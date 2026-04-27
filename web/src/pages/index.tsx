@@ -7,7 +7,7 @@ import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 
 import data from '@/lib/data.json';
 
-const Index = () => {
+export const Index = () => {
     return (
         <SidebarProvider
             style={
@@ -35,5 +35,3 @@ const Index = () => {
         </SidebarProvider>
     );
 };
-
-export default Index;
