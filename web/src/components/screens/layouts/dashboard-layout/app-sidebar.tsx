@@ -1,9 +1,3 @@
-import * as React from 'react';
-
-import { NavDocuments } from '@/components/nav-documents';
-import { NavMain } from '@/components/nav-main';
-import { NavSecondary } from '@/components/nav-secondary';
-import { NavUser } from '@/components/nav-user';
 import {
     Sidebar,
     SidebarContent,
@@ -13,6 +7,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
+
 import {
     CameraIcon,
     ChartBarIcon,
@@ -29,6 +24,11 @@ import {
     Settings2Icon,
     UsersIcon,
 } from 'lucide-react';
+
+import { NavDocuments } from './nav-documents';
+import { NavMain } from './nav-main';
+import { NavSecondary } from './nav-secondary';
+import { NavUser } from './nav-user';
 
 const data = {
     user: {
