@@ -25,6 +25,7 @@ import {
     UsersIcon,
 } from 'lucide-react';
 
+import { Link } from 'react-router';
 import { NavDocuments } from './nav-documents';
 import { NavMain } from './nav-main';
 import { NavSecondary } from './nav-secondary';
@@ -154,10 +155,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     <SidebarMenuItem>
                         <SidebarMenuButton
                             className="data-[slot=sidebar-menu-button]:p-1.5!"
-                            render={<a href="#" />}
+                            render={<Link to="/dashboard" />}
                         >
                             <CommandIcon className="size-5!" />
-                            <span className="text-base font-semibold">Acme Inc.</span>
+                            <span className="text-base font-semibold">URLz</span>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
