@@ -8,6 +8,7 @@ type ThemeProviderProps = {
     defaultTheme?: Theme;
     storageKey?: string;
     disableTransitionOnChange?: boolean;
+    enableKeyboardToggle?: boolean;
 };
 
 type ThemeProviderState = {
@@ -77,6 +78,7 @@ export function ThemeProvider({
     defaultTheme = 'system',
     storageKey = 'theme',
     disableTransitionOnChange = true,
+    enableKeyboardToggle = false,
     ...props
 }: ThemeProviderProps) {
     const [theme, setThemeState] = React.useState<Theme>(() => {
@@ -134,6 +136,10 @@ export function ThemeProvider({
     }, [theme, applyTheme]);
 
     React.useEffect(() => {
+        if (!enableKeyboardToggle) {
+            return undefined;
+        }
+
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.repeat) {
                 return;
@@ -171,7 +177,7 @@ export function ThemeProvider({
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, [storageKey]);
+    }, [storageKey, enableKeyboardToggle]);
 
     React.useEffect(() => {
         const handleStorageChange = (event: StorageEvent) => {
