@@ -54,4 +54,5 @@ dist-ssr
 *.sw?
 
 tmp
+.data
 

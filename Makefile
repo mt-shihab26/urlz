@@ -1,10 +1,10 @@
-.PHONY: migrate-snapshot migrate-up setup dev build
+.PHONY: build dev migrate-snapshot migrate-up setup
 
-## Apply all pending migrations
+# Apply all pending migrations
 migrate-up:
 	go run main.go migrate up
 
-## Pull a snapshot of the current collections into a new migration file
+# Pull a snapshot of the current collections into a new migration file
 migrate-snapshot:
 	go run main.go migrate collections
 
@@ -21,16 +21,16 @@ setup:
 	@echo ""
 	@echo "Setup complete. Edit .env and web/.env, then run: make dev"
 
-# Live Reload
+# Live reload
 dev:
 	@if ! command -v air > /dev/null; then \
-            read -p "Go's 'air' is not installed on your machine. Do you want to install it? [Y/n] " choice; \
-            if [ "$$choice" != "n" ] && [ "$$choice" != "N" ]; then \
-                go install github.com/air-verse/air@latest; \
-            else \
-                echo "You chose not to install air. Exiting..."; \
-                exit 1; \
-            fi; \
-        fi
+		read -p "Go's 'air' is not installed. Install it? [Y/n] " choice; \
+		if [ "$$choice" != "n" ] && [ "$$choice" != "N" ]; then \
+			go install github.com/air-verse/air@latest; \
+		else \
+			echo "Skipping air install. Exiting..."; \
+			exit 1; \
+		fi; \
+	fi
+	@cd web && bun run build
 	@air & (cd web && bun run dev); wait
-
