@@ -1,0 +1,40 @@
+package main
+
+import (
+	"io/fs"
+	"log"
+
+	"github.com/joho/godotenv"
+	"github.com/pocketbase/pocketbase"
+	"github.com/pocketbase/pocketbase/apis"
+	"github.com/pocketbase/pocketbase/core"
+	"github.com/pocketbase/pocketbase/plugins/migratecmd"
+	"github.com/pocketbase/pocketbase/tools/osutils"
+
+	_ "github.com/mt-shihab26/urlz/migrations"
+	"github.com/mt-shihab26/urlz/web"
+)
+
+func main() {
+	if err := godotenv.Load(); err != nil {
+		log.Fatal("No .env file found, using system environment")
+	}
+	app := pocketbase.NewWithConfig(pocketbase.Config{
+		DefaultDev:     true,
+		DefaultDataDir: ".data",
+	})
+	migratecmd.MustRegister(app, app.RootCmd, migratecmd.Config{
+		Automigrate: osutils.IsProbablyGoRun(),
+	})
+	app.OnServe().BindFunc(func(se *core.ServeEvent) error {
+		sub, err := fs.Sub(web.DistFS, "dist")
+		if err != nil {
+			return err
+		}
+		se.Router.GET("/{path...}", apis.Static(sub, true))
+		return se.Next()
+	})
+	if err := app.Start(); err != nil {
+		log.Fatal(err)
+	}
+}
