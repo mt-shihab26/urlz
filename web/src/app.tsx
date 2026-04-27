@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@/components/theme-provider';
+import { ThemeProvider } from '@/components/providers/theme-provider';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import { Index } from './pages/index';
