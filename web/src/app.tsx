@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
 
 import { ThemeProvider } from '@/components/providers/theme-provider';
+import { PageLoader } from '@/components/composite/page-loader';
 import { TooltipProvider } from '@/components/ui/tooltip';
 
 const Overview = lazy(() => import('@/pages/overview'));
@@ -21,7 +22,7 @@ export const App = () => {
         <ThemeProvider>
             <TooltipProvider>
                 <BrowserRouter>
-                    <Suspense fallback={null}>
+                    <Suspense fallback={<PageLoader />}>
                         <Routes>
                             <Route path="/" element={<Navigate to="/overview" replace />} />
                             {/* App */}
