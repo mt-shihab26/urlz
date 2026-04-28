@@ -6,6 +6,7 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    useSidebar,
 } from '@/components/ui/sidebar';
 
 import {
@@ -13,6 +14,7 @@ import {
     CommandIcon,
     LayoutDashboardIcon,
     LinkIcon,
+    PanelLeftIcon,
     SettingsIcon,
 } from 'lucide-react';
 
@@ -50,6 +52,8 @@ const data = {
     ],
 };
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+    const { toggleSidebar } = useSidebar();
+
     return (
         <Sidebar collapsible="icon" {...props}>
             <SidebarHeader>
@@ -68,8 +72,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarContent>
                 <NavMain items={data.navMain} />
             </SidebarContent>
-            <SidebarFooter>
+            <SidebarFooter className="gap-2">
                 <NavUser user={data.user} />
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton
+                            className="group-data-[collapsible=icon]:justify-center"
+                            onClick={toggleSidebar}
+                        >
+                            <PanelLeftIcon className="size-5" />
+                            <span>Collapse</span>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </SidebarMenu>
             </SidebarFooter>
         </Sidebar>
     );
