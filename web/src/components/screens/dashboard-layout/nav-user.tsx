@@ -5,28 +5,17 @@ import {
     DropdownMenuGroup,
     DropdownMenuItem,
     DropdownMenuLabel,
-    DropdownMenuRadioGroup,
-    DropdownMenuRadioItem,
     DropdownMenuSeparator,
-    DropdownMenuSub,
-    DropdownMenuSubContent,
-    DropdownMenuSubTrigger,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useTheme } from '@/components/providers/theme-provider';
+import { ThemeSwitcher } from '@/components/screens/dashboard-layout/theme-switcher';
 import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
     useSidebar,
 } from '@/components/ui/sidebar';
-import {
-    EllipsisVerticalIcon,
-    LogOutIcon,
-    MonitorIcon,
-    MoonIcon,
-    SunIcon,
-} from 'lucide-react';
+import { EllipsisVerticalIcon, LogOutIcon } from 'lucide-react';
 
 export function NavUser({
     user,
@@ -38,7 +27,6 @@ export function NavUser({
     };
 }) {
     const { isMobile } = useSidebar();
-    const { theme, setTheme } = useTheme();
 
     return (
         <SidebarMenu>
@@ -83,34 +71,7 @@ export function NavUser({
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
-                            <DropdownMenuSub>
-                                <DropdownMenuSubTrigger>
-                                    {theme === 'dark' ? (
-                                        <MoonIcon />
-                                    ) : theme === 'light' ? (
-                                        <SunIcon />
-                                    ) : (
-                                        <MonitorIcon />
-                                    )}
-                                    Theme
-                                </DropdownMenuSubTrigger>
-                                <DropdownMenuSubContent>
-                                    <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
-                                        <DropdownMenuRadioItem value="system">
-                                            <MonitorIcon />
-                                            System
-                                        </DropdownMenuRadioItem>
-                                        <DropdownMenuRadioItem value="dark">
-                                            <MoonIcon />
-                                            Dark
-                                        </DropdownMenuRadioItem>
-                                        <DropdownMenuRadioItem value="light">
-                                            <SunIcon />
-                                            Light
-                                        </DropdownMenuRadioItem>
-                                    </DropdownMenuRadioGroup>
-                                </DropdownMenuSubContent>
-                            </DropdownMenuSub>
+                            <ThemeSwitcher />
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>
