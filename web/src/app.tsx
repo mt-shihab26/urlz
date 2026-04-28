@@ -16,6 +16,7 @@ const SignIn = lazy(() => import('@/pages/sign-in'));
 const SignUp = lazy(() => import('@/pages/sign-up'));
 const ForgotPassword = lazy(() => import('@/pages/forgot-password'));
 const ResetPassword = lazy(() => import('@/pages/reset-password'));
+const NotFound = lazy(() => import('@/pages/not-found'));
 
 export const App = () => {
     return (
@@ -36,6 +37,8 @@ export const App = () => {
                             <Route path="/sign-up" element={<SignUp />} />
                             <Route path="/forgot-password" element={<ForgotPassword />} />
                             <Route path="/reset-password" element={<ResetPassword />} />
+                            {/* 404 */}
+                            <Route path="*" element={<NotFound />} />
                         </Routes>
                     </Suspense>
                 </BrowserRouter>
