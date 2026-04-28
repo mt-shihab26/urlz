@@ -14,13 +14,7 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from '@/components/ui/sidebar';
-import {
-    BellIcon,
-    CircleUserRoundIcon,
-    CreditCardIcon,
-    EllipsisVerticalIcon,
-    LogOutIcon,
-} from 'lucide-react';
+import { BellIcon, EllipsisVerticalIcon, LogOutIcon } from 'lucide-react';
 
 export function NavUser({
     user,
@@ -75,14 +69,6 @@ export function NavUser({
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
-                            <DropdownMenuItem>
-                                <CircleUserRoundIcon />
-                                Account
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                                <CreditCardIcon />
-                                Billing
-                            </DropdownMenuItem>
                             <DropdownMenuItem>
                                 <BellIcon />
                                 Notifications
