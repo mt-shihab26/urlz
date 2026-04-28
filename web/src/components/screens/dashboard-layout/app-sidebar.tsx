@@ -77,11 +77,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton
-                            className="group-data-[collapsible=icon]:justify-center"
+                            className="justify-start group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0"
                             onClick={toggleSidebar}
                         >
                             <PanelLeftIcon className="size-5" />
-                            <span>Collapse</span>
+                            <span className="group-data-[collapsible=icon]:hidden">Collapse</span>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
