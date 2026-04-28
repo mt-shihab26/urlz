@@ -11,9 +11,8 @@ import {
 
 import {
     ChartBarIcon,
-    CommandIcon,
-    LayoutDashboardIcon,
     LinkIcon,
+    LayoutDashboardIcon,
     PanelLeftIcon,
     SettingsIcon,
 } from 'lucide-react';
@@ -24,33 +23,34 @@ import { NavUser } from './nav-user';
 
 const data = {
     user: {
-        name: 'shadcn',
-        email: 'm@example.com',
+        name: 'Jamie Chen',
+        email: 'jamie@myapp.com',
         avatar: '/avatars/shadcn.jpg',
     },
     navMain: [
         {
             title: 'Overview',
-            url: '#',
+            url: '/overview',
             icon: <LayoutDashboardIcon />,
         },
         {
             title: 'Links',
-            url: '#',
+            url: '/links',
             icon: <LinkIcon />,
         },
         {
             title: 'Analytics',
-            url: '#',
+            url: '/analytics',
             icon: <ChartBarIcon />,
         },
         {
             title: 'Settings',
-            url: '#',
+            url: '/settings',
             icon: <SettingsIcon />,
         },
     ],
 };
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const { toggleSidebar } = useSidebar();
 
@@ -61,10 +61,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     <SidebarMenuItem>
                         <SidebarMenuButton
                             className="data-[slot=sidebar-menu-button]:p-1.5!"
-                            render={<Link to="/dashboard" />}
+                            render={<Link to="/overview" />}
                         >
-                            <CommandIcon className="size-5!" />
-                            <span className="text-base font-semibold">URLz</span>
+                            <LinkIcon className="size-5!" />
+                            <span className="text-base font-semibold">urlz</span>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>

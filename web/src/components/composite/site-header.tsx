@@ -1,8 +1,29 @@
-export const Header = () => {
+import type { ReactNode } from 'react';
+import { cn } from '@/lib/utils';
+
+interface HeaderProps {
+    title: string;
+    description?: string;
+    action?: ReactNode;
+    className?: string;
+}
+
+export const Header = ({ title, description, action, className }: HeaderProps) => {
     return (
-        <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
-            <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
-                <h1 className="text-base font-medium">Documents</h1>
+        <header
+            className={cn(
+                'flex shrink-0 items-start gap-2 border-b px-4 py-4 lg:px-6',
+                className,
+            )}
+        >
+            <div className="flex w-full items-start justify-between gap-4">
+                <div>
+                    <h1 className="text-xl font-bold tracking-tight">{title}</h1>
+                    {description && (
+                        <p className="mt-0.5 text-sm text-muted-foreground">{description}</p>
+                    )}
+                </div>
+                {action && <div className="flex shrink-0 items-center gap-2">{action}</div>}
             </div>
         </header>
     );
