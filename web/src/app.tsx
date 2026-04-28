@@ -1,11 +1,12 @@
 import { routes } from '@/routes';
 
-import { Suspense, type ReactNode } from 'react';
+import { Suspense } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
 
 import { AuthGuard } from '@/components/composite/auth-guard';
 import { GuestGuard } from '@/components/composite/guest-guard';
 import { PageLoader } from '@/components/composite/page-loader';
+import { PublicGuard } from '@/components/composite/public-guard';
 import { AuthProvider } from '@/components/providers/auth-provider';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -13,7 +14,7 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 const guardMap = {
     auth: AuthGuard,
     guest: GuestGuard,
-    public: ({ children }: { children: ReactNode }) => <>{children}</>,
+    public: PublicGuard,
 };
 
 export const App = () => {
@@ -24,18 +25,19 @@ export const App = () => {
                     <AuthProvider>
                         <Suspense fallback={<PageLoader />}>
                             <Routes>
-                                <Route path="/" element={<Navigate to="/overview" replace />} />
-                                {routes.map(({ path, component: Page, guard }) => {
-                                    const Guard = guardMap[guard];
+                                {routes.map((route) => {
+                                    const Guard = guardMap[route.guard];
+                                    const element =
+                                        'redirect' in route ? (
+                                            <Navigate to={route.redirect} replace />
+                                        ) : (
+                                            <route.component />
+                                        );
                                     return (
                                         <Route
-                                            key={path}
-                                            path={path}
-                                            element={
-                                                <Guard>
-                                                    <Page />
-                                                </Guard>
-                                            }
+                                            key={route.path}
+                                            path={route.path}
+                                            element={<Guard>{element}</Guard>}
                                         />
                                     );
                                 })}
