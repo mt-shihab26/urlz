@@ -49,7 +49,7 @@ function getSlice(range: Range) {
     return TOTAL_SERIES;
 }
 
-export function Overview() {
+function Overview() {
     const navigate = useNavigate();
     const [range, setRange] = React.useState<Range>('30d');
     const slicedSeries = getSlice(range);
@@ -257,3 +257,4 @@ export function Overview() {
         </DashboardLayout>
     );
 }
+export default Overview;

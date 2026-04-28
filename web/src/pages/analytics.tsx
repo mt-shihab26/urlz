@@ -52,7 +52,7 @@ function getSlice(range: Range) {
 
 const maxCountryPct = COUNTRIES_DATA[0].pct;
 
-export function Analytics() {
+function Analytics() {
     const [range, setRange] = React.useState<Range>('30d');
     const slicedSeries = getSlice(range);
 
@@ -229,3 +229,4 @@ export function Analytics() {
         </DashboardLayout>
     );
 }
+export default Analytics;

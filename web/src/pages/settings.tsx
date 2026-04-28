@@ -29,7 +29,7 @@ interface ApiKey {
 
 const maskKey = (key: string) => key.slice(0, 18) + '●'.repeat(12) + key.slice(-4);
 
-export function Settings() {
+function Settings() {
     const { theme, setTheme } = useTheme();
     const [keys, setKeys] = React.useState<ApiKey[]>(API_KEYS_DATA);
     const [revealed, setRevealed] = React.useState<Record<string, boolean>>({});
@@ -241,3 +241,4 @@ export function Settings() {
         </DashboardLayout>
     );
 }
+export default Settings;

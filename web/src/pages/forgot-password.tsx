@@ -14,7 +14,7 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 
-export function ForgotPassword() {
+function ForgotPassword() {
     const [email, setEmail] = React.useState('');
     const [loading, setLoading] = React.useState(false);
     const [sent, setSent] = React.useState(false);
@@ -111,3 +111,4 @@ export function ForgotPassword() {
         </AuthLayout>
     );
 }
+export default ForgotPassword;

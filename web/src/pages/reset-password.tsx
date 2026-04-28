@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
-export function ResetPassword() {
+function ResetPassword() {
     const [password, setPassword] = React.useState('');
     const [confirm, setConfirm] = React.useState('');
     const [loading, setLoading] = React.useState(false);
@@ -139,3 +139,4 @@ export function ResetPassword() {
         </AuthLayout>
     );
 }
+export default ResetPassword;

@@ -39,7 +39,7 @@ const chartConfig = {
 const RANGES = ['7d', '30d', '90d', 'All'] as const;
 type Range = (typeof RANGES)[number];
 
-export function LinkDetail() {
+function LinkDetail() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [range, setRange] = React.useState<Range>('30d');
@@ -242,3 +242,4 @@ export function LinkDetail() {
         </DashboardLayout>
     );
 }
+export default LinkDetail;

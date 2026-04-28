@@ -15,7 +15,7 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 
-export function SignIn() {
+function SignIn() {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [remember, setRemember] = React.useState(false);
@@ -134,3 +134,4 @@ function GoogleIcon() {
         </svg>
     );
 }
+export default SignIn;

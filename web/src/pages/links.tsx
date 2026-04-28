@@ -29,7 +29,7 @@ import { cn } from '@/lib/utils';
 
 type Filter = 'all' | LinkStatus;
 
-export function Links() {
+function Links() {
     const navigate = useNavigate();
     const [links, setLinks] = React.useState(LINKS_DATA);
     const [search, setSearch] = React.useState('');
@@ -252,3 +252,4 @@ function LinkRow({
         </TableRow>
     );
 }
+export default Links;
