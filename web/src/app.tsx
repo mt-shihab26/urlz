@@ -3,9 +3,13 @@ import { lazy } from 'react';
 import { Suspense } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
 
+import { AuthProvider } from '@/components/providers/auth-provider';
 import { ThemeProvider } from '@/components/providers/theme-provider';
-import { PageLoader } from '@/components/composite/page-loader';
 import { TooltipProvider } from '@/components/ui/tooltip';
+
+import { AuthGuard } from '@/components/composite/auth-guard';
+import { GuestGuard } from '@/components/composite/guest-guard';
+import { PageLoader } from '@/components/composite/page-loader';
 
 const Overview = lazy(() => import('@/pages/overview'));
 const Links = lazy(() => import('@/pages/links'));
@@ -23,24 +27,89 @@ export const App = () => {
         <ThemeProvider>
             <TooltipProvider>
                 <BrowserRouter>
-                    <Suspense fallback={<PageLoader />}>
-                        <Routes>
-                            <Route path="/" element={<Navigate to="/overview" replace />} />
-                            {/* App */}
-                            <Route path="/overview" element={<Overview />} />
-                            <Route path="/links" element={<Links />} />
-                            <Route path="/links/:id" element={<LinkDetail />} />
-                            <Route path="/analytics" element={<Analytics />} />
-                            <Route path="/settings" element={<Settings />} />
-                            {/* Auth */}
-                            <Route path="/sign-in" element={<SignIn />} />
-                            <Route path="/sign-up" element={<SignUp />} />
-                            <Route path="/forgot-password" element={<ForgotPassword />} />
-                            <Route path="/reset-password" element={<ResetPassword />} />
-                            {/* 404 */}
-                            <Route path="*" element={<NotFound />} />
-                        </Routes>
-                    </Suspense>
+                    <AuthProvider>
+                        <Suspense fallback={<PageLoader />}>
+                            <Routes>
+                                <Route path="/" element={<Navigate to="/overview" replace />} />
+                                {/* App */}
+                                <Route
+                                    path="/overview"
+                                    element={
+                                        <AuthGuard>
+                                            <Overview />
+                                        </AuthGuard>
+                                    }
+                                />
+                                <Route
+                                    path="/links"
+                                    element={
+                                        <AuthGuard>
+                                            <Links />
+                                        </AuthGuard>
+                                    }
+                                />
+                                <Route
+                                    path="/links/:id"
+                                    element={
+                                        <AuthGuard>
+                                            <LinkDetail />
+                                        </AuthGuard>
+                                    }
+                                />
+                                <Route
+                                    path="/analytics"
+                                    element={
+                                        <AuthGuard>
+                                            <Analytics />
+                                        </AuthGuard>
+                                    }
+                                />
+                                <Route
+                                    path="/settings"
+                                    element={
+                                        <AuthGuard>
+                                            <Settings />
+                                        </AuthGuard>
+                                    }
+                                />
+                                {/* Auth */}
+                                <Route
+                                    path="/sign-in"
+                                    element={
+                                        <GuestGuard>
+                                            <SignIn />
+                                        </GuestGuard>
+                                    }
+                                />
+                                <Route
+                                    path="/sign-up"
+                                    element={
+                                        <GuestGuard>
+                                            <SignUp />
+                                        </GuestGuard>
+                                    }
+                                />
+                                <Route
+                                    path="/forgot-password"
+                                    element={
+                                        <GuestGuard>
+                                            <ForgotPassword />
+                                        </GuestGuard>
+                                    }
+                                />
+                                <Route
+                                    path="/reset-password"
+                                    element={
+                                        <GuestGuard>
+                                            <ResetPassword />
+                                        </GuestGuard>
+                                    }
+                                />
+                                {/* 404 */}
+                                <Route path="*" element={<NotFound />} />
+                            </Routes>
+                        </Suspense>
+                    </AuthProvider>
                 </BrowserRouter>
             </TooltipProvider>
         </ThemeProvider>
