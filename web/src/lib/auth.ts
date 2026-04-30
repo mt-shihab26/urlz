@@ -34,6 +34,11 @@ export const updateAvatar = async (userId: string, file: File) => {
     await pb.collection('users').authRefresh();
 };
 
+export const deleteAccount = async (userId: string) => {
+    await pb.collection('users').update(userId, { deleted: true });
+    pb.authStore.clear();
+};
+
 export const getAvatarUrl = (user: TUser): string | null => {
     if (!user.avatar) return null;
     return pb.files.getURL(user, user.avatar);
