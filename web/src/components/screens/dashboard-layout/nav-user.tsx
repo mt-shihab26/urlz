@@ -1,4 +1,3 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -8,24 +7,18 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+
+import type { TUser } from '@/types/models';
+
+import { useSidebar } from '@/components/ui/sidebar';
+import { signOut } from '@/lib/auth';
+
 import { ThemeSwitcher } from '@/components/screens/dashboard-layout/theme-switcher';
-import {
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
-    useSidebar,
-} from '@/components/ui/sidebar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { EllipsisVerticalIcon, LogOutIcon } from 'lucide-react';
 
-export function NavUser({
-    user,
-}: {
-    user: {
-        name: string;
-        email: string;
-        avatar: string;
-    };
-}) {
+export const NavUser = ({ user }: { user: TUser }) => {
     const { isMobile } = useSidebar();
 
     return (
@@ -74,7 +67,7 @@ export function NavUser({
                             <ThemeSwitcher />
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>
+                        <DropdownMenuItem onClick={signOut}>
                             <LogOutIcon />
                             Log out
                         </DropdownMenuItem>
@@ -83,4 +76,4 @@ export function NavUser({
             </SidebarMenuItem>
         </SidebarMenu>
     );
-}
+};

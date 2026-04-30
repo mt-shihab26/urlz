@@ -1,4 +1,12 @@
 import {
+    ChartBarIcon,
+    LayoutDashboardIcon,
+    LinkIcon,
+    PanelLeftIcon,
+    SettingsIcon,
+} from 'lucide-react';
+
+import {
     Sidebar,
     SidebarContent,
     SidebarFooter,
@@ -6,53 +14,44 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
-    useSidebar,
 } from '@/components/ui/sidebar';
 
-import {
-    ChartBarIcon,
-    LinkIcon,
-    LayoutDashboardIcon,
-    PanelLeftIcon,
-    SettingsIcon,
-} from 'lucide-react';
+import type { ComponentProps } from 'react';
+
+import { useSidebar } from '@/components/ui/sidebar';
+import { getAuth } from '@/lib/auth';
 
 import { Link } from 'react-router';
 import { NavMain } from './nav-main';
 import { NavUser } from './nav-user';
 
-const data = {
-    user: {
-        name: 'Jamie Chen',
-        email: 'jamie@myapp.com',
-        avatar: '/avatars/shadcn.jpg',
+const navMain = [
+    {
+        title: 'Overview',
+        url: '/overview',
+        icon: <LayoutDashboardIcon />,
     },
-    navMain: [
-        {
-            title: 'Overview',
-            url: '/overview',
-            icon: <LayoutDashboardIcon />,
-        },
-        {
-            title: 'Links',
-            url: '/links',
-            icon: <LinkIcon />,
-        },
-        {
-            title: 'Analytics',
-            url: '/analytics',
-            icon: <ChartBarIcon />,
-        },
-        {
-            title: 'Settings',
-            url: '/settings',
-            icon: <SettingsIcon />,
-        },
-    ],
-};
+    {
+        title: 'Links',
+        url: '/links',
+        icon: <LinkIcon />,
+    },
+    {
+        title: 'Analytics',
+        url: '/analytics',
+        icon: <ChartBarIcon />,
+    },
+    {
+        title: 'Settings',
+        url: '/settings',
+        icon: <SettingsIcon />,
+    },
+];
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export const AppSidebar = ({ ...props }: ComponentProps<typeof Sidebar>) => {
     const { toggleSidebar } = useSidebar();
+
+    const user = getAuth();
 
     return (
         <Sidebar collapsible="icon" {...props}>
@@ -70,10 +69,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </SidebarMenu>
             </SidebarHeader>
             <SidebarContent>
-                <NavMain items={data.navMain} />
+                <NavMain items={navMain} />
             </SidebarContent>
             <SidebarFooter className="gap-2">
-                <NavUser user={data.user} />
+                <NavUser user={user!} />
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton
@@ -88,4 +87,4 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </SidebarFooter>
         </Sidebar>
     );
-}
+};
