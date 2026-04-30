@@ -9,6 +9,7 @@ import {
 
 import { useForm } from '@/hooks/use-form';
 import { signUp } from '@/lib/auth';
+import { useNavigate } from 'react-router';
 
 import { CheckboxField } from '@/components/composite/checkbox-field';
 import { EmailField } from '@/components/composite/email-field';
@@ -23,6 +24,8 @@ import { TextField } from '@/components/composite/text-field';
 import { AuthLayout } from '@/components/layouts/auth-layout';
 
 const SignUp = () => {
+    const navigate = useNavigate();
+
     const { data, setData, errors, setErrors, loading, setLoading } = useForm({
         name: '',
         email: '',
@@ -35,6 +38,7 @@ const SignUp = () => {
         setLoading(true);
         try {
             await signUp(data.name, data.email, data.password);
+            navigate('/');
         } catch (e: any) {
             const resData = e?.response?.data;
             if (resData?.email?.message) {

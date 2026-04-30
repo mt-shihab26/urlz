@@ -19,4 +19,5 @@ export const signIn = async (email: string, password: string) => {
 
 export const signOut = () => {
     pb.authStore.clear();
+    window.location.reload();
 };

@@ -9,6 +9,7 @@ import {
 
 import { useForm } from '@/hooks/use-form';
 import { signIn } from '@/lib/auth';
+import { useNavigate } from 'react-router';
 
 import { CheckboxField } from '@/components/composite/checkbox-field';
 import { EmailField } from '@/components/composite/email-field';
@@ -22,6 +23,8 @@ import { AuthLayout } from '@/components/layouts/auth-layout';
 import { Link } from 'react-router';
 
 const SignIn = () => {
+    const navigate = useNavigate();
+
     const { data, setData, errors, setErrors, loading, setLoading } = useForm({
         email: '',
         password: '',
@@ -32,6 +35,7 @@ const SignIn = () => {
         setLoading(true);
         try {
             await signIn(data.email, data.password);
+            navigate('/');
         } catch (e: any) {
             const resData = e?.response?.data;
             if (resData?.email?.message) {
