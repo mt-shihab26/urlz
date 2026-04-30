@@ -12,7 +12,7 @@ import {
 
 import { deleteAccount } from '@/collections/users';
 import { useUser } from '@/components/providers/auth-provider';
-import { useState } from 'react';
+import { useForm } from '@/hooks/use-form';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -23,17 +23,15 @@ import { Spinner } from '@/components/ui/spinner';
 export const DangerZoneCard = () => {
     const { user } = useUser();
 
-    const [input, setInput] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const { data, setData, errors, setErrors, loading, setLoading } = useForm({ email: '' });
 
     const handleDelete = async () => {
         setLoading(true);
-        setError(null);
+        setErrors('email', null);
         try {
             await deleteAccount(user.id);
         } catch (e: any) {
-            setError(e?.message ?? 'Something went wrong.');
+            setErrors('email', e?.message ?? 'Something went wrong.');
             setLoading(false);
         }
     };
@@ -71,18 +69,21 @@ export const DangerZoneCard = () => {
                                 <Input
                                     id="confirm-email"
                                     placeholder={user.email}
-                                    value={input}
-                                    onChange={(e) => setInput(e.target.value)}
+                                    value={data.email}
+                                    autoComplete="off"
+                                    onChange={(e) => setData('email', e.target.value)}
                                 />
-                                {error && <p className="text-xs text-destructive">{error}</p>}
+                                {errors.email && (
+                                    <p className="text-xs text-destructive">{errors.email}</p>
+                                )}
                             </div>
                             <AlertDialogFooter>
-                                <AlertDialogCancel onClick={() => setInput('')}>
+                                <AlertDialogCancel onClick={() => setData('email', '')}>
                                     Cancel
                                 </AlertDialogCancel>
                                 <AlertDialogAction
                                     className="bg-destructive text-white hover:bg-destructive/90"
-                                    disabled={input !== user.email || loading}
+                                    disabled={data.email !== user.email || loading}
                                     onClick={handleDelete}
                                 >
                                     {loading && <Spinner className="mr-2" />}
