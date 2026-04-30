@@ -7,3 +7,16 @@ export const getAuth = (): TUser | null => {
 
     return pb.authStore.record as unknown as TUser;
 };
+
+export const signUp = async (name: string, email: string, password: string) => {
+    await pb.collection('users').create({ name, email, password, passwordConfirm: password });
+    await pb.collection('users').authWithPassword(email, password);
+};
+
+export const signIn = async (email: string, password: string) => {
+    await pb.collection('users').authWithPassword(email, password);
+};
+
+export const signOut = () => {
+    pb.authStore.clear();
+};

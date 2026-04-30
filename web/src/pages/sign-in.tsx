@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/card';
 
 import { useForm } from '@/hooks/use-form';
-import { pb } from '@/lib/pb';
+import { signIn } from '@/lib/auth';
 
 import { CheckboxField } from '@/components/composite/checkbox-field';
 import { EmailField } from '@/components/composite/email-field';
@@ -31,7 +31,7 @@ const SignIn = () => {
     const handleSubmit = async () => {
         setLoading(true);
         try {
-            await pb.collection('users').authWithPassword(data.email, data.password);
+            await signIn(data.email, data.password);
         } catch (e: any) {
             const resData = e?.response?.data;
             if (resData?.email?.message) {

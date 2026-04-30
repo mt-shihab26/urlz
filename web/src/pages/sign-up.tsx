@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/card';
 
 import { useForm } from '@/hooks/use-form';
-import { pb } from '@/lib/pb';
+import { signUp } from '@/lib/auth';
 
 import { CheckboxField } from '@/components/composite/checkbox-field';
 import { EmailField } from '@/components/composite/email-field';
@@ -34,13 +34,7 @@ const SignUp = () => {
         if (!data.agreed) return;
         setLoading(true);
         try {
-            await pb.collection('users').create({
-                name: data.name,
-                email: data.email,
-                password: data.password,
-                passwordConfirm: data.password,
-            });
-            await pb.collection('users').authWithPassword(data.email, data.password);
+            await signUp(data.name, data.email, data.password);
         } catch (e: any) {
             const resData = e?.response?.data;
             if (resData?.email?.message) {
