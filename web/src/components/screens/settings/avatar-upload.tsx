@@ -1,26 +1,29 @@
-import { CameraIcon } from 'lucide-react';
+import type { TUser } from '@/types/models';
+
+import { useForm } from '@/hooks/use-form';
+import { getAvatarUrl, updateAvatar } from '@/lib/auth';
 import { useRef, useState } from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { getAvatarUrl, updateAvatar } from '@/lib/auth';
-import type { TUser } from '@/types/models';
+import { CameraIcon } from 'lucide-react';
 
 export const AvatarUpload = ({ user }: { user: TUser }) => {
+    const { errors, setErrors, loading, setLoading } = useForm({ avatar: '' });
+
     const [avatarUrl, setAvatarUrl] = useState<string | null>(getAvatarUrl(user));
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
         setLoading(true);
-        setError(null);
+        setErrors('avatar', null);
         try {
             await updateAvatar(user.id, file);
             setAvatarUrl(URL.createObjectURL(file));
         } catch (e: any) {
-            setError(e?.message ?? 'Failed to upload avatar.');
+            setErrors('avatar', e?.message ?? 'Failed to upload avatar.');
         } finally {
             setLoading(false);
         }
@@ -28,7 +31,7 @@ export const AvatarUpload = ({ user }: { user: TUser }) => {
 
     return (
         <div className="flex flex-col gap-1.5">
-            {error && <p className="text-xs text-destructive">{error}</p>}
+            {errors.avatar && <p className="text-xs text-destructive">{errors.avatar}</p>}
             <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
