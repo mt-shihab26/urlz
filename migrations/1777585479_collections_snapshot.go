@@ -617,7 +617,7 @@ func init() {
 					"subject": "Confirm your {APP_NAME} new email address"
 				},
 				"createRule": "",
-				"deleteRule": "id = @request.auth.id",
+				"deleteRule": null,
 				"emailChangeToken": {
 					"duration": 1800
 				},
@@ -718,7 +718,7 @@ func init() {
 						"hidden": false,
 						"id": "file376926767",
 						"maxSelect": 1,
-						"maxSize": 0,
+						"maxSize": 5242880,
 						"mimeTypes": [
 							"image/jpeg",
 							"image/png",
