@@ -10,6 +10,8 @@ import {
 import type { TLink } from '@/types/models';
 
 import { cn } from '@/lib/utils';
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
 
 import { Sparkline, StatusBadge } from '@/components/composite/urlz-ui';
 import { Button } from '@/components/ui/button';
@@ -17,23 +19,30 @@ import { TableCell, TableRow } from '@/components/ui/table';
 
 export const LinkRow = ({
     link,
-    copied,
-    onCopy,
     onToggle,
     onDelete,
-    onClick,
 }: {
     link: TLink;
-    copied: string | null;
-    onCopy: (code: string) => void;
     onToggle: (id: string) => void;
     onDelete: (id: string) => void;
-    onClick: () => void;
 }) => {
+    const navigate = useNavigate();
+
+    const [copied, setCopied] = useState<string | null>(null);
+
+    const copyLink = (code: string) => {
+        setCopied(code);
+        setTimeout(() => setCopied(null), 1800);
+    };
+
+    const handleClick = () => {
+        navigate(`/links/${link.id}`);
+    };
+
     return (
         <TableRow className="group">
             <TableCell className="max-w-55">
-                <div className="cursor-pointer" onClick={onClick}>
+                <div className="cursor-pointer" onClick={handleClick}>
                     <div className="truncate font-medium">{link.title}</div>
                     <div className="truncate font-mono text-xs text-muted-foreground">
                         {link.url}
@@ -44,7 +53,7 @@ export const LinkRow = ({
                 <div className="flex items-center gap-1.5">
                     <span className="font-mono text-xs text-primary">urlz.io/{link.code}</span>
                     <button
-                        onClick={() => onCopy(link.code)}
+                        onClick={() => copyLink(link.code)}
                         className={cn(
                             'rounded p-1 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 hover:text-foreground',
                             copied === link.code &&

@@ -1,22 +1,14 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import type { TLink, TLinkStatus } from '@/types/models';
 
 import { deleteLink, getLinks, toggleLinkStatus } from '@/collections/links';
+import { useEffect, useState } from 'react';
+
 import { CreateLinkButton } from '@/components/composite/create-link-dialog';
 import { Header } from '@/components/composite/site-header';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
-import { LinkRow } from '@/components/screens/links/link-row';
+import { LinksTable } from '@/components/screens/links/links-table';
 import { Input } from '@/components/ui/input';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import type { TLink, TLinkStatus } from '@/types/models';
 
 type Filter = 'all' | TLinkStatus;
 
@@ -28,11 +20,9 @@ const filterEntries: { key: Filter; label: string }[] = [
 ];
 
 const Links = () => {
-    const navigate = useNavigate();
     const [links, setLinks] = useState<TLink[]>([]);
     const [search, setSearch] = useState('');
     const [filter, setFilter] = useState<Filter>('all');
-    const [copied, setCopied] = useState<string | null>(null);
 
     useEffect(() => {
         getLinks().then(setLinks);
@@ -66,11 +56,6 @@ const Links = () => {
         setLinks((prev) => prev.filter((l) => l.id !== id));
     };
 
-    const copyLink = (code: string) => {
-        setCopied(code);
-        setTimeout(() => setCopied(null), 1800);
-    };
-
     return (
         <DashboardLayout title="Links">
             <Header
@@ -80,7 +65,6 @@ const Links = () => {
                     <CreateLinkButton onCreated={(link) => setLinks((prev) => [link, ...prev])} />
                 }
             />
-
             <div className="flex flex-col gap-4 p-4 lg:p-6">
                 <div className="flex flex-wrap items-center gap-3">
                     <Input
@@ -104,46 +88,7 @@ const Links = () => {
                         ))}
                     </ToggleGroup>
                 </div>
-
-                <div className="overflow-hidden rounded-lg border">
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Link</TableHead>
-                                <TableHead>Short URL</TableHead>
-                                <TableHead className="text-right">Clicks</TableHead>
-                                <TableHead className="text-right">Trend</TableHead>
-                                <TableHead className="text-right">Created</TableHead>
-                                <TableHead>Status</TableHead>
-                                <TableHead />
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {filtered.length === 0 ? (
-                                <TableRow>
-                                    <TableCell
-                                        colSpan={7}
-                                        className="h-24 text-center text-muted-foreground"
-                                    >
-                                        No links found
-                                    </TableCell>
-                                </TableRow>
-                            ) : (
-                                filtered.map((link) => (
-                                    <LinkRow
-                                        key={link.id}
-                                        link={link}
-                                        copied={copied}
-                                        onCopy={copyLink}
-                                        onToggle={handleToggle}
-                                        onDelete={handleDelete}
-                                        onClick={() => navigate(`/links/${link.id}`)}
-                                    />
-                                ))
-                            )}
-                        </TableBody>
-                    </Table>
-                </div>
+                <LinksTable links={filtered} onToggle={handleToggle} onDelete={handleDelete} />
             </div>
         </DashboardLayout>
     );
