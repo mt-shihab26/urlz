@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Spinner } from '@/components/ui/spinner';
 
 export const DangerZoneCard = () => {
     const { user } = useUser();
@@ -84,7 +85,8 @@ export const DangerZoneCard = () => {
                                     disabled={input !== user.email || loading}
                                     onClick={handleDelete}
                                 >
-                                    {loading ? 'Deleting…' : 'Delete Account'}
+                                    {loading && <Spinner className="mr-2" />}
+                                    Delete Account
                                 </AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>
