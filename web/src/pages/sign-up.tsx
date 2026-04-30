@@ -11,11 +11,13 @@ import { useForm } from '@/hooks/use-form';
 import { getPasswordStrength } from '@/lib/password';
 import { pb } from '@/lib/pb';
 
+import { EmailField } from '@/components/composite/email-field';
+import { PasswordField } from '@/components/composite/password-field';
+import { TextField } from '@/components/composite/text-field';
 import { GoogleIcon } from '@/components/icons/google-icon';
 import { AuthLayout } from '@/components/layouts/auth-layout';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Link } from 'react-router';
@@ -42,13 +44,13 @@ const SignUp = () => {
             });
             await pb.collection('users').authWithPassword(data.email, data.password);
         } catch (e: any) {
-            const data = e?.response?.data;
-            if (data?.email?.message) {
-                setErrors('email', data.email.message);
-            } else if (data?.password?.message) {
-                setErrors('password', data.password.message);
-            } else if (data?.name?.message) {
-                setErrors('name', data.name.message);
+            const resData = e?.response?.data;
+            if (resData?.email?.message) {
+                setErrors('email', resData.email.message);
+            } else if (resData?.password?.message) {
+                setErrors('password', resData.password.message);
+            } else if (resData?.name?.message) {
+                setErrors('name', resData.name.message);
             } else {
                 setErrors('email', e?.message ?? 'Something went wrong. Please try again.');
             }
@@ -86,49 +88,38 @@ const SignUp = () => {
                         }}
                         className="flex flex-col gap-4"
                     >
-                        <div className="flex flex-col gap-1.5">
-                            <Label htmlFor="name">Full name</Label>
-                            <Input
-                                id="name"
-                                type="text"
-                                placeholder="Jamie Chen"
-                                value={data.name}
-                                onChange={(e) => setData('name', e.target.value)}
-                                required
-                                autoComplete="name"
-                            />
-                            {errors.name && (
-                                <p className="text-xs text-destructive">{errors.name}</p>
-                            )}
-                        </div>
+                        <TextField
+                            id="name"
+                            label="Full name"
+                            placeholder="Jamie Chen"
+                            value={data.name}
+                            onChange={(e) => setData('name', e.target.value)}
+                            error={errors.name}
+                            required
+                            autoComplete="name"
+                        />
 
-                        <div className="flex flex-col gap-1.5">
-                            <Label htmlFor="email">Email</Label>
-                            <Input
-                                id="email"
-                                type="email"
-                                placeholder="you@example.com"
-                                value={data.email}
-                                onChange={(e) => setData('email', e.target.value)}
-                                required
-                                autoComplete="email"
-                            />
-                            {errors.email && (
-                                <p className="text-xs text-destructive">{errors.email}</p>
-                            )}
-                        </div>
+                        <EmailField
+                            id="email"
+                            label="Email"
+                            placeholder="you@example.com"
+                            value={data.email}
+                            onChange={(e) => setData('email', e.target.value)}
+                            error={errors.email}
+                            required
+                            autoComplete="email"
+                        />
 
-                        <div className="flex flex-col gap-1.5">
-                            <Label htmlFor="password">Password</Label>
-                            <Input
-                                id="password"
-                                type="password"
-                                placeholder="At least 8 characters"
-                                value={data.password}
-                                onChange={(e) => setData('password', e.target.value)}
-                                required
-                                autoComplete="new-password"
-                            />
+                        <PasswordField
+                            id="password"
+                            label="Password"
+                            placeholder="At least 8 characters"
+                            value={data.password}
+                            onChange={(e) => setData('password', e.target.value)}
+                            error={errors.password}
+                            required
+                            autoComplete="new-password"
+                        >
                             {passwordStrength && (
                                 <div className="flex items-center gap-2">
                                     <div className="h-1 flex-1 overflow-hidden rounded-full bg-muted">
@@ -142,10 +133,7 @@ const SignUp = () => {
                                     </span>
                                 </div>
                             )}
-                            {errors.password && (
-                                <p className="text-xs text-destructive">{errors.password}</p>
-                            )}
-                        </div>
+                        </PasswordField>
 
                         <div className="flex items-start gap-2">
                             <Checkbox
@@ -154,19 +142,15 @@ const SignUp = () => {
                                 onCheckedChange={(v) => setData('agreed', !!v)}
                                 className="mt-0.5"
                             />
-
                             <Label
                                 htmlFor="terms"
                                 className="cursor-pointer text-sm font-normal leading-relaxed flex flex-wrap items-center gap-1"
                             >
                                 <span>I agree to the</span>
-
                                 <span className="font-medium text-foreground hover:underline cursor-pointer">
                                     Terms of Service
                                 </span>
-
                                 <span>and</span>
-
                                 <span className="font-medium text-foreground hover:underline cursor-pointer">
                                     Privacy Policy
                                 </span>
