@@ -8,19 +8,20 @@ import {
 } from '@/components/ui/card';
 
 import { useForm } from '@/hooks/use-form';
-import { getPasswordStrength } from '@/lib/password';
 import { pb } from '@/lib/pb';
 
+import { CheckboxField } from '@/components/composite/checkbox-field';
 import { EmailField } from '@/components/composite/email-field';
+import { Form } from '@/components/composite/form';
+import { LinkPrompt } from '@/components/composite/link-prompt';
 import { PasswordField } from '@/components/composite/password-field';
+import { PasswordStrength } from '@/components/composite/password-strength';
+import { SubmitButton } from '@/components/composite/submit-button';
 import { TextField } from '@/components/composite/text-field';
 import { GoogleIcon } from '@/components/icons/google-icon';
 import { AuthLayout } from '@/components/layouts/auth-layout';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { Link } from 'react-router';
 
 const SignUp = () => {
     const { data, setData, errors, setErrors, loading, setLoading } = useForm({
@@ -29,8 +30,6 @@ const SignUp = () => {
         password: '',
         agreed: false,
     });
-
-    const passwordStrength = getPasswordStrength(data.password);
 
     const handleSubmit = async () => {
         if (!data.agreed) return;
@@ -66,28 +65,17 @@ const SignUp = () => {
                     <CardTitle className="text-xl">Create your account</CardTitle>
                     <CardDescription>Start shortening links for free</CardDescription>
                 </CardHeader>
-
                 <CardContent className="flex flex-col gap-4">
-                    {/* Social */}
                     <Button variant="outline" type="button" className="w-full gap-2">
                         <GoogleIcon className="size-5" />
                         Continue with Google
                     </Button>
-
                     <div className="flex items-center gap-3">
                         <Separator className="flex-1" />
                         <span className="text-xs text-muted-foreground">or</span>
                         <Separator className="flex-1" />
                     </div>
-
-                    {/* Form */}
-                    <form
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                            handleSubmit();
-                        }}
-                        className="flex flex-col gap-4"
-                    >
+                    <Form onSubmit={handleSubmit}>
                         <TextField
                             id="name"
                             label="Full name"
@@ -98,7 +86,6 @@ const SignUp = () => {
                             required
                             autoComplete="name"
                         />
-
                         <EmailField
                             id="email"
                             label="Email"
@@ -109,7 +96,6 @@ const SignUp = () => {
                             required
                             autoComplete="email"
                         />
-
                         <PasswordField
                             id="password"
                             label="Password"
@@ -120,54 +106,35 @@ const SignUp = () => {
                             required
                             autoComplete="new-password"
                         >
-                            {passwordStrength && (
-                                <div className="flex items-center gap-2">
-                                    <div className="h-1 flex-1 overflow-hidden rounded-full bg-muted">
-                                        <div
-                                            className={`h-full rounded-full transition-all ${passwordStrength.color}`}
-                                            style={{ width: passwordStrength.width }}
-                                        />
-                                    </div>
-                                    <span className="text-xs text-muted-foreground">
-                                        {passwordStrength.label}
-                                    </span>
-                                </div>
-                            )}
+                            <PasswordStrength password={data.password} />
                         </PasswordField>
-
-                        <div className="flex items-start gap-2">
-                            <Checkbox
-                                id="terms"
-                                checked={data.agreed}
-                                onCheckedChange={(v) => setData('agreed', !!v)}
-                                className="mt-0.5"
-                            />
-                            <Label
-                                htmlFor="terms"
-                                className="cursor-pointer text-sm font-normal leading-relaxed flex flex-wrap items-center gap-1"
-                            >
-                                <span>I agree to the</span>
-                                <span className="font-medium text-foreground hover:underline cursor-pointer">
-                                    Terms of Service
-                                </span>
-                                <span>and</span>
-                                <span className="font-medium text-foreground hover:underline cursor-pointer">
-                                    Privacy Policy
-                                </span>
-                            </Label>
-                        </div>
-
-                        <Button type="submit" className="w-full" disabled={loading || !data.agreed}>
-                            {loading ? 'Creating account…' : 'Create account'}
-                        </Button>
-                    </form>
+                        <CheckboxField
+                            id="terms"
+                            checked={data.agreed}
+                            onCheckedChange={(v) => setData('agreed', v)}
+                        >
+                            <span>I agree to the</span>
+                            <span className="font-medium text-foreground hover:underline cursor-pointer">
+                                Terms of Service
+                            </span>
+                            <span>and</span>
+                            <span className="font-medium text-foreground hover:underline cursor-pointer">
+                                Privacy Policy
+                            </span>
+                        </CheckboxField>
+                        <SubmitButton
+                            loading={loading}
+                            disabled={!data.agreed}
+                            label="Create account"
+                        />
+                    </Form>
                 </CardContent>
-
-                <CardFooter className="justify-center text-sm text-muted-foreground">
-                    Already have an account?&nbsp;
-                    <Link to="/sign-in" className="font-medium text-foreground hover:underline">
-                        Sign in
-                    </Link>
+                <CardFooter>
+                    <LinkPrompt
+                        text="Already have an account?"
+                        linkText="Sign in"
+                        linkTo="/sign-in"
+                    />
                 </CardFooter>
             </Card>
         </AuthLayout>
