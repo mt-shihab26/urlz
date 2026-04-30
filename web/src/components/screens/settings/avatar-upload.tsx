@@ -2,6 +2,7 @@ import type { TUser } from '@/types/models';
 
 import { useForm } from '@/hooks/use-form';
 import { getAvatarUrl, updateAvatar } from '@/lib/auth';
+import { getInitial } from '@/lib/utils';
 import { useRef, useState } from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -41,7 +42,7 @@ export const AvatarUpload = ({ user }: { user: TUser }) => {
                 <Avatar className="size-20 text-2xl">
                     <AvatarImage src={avatarUrl ?? undefined} alt={user.name} />
                     <AvatarFallback className="bg-linear-to-br from-primary to-blue-400 font-bold text-white">
-                        {user.name[0].toUpperCase()}
+                        {getInitial(user.name)}
                     </AvatarFallback>
                 </Avatar>
                 <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
