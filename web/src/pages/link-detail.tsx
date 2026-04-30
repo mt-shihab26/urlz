@@ -6,12 +6,7 @@ import { ChevronLeftIcon } from 'lucide-react';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
 import { StatusBadge, CountryBar } from '@/components/composite/urlz-ui';
 import { Button } from '@/components/ui/button';
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     ChartContainer,
     ChartTooltip,
@@ -27,24 +22,42 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { LINKS_DATA, COUNTRIES_DATA, REFERRERS_DATA } from '@/lib/urlz-data';
+import { getLinkById } from '@/collections/links';
+import type { TLink } from '@/types/models';
 
 const chartConfig = {
-    clicks: {
-        label: 'Clicks',
-        color: 'var(--primary)',
-    },
+    clicks: { label: 'Clicks', color: 'var(--primary)' },
 } satisfies ChartConfig;
 
 const RANGES = ['7d', '30d', '90d', 'All'] as const;
 type Range = (typeof RANGES)[number];
 
+const countriesData: { country: string; code: string; clicks: number; pct: number }[] = [];
+const referrersData: { source: string; clicks: number }[] = [];
+
 function LinkDetail() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const [link, setLink] = React.useState<TLink | null>(null);
+    const [loading, setLoading] = React.useState(true);
     const [range, setRange] = React.useState<Range>('30d');
 
-    const link = LINKS_DATA.find((l) => l.id === id);
+    React.useEffect(() => {
+        if (!id) return;
+        getLinkById(id)
+            .then(setLink)
+            .finally(() => setLoading(false));
+    }, [id]);
+
+    if (loading) {
+        return (
+            <DashboardLayout title="Link">
+                <div className="flex h-64 items-center justify-center text-muted-foreground">
+                    Loading…
+                </div>
+            </DashboardLayout>
+        );
+    }
 
     if (!link) {
         return (
@@ -63,12 +76,12 @@ function LinkDetail() {
         range === '7d' ? 7 : range === '90d' ? 90 : range === 'All' ? link.series.length : 30;
     const slicedSeries = link.series.slice(-days);
     const periodClicks = slicedSeries.reduce((s, d) => s + d.clicks, 0);
-    const maxCountryPct = COUNTRIES_DATA[0].pct;
+    const maxCountryPct = countriesData[0]?.pct ?? 100;
 
     const stats = [
         { label: 'Period Clicks', value: periodClicks.toLocaleString() },
         { label: 'Total Clicks', value: link.clicks.toLocaleString() },
-        { label: 'Countries', value: '38' },
+        { label: 'Countries', value: '—' },
         {
             label: 'Created',
             value: new Date(link.created).toLocaleDateString('en-US', {
@@ -81,7 +94,6 @@ function LinkDetail() {
 
     return (
         <DashboardLayout title={link.title}>
-            {/* Header section */}
             <div className="flex flex-col gap-2 border-b px-4 py-4 lg:px-6">
                 <button
                     onClick={() => navigate('/links')}
@@ -121,7 +133,6 @@ function LinkDetail() {
             </div>
 
             <div className="flex flex-col gap-6 p-4 lg:p-6">
-                {/* Stat cards */}
                 <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
                     {stats.map((s) => (
                         <Card key={s.label}>
@@ -135,7 +146,6 @@ function LinkDetail() {
                     ))}
                 </div>
 
-                {/* Click volume chart */}
                 <Card>
                     <CardHeader>
                         <CardTitle>Clicks Over Time</CardTitle>
@@ -194,14 +204,13 @@ function LinkDetail() {
                     </CardContent>
                 </Card>
 
-                {/* Countries + Referrers */}
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                     <Card>
                         <CardHeader>
                             <CardTitle>Top Countries</CardTitle>
                         </CardHeader>
                         <CardContent className="flex flex-col gap-2.5">
-                            {COUNTRIES_DATA.slice(0, 6).map((d) => (
+                            {countriesData.slice(0, 6).map((d) => (
                                 <CountryBar
                                     key={d.code}
                                     code={d.code}
@@ -225,7 +234,7 @@ function LinkDetail() {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {REFERRERS_DATA.slice(0, 6).map((r) => (
+                                    {referrersData.slice(0, 6).map((r) => (
                                         <TableRow key={r.source}>
                                             <TableCell>{r.source}</TableCell>
                                             <TableCell className="text-right font-mono text-sm text-muted-foreground">
