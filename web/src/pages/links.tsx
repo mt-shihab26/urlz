@@ -77,7 +77,7 @@ function Links() {
     ];
 
     return (
-        <DashboardLayout>
+        <DashboardLayout title="Links">
             <Header
                 title="Links"
                 description="Manage and monitor all your shortened links"

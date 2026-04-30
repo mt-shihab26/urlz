@@ -57,7 +57,7 @@ function Analytics() {
     const slicedSeries = getSlice(range);
 
     return (
-        <DashboardLayout>
+        <DashboardLayout title="Analytics">
             <Header
                 title="Analytics"
                 description="Aggregated traffic across all links"

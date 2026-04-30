@@ -48,7 +48,7 @@ function LinkDetail() {
 
     if (!link) {
         return (
-            <DashboardLayout>
+            <DashboardLayout title="Link Not Found">
                 <div className="flex flex-col items-center justify-center gap-4 p-12 text-center">
                     <p className="text-muted-foreground">Link not found.</p>
                     <Button variant="outline" onClick={() => navigate('/links')}>
@@ -80,7 +80,7 @@ function LinkDetail() {
     ];
 
     return (
-        <DashboardLayout>
+        <DashboardLayout title={link.title}>
             {/* Header section */}
             <div className="flex flex-col gap-2 border-b px-4 py-4 lg:px-6">
                 <button

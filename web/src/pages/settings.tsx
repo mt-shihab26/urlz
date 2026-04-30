@@ -5,7 +5,7 @@ import { DangerZoneCard } from '@/components/screens/settings/danger-zone-card';
 import { ProfileCard } from '@/components/screens/settings/profile-card';
 
 const Settings = () => (
-    <DashboardLayout>
+    <DashboardLayout title="Settings">
         <Header
             title="Settings"
             description="Manage your account, API access, and preferences"
