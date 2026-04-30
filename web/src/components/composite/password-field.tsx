@@ -7,19 +7,21 @@ import { Eye, EyeOff } from 'lucide-react';
 export const PasswordField = ({
     id,
     label,
+    labelExtra,
     error,
     children,
     ...props
 }: {
     id: string;
     label: string;
+    labelExtra?: ReactNode;
     error?: string | null;
     children?: ReactNode;
 } & Omit<ComponentProps<'input'>, 'id' | 'type'>) => {
     const [show, setShow] = useState(false);
 
     return (
-        <FormField id={id} label={label} error={error}>
+        <FormField id={id} label={label} labelExtra={labelExtra} error={error}>
             <div className="relative">
                 <Input id={id} type={show ? 'text' : 'password'} className="pr-9" {...props} />
                 <button

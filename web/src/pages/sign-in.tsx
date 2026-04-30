@@ -7,26 +7,43 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 
-import { useState } from 'react';
+import { useForm } from '@/hooks/use-form';
+import { pb } from '@/lib/pb';
 
-import { GoogleIcon } from '@/components/icons/google-icon';
+import { CheckboxField } from '@/components/composite/checkbox-field';
+import { EmailField } from '@/components/composite/email-field';
+import { Form } from '@/components/composite/form';
+import { GoogleOAuthButton } from '@/components/composite/google-oauth-button';
+import { LinkPrompt } from '@/components/composite/link-prompt';
+import { OrDivider } from '@/components/composite/or-divider';
+import { PasswordField } from '@/components/composite/password-field';
+import { SubmitButton } from '@/components/composite/submit-button';
 import { AuthLayout } from '@/components/layouts/auth-layout';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
 import { Link } from 'react-router';
 
 const SignIn = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [remember, setRemember] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const { data, setData, errors, setErrors, loading, setLoading } = useForm({
+        email: '',
+        password: '',
+        remember: false,
+    });
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         setLoading(true);
-        setTimeout(() => setLoading(false), 1200);
+        try {
+            await pb.collection('users').authWithPassword(data.email, data.password);
+        } catch (e: any) {
+            const resData = e?.response?.data;
+            if (resData?.email?.message) {
+                setErrors('email', resData.email.message);
+            } else if (resData?.password?.message) {
+                setErrors('password', resData.password.message);
+            } else {
+                setErrors('email', e?.message ?? 'Something went wrong. Please try again.');
+            }
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -36,87 +53,54 @@ const SignIn = () => {
                     <CardTitle className="text-xl">Welcome back</CardTitle>
                     <CardDescription>Sign in to your urlz account</CardDescription>
                 </CardHeader>
-
                 <CardContent className="flex flex-col gap-4">
-                    {/* Social */}
-                    <Button variant="outline" type="button" className="w-full gap-2">
-                        <GoogleIcon className="size-5" />
-                        Continue with Google
-                    </Button>
-
-                    <div className="flex items-center gap-3">
-                        <Separator className="flex-1" />
-                        <span className="text-xs text-muted-foreground">or</span>
-                        <Separator className="flex-1" />
-                    </div>
-
-                    {/* Form */}
-                    <form
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                            handleSubmit();
-                        }}
-                        className="flex flex-col gap-4"
-                    >
-                        <div className="flex flex-col gap-1.5">
-                            <Label htmlFor="email">Email</Label>
-                            <Input
-                                id="email"
-                                type="email"
-                                placeholder="you@example.com"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                                autoComplete="email"
-                            />
-                        </div>
-
-                        <div className="flex flex-col gap-1.5">
-                            <div className="flex items-center justify-between">
-                                <Label htmlFor="password">Password</Label>
+                    <GoogleOAuthButton />
+                    <OrDivider />
+                    <Form onSubmit={handleSubmit}>
+                        <EmailField
+                            id="email"
+                            label="Email"
+                            placeholder="you@example.com"
+                            value={data.email}
+                            onChange={(e) => setData('email', e.target.value)}
+                            error={errors.email}
+                            required
+                            autoComplete="email"
+                        />
+                        <PasswordField
+                            id="password"
+                            label="Password"
+                            placeholder="••••••••"
+                            value={data.password}
+                            onChange={(e) => setData('password', e.target.value)}
+                            error={errors.password}
+                            required
+                            autoComplete="current-password"
+                            labelExtra={
                                 <Link
                                     to="/forgot-password"
                                     className="text-xs text-muted-foreground hover:text-foreground"
                                 >
                                     Forgot password?
                                 </Link>
-                            </div>
-                            <Input
-                                id="password"
-                                type="password"
-                                placeholder="••••••••"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                                autoComplete="current-password"
-                            />
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                            <Checkbox
-                                id="remember"
-                                checked={remember}
-                                onCheckedChange={(v) => setRemember(!!v)}
-                            />
-                            <Label
-                                htmlFor="remember"
-                                className="cursor-pointer text-sm font-normal"
-                            >
-                                Remember me for 30 days
-                            </Label>
-                        </div>
-
-                        <Button type="submit" className="w-full" disabled={loading}>
-                            {loading ? 'Signing in…' : 'Sign in'}
-                        </Button>
-                    </form>
+                            }
+                        />
+                        <CheckboxField
+                            id="remember"
+                            checked={data.remember}
+                            onCheckedChange={(v) => setData('remember', v)}
+                        >
+                            Remember me for 30 days
+                        </CheckboxField>
+                        <SubmitButton loading={loading} label="Sign in" />
+                    </Form>
                 </CardContent>
-
-                <CardFooter className="justify-center text-sm text-muted-foreground">
-                    Don't have an account?&nbsp;
-                    <Link to="/sign-up" className="font-medium text-foreground hover:underline">
-                        Sign up
-                    </Link>
+                <CardFooter>
+                    <LinkPrompt
+                        text="Don't have an account?"
+                        linkText="Sign up"
+                        linkTo="/sign-up"
+                    />
                 </CardFooter>
             </Card>
         </AuthLayout>
