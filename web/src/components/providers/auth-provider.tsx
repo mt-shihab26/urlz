@@ -29,8 +29,8 @@ export const useAuth = () => {
     return ctx;
 };
 
-export const useUser = (): TUser => {
+export const useUser = (): { user: TUser } => {
     const { user } = useAuth();
     if (!user) throw new Error('useUser must be used within AuthGuard');
-    return user;
+    return { user };
 };

@@ -22,6 +22,10 @@ export const signOut = () => {
     window.location.reload();
 };
 
+export const updateProfile = async (userId: string, name: string, email: string) => {
+    await pb.collection('users').update(userId, { name, email });
+};
+
 export const updateAvatar = async (userId: string, file: File) => {
     const form = new FormData();
     form.append('avatar', file);
