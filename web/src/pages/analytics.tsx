@@ -4,12 +4,7 @@ import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
 import { Header } from '@/components/composite/site-header';
 import { CountryBar } from '@/components/composite/urlz-ui';
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     ChartContainer,
     ChartTooltip,
@@ -25,36 +20,33 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import {
-    TOTAL_SERIES,
-    COUNTRIES_DATA,
-    REFERRERS_DATA,
-    BROWSERS_DATA,
-    OS_DATA,
-} from '@/lib/urlz-data';
 
 const chartConfig = {
-    clicks: {
-        label: 'Clicks',
-        color: 'var(--primary)',
-    },
+    clicks: { label: 'Clicks', color: 'var(--primary)' },
 } satisfies ChartConfig;
 
 const RANGES = ['7d', '30d', '90d', 'All'] as const;
 type Range = (typeof RANGES)[number];
 
-function getSlice(range: Range) {
-    if (range === '7d') return TOTAL_SERIES.slice(-7);
-    if (range === '30d') return TOTAL_SERIES.slice(-30);
-    if (range === '90d') return TOTAL_SERIES.slice(-90);
-    return TOTAL_SERIES;
-}
-
-const maxCountryPct = COUNTRIES_DATA[0].pct;
+const totalSeries: { date: string; clicks: number }[] = [];
+const countriesData: { country: string; code: string; clicks: number; pct: number }[] = [];
+const referrersData: { source: string; clicks: number }[] = [];
+const browsersData: { name: string; pct: number; color: string }[] = [];
+const osData: { name: string; pct: number; color: string }[] = [];
 
 function Analytics() {
     const [range, setRange] = React.useState<Range>('30d');
-    const slicedSeries = getSlice(range);
+
+    const slicedSeries =
+        range === '7d'
+            ? totalSeries.slice(-7)
+            : range === '30d'
+              ? totalSeries.slice(-30)
+              : range === '90d'
+                ? totalSeries.slice(-90)
+                : totalSeries;
+
+    const maxCountryPct = countriesData[0]?.pct ?? 100;
 
     return (
         <DashboardLayout title="Analytics">
@@ -79,7 +71,6 @@ function Analytics() {
             />
 
             <div className="flex flex-col gap-6 p-4 lg:p-6">
-                {/* Click volume */}
                 <Card>
                     <CardHeader>
                         <CardTitle>Click Volume</CardTitle>
@@ -138,14 +129,13 @@ function Analytics() {
                     </CardContent>
                 </Card>
 
-                {/* Countries + Referrers */}
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                     <Card>
                         <CardHeader>
                             <CardTitle>Top Countries</CardTitle>
                         </CardHeader>
                         <CardContent className="flex flex-col gap-2.5">
-                            {COUNTRIES_DATA.map((d) => (
+                            {countriesData.map((d) => (
                                 <CountryBar
                                     key={d.code}
                                     code={d.code}
@@ -169,7 +159,7 @@ function Analytics() {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {REFERRERS_DATA.map((r) => (
+                                    {referrersData.map((r) => (
                                         <TableRow key={r.source}>
                                             <TableCell>{r.source}</TableCell>
                                             <TableCell className="text-right font-mono text-sm text-muted-foreground">
@@ -183,14 +173,13 @@ function Analytics() {
                     </Card>
                 </div>
 
-                {/* Browsers + OS */}
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                     <Card>
                         <CardHeader>
                             <CardTitle>Browsers</CardTitle>
                         </CardHeader>
                         <CardContent className="flex flex-col gap-3">
-                            {BROWSERS_DATA.map((d) => (
+                            {browsersData.map((d) => (
                                 <div key={d.name} className="flex items-center gap-2.5">
                                     <span
                                         className="size-2.5 shrink-0 rounded-sm"
@@ -210,7 +199,7 @@ function Analytics() {
                             <CardTitle>Operating Systems</CardTitle>
                         </CardHeader>
                         <CardContent className="flex flex-col gap-3">
-                            {OS_DATA.map((d) => (
+                            {osData.map((d) => (
                                 <div key={d.name} className="flex items-center gap-2.5">
                                     <span
                                         className="size-2.5 shrink-0 rounded-sm"

@@ -10,12 +10,14 @@ export type TLinkStatus = 'active' | 'disabled' | 'expired';
 
 export type TLink = {
     id: string;
+    user: string;
     code: string;
     url: string;
     title: string;
     clicks: number;
     created: string;
+    updated: string;
     status: TLinkStatus;
-    expires: string | null;
+    expires: string;
     series: { date: string; clicks: number }[];
 };

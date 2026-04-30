@@ -28,63 +28,70 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { LINKS_DATA, TOTAL_SERIES } from '@/lib/urlz-data';
 import { StatusBadge, Sparkline } from '@/components/composite/urlz-ui';
+import { getLinks } from '@/collections/links';
+import type { TLink } from '@/types/models';
 
 const chartConfig = {
-    clicks: {
-        label: 'Clicks',
-        color: 'var(--primary)',
-    },
+    clicks: { label: 'Clicks', color: 'var(--primary)' },
 } satisfies ChartConfig;
 
 const RANGES = ['7d', '30d', '90d', 'All'] as const;
 type Range = (typeof RANGES)[number];
 
-function getSlice(range: Range) {
-    const len = TOTAL_SERIES.length;
-    if (range === '7d') return TOTAL_SERIES.slice(-7);
-    if (range === '30d') return TOTAL_SERIES.slice(-30);
-    if (range === '90d') return TOTAL_SERIES.slice(-Math.min(90, len));
-    return TOTAL_SERIES;
-}
-
 function Overview() {
     const navigate = useNavigate();
+    const [links, setLinks] = React.useState<TLink[]>([]);
     const [range, setRange] = React.useState<Range>('30d');
-    const slicedSeries = getSlice(range);
 
-    const totalClicks = TOTAL_SERIES.reduce((s, d) => s + d.clicks, 0);
-    const prevClicks = TOTAL_SERIES.slice(-60, -30).reduce((s, d) => s + d.clicks, 0);
-    const currClicks = TOTAL_SERIES.slice(-30).reduce((s, d) => s + d.clicks, 0);
-    const delta = prevClicks > 0 ? Math.round(((currClicks - prevClicks) / prevClicks) * 100) : 0;
-    const activeLinks = LINKS_DATA.filter((l) => l.status === 'active').length;
+    React.useEffect(() => {
+        getLinks().then(setLinks);
+    }, []);
+
+    const totalSeries = React.useMemo(() => {
+        const byDate = new Map<string, number>();
+        links.forEach((link) => {
+            link.series.forEach(({ date, clicks }) => {
+                byDate.set(date, (byDate.get(date) ?? 0) + clicks);
+            });
+        });
+        return Array.from(byDate.entries())
+            .map(([date, clicks]) => ({ date, clicks }))
+            .sort((a, b) => a.date.localeCompare(b.date));
+    }, [links]);
+
+    const slicedSeries =
+        range === '7d'
+            ? totalSeries.slice(-7)
+            : range === '30d'
+              ? totalSeries.slice(-30)
+              : range === '90d'
+                ? totalSeries.slice(-90)
+                : totalSeries;
+
+    const totalClicks = links.reduce((s, l) => s + l.clicks, 0);
+    const prev30 = totalSeries.slice(-60, -30).reduce((s, d) => s + d.clicks, 0);
+    const curr30 = totalSeries.slice(-30).reduce((s, d) => s + d.clicks, 0);
+    const delta = prev30 > 0 ? Math.round(((curr30 - prev30) / prev30) * 100) : 0;
+    const activeLinks = links.filter((l) => l.status === 'active').length;
+    const topLinks = [...links].sort((a, b) => b.clicks - a.clicks).slice(0, 6);
 
     const stats = [
-        {
-            label: 'Total Clicks',
-            value: totalClicks.toLocaleString(),
-            delta,
-            sub: 'vs prev 30d',
-        },
-        {
-            label: 'Active Links',
-            value: activeLinks,
-            sub: `of ${LINKS_DATA.length} total`,
-        },
+        { label: 'Total Clicks', value: totalClicks.toLocaleString(), delta, sub: 'vs prev 30d' },
+        { label: 'Active Links', value: activeLinks, sub: `of ${links.length} total` },
         {
             label: 'Avg Clicks / Link',
-            value: Math.round(totalClicks / LINKS_DATA.length).toLocaleString(),
+            value: links.length > 0 ? Math.round(totalClicks / links.length).toLocaleString() : '0',
             sub: 'lifetime',
         },
-        { label: 'Countries', value: '43', delta: 8, sub: 'reached' },
+        { label: 'Countries', value: '—', sub: 'reached' },
     ];
 
     return (
         <DashboardLayout title="Overview">
             <Header
                 title="Overview"
-                description="April 28, 2026 — all your links at a glance"
+                description="All your links at a glance"
                 action={
                     <ToggleGroup
                         multiple={false}
@@ -103,7 +110,6 @@ function Overview() {
             />
 
             <div className="flex flex-col gap-6 p-4 lg:p-6">
-                {/* Stat cards */}
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
                     {stats.map((s) => (
                         <Card key={s.label}>
@@ -131,21 +137,18 @@ function Overview() {
                                         {s.delta}%
                                     </span>
                                 )}
-                                {s.sub && (
-                                    <span className="text-muted-foreground">{s.sub}</span>
-                                )}
+                                {s.sub && <span className="text-muted-foreground">{s.sub}</span>}
                             </CardFooter>
                         </Card>
                     ))}
                 </div>
 
-                {/* Click volume chart */}
                 <Card>
                     <CardHeader className="flex-row items-center justify-between">
                         <div>
                             <CardTitle>Click Volume</CardTitle>
                             <CardDescription className="mt-0.5 font-mono text-xs">
-                                {currClicks.toLocaleString()} this period
+                                {curr30.toLocaleString()} this period
                             </CardDescription>
                         </div>
                     </CardHeader>
@@ -203,7 +206,6 @@ function Overview() {
                     </CardContent>
                 </Card>
 
-                {/* Top links */}
                 <Card>
                     <CardHeader>
                         <CardTitle>Top Links</CardTitle>
@@ -219,36 +221,53 @@ function Overview() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {LINKS_DATA.slice(0, 6).map((link, i) => (
-                                    <TableRow
-                                        key={link.id}
-                                        className="cursor-pointer"
-                                        onClick={() => navigate(`/links/${link.id}`)}
-                                    >
-                                        <TableCell>
-                                            <div className="flex items-center gap-3">
-                                                <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-primary/10 text-xs font-bold text-primary">
-                                                    {i + 1}
-                                                </span>
-                                                <div>
-                                                    <div className="font-medium">{link.title}</div>
-                                                    <div className="font-mono text-xs text-muted-foreground">
-                                                        urlz.io/{link.code}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </TableCell>
-                                        <TableCell className="text-right font-mono font-bold">
-                                            {link.clicks.toLocaleString()}
-                                        </TableCell>
-                                        <TableCell className="text-right">
-                                            <Sparkline data={link.series.slice(-14)} width={72} height={24} />
-                                        </TableCell>
-                                        <TableCell>
-                                            <StatusBadge status={link.status} />
+                                {topLinks.length === 0 ? (
+                                    <TableRow>
+                                        <TableCell
+                                            colSpan={4}
+                                            className="h-24 text-center text-muted-foreground"
+                                        >
+                                            No links yet
                                         </TableCell>
                                     </TableRow>
-                                ))}
+                                ) : (
+                                    topLinks.map((link, i) => (
+                                        <TableRow
+                                            key={link.id}
+                                            className="cursor-pointer"
+                                            onClick={() => navigate(`/links/${link.id}`)}
+                                        >
+                                            <TableCell>
+                                                <div className="flex items-center gap-3">
+                                                    <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-primary/10 text-xs font-bold text-primary">
+                                                        {i + 1}
+                                                    </span>
+                                                    <div>
+                                                        <div className="font-medium">
+                                                            {link.title}
+                                                        </div>
+                                                        <div className="font-mono text-xs text-muted-foreground">
+                                                            urlz.io/{link.code}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </TableCell>
+                                            <TableCell className="text-right font-mono font-bold">
+                                                {link.clicks.toLocaleString()}
+                                            </TableCell>
+                                            <TableCell className="text-right">
+                                                <Sparkline
+                                                    data={link.series.slice(-14)}
+                                                    width={72}
+                                                    height={24}
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                <StatusBadge status={link.status} />
+                                            </TableCell>
+                                        </TableRow>
+                                    ))
+                                )}
                             </TableBody>
                         </Table>
                     </CardContent>
