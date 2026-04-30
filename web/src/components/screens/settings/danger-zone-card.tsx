@@ -14,10 +14,9 @@ import { deleteAccount } from '@/collections/users';
 import { useUser } from '@/components/providers/auth-provider';
 import { useForm } from '@/hooks/use-form';
 
+import { EmailField } from '@/components/composite/email-field';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 
 export const DangerZoneCard = () => {
@@ -64,19 +63,15 @@ export const DangerZoneCard = () => {
                                     to confirm.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
-                            <div className="flex flex-col gap-1.5">
-                                <Label htmlFor="confirm-email">Email</Label>
-                                <Input
-                                    id="confirm-email"
-                                    placeholder={user.email}
-                                    value={data.email}
-                                    autoComplete="off"
-                                    onChange={(e) => setData('email', e.target.value)}
-                                />
-                                {errors.email && (
-                                    <p className="text-xs text-destructive">{errors.email}</p>
-                                )}
-                            </div>
+                            <EmailField
+                                id="confirm-email"
+                                label="Email"
+                                placeholder={user.email}
+                                value={data.email}
+                                autoComplete="off"
+                                error={errors.email}
+                                onChange={(e) => setData('email', e.target.value)}
+                            />
                             <AlertDialogFooter>
                                 <AlertDialogCancel onClick={() => setData('email', '')}>
                                     Cancel
