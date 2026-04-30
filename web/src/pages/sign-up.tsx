@@ -7,6 +7,8 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 
+import { getPasswordStrength } from '@/lib/password';
+import { pb } from '@/lib/pb';
 import { useState } from 'react';
 
 import { GoogleIcon } from '@/components/icons/google-icon';
@@ -25,18 +27,18 @@ const SignUp = () => {
     const [agreed, setAgreed] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const handleSubmit = () => {
+    const passwordStrength = getPasswordStrength(password);
+
+    const handleSubmit = async () => {
         if (!agreed) return;
         setLoading(true);
-        setTimeout(() => setLoading(false), 1200);
+        try {
+            await pb.collection('users').authWithPassword('test@example.com', '1234567890');
+        } catch (e: any) {
+        } finally {
+            setLoading(false);
+        }
     };
-
-    const passwordStrength = (() => {
-        if (password.length === 0) return null;
-        if (password.length < 6) return { label: 'Weak', color: 'bg-destructive', width: '33%' };
-        if (password.length < 10) return { label: 'Fair', color: 'bg-yellow-500', width: '66%' };
-        return { label: 'Strong', color: 'bg-green-500 dark:bg-green-400', width: '100%' };
-    })();
 
     return (
         <AuthLayout>
@@ -49,7 +51,7 @@ const SignUp = () => {
                 <CardContent className="flex flex-col gap-4">
                     {/* Social */}
                     <Button variant="outline" type="button" className="w-full gap-2">
-                        <GoogleIcon />
+                        <GoogleIcon className="size-5" />
                         Continue with Google
                     </Button>
 
@@ -126,15 +128,19 @@ const SignUp = () => {
                                 onCheckedChange={(v) => setAgreed(!!v)}
                                 className="mt-0.5"
                             />
+
                             <Label
                                 htmlFor="terms"
-                                className="cursor-pointer text-sm font-normal leading-relaxed"
+                                className="cursor-pointer text-sm font-normal leading-relaxed flex flex-wrap items-center gap-1"
                             >
-                                I agree to the{' '}
+                                <span>I agree to the</span>
+
                                 <span className="font-medium text-foreground hover:underline cursor-pointer">
                                     Terms of Service
-                                </span>{' '}
-                                and{' '}
+                                </span>
+
+                                <span>and</span>
+
                                 <span className="font-medium text-foreground hover:underline cursor-pointer">
                                     Privacy Policy
                                 </span>

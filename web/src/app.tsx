@@ -10,6 +10,7 @@ import { PublicGuard } from '@/components/composite/public-guard';
 import { AuthProvider } from '@/components/providers/auth-provider';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { pb } from './lib/pb';
 
 const guardMap = {
     auth: AuthGuard,
@@ -18,6 +19,8 @@ const guardMap = {
 };
 
 export const App = () => {
+    console.log(pb.authStore.isValid, pb.authStore.token, pb.authStore.record);
+
     return (
         <ThemeProvider>
             <TooltipProvider>
