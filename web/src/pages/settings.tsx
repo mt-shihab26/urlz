@@ -1,21 +1,26 @@
+import {
+    CheckIcon,
+    CopyIcon,
+    EyeIcon,
+    EyeOffIcon,
+    MonitorIcon,
+    MoonIcon,
+    PlusIcon,
+    SunIcon,
+} from 'lucide-react';
 import * as React from 'react';
-import { CheckIcon, CopyIcon, EyeIcon, EyeOffIcon, PlusIcon } from 'lucide-react';
-import { MonitorIcon, MoonIcon, SunIcon } from 'lucide-react';
 
-import { DashboardLayout } from '@/components/layouts/dashboard-layout';
 import { Header } from '@/components/composite/site-header';
+import { DashboardLayout } from '@/components/layouts/dashboard-layout';
+import { useTheme } from '@/components/providers/theme-provider';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
-import { useTheme } from '@/components/providers/theme-provider';
+import { getAuth, getAvatarUrl, updateAvatar } from '@/lib/auth';
 import { API_KEYS_DATA } from '@/lib/urlz-data';
 import { cn } from '@/lib/utils';
+import { CameraIcon } from 'lucide-react';
 
 type ApiKeyStatus = 'active' | 'revoked';
 interface ApiKey {
@@ -35,6 +40,25 @@ function Settings() {
     const [revealed, setRevealed] = React.useState<Record<string, boolean>>({});
     const [copied, setCopied] = React.useState<string | null>(null);
 
+    const user = getAuth();
+    const [avatarUrl, setAvatarUrl] = React.useState<string | null>(
+        user ? getAvatarUrl(user) : null,
+    );
+    const [avatarLoading, setAvatarLoading] = React.useState(false);
+    const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+    const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file || !user) return;
+        setAvatarLoading(true);
+        try {
+            await updateAvatar(user.id, file);
+            setAvatarUrl(URL.createObjectURL(file));
+        } finally {
+            setAvatarLoading(false);
+        }
+    };
+
     const revokeKey = (id: string) =>
         setKeys((prev) => prev.map((k) => (k.id === id ? { ...k, status: 'revoked' } : k)));
 
@@ -43,7 +67,11 @@ function Settings() {
         setTimeout(() => setCopied(null), 1800);
     };
 
-    const themeOptions: { value: 'light' | 'system' | 'dark'; label: string; icon: React.ReactNode }[] = [
+    const themeOptions: {
+        value: 'light' | 'system' | 'dark';
+        label: string;
+        icon: React.ReactNode;
+    }[] = [
         { value: 'light', label: 'Light', icon: <SunIcon className="size-4" /> },
         { value: 'system', label: 'System', icon: <MonitorIcon className="size-4" /> },
         { value: 'dark', label: 'Dark', icon: <MoonIcon className="size-4" /> },
@@ -57,42 +85,6 @@ function Settings() {
             />
 
             <div className="flex flex-col gap-6 p-4 lg:p-6 max-w-2xl">
-                {/* Appearance */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Appearance</CardTitle>
-                    </CardHeader>
-                    <CardContent className="flex flex-col gap-3">
-                        <Label className="text-xs uppercase tracking-widest text-muted-foreground">
-                            Theme
-                        </Label>
-                        <div className="flex rounded-lg border bg-muted p-1 gap-1 max-w-xs">
-                            {themeOptions.map(({ value, label, icon }) => (
-                                <button
-                                    key={value}
-                                    onClick={() => setTheme(value)}
-                                    className={cn(
-                                        'flex flex-1 items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-all',
-                                        theme === value
-                                            ? 'bg-background text-foreground shadow-sm'
-                                            : 'text-muted-foreground hover:text-foreground',
-                                    )}
-                                >
-                                    {icon}
-                                    {label}
-                                </button>
-                            ))}
-                        </div>
-                        <p className="text-xs text-muted-foreground">
-                            {theme === 'system'
-                                ? 'Follows your OS preference automatically.'
-                                : theme === 'dark'
-                                  ? 'Always use the dark theme.'
-                                  : 'Always use the light theme.'}
-                        </p>
-                    </CardContent>
-                </Card>
-
                 {/* Profile */}
                 <Card>
                     <CardHeader>
@@ -100,14 +92,37 @@ function Settings() {
                     </CardHeader>
                     <CardContent className="flex flex-col gap-4">
                         <div className="flex items-center gap-4">
-                            <div className="flex size-14 items-center justify-center rounded-full bg-gradient-to-br from-primary to-blue-400 text-xl font-bold text-white">
-                                J
-                            </div>
-                            <div>
-                                <div className="font-semibold">Jamie Chen</div>
-                                <div className="text-sm text-muted-foreground">
-                                    jamie@myapp.com
+                            <button
+                                type="button"
+                                onClick={() => fileInputRef.current?.click()}
+                                disabled={avatarLoading}
+                                className="group relative size-14 shrink-0 rounded-full"
+                            >
+                                {avatarUrl ? (
+                                    <img
+                                        src={avatarUrl}
+                                        alt="Avatar"
+                                        className="size-14 rounded-full object-cover"
+                                    />
+                                ) : (
+                                    <div className="flex size-14 items-center justify-center rounded-full bg-gradient-to-br from-primary to-blue-400 text-xl font-bold text-white">
+                                        {user?.name?.[0]?.toUpperCase() ?? 'U'}
+                                    </div>
+                                )}
+                                <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+                                    <CameraIcon className="size-5 text-white" />
                                 </div>
+                            </button>
+                            <input
+                                ref={fileInputRef}
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={handleAvatarChange}
+                            />
+                            <div>
+                                <div className="font-semibold">{user?.name ?? 'Jamie Chen'}</div>
+                                <div className="text-sm text-muted-foreground">{user?.email ?? 'jamie@myapp.com'}</div>
                             </div>
                         </div>
                         <div className="grid grid-cols-2 gap-3">
@@ -140,10 +155,7 @@ function Settings() {
                         {keys.map((k, i) => (
                             <div
                                 key={k.id}
-                                className={cn(
-                                    'px-6 py-4',
-                                    i < keys.length - 1 && 'border-b',
-                                )}
+                                className={cn('px-6 py-4', i < keys.length - 1 && 'border-b')}
                             >
                                 <div className="mb-3 flex items-center justify-between">
                                     <div className="flex items-center gap-2">

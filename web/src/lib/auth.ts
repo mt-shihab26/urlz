@@ -21,3 +21,14 @@ export const signOut = () => {
     pb.authStore.clear();
     window.location.reload();
 };
+
+export const updateAvatar = async (userId: string, file: File) => {
+    const form = new FormData();
+    form.append('avatar', file);
+    await pb.collection('users').update(userId, form);
+};
+
+export const getAvatarUrl = (user: TUser): string | null => {
+    if (!user.avatar) return null;
+    return pb.files.getURL(user, user.avatar);
+};
