@@ -21,32 +21,59 @@ import { Separator } from '@/components/ui/separator';
 import { Link } from 'react-router';
 
 const SignUp = () => {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [agreed, setAgreed] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const [data, setData] = useState<{
+        name: string;
+        email: string;
+        password: string;
+        agreed: boolean;
+    }>({
+        name: '',
+        email: '',
+        password: '',
+        agreed: false,
+    });
 
-    const passwordStrength = getPasswordStrength(password);
+    const [errors, setErrors] = useState<{
+        name?: string | null;
+        email?: string | null;
+        password?: string | null;
+        agreed?: string | null;
+    }>({
+        name: null,
+        email: null,
+        password: null,
+        agreed: null,
+    });
+
+    const [loading, setLoading] = useState(false);
+
+    const passwordStrength = getPasswordStrength(data.password);
 
     const handleSubmit = async () => {
-        if (!agreed) return;
+        if (!data.agreed) return;
         setLoading(true);
-        setError(null);
+        setErrors({ name: null, email: null, password: null, agreed: null });
         try {
-            await pb
-                .collection('users')
-                .create({ name, email, password, passwordConfirm: password });
-            await pb.collection('users').authWithPassword(email, password);
+            await pb.collection('users').create({
+                name: data.name,
+                email: data.email,
+                password: data.password,
+                passwordConfirm: data.password,
+            });
+            await pb.collection('users').authWithPassword(data.email, data.password);
         } catch (e: any) {
-            const data = e?.response?.data;
-            if (data?.email?.message) {
-                setError(data.email.message);
-            } else if (data?.password?.message) {
-                setError(data.password.message);
+            const resData = e?.response?.data;
+            if (resData?.email?.message) {
+                setErrors((prev) => ({ ...prev, email: resData.email.message }));
+            } else if (resData?.password?.message) {
+                setErrors((prev) => ({ ...prev, password: resData.password.message }));
+            } else if (resData?.name?.message) {
+                setErrors((prev) => ({ ...prev, name: resData.name.message }));
             } else {
-                setError(e?.message ?? 'Something went wrong. Please try again.');
+                setErrors((prev) => ({
+                    ...prev,
+                    email: e?.message ?? 'Something went wrong. Please try again.',
+                }));
             }
         } finally {
             setLoading(false);
@@ -88,11 +115,16 @@ const SignUp = () => {
                                 id="name"
                                 type="text"
                                 placeholder="Jamie Chen"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
+                                value={data.name}
+                                onChange={(e) =>
+                                    setData((prev) => ({ ...prev, name: e.target.value }))
+                                }
                                 required
                                 autoComplete="name"
                             />
+                            {errors.name && (
+                                <p className="text-xs text-destructive">{errors.name}</p>
+                            )}
                         </div>
 
                         <div className="flex flex-col gap-1.5">
@@ -101,11 +133,16 @@ const SignUp = () => {
                                 id="email"
                                 type="email"
                                 placeholder="you@example.com"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                value={data.email}
+                                onChange={(e) =>
+                                    setData((prev) => ({ ...prev, email: e.target.value }))
+                                }
                                 required
                                 autoComplete="email"
                             />
+                            {errors.email && (
+                                <p className="text-xs text-destructive">{errors.email}</p>
+                            )}
                         </div>
 
                         <div className="flex flex-col gap-1.5">
@@ -114,8 +151,10 @@ const SignUp = () => {
                                 id="password"
                                 type="password"
                                 placeholder="At least 8 characters"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                value={data.password}
+                                onChange={(e) =>
+                                    setData((prev) => ({ ...prev, password: e.target.value }))
+                                }
                                 required
                                 autoComplete="new-password"
                             />
@@ -132,13 +171,18 @@ const SignUp = () => {
                                     </span>
                                 </div>
                             )}
+                            {errors.password && (
+                                <p className="text-xs text-destructive">{errors.password}</p>
+                            )}
                         </div>
 
                         <div className="flex items-start gap-2">
                             <Checkbox
                                 id="terms"
-                                checked={agreed}
-                                onCheckedChange={(v) => setAgreed(!!v)}
+                                checked={data.agreed}
+                                onCheckedChange={(v) =>
+                                    setData((prev) => ({ ...prev, agreed: !!v }))
+                                }
                                 className="mt-0.5"
                             />
 
@@ -160,9 +204,7 @@ const SignUp = () => {
                             </Label>
                         </div>
 
-                        {error && <p className="text-sm text-destructive">{error}</p>}
-
-                        <Button type="submit" className="w-full" disabled={loading || !agreed}>
+                        <Button type="submit" className="w-full" disabled={loading || !data.agreed}>
                             {loading ? 'Creating account…' : 'Create account'}
                         </Button>
                     </form>
