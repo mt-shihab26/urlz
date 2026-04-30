@@ -1,6 +1,7 @@
 import { CameraIcon } from 'lucide-react';
 import { useRef, useState } from 'react';
 
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getAvatarUrl, updateAvatar } from '@/lib/auth';
 import type { TUser } from '@/types/models';
 
@@ -32,21 +33,16 @@ export const AvatarUpload = ({ user }: { user: TUser }) => {
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={loading}
-                className="group relative size-14 shrink-0 rounded-full"
+                className="group relative w-fit rounded-full"
             >
-                {avatarUrl ? (
-                    <img
-                        src={avatarUrl}
-                        alt="Avatar"
-                        className="size-14 rounded-full object-cover"
-                    />
-                ) : (
-                    <div className="flex size-14 items-center justify-center rounded-full bg-linear-to-br from-primary to-blue-400 text-xl font-bold text-white">
+                <Avatar className="size-20 text-2xl">
+                    <AvatarImage src={avatarUrl ?? undefined} alt={user.name} />
+                    <AvatarFallback className="bg-linear-to-br from-primary to-blue-400 font-bold text-white">
                         {user.name[0].toUpperCase()}
-                    </div>
-                )}
+                    </AvatarFallback>
+                </Avatar>
                 <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
-                    <CameraIcon className="size-5 text-white" />
+                    <CameraIcon className="size-6 text-white" />
                 </div>
             </button>
             <input
