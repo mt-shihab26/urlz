@@ -11,7 +11,7 @@ export const SubmitButton = ({
     label: string;
 }) => {
     return (
-        <Button type="submit" className="w-full" disabled={loading || disabled}>
+        <Button type="submit" disabled={loading || disabled}>
             {loading && <Spinner className="mr-2" />}
             {label}
         </Button>
