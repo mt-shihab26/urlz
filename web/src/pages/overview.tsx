@@ -81,7 +81,7 @@ function Overview() {
     ];
 
     return (
-        <DashboardLayout>
+        <DashboardLayout title="Overview">
             <Header
                 title="Overview"
                 description="April 28, 2026 — all your links at a glance"
