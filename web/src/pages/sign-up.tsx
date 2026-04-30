@@ -13,15 +13,14 @@ import { pb } from '@/lib/pb';
 import { CheckboxField } from '@/components/composite/checkbox-field';
 import { EmailField } from '@/components/composite/email-field';
 import { Form } from '@/components/composite/form';
+import { GoogleOAuthButton } from '@/components/composite/google-oauth-button';
 import { LinkPrompt } from '@/components/composite/link-prompt';
+import { OrDivider } from '@/components/composite/or-divider';
 import { PasswordField } from '@/components/composite/password-field';
 import { PasswordStrength } from '@/components/composite/password-strength';
 import { SubmitButton } from '@/components/composite/submit-button';
 import { TextField } from '@/components/composite/text-field';
-import { GoogleIcon } from '@/components/icons/google-icon';
 import { AuthLayout } from '@/components/layouts/auth-layout';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
 
 const SignUp = () => {
     const { data, setData, errors, setErrors, loading, setLoading } = useForm({
@@ -66,15 +65,8 @@ const SignUp = () => {
                     <CardDescription>Start shortening links for free</CardDescription>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-4">
-                    <Button variant="outline" type="button" className="w-full gap-2">
-                        <GoogleIcon className="size-5" />
-                        Continue with Google
-                    </Button>
-                    <div className="flex items-center gap-3">
-                        <Separator className="flex-1" />
-                        <span className="text-xs text-muted-foreground">or</span>
-                        <Separator className="flex-1" />
-                    </div>
+                    <GoogleOAuthButton />
+                    <OrDivider />
                     <Form onSubmit={handleSubmit}>
                         <TextField
                             id="name"
