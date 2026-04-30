@@ -26,15 +26,28 @@ const SignUp = () => {
     const [password, setPassword] = useState('');
     const [agreed, setAgreed] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const passwordStrength = getPasswordStrength(password);
 
     const handleSubmit = async () => {
         if (!agreed) return;
         setLoading(true);
+        setError(null);
         try {
-            await pb.collection('users').authWithPassword('test@example.com', '1234567890');
+            await pb
+                .collection('users')
+                .create({ name, email, password, passwordConfirm: password });
+            await pb.collection('users').authWithPassword(email, password);
         } catch (e: any) {
+            const data = e?.response?.data;
+            if (data?.email?.message) {
+                setError(data.email.message);
+            } else if (data?.password?.message) {
+                setError(data.password.message);
+            } else {
+                setError(e?.message ?? 'Something went wrong. Please try again.');
+            }
         } finally {
             setLoading(false);
         }
@@ -146,6 +159,8 @@ const SignUp = () => {
                                 </span>
                             </Label>
                         </div>
+
+                        {error && <p className="text-sm text-destructive">{error}</p>}
 
                         <Button type="submit" className="w-full" disabled={loading || !agreed}>
                             {loading ? 'Creating account…' : 'Create account'}
