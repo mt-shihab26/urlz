@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 
-import { DashboardLayout } from '@/components/layouts/dashboard-layout';
 import { Header } from '@/components/composite/site-header';
 import { CountryBar } from '@/components/composite/urlz-ui';
+import { DashboardLayout } from '@/components/layouts/dashboard-layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     ChartContainer,
@@ -11,7 +11,6 @@ import {
     ChartTooltipContent,
     type ChartConfig,
 } from '@/components/ui/chart';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import {
     Table,
     TableBody,
@@ -20,6 +19,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
 const chartConfig = {
     clicks: { label: 'Clicks', color: 'var(--primary)' },

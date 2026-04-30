@@ -43,10 +43,7 @@ export const ApiKeysCard = () => {
             </CardHeader>
             <CardContent className="p-0">
                 {keys.map((k, i) => (
-                    <div
-                        key={k.id}
-                        className={cn('px-6 py-4', i < keys.length - 1 && 'border-b')}
-                    >
+                    <div key={k.id} className={cn('px-6 py-4', i < keys.length - 1 && 'border-b')}>
                         <div className="mb-3 flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 <span className="font-semibold">{k.name}</span>
@@ -66,9 +63,7 @@ export const ApiKeysCard = () => {
                                     variant="outline"
                                     size="sm"
                                     className="h-7 gap-1 text-xs"
-                                    onClick={() =>
-                                        setRevealed((r) => ({ ...r, [k.id]: !r[k.id] }))
-                                    }
+                                    onClick={() => setRevealed((r) => ({ ...r, [k.id]: !r[k.id] }))}
                                 >
                                     {revealed[k.id] ? (
                                         <EyeOffIcon className="size-3" />

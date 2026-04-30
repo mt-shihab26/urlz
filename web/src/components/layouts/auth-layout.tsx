@@ -1,6 +1,6 @@
+import { LinkIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
-import { LinkIcon } from 'lucide-react';
 
 export const AuthLayout = ({ children }: { children: ReactNode }) => {
     return (

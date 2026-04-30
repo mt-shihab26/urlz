@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
+import type { ReactNode } from 'react';
 
 interface HeaderProps {
     title: string;
@@ -11,10 +11,7 @@ interface HeaderProps {
 export const Header = ({ title, description, action, className }: HeaderProps) => {
     return (
         <header
-            className={cn(
-                'flex shrink-0 items-start gap-2 border-b px-4 py-4 lg:px-6',
-                className,
-            )}
+            className={cn('flex shrink-0 items-start gap-2 border-b px-4 py-4 lg:px-6', className)}
         >
             <div className="flex w-full items-start justify-between gap-4">
                 <div>

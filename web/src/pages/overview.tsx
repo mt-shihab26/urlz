@@ -1,10 +1,12 @@
+import { TrendingDownIcon, TrendingUpIcon } from 'lucide-react';
 import * as React from 'react';
 import { useNavigate } from 'react-router';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
-import { TrendingDownIcon, TrendingUpIcon } from 'lucide-react';
 
-import { DashboardLayout } from '@/components/layouts/dashboard-layout';
+import { getLinks } from '@/collections/links';
 import { Header } from '@/components/composite/site-header';
+import { Sparkline, StatusBadge } from '@/components/composite/urlz-ui';
+import { DashboardLayout } from '@/components/layouts/dashboard-layout';
 import {
     Card,
     CardContent,
@@ -19,7 +21,6 @@ import {
     ChartTooltipContent,
     type ChartConfig,
 } from '@/components/ui/chart';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import {
     Table,
     TableBody,
@@ -28,8 +29,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { StatusBadge, Sparkline } from '@/components/composite/urlz-ui';
-import { getLinks } from '@/collections/links';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import type { TLink } from '@/types/models';
 
 const chartConfig = {

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 
+import { deleteLink, getLinks, toggleLinkStatus } from '@/collections/links';
 import { CreateLinkButton } from '@/components/composite/create-link-dialog';
 import { Header } from '@/components/composite/site-header';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
@@ -15,7 +16,6 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { deleteLink, getLinks, toggleLinkStatus } from '@/collections/links';
 import type { TLink, TLinkStatus } from '@/types/models';
 
 type Filter = 'all' | TLinkStatus;
@@ -77,9 +77,7 @@ const Links = () => {
                 title="Links"
                 description="Manage and monitor all your shortened links"
                 action={
-                    <CreateLinkButton
-                        onCreated={(link) => setLinks((prev) => [link, ...prev])}
-                    />
+                    <CreateLinkButton onCreated={(link) => setLinks((prev) => [link, ...prev])} />
                 }
             />
 

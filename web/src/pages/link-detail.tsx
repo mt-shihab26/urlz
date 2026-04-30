@@ -1,10 +1,11 @@
+import { ChevronLeftIcon } from 'lucide-react';
 import * as React from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
-import { ChevronLeftIcon } from 'lucide-react';
 
+import { getLinkById } from '@/collections/links';
+import { CountryBar, StatusBadge } from '@/components/composite/urlz-ui';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
-import { StatusBadge, CountryBar } from '@/components/composite/urlz-ui';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -13,7 +14,6 @@ import {
     ChartTooltipContent,
     type ChartConfig,
 } from '@/components/ui/chart';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import {
     Table,
     TableBody,
@@ -22,7 +22,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { getLinkById } from '@/collections/links';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import type { TLink } from '@/types/models';
 
 const chartConfig = {

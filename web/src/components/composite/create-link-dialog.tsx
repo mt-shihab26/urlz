@@ -1,17 +1,12 @@
-import * as React from 'react';
+import { createLink } from '@/collections/links';
 import { Button } from '@/components/ui/button';
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { CheckIcon, PlusIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { createLink } from '@/collections/links';
 import type { TLink } from '@/types/models';
+import { CheckIcon, PlusIcon } from 'lucide-react';
+import * as React from 'react';
 
 interface CreateLinkDialogProps {
     open: boolean;
@@ -33,7 +28,12 @@ export function CreateLinkDialog({ open, onOpenChange, onCreated }: CreateLinkDi
         setLoading(true);
         try {
             const code = slug || Math.random().toString(36).slice(2, 7);
-            const link = await createLink({ url, title: title || url, code, expires: expiry || undefined });
+            const link = await createLink({
+                url,
+                title: title || url,
+                code,
+                expires: expiry || undefined,
+            });
             setCreated(link);
             setStep('success');
             onCreated?.(link);
@@ -67,8 +67,7 @@ export function CreateLinkDialog({ open, onOpenChange, onCreated }: CreateLinkDi
                     <div className="flex flex-col gap-4 pt-2">
                         <div className="flex flex-col gap-1.5">
                             <Label>
-                                Destination URL{' '}
-                                <span className="text-destructive">*</span>
+                                Destination URL <span className="text-destructive">*</span>
                             </Label>
                             <Input
                                 value={url}
@@ -87,9 +86,7 @@ export function CreateLinkDialog({ open, onOpenChange, onCreated }: CreateLinkDi
                                     value={slug}
                                     onChange={(e) =>
                                         setSlug(
-                                            e.target.value
-                                                .toLowerCase()
-                                                .replace(/[^a-z0-9-]/g, ''),
+                                            e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''),
                                         )
                                     }
                                     placeholder="my-link"

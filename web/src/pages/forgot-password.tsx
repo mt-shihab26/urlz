@@ -1,10 +1,5 @@
-import * as React from 'react';
-import { Link } from 'react-router';
-import { MailIcon, ArrowLeftIcon } from 'lucide-react';
 import { AuthLayout } from '@/components/layouts/auth-layout';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import {
     Card,
     CardContent,
@@ -13,6 +8,11 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { ArrowLeftIcon, MailIcon } from 'lucide-react';
+import * as React from 'react';
+import { Link } from 'react-router';
 
 function ForgotPassword() {
     const [email, setEmail] = React.useState('');

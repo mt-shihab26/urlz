@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { CreateLinkDialog } from '@/components/composite/create-link-dialog';
 import {
     SidebarGroup,
     SidebarGroupContent,
@@ -7,8 +7,8 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { PlusIcon } from 'lucide-react';
+import * as React from 'react';
 import { Link, useLocation } from 'react-router';
-import { CreateLinkDialog } from '@/components/composite/create-link-dialog';
 
 export function NavMain({
     items,
