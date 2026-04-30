@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { CreateLinkButton } from '@/components/composite/create-link-dialog';
@@ -14,9 +15,8 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { LINKS_DATA } from '@/lib/urlz-data';
+import { deleteLink, getLinks, toggleLinkStatus } from '@/collections/links';
 import type { TLink, TLinkStatus } from '@/types/models';
-import { useState } from 'react';
 
 type Filter = 'all' | TLinkStatus;
 
@@ -29,10 +29,14 @@ const filterEntries: { key: Filter; label: string }[] = [
 
 const Links = () => {
     const navigate = useNavigate();
-    const [links, setLinks] = useState(LINKS_DATA);
+    const [links, setLinks] = useState<TLink[]>([]);
     const [search, setSearch] = useState('');
     const [filter, setFilter] = useState<Filter>('all');
     const [copied, setCopied] = useState<string | null>(null);
+
+    useEffect(() => {
+        getLinks().then(setLinks);
+    }, []);
 
     const filtered = links.filter((l) => {
         const matchSearch =
@@ -51,17 +55,16 @@ const Links = () => {
         expired: links.filter((l) => l.status === 'expired').length,
     };
 
-    const toggleStatus = (id: string) =>
-        setLinks(
-            (prev) =>
-                prev.map((l) =>
-                    l.id === id
-                        ? { ...l, status: l.status === 'active' ? 'disabled' : 'active' }
-                        : l,
-                ) as TLink[],
-        );
+    const handleToggle = async (id: string) => {
+        const link = links.find((l) => l.id === id)!;
+        const updated = await toggleLinkStatus(id, link.status);
+        setLinks((prev) => prev.map((l) => (l.id === id ? updated : l)));
+    };
 
-    const deleteLink = (id: string) => setLinks((prev) => prev.filter((l) => l.id !== id));
+    const handleDelete = async (id: string) => {
+        await deleteLink(id);
+        setLinks((prev) => prev.filter((l) => l.id !== id));
+    };
 
     const copyLink = (code: string) => {
         setCopied(code);
@@ -73,7 +76,11 @@ const Links = () => {
             <Header
                 title="Links"
                 description="Manage and monitor all your shortened links"
-                action={<CreateLinkButton />}
+                action={
+                    <CreateLinkButton
+                        onCreated={(link) => setLinks((prev) => [link, ...prev])}
+                    />
+                }
             />
 
             <div className="flex flex-col gap-4 p-4 lg:p-6">
@@ -130,8 +137,8 @@ const Links = () => {
                                         link={link}
                                         copied={copied}
                                         onCopy={copyLink}
-                                        onToggle={toggleStatus}
-                                        onDelete={deleteLink}
+                                        onToggle={handleToggle}
+                                        onDelete={handleDelete}
                                         onClick={() => navigate(`/links/${link.id}`)}
                                     />
                                 ))

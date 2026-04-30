@@ -1,13 +1,13 @@
-import { cn } from '@/lib/utils';
-import type { LinkStatus } from '@/lib/urlz-data';
+import type { TLinkStatus } from '@/types/models';
 
-export function StatusBadge({ status }: { status: LinkStatus }) {
+import { cn } from '@/lib/utils';
+
+export function StatusBadge({ status }: { status: TLinkStatus }) {
     return (
         <span
             className={cn(
                 'inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium',
-                status === 'active' &&
-                    'bg-green-500/10 text-green-600 dark:text-green-400',
+                status === 'active' && 'bg-green-500/10 text-green-600 dark:text-green-400',
                 status === 'disabled' && 'bg-muted text-muted-foreground',
                 status === 'expired' && 'bg-destructive/10 text-destructive',
             )}
@@ -40,9 +40,7 @@ export function Sparkline({
         d += ` C ${cx},${py(vals[i - 1])} ${cx},${py(vals[i])} ${px(i)},${py(vals[i])}`;
     }
     const trend = vals[vals.length - 1] > vals[0];
-    const color = trend
-        ? 'oklch(0.7 0.18 145)'
-        : 'oklch(0.65 0.2 25)';
+    const color = trend ? 'oklch(0.7 0.18 145)' : 'oklch(0.65 0.2 25)';
     return (
         <svg viewBox={`0 0 ${width} ${height}`} style={{ width, height }}>
             <path d={d} fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
@@ -50,15 +48,7 @@ export function Sparkline({
     );
 }
 
-export function CountryBar({
-    code,
-    pct,
-    max,
-}: {
-    code: string;
-    pct: number;
-    max: number;
-}) {
+export function CountryBar({ code, pct, max }: { code: string; pct: number; max: number }) {
     return (
         <div className="flex items-center gap-2.5">
             <span className="w-6 shrink-0 text-right font-mono text-xs text-muted-foreground">

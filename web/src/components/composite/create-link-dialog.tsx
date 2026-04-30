@@ -10,26 +10,36 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { CheckIcon, PlusIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { createLink } from '@/collections/links';
+import type { TLink } from '@/types/models';
 
 interface CreateLinkDialogProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
+    onCreated?: (link: TLink) => void;
 }
 
-export function CreateLinkDialog({ open, onOpenChange }: CreateLinkDialogProps) {
+export function CreateLinkDialog({ open, onOpenChange, onCreated }: CreateLinkDialogProps) {
     const [url, setUrl] = React.useState('');
     const [slug, setSlug] = React.useState('');
     const [title, setTitle] = React.useState('');
     const [expiry, setExpiry] = React.useState('');
-    const [limit, setLimit] = React.useState('');
     const [step, setStep] = React.useState<'form' | 'success'>('form');
-    const [created, setCreated] = React.useState<{ code: string } | null>(null);
+    const [created, setCreated] = React.useState<TLink | null>(null);
+    const [loading, setLoading] = React.useState(false);
 
-    const handleSubmit = () => {
-        if (!url) return;
-        const code = slug || Math.random().toString(36).slice(2, 7);
-        setCreated({ code });
-        setStep('success');
+    const handleSubmit = async () => {
+        if (!url || loading) return;
+        setLoading(true);
+        try {
+            const code = slug || Math.random().toString(36).slice(2, 7);
+            const link = await createLink({ url, title: title || url, code, expires: expiry || undefined });
+            setCreated(link);
+            setStep('success');
+            onCreated?.(link);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleClose = () => {
@@ -40,7 +50,6 @@ export function CreateLinkDialog({ open, onOpenChange }: CreateLinkDialogProps) 
             setSlug('');
             setTitle('');
             setExpiry('');
-            setLimit('');
             setCreated(null);
         }, 200);
     };
@@ -98,32 +107,21 @@ export function CreateLinkDialog({ open, onOpenChange }: CreateLinkDialogProps) 
                             />
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3">
-                            <div className="flex flex-col gap-1.5">
-                                <Label>Expiry Date</Label>
-                                <Input
-                                    type="date"
-                                    value={expiry}
-                                    onChange={(e) => setExpiry(e.target.value)}
-                                />
-                            </div>
-                            <div className="flex flex-col gap-1.5">
-                                <Label>Click Limit</Label>
-                                <Input
-                                    type="number"
-                                    value={limit}
-                                    onChange={(e) => setLimit(e.target.value)}
-                                    placeholder="∞"
-                                />
-                            </div>
+                        <div className="flex flex-col gap-1.5">
+                            <Label>Expiry Date</Label>
+                            <Input
+                                type="date"
+                                value={expiry}
+                                onChange={(e) => setExpiry(e.target.value)}
+                            />
                         </div>
 
                         <div className="flex justify-end gap-2 pt-2">
                             <Button variant="outline" onClick={handleClose}>
                                 Cancel
                             </Button>
-                            <Button onClick={handleSubmit} disabled={!url}>
-                                Create Link
+                            <Button onClick={handleSubmit} disabled={!url || loading}>
+                                {loading ? 'Creating…' : 'Create Link'}
                             </Button>
                         </div>
                     </div>
@@ -168,6 +166,7 @@ interface CreateLinkButtonProps {
     children?: React.ReactNode;
     variant?: React.ComponentProps<typeof Button>['variant'];
     size?: React.ComponentProps<typeof Button>['size'];
+    onCreated?: (link: TLink) => void;
 }
 
 export function CreateLinkButton({
@@ -175,6 +174,7 @@ export function CreateLinkButton({
     children,
     variant,
     size,
+    onCreated,
 }: CreateLinkButtonProps) {
     const [open, setOpen] = React.useState(false);
     return (
@@ -188,7 +188,7 @@ export function CreateLinkButton({
                 <PlusIcon className="size-4" />
                 {children ?? 'New Link'}
             </Button>
-            <CreateLinkDialog open={open} onOpenChange={setOpen} />
+            <CreateLinkDialog open={open} onOpenChange={setOpen} onCreated={onCreated} />
         </>
     );
 }
