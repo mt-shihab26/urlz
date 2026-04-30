@@ -7,10 +7,8 @@ import { AuthGuard } from '@/components/composite/auth-guard';
 import { GuestGuard } from '@/components/composite/guest-guard';
 import { PageLoader } from '@/components/composite/page-loader';
 import { PublicGuard } from '@/components/composite/public-guard';
-import { AuthProvider } from '@/components/providers/auth-provider';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { pb } from './lib/pb';
 
 const guardMap = {
     auth: AuthGuard,
@@ -19,34 +17,30 @@ const guardMap = {
 };
 
 export const App = () => {
-    console.log(pb.authStore.isValid, pb.authStore.token, pb.authStore.record);
-
     return (
         <ThemeProvider>
             <TooltipProvider>
                 <BrowserRouter>
-                    <AuthProvider>
-                        <Suspense fallback={<PageLoader />}>
-                            <Routes>
-                                {routes.map((route) => {
-                                    const Guard = guardMap[route.guard];
-                                    const element =
-                                        'redirect' in route ? (
-                                            <Navigate to={route.redirect} replace />
-                                        ) : (
-                                            <route.component />
-                                        );
-                                    return (
-                                        <Route
-                                            key={route.path}
-                                            path={route.path}
-                                            element={<Guard>{element}</Guard>}
-                                        />
+                    <Suspense fallback={<PageLoader />}>
+                        <Routes>
+                            {routes.map((route) => {
+                                const Guard = guardMap[route.guard];
+                                const element =
+                                    'redirect' in route ? (
+                                        <Navigate to={route.redirect} replace />
+                                    ) : (
+                                        <route.component />
                                     );
-                                })}
-                            </Routes>
-                        </Suspense>
-                    </AuthProvider>
+                                return (
+                                    <Route
+                                        key={route.path}
+                                        path={route.path}
+                                        element={<Guard>{element}</Guard>}
+                                    />
+                                );
+                            })}
+                        </Routes>
+                    </Suspense>
                 </BrowserRouter>
             </TooltipProvider>
         </ThemeProvider>
