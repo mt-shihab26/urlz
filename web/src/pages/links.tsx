@@ -10,9 +10,9 @@ import { LinksTable } from '@/components/screens/links/links-table';
 import { Input } from '@/components/ui/input';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
-type Filter = 'all' | TLinkStatus;
+type TFilter = 'all' | TLinkStatus;
 
-const filterEntries: { key: Filter; label: string }[] = [
+const filterEntries: { key: TFilter; label: string }[] = [
     { key: 'all', label: 'All' },
     { key: 'active', label: 'Active' },
     { key: 'disabled', label: 'Disabled' },
@@ -22,7 +22,7 @@ const filterEntries: { key: Filter; label: string }[] = [
 const Links = () => {
     const [links, setLinks] = useState<TLink[]>([]);
     const [search, setSearch] = useState('');
-    const [filter, setFilter] = useState<Filter>('all');
+    const [filter, setFilter] = useState<TFilter>('all');
 
     useEffect(() => {
         getLinks().then(setLinks);
@@ -76,7 +76,7 @@ const Links = () => {
                     <ToggleGroup
                         multiple={false}
                         value={filter ? [filter] : []}
-                        onValueChange={(v) => setFilter((v[0] as Filter) ?? 'all')}
+                        onValueChange={(v) => setFilter((v[0] as TFilter) ?? 'all')}
                         variant="outline"
                         size="sm"
                     >
