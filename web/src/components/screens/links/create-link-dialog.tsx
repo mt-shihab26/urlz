@@ -1,27 +1,30 @@
+import type { TLink } from '@/types/models';
+
 import { createLink } from '@/collections/links';
+import { useState } from 'react';
+
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { cn } from '@/lib/utils';
-import type { TLink } from '@/types/models';
-import { CheckIcon, PlusIcon } from 'lucide-react';
-import * as React from 'react';
+import { CheckIcon } from 'lucide-react';
 
-interface CreateLinkDialogProps {
+export const CreateLinkDialog = ({
+    open,
+    onOpenChange,
+    onCreated,
+}: {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     onCreated?: (link: TLink) => void;
-}
-
-export function CreateLinkDialog({ open, onOpenChange, onCreated }: CreateLinkDialogProps) {
-    const [url, setUrl] = React.useState('');
-    const [slug, setSlug] = React.useState('');
-    const [title, setTitle] = React.useState('');
-    const [expiry, setExpiry] = React.useState('');
-    const [step, setStep] = React.useState<'form' | 'success'>('form');
-    const [created, setCreated] = React.useState<TLink | null>(null);
-    const [loading, setLoading] = React.useState(false);
+}) => {
+    const [url, setUrl] = useState('');
+    const [slug, setSlug] = useState('');
+    const [title, setTitle] = useState('');
+    const [expiry, setExpiry] = useState('');
+    const [step, setStep] = useState<'form' | 'success'>('form');
+    const [created, setCreated] = useState<TLink | null>(null);
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async () => {
         if (!url || loading) return;
@@ -56,7 +59,7 @@ export function CreateLinkDialog({ open, onOpenChange, onCreated }: CreateLinkDi
 
     return (
         <Dialog open={open} onOpenChange={handleClose}>
-            <DialogContent className="sm:max-w-[480px]">
+            <DialogContent className="sm:max-w-120">
                 <DialogHeader>
                     <DialogTitle>
                         {step === 'success' ? 'Link Created!' : 'New Short Link'}
@@ -156,36 +159,4 @@ export function CreateLinkDialog({ open, onOpenChange, onCreated }: CreateLinkDi
             </DialogContent>
         </Dialog>
     );
-}
-
-interface CreateLinkButtonProps {
-    className?: string;
-    children?: React.ReactNode;
-    variant?: React.ComponentProps<typeof Button>['variant'];
-    size?: React.ComponentProps<typeof Button>['size'];
-    onCreated?: (link: TLink) => void;
-}
-
-export function CreateLinkButton({
-    className,
-    children,
-    variant,
-    size,
-    onCreated,
-}: CreateLinkButtonProps) {
-    const [open, setOpen] = React.useState(false);
-    return (
-        <>
-            <Button
-                variant={variant}
-                size={size}
-                className={cn('gap-1.5', className)}
-                onClick={() => setOpen(true)}
-            >
-                <PlusIcon className="size-4" />
-                {children ?? 'New Link'}
-            </Button>
-            <CreateLinkDialog open={open} onOpenChange={setOpen} onCreated={onCreated} />
-        </>
-    );
-}
+};

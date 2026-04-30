@@ -3,9 +3,9 @@ import type { TLink, TLinkStatus } from '@/types/models';
 import { deleteLink, getLinks, toggleLinkStatus } from '@/collections/links';
 import { useEffect, useState } from 'react';
 
-import { CreateLinkButton } from '@/components/composite/create-link-dialog';
 import { Header } from '@/components/composite/site-header';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
+import { CreateLinkButton } from '@/components/screens/links/create-link-button';
 import { LinksTable } from '@/components/screens/links/links-table';
 import { Input } from '@/components/ui/input';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';

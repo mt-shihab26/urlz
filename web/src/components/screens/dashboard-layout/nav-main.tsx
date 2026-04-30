@@ -1,4 +1,4 @@
-import { CreateLinkDialog } from '@/components/composite/create-link-dialog';
+import { CreateLinkDialog } from '@/components/screens/links/create-link-dialog';
 import {
     SidebarGroup,
     SidebarGroupContent,
