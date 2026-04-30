@@ -43,6 +43,6 @@ export const updateAvatar = async (userId: string, file: File) => {
 };
 
 export const deleteAccount = async (userId: string) => {
-    await pb.collection('users').update(userId, { deleted: true });
+    await pb.collection('users').update(userId, { deleted: new Date().toISOString() });
     signOut();
 };
