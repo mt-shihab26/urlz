@@ -1,6 +1,6 @@
+import { updateProfile } from '@/collections/users';
 import { useUser } from '@/components/providers/auth-provider';
 import { useForm } from '@/hooks/use-form';
-import { updateProfile } from '@/lib/auth';
 
 import { EmailField } from '@/components/composite/email-field';
 import { Form } from '@/components/composite/form';

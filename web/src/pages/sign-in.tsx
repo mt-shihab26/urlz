@@ -7,8 +7,8 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 
+import { signIn } from '@/collections/users';
 import { useForm } from '@/hooks/use-form';
-import { signIn } from '@/lib/auth';
 import { useNavigate } from 'react-router';
 
 import { CheckboxField } from '@/components/composite/checkbox-field';

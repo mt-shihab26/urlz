@@ -1,7 +1,7 @@
 import type { TUser } from '@/types/models';
 import type { ReactNode } from 'react';
 
-import { getAuth } from '@/lib/auth';
+import { getAuth } from '@/collections/users';
 import { pb } from '@/lib/pb';
 import { createContext, useContext, useEffect, useState } from 'react';
 

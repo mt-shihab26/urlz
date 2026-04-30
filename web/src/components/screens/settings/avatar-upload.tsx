@@ -1,7 +1,7 @@
 import type { TUser } from '@/types/models';
 
+import { getAvatarUrl, updateAvatar } from '@/collections/users';
 import { useForm } from '@/hooks/use-form';
-import { getAvatarUrl, updateAvatar } from '@/lib/auth';
 import { getInitial } from '@/lib/utils';
 import { useRef, useState } from 'react';
 

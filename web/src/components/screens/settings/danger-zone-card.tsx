@@ -10,8 +10,8 @@ import {
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 
+import { deleteAccount } from '@/collections/users';
 import { useUser } from '@/components/providers/auth-provider';
-import { deleteAccount } from '@/lib/auth';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';

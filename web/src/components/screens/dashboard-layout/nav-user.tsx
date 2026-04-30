@@ -10,8 +10,8 @@ import {
 
 import type { TUser } from '@/types/models';
 
+import { getAvatarUrl, signOut } from '@/collections/users';
 import { useSidebar } from '@/components/ui/sidebar';
-import { getAvatarUrl, signOut } from '@/lib/auth';
 import { getInitial } from '@/lib/utils';
 
 import { ThemeSwitcher } from '@/components/screens/dashboard-layout/theme-switcher';
