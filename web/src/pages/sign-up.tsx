@@ -7,9 +7,9 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 
+import { useForm } from '@/hooks/use-form';
 import { getPasswordStrength } from '@/lib/password';
 import { pb } from '@/lib/pb';
-import { useState } from 'react';
 
 import { GoogleIcon } from '@/components/icons/google-icon';
 import { AuthLayout } from '@/components/layouts/auth-layout';
@@ -21,38 +21,18 @@ import { Separator } from '@/components/ui/separator';
 import { Link } from 'react-router';
 
 const SignUp = () => {
-    const [data, setData] = useState<{
-        name: string;
-        email: string;
-        password: string;
-        agreed: boolean;
-    }>({
+    const { data, setData, errors, setErrors, loading, setLoading } = useForm({
         name: '',
         email: '',
         password: '',
         agreed: false,
     });
 
-    const [errors, setErrors] = useState<{
-        name?: string | null;
-        email?: string | null;
-        password?: string | null;
-        agreed?: string | null;
-    }>({
-        name: null,
-        email: null,
-        password: null,
-        agreed: null,
-    });
-
-    const [loading, setLoading] = useState(false);
-
     const passwordStrength = getPasswordStrength(data.password);
 
     const handleSubmit = async () => {
         if (!data.agreed) return;
         setLoading(true);
-        setErrors({ name: null, email: null, password: null, agreed: null });
         try {
             await pb.collection('users').create({
                 name: data.name,
@@ -62,18 +42,15 @@ const SignUp = () => {
             });
             await pb.collection('users').authWithPassword(data.email, data.password);
         } catch (e: any) {
-            const resData = e?.response?.data;
-            if (resData?.email?.message) {
-                setErrors((prev) => ({ ...prev, email: resData.email.message }));
-            } else if (resData?.password?.message) {
-                setErrors((prev) => ({ ...prev, password: resData.password.message }));
-            } else if (resData?.name?.message) {
-                setErrors((prev) => ({ ...prev, name: resData.name.message }));
+            const data = e?.response?.data;
+            if (data?.email?.message) {
+                setErrors('email', data.email.message);
+            } else if (data?.password?.message) {
+                setErrors('password', data.password.message);
+            } else if (data?.name?.message) {
+                setErrors('name', data.name.message);
             } else {
-                setErrors((prev) => ({
-                    ...prev,
-                    email: e?.message ?? 'Something went wrong. Please try again.',
-                }));
+                setErrors('email', e?.message ?? 'Something went wrong. Please try again.');
             }
         } finally {
             setLoading(false);
@@ -116,9 +93,7 @@ const SignUp = () => {
                                 type="text"
                                 placeholder="Jamie Chen"
                                 value={data.name}
-                                onChange={(e) =>
-                                    setData((prev) => ({ ...prev, name: e.target.value }))
-                                }
+                                onChange={(e) => setData('name', e.target.value)}
                                 required
                                 autoComplete="name"
                             />
@@ -134,9 +109,7 @@ const SignUp = () => {
                                 type="email"
                                 placeholder="you@example.com"
                                 value={data.email}
-                                onChange={(e) =>
-                                    setData((prev) => ({ ...prev, email: e.target.value }))
-                                }
+                                onChange={(e) => setData('email', e.target.value)}
                                 required
                                 autoComplete="email"
                             />
@@ -152,9 +125,7 @@ const SignUp = () => {
                                 type="password"
                                 placeholder="At least 8 characters"
                                 value={data.password}
-                                onChange={(e) =>
-                                    setData((prev) => ({ ...prev, password: e.target.value }))
-                                }
+                                onChange={(e) => setData('password', e.target.value)}
                                 required
                                 autoComplete="new-password"
                             />
@@ -180,9 +151,7 @@ const SignUp = () => {
                             <Checkbox
                                 id="terms"
                                 checked={data.agreed}
-                                onCheckedChange={(v) =>
-                                    setData((prev) => ({ ...prev, agreed: !!v }))
-                                }
+                                onCheckedChange={(v) => setData('agreed', !!v)}
                                 className="mt-0.5"
                             />
 
