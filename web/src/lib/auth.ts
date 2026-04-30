@@ -24,12 +24,14 @@ export const signOut = () => {
 
 export const updateProfile = async (userId: string, name: string, email: string) => {
     await pb.collection('users').update(userId, { name, email });
+    await pb.collection('users').authRefresh();
 };
 
 export const updateAvatar = async (userId: string, file: File) => {
     const form = new FormData();
     form.append('avatar', file);
     await pb.collection('users').update(userId, form);
+    await pb.collection('users').authRefresh();
 };
 
 export const getAvatarUrl = (user: TUser): string | null => {

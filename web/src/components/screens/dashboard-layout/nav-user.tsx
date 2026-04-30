@@ -11,7 +11,7 @@ import {
 import type { TUser } from '@/types/models';
 
 import { useSidebar } from '@/components/ui/sidebar';
-import { signOut } from '@/lib/auth';
+import { getAvatarUrl, signOut } from '@/lib/auth';
 
 import { ThemeSwitcher } from '@/components/screens/dashboard-layout/theme-switcher';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -29,8 +29,8 @@ export const NavUser = ({ user }: { user: TUser }) => {
                         render={<SidebarMenuButton size="lg" className="aria-expanded:bg-muted" />}
                     >
                         <Avatar className="size-8 rounded-lg grayscale">
-                            <AvatarImage src={user.avatar} alt={user.name} />
-                            <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                            <AvatarImage src={getAvatarUrl(user) ?? undefined} alt={user.name} />
+                            <AvatarFallback className="rounded-lg">{user.name[0].toUpperCase()}</AvatarFallback>
                         </Avatar>
                         <div className="grid flex-1 text-left text-sm leading-tight">
                             <span className="truncate font-medium">{user.name}</span>
@@ -50,8 +50,8 @@ export const NavUser = ({ user }: { user: TUser }) => {
                             <DropdownMenuLabel className="p-0 font-normal">
                                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                                     <Avatar className="size-8">
-                                        <AvatarImage src={user.avatar} alt={user.name} />
-                                        <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                                        <AvatarImage src={getAvatarUrl(user) ?? undefined} alt={user.name} />
+                                        <AvatarFallback className="rounded-lg">{user.name[0].toUpperCase()}</AvatarFallback>
                                     </Avatar>
                                     <div className="grid flex-1 text-left text-sm leading-tight">
                                         <span className="truncate font-medium">{user.name}</span>

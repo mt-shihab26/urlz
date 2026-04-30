@@ -18,8 +18,8 @@ import {
 
 import type { ComponentProps } from 'react';
 
+import { useUser } from '@/components/providers/auth-provider';
 import { useSidebar } from '@/components/ui/sidebar';
-import { getAuth } from '@/lib/auth';
 
 import { Link } from 'react-router';
 import { NavMain } from './nav-main';
@@ -48,10 +48,9 @@ const navMain = [
     },
 ];
 
-export const AppSidebar = ({ ...props }: ComponentProps<typeof Sidebar>) => {
+export const AppSidebar = (props: ComponentProps<typeof Sidebar>) => {
     const { toggleSidebar } = useSidebar();
-
-    const user = getAuth();
+    const { user } = useUser();
 
     return (
         <Sidebar collapsible="icon" {...props}>
@@ -72,7 +71,7 @@ export const AppSidebar = ({ ...props }: ComponentProps<typeof Sidebar>) => {
                 <NavMain items={navMain} />
             </SidebarContent>
             <SidebarFooter className="gap-2">
-                <NavUser user={user!} />
+                <NavUser user={user} />
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton
