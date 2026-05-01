@@ -11,6 +11,7 @@ import (
 	"github.com/pocketbase/pocketbase/plugins/migratecmd"
 	"github.com/pocketbase/pocketbase/tools/osutils"
 
+	"github.com/mt-shihab26/urlz/internal/redirect"
 	_ "github.com/mt-shihab26/urlz/migrations"
 	"github.com/mt-shihab26/urlz/web"
 )
@@ -27,6 +28,7 @@ func main() {
 		Automigrate: osutils.IsProbablyGoRun(),
 	})
 	app.OnServe().BindFunc(func(se *core.ServeEvent) error {
+		se.Router.GET("/{code}", redirect.Handler)
 		sub, err := fs.Sub(web.DistFS, "dist")
 		if err != nil {
 			return err
