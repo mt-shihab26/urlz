@@ -3,6 +3,7 @@ import { useForm } from '@/hooks/use-form';
 import { generateRandomSlug } from '@/lib/links';
 import { toastError } from '@/lib/toast';
 
+import { DateField } from '@/components/composite/date-field';
 import { Form } from '@/components/composite/form';
 import { SubmitButton } from '@/components/composite/submit-button';
 import { TextField } from '@/components/composite/text-field';
@@ -82,25 +83,19 @@ export const CreateLinkDialog = ({
                             />
                         </div>
                     </div>
-
-                    <div className="flex flex-col gap-1.5">
-                        <Label>Label</Label>
-                        <Input
-                            value={data.title}
-                            onChange={(e) => setData('title', e.target.value)}
-                            placeholder="e.g. Pricing Page Q2"
-                        />
-                    </div>
-
-                    <div className="flex flex-col gap-1.5">
-                        <Label>Expiry Date</Label>
-                        <Input
-                            type="date"
-                            value={data.expiry}
-                            onChange={(e) => setData('expiry', e.target.value)}
-                        />
-                    </div>
-
+                    <TextField
+                        id="label"
+                        label="Label"
+                        value={data.title}
+                        onChange={(e) => setData('title', e.target.value)}
+                        placeholder="e.g. Pricing Page Q2"
+                    />
+                    <DateField
+                        id="expiry-date"
+                        label="Expiry Date"
+                        value={data.expiry}
+                        onChange={(e) => setData('expiry', e.target.value)}
+                    />
                     <div className="flex justify-end gap-2 pt-2">
                         <Button variant="outline" onClick={handleClose}>
                             Cancel
