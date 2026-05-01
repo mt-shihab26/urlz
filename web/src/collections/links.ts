@@ -15,6 +15,10 @@ const getLinks = async (): Promise<TLink[]> => {
     }
 };
 
+export const getLinkById = async (id: string): Promise<TLink> => {
+    return pb.collection('links').getOne<TLink>(id);
+};
+
 /**
  * Subscribes to real-time updates from the `links` collection.
  */
@@ -59,10 +63,9 @@ export const unsubscribeLinks = ({ onError }: { onError?: (error: string) => voi
     }
 };
 
-export const getLinkById = async (id: string): Promise<TLink> => {
-    return pb.collection('links').getOne<TLink>(id);
-};
-
+/**
+ * Creates a new link record in the `links` collection with default metadata (user, clicks, status, series).
+ */
 export const createLink = async (data: {
     url: string;
     title: string;
@@ -78,11 +81,17 @@ export const createLink = async (data: {
     });
 };
 
+/**
+ * Toggles a link's status between `active` and `disabled` and updates it in the `links` collection.
+ */
 export const toggleLinkStatus = async (id: string, current: TLinkStatus): Promise<TLink> => {
     const status = current === 'active' ? 'disabled' : 'active';
     return pb.collection('links').update<TLink>(id, { status });
 };
 
+/**
+ * Deletes a link record from the `links` collection by its ID.
+ */
 export const deleteLink = async (id: string): Promise<void> => {
     await pb.collection('links').delete(id);
 };
