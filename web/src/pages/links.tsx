@@ -18,7 +18,9 @@ const Links = () => {
     const [filter, setFilter] = useState<TFilter>('all');
 
     useEffect(() => {
-        getLinks().then(setLinks);
+        (async () => {
+            setLinks(await getLinks());
+        })();
     }, []);
 
     return (
