@@ -1,5 +1,5 @@
 export const formatCode = (code: string) => {
-    return `urlz.io/${code}`;
+    return `http://localhost:8090/${code}`;
 };
 
 export const formatNumber = (valueNumber: number) => {

@@ -26,7 +26,7 @@ export const LinkRow = ({ link }: { link: TLink }) => {
             <TableCell>
                 <div className="flex items-center gap-1.5">
                     <span className="font-mono text-xs text-primary">{formatCode(link.code)}</span>
-                    <CopyButton text={link.code} />
+                    <CopyButton text={formatCode(link.code)} />
                 </div>
             </TableCell>
             <TableCell className="text-right font-mono font-bold">
