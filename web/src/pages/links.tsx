@@ -1,6 +1,7 @@
 import type { TLink } from '@/types/models';
 
 import { getLinks } from '@/collections/links';
+import { filterLinks } from '@/lib/links';
 import { useEffect, useState } from 'react';
 
 import { Header } from '@/components/composite/site-header';
@@ -19,16 +20,6 @@ const Links = () => {
         getLinks().then(setLinks);
     }, []);
 
-    const filtered = links.filter((l) => {
-        const matchSearch =
-            !search ||
-            l.title.toLowerCase().includes(search.toLowerCase()) ||
-            l.code.includes(search) ||
-            l.url.includes(search);
-        const matchFilter = filter === 'all' || l.status === filter;
-        return matchSearch && matchFilter;
-    });
-
     return (
         <DashboardLayout title="Links">
             <Header
@@ -41,7 +32,7 @@ const Links = () => {
                     <SearchBox search={search} onSearch={setSearch} />
                     <FiltersToggle links={links} filter={filter} onFilter={setFilter} />
                 </div>
-                <LinksTable links={filtered} />
+                <LinksTable links={filterLinks({ links, search, filter })} />
             </div>
         </DashboardLayout>
     );
