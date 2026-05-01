@@ -8,7 +8,7 @@ import { DashboardLayout } from '@/components/layouts/dashboard-layout';
 import { CreateLinkButton } from '@/components/screens/links/create-link-button';
 import { FiltersToggle, type TFilter } from '@/components/screens/links/filters-toggle';
 import { LinksTable } from '@/components/screens/links/links-table';
-import { Input } from '@/components/ui/input';
+import { SearchBox } from '@/components/screens/links/search-box';
 
 const Links = () => {
     const [links, setLinks] = useState<TLink[]>([]);
@@ -38,12 +38,7 @@ const Links = () => {
             />
             <div className="flex flex-col gap-4 p-4 lg:p-6">
                 <div className="flex flex-wrap items-center gap-3">
-                    <Input
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        placeholder="Search links..."
-                        className="max-w-xs"
-                    />
+                    <SearchBox search={search} onSearch={setSearch} />
                     <FiltersToggle links={links} filter={filter} onFilter={setFilter} />
                 </div>
                 <LinksTable links={filtered} />
