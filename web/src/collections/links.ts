@@ -16,7 +16,7 @@ const getLinks = async (): Promise<TLink[]> => {
 };
 
 /**
- * Subscribes to link collection changes and emits updated data.
+ * Subscribes to real-time updates from the `links` collection.
  */
 export const subscribeLinks = ({
     onData,
@@ -47,6 +47,9 @@ export const subscribeLinks = ({
     }
 };
 
+/**
+ * Unsubscribes from all real-time updates on the `links` collection.
+ */
 export const unsubscribeLinks = ({ onError }: { onError?: (error: string) => void }) => {
     try {
         pb.collection('links').unsubscribe('*');
