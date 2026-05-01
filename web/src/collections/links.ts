@@ -84,8 +84,8 @@ export const createLink = async (data: {
         clicks: 0,
         status: 'active',
         series: [],
-        countriesData: [],
-        referrersData: [],
+        countries: [],
+        referrers: [],
     });
 };
 

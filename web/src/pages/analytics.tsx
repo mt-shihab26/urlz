@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 
+import type { TLinkCountry, TLinkReferrer, TSerie } from '@/types/models';
+
 import { Header } from '@/components/composite/site-header';
 import { CountryBar } from '@/components/composite/urlz-ui';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
@@ -28,9 +30,9 @@ const chartConfig = {
 const RANGES = ['7d', '30d', '90d', 'All'] as const;
 type Range = (typeof RANGES)[number];
 
-const totalSeries: { date: string; clicks: number }[] = [];
-const countriesData: { country: string; code: string; clicks: number; pct: number }[] = [];
-const referrersData: { source: string; clicks: number }[] = [];
+const totalSeries: TSerie[] = [];
+const countries: TLinkCountry[] = [];
+const referrers: TLinkReferrer[] = [];
 const browsersData: { name: string; pct: number; color: string }[] = [];
 const osData: { name: string; pct: number; color: string }[] = [];
 
@@ -46,7 +48,7 @@ function Analytics() {
                 ? totalSeries.slice(-90)
                 : totalSeries;
 
-    const maxCountryPct = countriesData[0]?.pct ?? 100;
+    const maxCountryPct = countries[0]?.pct ?? 100;
 
     return (
         <DashboardLayout title="Analytics">
@@ -135,7 +137,7 @@ function Analytics() {
                             <CardTitle>Top Countries</CardTitle>
                         </CardHeader>
                         <CardContent className="flex flex-col gap-2.5">
-                            {countriesData.map((d) => (
+                            {countries.map((d) => (
                                 <CountryBar
                                     key={d.code}
                                     code={d.code}
@@ -159,7 +161,7 @@ function Analytics() {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {referrersData.map((r) => (
+                                    {referrers.map((r) => (
                                         <TableRow key={r.source}>
                                             <TableCell>{r.source}</TableCell>
                                             <TableCell className="text-right font-mono text-sm text-muted-foreground">
