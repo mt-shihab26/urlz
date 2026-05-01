@@ -6,7 +6,7 @@ export type TUser = {
     deleted?: string;
 };
 
-export type TLinkStatus = 'active' | 'disabled' | 'expired';
+export type TLinkStatus = 'active' | 'disabled';
 
 export type TSerie = {
     date: string;
