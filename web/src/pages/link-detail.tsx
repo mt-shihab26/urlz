@@ -1,19 +1,3 @@
-import { ChevronLeftIcon } from 'lucide-react';
-import * as React from 'react';
-import { useNavigate, useParams } from 'react-router';
-import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
-
-import { getLinkById } from '@/collections/links';
-import { CountryBar, StatusBadge } from '@/components/composite/urlz-ui';
-import { DashboardLayout } from '@/components/layouts/dashboard-layout';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-    ChartContainer,
-    ChartTooltip,
-    ChartTooltipContent,
-    type ChartConfig,
-} from '@/components/ui/chart';
 import {
     Table,
     TableBody,
@@ -22,8 +6,22 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+
+import type { ChartConfig } from '@/components/ui/chart';
 import type { TLink } from '@/types/models';
+
+import { getLinkById } from '@/collections/links';
+import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
+
+import { CountryBar, StatusBadge } from '@/components/composite/urlz-ui';
+import { DashboardLayout } from '@/components/layouts/dashboard-layout';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { ChevronLeftIcon } from 'lucide-react';
+import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 
 const chartConfig = {
     clicks: { label: 'Clicks', color: 'var(--primary)' },
@@ -38,8 +36,8 @@ const referrersData: { source: string; clicks: number }[] = [];
 function LinkDetail() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const [link, setLink] = React.useState<TLink | null>(null);
-    const [loading, setLoading] = React.useState(true);
+    const [link, setLink] = useState<TLink | null>(null);
+    const [loading, setLoading] = useState(true);
     const [range, setRange] = React.useState<Range>('30d');
 
     React.useEffect(() => {
