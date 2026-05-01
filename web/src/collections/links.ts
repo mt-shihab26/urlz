@@ -11,13 +11,13 @@ const LINKS = 'links';
  */
 const getLinks = async (): Promise<TLink[]> => {
     try {
-        return pb.collection(LINKS).getFullList<TLink>({ sort: '-created' });
+        return await pb.collection(LINKS).getFullList<TLink>({ sort: '-created' });
     } catch (e) {
         throw new Error(e instanceof Error ? e.message : 'Failed to fetch links');
     }
 };
 
-export const getLinkById = async (id: string): Promise<TLink> => {
+const getLinkById = async (id: string): Promise<TLink> => {
     return pb.collection(LINKS).getOne<TLink>(id);
 };
 
@@ -50,7 +50,6 @@ export const subscribeLinks = ({
                 onData(await getLinks());
             } catch (e: any) {
                 onError && onError(e.message);
-            } finally {
             }
         });
     } catch (e) {
@@ -64,6 +63,56 @@ export const subscribeLinks = ({
 export const unsubscribeLinks = ({ onError }: { onError?: (error: string) => void }) => {
     try {
         pb.collection(LINKS).unsubscribe('*');
+    } catch (e) {
+        onError?.(e instanceof Error ? e.message : 'Failed to unsubscribe to links collection');
+    }
+};
+
+/**
+ * Subscribes to real-time updates from the `links` collection.
+ */
+export const subscribeLink = (
+    id: string,
+    {
+        onData,
+        onError,
+        onLoading,
+    }: {
+        onData: (links: TLink) => void;
+        onError?: (error: string) => void;
+        onLoading?: (loading: boolean) => void;
+    },
+) => {
+    try {
+        (async () => {
+            onLoading && onLoading(true);
+            try {
+                onData(await getLinkById(id));
+            } catch (e: any) {
+                onError && onError(e.message);
+            } finally {
+                onLoading && onLoading(false);
+            }
+        })();
+
+        pb.collection(LINKS).subscribe(id, async (e) => {
+            try {
+                onData(e.record as unknown as TLink);
+            } catch (e: any) {
+                onError && onError(e.message);
+            }
+        });
+    } catch (e) {
+        onError?.(e instanceof Error ? e.message : 'Failed to subscribe to links collection');
+    }
+};
+
+/**
+ * Unsubscribes from all real-time updates on the `links` collection.
+ */
+export const unsubscribeLink = (id: string, { onError }: { onError?: (error: string) => void }) => {
+    try {
+        pb.collection(LINKS).unsubscribe(id);
     } catch (e) {
         onError?.(e instanceof Error ? e.message : 'Failed to unsubscribe to links collection');
     }
