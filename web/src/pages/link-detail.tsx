@@ -1,3 +1,4 @@
+import type { TLinkDetailRange } from '@/components/screens/link-detail/link-detail-header';
 import type { TLink } from '@/types/models';
 
 import { getLinkById } from '@/collections/links';
@@ -6,10 +7,7 @@ import { useNavigate, useParams } from 'react-router';
 
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
 import { LinkClicksChart } from '@/components/screens/link-detail/link-clicks-chart';
-import {
-    LinkDetailHeader,
-    type LinkDetailRange,
-} from '@/components/screens/link-detail/link-detail-header';
+import { LinkDetailHeader } from '@/components/screens/link-detail/link-detail-header';
 import { LinkDetailPageSkeleton } from '@/components/screens/link-detail/link-detail-page-skeleton';
 import { LinkDetailStats } from '@/components/screens/link-detail/link-detail-stats';
 import { ReferrersCard } from '@/components/screens/link-detail/referrers-card';
@@ -19,12 +17,14 @@ import { Button } from '@/components/ui/button';
 const countriesData: { country: string; code: string; clicks: number; pct: number }[] = [];
 const referrersData: { source: string; clicks: number }[] = [];
 
-function LinkDetail() {
-    const { id } = useParams<{ id: string }>();
+const LinkDetail = () => {
     const navigate = useNavigate();
+
+    const { id } = useParams<{ id: string }>();
+
     const [link, setLink] = useState<TLink | null>(null);
     const [loading, setLoading] = useState(true);
-    const [range, setRange] = useState<LinkDetailRange>('30d');
+    const [range, setRange] = useState<TLinkDetailRange>('30d');
 
     useEffect(() => {
         if (!id) return;
@@ -92,5 +92,5 @@ function LinkDetail() {
             </div>
         </DashboardLayout>
     );
-}
+};
 export default LinkDetail;

@@ -6,21 +6,16 @@ import type { TLink } from '@/types/models';
 
 const RANGES = ['7d', '30d', '90d', 'All'] as const;
 
-export type LinkDetailRange = (typeof RANGES)[number];
+export type TLinkDetailRange = (typeof RANGES)[number];
 
 type LinkDetailHeaderProps = {
     link: TLink;
-    range: LinkDetailRange;
-    onRangeChange: (range: LinkDetailRange) => void;
+    range: TLinkDetailRange;
+    onRangeChange: (range: TLinkDetailRange) => void;
     onBack: () => void;
 };
 
-export const LinkDetailHeader = ({
-    link,
-    range,
-    onRangeChange,
-    onBack,
-}: LinkDetailHeaderProps) => {
+export const LinkDetailHeader = ({ link, range, onRangeChange, onBack }: LinkDetailHeaderProps) => {
     return (
         <div className="flex flex-col gap-2 border-b px-4 py-4 lg:px-6">
             <button
@@ -47,7 +42,9 @@ export const LinkDetailHeader = ({
                 <ToggleGroup
                     multiple={false}
                     value={range ? [range] : []}
-                    onValueChange={(value) => onRangeChange((value[0] as LinkDetailRange) ?? '30d')}
+                    onValueChange={(value) =>
+                        onRangeChange((value[0] as TLinkDetailRange) ?? '30d')
+                    }
                     variant="outline"
                     size="sm"
                 >
