@@ -1,3 +1,15 @@
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+
 import type { TLink } from '@/types/models';
 
 import { deleteLink } from '@/collections/links';
@@ -16,14 +28,33 @@ export const LinkDeleteButton = ({ link }: { link: TLink }) => {
     };
 
     return (
-        <Button
-            variant="ghost"
-            size="icon"
-            className="size-7 text-destructive hover:bg-destructive/10 hover:text-destructive"
-            title="Delete"
-            onClick={handleDelete}
-        >
-            <Trash2Icon className="size-3.5" />
-        </Button>
+        <AlertDialog>
+            <AlertDialogTrigger
+                render={
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="size-7 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                        title="Delete"
+                    >
+                        <Trash2Icon className="size-3.5" />
+                    </Button>
+                }
+            />
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>Delete link</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        "{link.title}" will be permanently deleted. This cannot be undone.
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction variant="destructive" onClick={handleDelete}>
+                        Delete
+                    </AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
     );
 };
