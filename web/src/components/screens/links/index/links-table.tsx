@@ -9,7 +9,7 @@ import {
 
 import type { TLink } from '@/types/models';
 
-import { LinkRow } from '@/components/screens/links/link-row';
+import { LinkRow } from '@/components/screens/links/index/link-row';
 
 export const LinksTable = ({ links }: { links: TLink[] }) => {
     return (

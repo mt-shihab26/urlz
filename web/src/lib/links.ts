@@ -1,4 +1,4 @@
-import type { TFilter } from '@/components/screens/links/filters-toggle';
+import type { TFilter } from '@/components/screens/links/index/filters-toggle';
 import type { TLink } from '@/types/models';
 
 export const filterLinks = ({
