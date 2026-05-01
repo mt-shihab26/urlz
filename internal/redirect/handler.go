@@ -1,7 +1,9 @@
 package redirect
 
 import (
+	"net"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/pocketbase/pocketbase/apis"
@@ -21,6 +23,17 @@ func Handler(e *core.RequestEvent) error {
 		return apis.NewNotFoundError("Link expired", nil)
 	}
 	targetURL := record.GetString("url")
-	go trackClick(e.App, record.Id, e.Request.Header.Get("Referer"))
+	go trackClick(e.App, record.Id, e.Request.Header.Get("Referer"), realIP(e.Request))
 	return e.Redirect(http.StatusFound, targetURL)
+}
+
+func realIP(r *http.Request) string {
+	if ip := r.Header.Get("X-Real-IP"); ip != "" {
+		return strings.TrimSpace(ip)
+	}
+	if fwd := r.Header.Get("X-Forwarded-For"); fwd != "" {
+		return strings.TrimSpace(strings.Split(fwd, ",")[0])
+	}
+	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
+	return ip
 }
