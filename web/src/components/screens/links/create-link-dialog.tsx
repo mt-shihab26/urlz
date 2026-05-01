@@ -18,7 +18,7 @@ export const CreateLinkDialog = ({
     open: boolean;
     onOpenChange: (open: boolean) => void;
 }) => {
-    const { data, setData, loading, setLoading, reset, errors } = useForm({
+    const { data, setData, loading, setLoading, reset, errors, setErrors } = useForm({
         url: '',
         slug: '',
         title: '',
@@ -36,8 +36,19 @@ export const CreateLinkDialog = ({
                 expires: data.expiry || undefined,
             });
             handleClose();
-        } catch (e) {
-            toastError(e instanceof Error ? e.message : 'Failed to create new link');
+        } catch (e: any) {
+            const data = e?.response?.data;
+            if (data?.url?.message) {
+                setErrors('url', data.url.message);
+            } else if (data?.slug?.message) {
+                setErrors('slug', data.slug.message);
+            } else if (data?.title?.message) {
+                setErrors('title', data.title.message);
+            } else if (data?.expiry?.message) {
+                setErrors('expiry', data.expiry.message);
+            } else {
+                toastError(e?.message ?? 'Something went wrong. Please try again.');
+            }
         } finally {
             setLoading(false);
         }
