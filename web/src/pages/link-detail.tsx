@@ -11,7 +11,7 @@ import type { ChartConfig } from '@/components/ui/chart';
 import type { TLink } from '@/types/models';
 
 import { getLinkById } from '@/collections/links';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
 import { CountryBar, StatusBadge } from '@/components/composite/urlz-ui';
@@ -38,9 +38,9 @@ function LinkDetail() {
     const navigate = useNavigate();
     const [link, setLink] = useState<TLink | null>(null);
     const [loading, setLoading] = useState(true);
-    const [range, setRange] = React.useState<Range>('30d');
+    const [range, setRange] = useState<Range>('30d');
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (!id) return;
         getLinkById(id)
             .then(setLink)
@@ -149,7 +149,7 @@ function LinkDetail() {
                         <CardTitle>Clicks Over Time</CardTitle>
                     </CardHeader>
                     <CardContent className="px-2 pb-4">
-                        <ChartContainer config={chartConfig} className="h-[180px] w-full">
+                        <ChartContainer config={chartConfig} className="h-45 w-full">
                             <AreaChart data={slicedSeries}>
                                 <defs>
                                     <linearGradient id="fillClicksDt" x1="0" y1="0" x2="0" y2="1">
