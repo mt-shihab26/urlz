@@ -1,3 +1,4 @@
+import type { TFilter } from '@/components/screens/links/filters-toggle';
 import type { TLink } from '@/types/models';
 
 import { getLinks } from '@/collections/links';
@@ -7,7 +8,7 @@ import { useEffect, useState } from 'react';
 import { Header } from '@/components/composite/site-header';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
 import { CreateLinkButton } from '@/components/screens/links/create-link-button';
-import { FiltersToggle, type TFilter } from '@/components/screens/links/filters-toggle';
+import { FiltersToggle } from '@/components/screens/links/filters-toggle';
 import { LinksTable } from '@/components/screens/links/links-table';
 import { SearchBox } from '@/components/screens/links/search-box';
 

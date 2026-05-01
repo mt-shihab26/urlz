@@ -12,7 +12,7 @@ export const SearchBox = ({
 }) => {
     const [value, setValue] = useState(search);
 
-    const debouncedSearch = useDebounceCallback(onSearch, 500);
+    const debouncedSearch = useDebounceCallback(onSearch, 200);
 
     useEffect(() => setValue(search), [search]);
 
