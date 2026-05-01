@@ -24,7 +24,6 @@ function createDebounce<T extends (...args: any[]) => any>(
     options: DebounceOptions = {},
 ) {
     let timer: ReturnType<typeof setTimeout> | null = null;
-    let lastCallTime: number | null = null;
     let lastInvokeTime = 0;
     let lastArgs: Parameters<T> | null = null;
     let result: ReturnType<T> | undefined;
@@ -52,7 +51,6 @@ function createDebounce<T extends (...args: any[]) => any>(
     const debounced = (...args: Parameters<T>) => {
         const now = Date.now();
         lastArgs = args;
-        lastCallTime = now;
 
         const shouldInvokeLeading = leading && !timer;
         const reachedMaxWait = maxWait !== undefined && now - lastInvokeTime >= maxWait;

@@ -1,9 +1,15 @@
-import { CheckIcon, CopyIcon, EyeIcon, EyeOffIcon, PlusIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
+import { CheckIcon, CopyIcon, EyeIcon, EyeOffIcon, PlusIcon } from 'lucide-react';
+
+const makeDate = (daysAgo: number): string => {
+    const d = new Date('2026-04-27');
+    d.setDate(d.getDate() - daysAgo);
+    return d.toISOString().split('T')[0];
+};
 
 export const API_KEYS_DATA = [
     {
