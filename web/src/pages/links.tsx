@@ -3,6 +3,7 @@ import type { TLink } from '@/types/models';
 
 import { getLinks } from '@/collections/links';
 import { filterLinks } from '@/lib/links';
+import { toastError } from '@/lib/toast';
 import { useEffect, useState } from 'react';
 
 import { Header } from '@/components/composite/site-header';
@@ -19,7 +20,12 @@ const Links = () => {
 
     useEffect(() => {
         (async () => {
-            setLinks(await getLinks());
+            try {
+                throw new Error('Error bro');
+                setLinks(await getLinks());
+            } catch (e) {
+                toastError(e instanceof Error ? e.message : 'Failed to fetch links');
+            }
         })();
     }, []);
 

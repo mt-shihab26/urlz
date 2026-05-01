@@ -10,6 +10,7 @@ import { PublicGuard } from '@/components/composite/public-guard';
 import { AuthProvider } from '@/components/providers/auth-provider';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { Toaster } from './components/ui/sonner';
 
 const guardMap = {
     auth: AuthGuard,
@@ -19,33 +20,36 @@ const guardMap = {
 
 export const App = () => {
     return (
-        <ThemeProvider>
-            <AuthProvider>
-                <TooltipProvider>
-                    <BrowserRouter>
-                        <Suspense fallback={<PageLoader />}>
-                            <Routes>
-                                {routes.map((route) => {
-                                    const Guard = guardMap[route.guard];
-                                    const element =
-                                        'redirect' in route ? (
-                                            <Navigate to={route.redirect} replace />
-                                        ) : (
-                                            <route.component />
+        <>
+            <ThemeProvider>
+                <AuthProvider>
+                    <TooltipProvider>
+                        <BrowserRouter>
+                            <Suspense fallback={<PageLoader />}>
+                                <Routes>
+                                    {routes.map((route) => {
+                                        const Guard = guardMap[route.guard];
+                                        const element =
+                                            'redirect' in route ? (
+                                                <Navigate to={route.redirect} replace />
+                                            ) : (
+                                                <route.component />
+                                            );
+                                        return (
+                                            <Route
+                                                key={route.path}
+                                                path={route.path}
+                                                element={<Guard>{element}</Guard>}
+                                            />
                                         );
-                                    return (
-                                        <Route
-                                            key={route.path}
-                                            path={route.path}
-                                            element={<Guard>{element}</Guard>}
-                                        />
-                                    );
-                                })}
-                            </Routes>
-                        </Suspense>
-                    </BrowserRouter>
-                </TooltipProvider>
-            </AuthProvider>
-        </ThemeProvider>
+                                    })}
+                                </Routes>
+                            </Suspense>
+                        </BrowserRouter>
+                    </TooltipProvider>
+                </AuthProvider>
+            </ThemeProvider>
+            <Toaster />
+        </>
     );
 };
