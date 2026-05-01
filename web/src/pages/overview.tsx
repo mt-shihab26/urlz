@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useNavigate } from 'react-router';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 
-import { getLinks } from '@/collections/links';
+import { subscribeLinks } from '@/collections/links';
 import { Header } from '@/components/composite/site-header';
 import { Sparkline, StatusBadge } from '@/components/composite/urlz-ui';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
@@ -45,7 +45,7 @@ function Overview() {
     const [range, setRange] = React.useState<Range>('30d');
 
     React.useEffect(() => {
-        getLinks().then(setLinks);
+        subscribeLinks({ onData: setLinks });
     }, []);
 
     const totalSeries = React.useMemo(() => {

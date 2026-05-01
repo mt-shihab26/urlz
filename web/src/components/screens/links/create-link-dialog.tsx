@@ -9,7 +9,6 @@ import { SubmitButton } from '@/components/composite/submit-button';
 import { TextField } from '@/components/composite/text-field';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
 export const CreateLinkDialog = ({
@@ -19,7 +18,7 @@ export const CreateLinkDialog = ({
     open: boolean;
     onOpenChange: (open: boolean) => void;
 }) => {
-    const { data, setData, loading, setLoading, reset } = useForm({
+    const { data, setData, loading, setLoading, reset, errors } = useForm({
         url: '',
         slug: '',
         title: '',
@@ -62,6 +61,7 @@ export const CreateLinkDialog = ({
                         value={data.url}
                         onChange={(e) => setData('url', e.target.value)}
                         placeholder="https://example.com/very/long/url"
+                        error={errors.url}
                         required
                     />
                     <div className="flex flex-col gap-1.5">
@@ -70,7 +70,8 @@ export const CreateLinkDialog = ({
                             <span className="flex items-center border-r bg-muted px-3 text-sm text-muted-foreground font-mono">
                                 urlz.io/
                             </span>
-                            <Input
+                            <TextField
+                                id="slug"
                                 value={data.slug}
                                 onChange={(e) =>
                                     setData(
@@ -80,6 +81,7 @@ export const CreateLinkDialog = ({
                                 }
                                 placeholder="my-link"
                                 className="rounded-none border-0 shadow-none focus-visible:ring-0"
+                                error={errors.slug}
                             />
                         </div>
                     </div>
@@ -89,12 +91,14 @@ export const CreateLinkDialog = ({
                         value={data.title}
                         onChange={(e) => setData('title', e.target.value)}
                         placeholder="e.g. Pricing Page Q2"
+                        error={errors.title}
                     />
                     <DateField
                         id="expiry-date"
                         label="Expiry Date"
                         value={data.expiry}
                         onChange={(e) => setData('expiry', e.target.value)}
+                        error={errors.expiry}
                     />
                     <div className="flex justify-end gap-2 pt-2">
                         <Button variant="outline" onClick={handleClose}>

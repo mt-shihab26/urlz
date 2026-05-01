@@ -1,7 +1,7 @@
 import type { TFilter } from '@/components/screens/links/filters-toggle';
 import type { TLink } from '@/types/models';
 
-import { getLinks } from '@/collections/links';
+import { subscribeLinks, unsubscribeLinks } from '@/collections/links';
 import { filterLinks } from '@/lib/links';
 import { toastError } from '@/lib/toast';
 import { useEffect, useState } from 'react';
@@ -19,13 +19,8 @@ const Links = () => {
     const [filter, setFilter] = useState<TFilter>('all');
 
     useEffect(() => {
-        (async () => {
-            try {
-                setLinks(await getLinks());
-            } catch (e) {
-                toastError(e instanceof Error ? e.message : 'Failed to fetch links');
-            }
-        })();
+        subscribeLinks({ onData: setLinks, onError: (error) => toastError(error) });
+        return () => unsubscribeLinks();
     }, []);
 
     return (

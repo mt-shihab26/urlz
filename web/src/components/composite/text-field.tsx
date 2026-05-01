@@ -11,7 +11,7 @@ export const TextField = ({
     ...props
 }: {
     id: string;
-    label: string;
+    label?: string;
     error?: string | null;
 } & Omit<ComponentProps<'input'>, 'id' | 'type'>) => {
     return (

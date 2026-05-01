@@ -12,7 +12,7 @@ export const FormField = ({
     required,
 }: {
     id: string;
-    label: string;
+    label?: string;
     labelExtra?: ReactNode;
     error?: string | null;
     children: ReactNode;
@@ -20,13 +20,15 @@ export const FormField = ({
 }) => {
     return (
         <div className="flex flex-col gap-1.5">
-            <div className="flex items-center justify-between">
-                <Label htmlFor={id}>
-                    {label}
-                    {required && <span className="text-destructive">*</span>}
-                </Label>
-                {labelExtra}
-            </div>
+            {label && (
+                <div className="flex items-center justify-between">
+                    <Label htmlFor={id}>
+                        {label}
+                        {required && <span className="text-destructive">*</span>}
+                    </Label>
+                    {labelExtra}
+                </div>
+            )}
             {children}
             {error && <FieldError>{error}</FieldError>}
         </div>

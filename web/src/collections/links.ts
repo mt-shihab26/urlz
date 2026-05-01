@@ -2,8 +2,48 @@ import type { TLink, TLinkStatus } from '@/types/models';
 
 import { pb } from '@/lib/pb';
 
-export const getLinks = async (): Promise<TLink[]> => {
-    return pb.collection('links').getFullList<TLink>({ sort: '-created' });
+/**
+ * Fetches all links sorted by newest first.
+ *
+ * @throws {Error} When fetching links fails.
+ */
+const getLinks = async (): Promise<TLink[]> => {
+    try {
+        return pb.collection('links').getFullList<TLink>({ sort: '-created' });
+    } catch (e) {
+        throw new Error(e instanceof Error ? e.message : 'Failed to fetch links');
+    }
+};
+
+/**
+ * Subscribes to link collection changes and emits updated data.
+ */
+export const subscribeLinks = ({
+    onData,
+    onError,
+}: {
+    onData: (links: TLink[]) => void;
+    onError?: (error: string) => void;
+}) => {
+    (async () => {
+        try {
+            onData(await getLinks());
+        } catch (e: any) {
+            onError && onError(e.message);
+        }
+    })();
+
+    pb.collection('links').subscribe('*', async () => {
+        try {
+            onData(await getLinks());
+        } catch (e: any) {
+            onError && onError(e.message);
+        }
+    });
+};
+
+export const unsubscribeLinks = () => {
+    pb.collection('links').unsubscribe('*');
 };
 
 export const getLinkById = async (id: string): Promise<TLink> => {
