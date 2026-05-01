@@ -35,13 +35,13 @@ export const subscribeLinks = ({
 }) => {
     try {
         (async () => {
-            onLoading && onLoading(true);
+            onLoading?.(true);
             try {
                 onData(await getLinks());
             } catch (e: any) {
-                onError && onError(e.message);
+                onError?.(e.message);
             } finally {
-                onLoading && onLoading(false);
+                onLoading?.(false);
             }
         })();
 
@@ -49,11 +49,11 @@ export const subscribeLinks = ({
             try {
                 onData(await getLinks());
             } catch (e: any) {
-                onError && onError(e.message);
+                onError?.(e.message);
             }
         });
     } catch (e) {
-        onError?.(e instanceof Error ? e.message : 'Failed to subscribe to links collection');
+        onError?.(e instanceof Error ? e.message : 'Failed to subscribe to links');
     }
 };
 
@@ -64,12 +64,12 @@ export const unsubscribeLinks = ({ onError }: { onError?: (error: string) => voi
     try {
         pb.collection(LINKS).unsubscribe('*');
     } catch (e) {
-        onError?.(e instanceof Error ? e.message : 'Failed to unsubscribe to links collection');
+        onError?.(e instanceof Error ? e.message : 'Failed to unsubscribe from links');
     }
 };
 
 /**
- * Subscribes to real-time updates from the `links` collection.
+ * Subscribes to real-time updates for a single link by ID.
  */
 export const subscribeLink = (
     id: string,
@@ -85,13 +85,13 @@ export const subscribeLink = (
 ) => {
     try {
         (async () => {
-            onLoading && onLoading(true);
+            onLoading?.(true);
             try {
                 onData(await getLinkById(id));
             } catch (e: any) {
-                onError && onError(e.message);
+                onError?.(e.message);
             } finally {
-                onLoading && onLoading(false);
+                onLoading?.(false);
             }
         })();
 
@@ -99,22 +99,22 @@ export const subscribeLink = (
             try {
                 onData(e.record as unknown as TLink);
             } catch (e: any) {
-                onError && onError(e.message);
+                onError?.(e.message);
             }
         });
     } catch (e) {
-        onError?.(e instanceof Error ? e.message : 'Failed to subscribe to links collection');
+        onError?.(e instanceof Error ? e.message : 'Failed to subscribe to link');
     }
 };
 
 /**
- * Unsubscribes from all real-time updates on the `links` collection.
+ * Unsubscribes from real-time updates for a single link by ID.
  */
 export const unsubscribeLink = (id: string, { onError }: { onError?: (error: string) => void }) => {
     try {
         pb.collection(LINKS).unsubscribe(id);
     } catch (e) {
-        onError?.(e instanceof Error ? e.message : 'Failed to unsubscribe to links collection');
+        onError?.(e instanceof Error ? e.message : 'Failed to unsubscribe from link');
     }
 };
 

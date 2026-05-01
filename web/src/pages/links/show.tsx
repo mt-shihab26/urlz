@@ -1,7 +1,8 @@
 import type { TLinkDetailRange } from '@/components/screens/links/show/link-detail-header';
 import type { TLink } from '@/types/models';
 
-import { getLinkById } from '@/collections/links';
+import { subscribeLink, unsubscribeLink } from '@/collections/links';
+import { toastError } from '@/lib/toast';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
@@ -25,40 +26,39 @@ const LinkDetail = () => {
 
     useEffect(() => {
         if (!id) return;
-        getLinkById(id)
-            .then(setLink)
-            .finally(() => setLoading(false));
+        subscribeLink(id, { onData: setLink, onError: toastError, onLoading: setLoading });
+        return () => unsubscribeLink(id, { onError: toastError });
     }, [id]);
 
-    return loading ? (
-        <DashboardLayout title="Link">
-            <LinkDetailPageSkeleton />
-        </DashboardLayout>
-    ) : !link ? (
-        <DashboardLayout title="Link Not Found">
-            <div className="flex flex-col items-center justify-center gap-4 p-12 text-center">
-                <p className="text-muted-foreground">Link not found.</p>
-                <Button variant="outline" onClick={() => navigate('/links')}>
-                    Back to Links
-                </Button>
-            </div>
-        </DashboardLayout>
-    ) : (
-        <DashboardLayout title={link.title}>
-            <LinkDetailHeader
-                link={link}
-                range={range}
-                onRangeChange={setRange}
-                onBack={() => navigate('/links')}
-            />
-            <div className="flex flex-col gap-6 p-4 lg:p-6">
-                <LinkDetailStats range={range} link={link} />
-                <LinkClicksChart range={range} link={link} />
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <TopCountriesCard countries={link.countries} />
-                    <ReferrersCard referrers={link.referrers} />
+    return (
+        <DashboardLayout title={loading ? 'Link' : (link?.title ?? 'Link Not Found')}>
+            {loading ? (
+                <LinkDetailPageSkeleton />
+            ) : !link ? (
+                <div className="flex flex-col items-center justify-center gap-4 p-12 text-center">
+                    <p className="text-muted-foreground">Link not found.</p>
+                    <Button variant="outline" onClick={() => navigate('/links')}>
+                        Back to Links
+                    </Button>
                 </div>
-            </div>
+            ) : (
+                <>
+                    <LinkDetailHeader
+                        link={link}
+                        range={range}
+                        onRangeChange={setRange}
+                        onBack={() => navigate('/links')}
+                    />
+                    <div className="flex flex-col gap-6 p-4 lg:p-6">
+                        <LinkDetailStats range={range} link={link} />
+                        <LinkClicksChart range={range} link={link} />
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                            <TopCountriesCard countries={link.countries} />
+                            <ReferrersCard referrers={link.referrers} />
+                        </div>
+                    </div>
+                </>
+            )}
         </DashboardLayout>
     );
 };
