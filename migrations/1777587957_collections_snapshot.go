@@ -954,6 +954,28 @@ func init() {
 						"type": "json"
 					},
 					{
+						"help": "",
+						"hidden": false,
+						"id": "json1010101010",
+						"maxSize": 0,
+						"name": "countriesData",
+						"presentable": false,
+						"required": false,
+						"system": false,
+						"type": "json"
+					},
+					{
+						"help": "",
+						"hidden": false,
+						"id": "json2020202020",
+						"maxSize": 0,
+						"name": "referrersData",
+						"presentable": false,
+						"required": false,
+						"system": false,
+						"type": "json"
+					},
+					{
 						"hidden": false,
 						"id": "autodate8888888888",
 						"name": "created",

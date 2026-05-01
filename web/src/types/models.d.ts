@@ -8,6 +8,23 @@ export type TUser = {
 
 export type TLinkStatus = 'active' | 'disabled' | 'expired';
 
+export type TSerie = {
+    date: string;
+    clicks: number;
+};
+
+export type TLinkCountry = {
+    country: string;
+    code: string;
+    clicks: number;
+    pct: number;
+};
+
+export type TLinkReferrer = {
+    source: string;
+    clicks: number;
+};
+
 export type TLink = {
     id: string;
     user: string;
@@ -19,5 +36,7 @@ export type TLink = {
     updated: string;
     status: TLinkStatus;
     expires: string;
-    series: { date: string; clicks: number }[];
+    series: TSerie[];
+    countries: TLinkCountry[];
+    referrers: TLinkReferrer[];
 };

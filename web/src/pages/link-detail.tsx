@@ -14,9 +14,6 @@ import { ReferrersCard } from '@/components/screens/link-detail/referrers-card';
 import { TopCountriesCard } from '@/components/screens/link-detail/top-countries-card';
 import { Button } from '@/components/ui/button';
 
-const countriesData: { country: string; code: string; clicks: number; pct: number }[] = [];
-const referrersData: { source: string; clicks: number }[] = [];
-
 const LinkDetail = () => {
     const navigate = useNavigate();
 
@@ -58,8 +55,8 @@ const LinkDetail = () => {
                 <LinkDetailStats range={range} link={link} />
                 <LinkClicksChart range={range} link={link} />
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <TopCountriesCard countries={countriesData} />
-                    <ReferrersCard referrers={referrersData} />
+                    <TopCountriesCard countries={link.countries} />
+                    <ReferrersCard referrers={link.referrers} />
                 </div>
             </div>
         </DashboardLayout>

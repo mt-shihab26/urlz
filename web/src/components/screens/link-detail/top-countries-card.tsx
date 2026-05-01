@@ -1,15 +1,9 @@
 import { CountryBar } from '@/components/composite/urlz-ui';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-
-type CountryData = {
-    country: string;
-    code: string;
-    clicks: number;
-    pct: number;
-};
+import type { TLinkCountry } from '@/types/models';
 
 type TopCountriesCardProps = {
-    countries: CountryData[];
+    countries: TLinkCountry[];
 };
 
 export const TopCountriesCard = ({ countries }: TopCountriesCardProps) => {

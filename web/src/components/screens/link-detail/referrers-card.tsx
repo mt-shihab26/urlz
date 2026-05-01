@@ -8,13 +8,9 @@ import {
 } from '@/components/ui/table';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import type { TLinkReferrer } from '@/types/models';
 
-type ReferrerData = {
-    source: string;
-    clicks: number;
-};
-
-export const ReferrersCard = ({ referrers }: { referrers: ReferrerData[] }) => {
+export const ReferrersCard = ({ referrers }: { referrers: TLinkReferrer[] }) => {
     return (
         <Card>
             <CardHeader>
