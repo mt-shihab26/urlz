@@ -33,47 +33,20 @@ const LinkDetail = () => {
             .finally(() => setLoading(false));
     }, [id]);
 
-    if (loading) {
-        return (
-            <DashboardLayout title="Link">
-                <LinkDetailPageSkeleton />
-            </DashboardLayout>
-        );
-    }
-
-    if (!link) {
-        return (
-            <DashboardLayout title="Link Not Found">
-                <div className="flex flex-col items-center justify-center gap-4 p-12 text-center">
-                    <p className="text-muted-foreground">Link not found.</p>
-                    <Button variant="outline" onClick={() => navigate('/links')}>
-                        Back to Links
-                    </Button>
-                </div>
-            </DashboardLayout>
-        );
-    }
-
-    const days =
-        range === '7d' ? 7 : range === '90d' ? 90 : range === 'All' ? link.series.length : 30;
-    const slicedSeries = link.series.slice(-days);
-    const periodClicks = slicedSeries.reduce((s, d) => s + d.clicks, 0);
-
-    const stats = [
-        { label: 'Period Clicks', value: periodClicks.toLocaleString() },
-        { label: 'Total Clicks', value: link.clicks.toLocaleString() },
-        { label: 'Countries', value: '—' },
-        {
-            label: 'Created',
-            value: new Date(link.created).toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric',
-                year: '2-digit',
-            }),
-        },
-    ];
-
-    return (
+    return loading ? (
+        <DashboardLayout title="Link">
+            <LinkDetailPageSkeleton />
+        </DashboardLayout>
+    ) : !link ? (
+        <DashboardLayout title="Link Not Found">
+            <div className="flex flex-col items-center justify-center gap-4 p-12 text-center">
+                <p className="text-muted-foreground">Link not found.</p>
+                <Button variant="outline" onClick={() => navigate('/links')}>
+                    Back to Links
+                </Button>
+            </div>
+        </DashboardLayout>
+    ) : (
         <DashboardLayout title={link.title}>
             <LinkDetailHeader
                 link={link}
@@ -81,10 +54,9 @@ const LinkDetail = () => {
                 onRangeChange={setRange}
                 onBack={() => navigate('/links')}
             />
-
             <div className="flex flex-col gap-6 p-4 lg:p-6">
-                <LinkDetailStats stats={stats} />
-                <LinkClicksChart data={slicedSeries} />
+                <LinkDetailStats range={range} link={link} />
+                <LinkClicksChart range={range} link={link} />
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                     <TopCountriesCard countries={countriesData} />
                     <ReferrersCard referrers={referrersData} />
@@ -93,4 +65,5 @@ const LinkDetail = () => {
         </DashboardLayout>
     );
 };
+
 export default LinkDetail;
