@@ -25,25 +25,35 @@ export const subscribeLinks = ({
     onData: (links: TLink[]) => void;
     onError?: (error: string) => void;
 }) => {
-    (async () => {
-        try {
-            onData(await getLinks());
-        } catch (e: any) {
-            onError && onError(e.message);
-        }
-    })();
+    try {
+        (async () => {
+            try {
+                onData(await getLinks());
+            } catch (e: any) {
+                onError && onError(e.message);
+            }
+        })();
 
-    pb.collection('links').subscribe('*', async () => {
-        try {
-            onData(await getLinks());
-        } catch (e: any) {
-            onError && onError(e.message);
-        }
-    });
+        pb.collection('links').subscribe('*', async () => {
+            try {
+                onData(await getLinks());
+            } catch (e: any) {
+                onError && onError(e.message);
+            }
+        });
+    } catch (e) {
+        onError &&
+            onError(e instanceof Error ? e.message : 'Failed to subscribe to links collection');
+    }
 };
 
-export const unsubscribeLinks = () => {
-    pb.collection('links').unsubscribe('*');
+export const unsubscribeLinks = ({ onError }: { onError?: (error: string) => void }) => {
+    try {
+        pb.collection('links').unsubscribe('*');
+    } catch (e) {
+        onError &&
+            onError(e instanceof Error ? e.message : 'Failed to unsubscribe to links collection');
+    }
 };
 
 export const getLinkById = async (id: string): Promise<TLink> => {

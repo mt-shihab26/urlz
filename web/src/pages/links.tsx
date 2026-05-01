@@ -20,7 +20,7 @@ const Links = () => {
 
     useEffect(() => {
         subscribeLinks({ onData: setLinks, onError: (error) => toastError(error) });
-        return () => unsubscribeLinks();
+        return () => unsubscribeLinks({ onError: (error) => toastError(error) });
     }, []);
 
     return (
