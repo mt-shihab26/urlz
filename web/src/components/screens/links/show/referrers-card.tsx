@@ -25,14 +25,22 @@ export const ReferrersCard = ({ referrers }: { referrers: TLinkReferrer[] }) => 
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {referrers.slice(0, 6).map((referrer) => (
-                            <TableRow key={referrer.source}>
-                                <TableCell>{referrer.source}</TableCell>
-                                <TableCell className="text-right font-mono text-sm text-muted-foreground">
-                                    {referrer.clicks.toLocaleString()}
+                        {referrers.length === 0 ? (
+                            <TableRow>
+                                <TableCell colSpan={2} className="h-24 text-center text-muted-foreground">
+                                    No referrers yet
                                 </TableCell>
                             </TableRow>
-                        ))}
+                        ) : (
+                            referrers.slice(0, 6).map((referrer) => (
+                                <TableRow key={referrer.source}>
+                                    <TableCell>{referrer.source}</TableCell>
+                                    <TableCell className="text-right font-mono text-sm text-muted-foreground">
+                                        {referrer.clicks.toLocaleString()}
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        )}
                     </TableBody>
                 </Table>
             </CardContent>

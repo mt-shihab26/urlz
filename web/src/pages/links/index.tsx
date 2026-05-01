@@ -15,8 +15,9 @@ import { LinksTable } from '@/components/screens/links/index/links-table';
 import { SearchBox } from '@/components/screens/links/index/search-box';
 
 const Links = () => {
-    const [links, setLinks] = useState<TLink[]>([]);
     const [loading, setLoading] = useState(true);
+
+    const [links, setLinks] = useState<TLink[]>([]);
     const [search, setSearch] = useState('');
     const [filter, setFilter] = useState<TFilter>('all');
 

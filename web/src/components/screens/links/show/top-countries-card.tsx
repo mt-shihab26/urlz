@@ -15,14 +15,20 @@ export const TopCountriesCard = ({ countries }: TopCountriesCardProps) => {
                 <CardTitle>Top Countries</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-2.5">
-                {countries.slice(0, 6).map((country) => (
-                    <CountryBar
-                        key={country.code}
-                        code={country.code}
-                        pct={country.pct}
-                        max={maxCountryPct}
-                    />
-                ))}
+                {countries.length === 0 ? (
+                    <p className="h-24 text-center text-sm text-muted-foreground flex items-center justify-center">
+                        No data yet
+                    </p>
+                ) : (
+                    countries.slice(0, 6).map((country) => (
+                        <CountryBar
+                            key={country.code}
+                            code={country.code}
+                            pct={country.pct}
+                            max={maxCountryPct}
+                        />
+                    ))
+                )}
             </CardContent>
         </Card>
     );

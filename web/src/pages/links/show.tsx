@@ -20,12 +20,16 @@ const LinkDetail = () => {
 
     const { id } = useParams<{ id: string }>();
 
-    const [link, setLink] = useState<TLink | null>(null);
     const [loading, setLoading] = useState(true);
+
+    const [link, setLink] = useState<TLink | null>(null);
     const [range, setRange] = useState<TLinkDetailRange>('30d');
 
     useEffect(() => {
-        if (!id) return;
+        if (!id) {
+            setLoading(false);
+            return;
+        }
         subscribeLink(id, { onData: setLink, onError: toastError, onLoading: setLoading });
         return () => unsubscribeLink(id, { onError: toastError });
     }, [id]);

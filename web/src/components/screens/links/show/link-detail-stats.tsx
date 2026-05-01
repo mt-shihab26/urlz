@@ -12,7 +12,7 @@ export const LinkDetailStats = ({ range, link }: { range: TLinkDetailRange; link
     const stats = [
         { label: 'Period Clicks', value: periodClicks.toLocaleString() },
         { label: 'Total Clicks', value: link.clicks.toLocaleString() },
-        { label: 'Countries', value: '—' },
+        { label: 'Countries', value: link.countries.length.toLocaleString() },
         {
             label: 'Created',
             value: new Date(link.created).toLocaleDateString('en-US', {
