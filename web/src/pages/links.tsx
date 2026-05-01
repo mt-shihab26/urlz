@@ -21,7 +21,6 @@ const Links = () => {
     useEffect(() => {
         (async () => {
             try {
-                throw new Error('Error bro');
                 setLinks(await getLinks());
             } catch (e) {
                 toastError(e instanceof Error ? e.message : 'Failed to fetch links');

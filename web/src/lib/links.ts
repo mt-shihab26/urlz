@@ -20,3 +20,7 @@ export const filterLinks = ({
         return matchSearch && matchFilter;
     });
 };
+
+export const generateRandomSlug = () => {
+    return Math.random().toString(36).slice(2, 7);
+};

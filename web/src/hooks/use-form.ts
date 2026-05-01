@@ -16,5 +16,10 @@ export const useForm = <T>(initialData: T) => {
         },
         loading,
         setLoading,
+        reset: () => {
+            setData(initialData);
+            setErrors({});
+            setLoading(false);
+        },
     };
 };

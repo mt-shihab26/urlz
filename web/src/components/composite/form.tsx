@@ -1,9 +1,15 @@
+import type { ReactNode } from 'react';
+
+import { cn } from '@/lib/utils';
+
 export const Form = ({
     onSubmit,
     children,
+    className,
 }: {
     onSubmit: () => void;
-    children: React.ReactNode;
+    children: ReactNode;
+    className?: string;
 }) => {
     return (
         <form
@@ -11,7 +17,7 @@ export const Form = ({
                 e.preventDefault();
                 onSubmit();
             }}
-            className="flex flex-col gap-4"
+            className={cn('flex flex-col gap-4', className)}
         >
             {children}
         </form>
