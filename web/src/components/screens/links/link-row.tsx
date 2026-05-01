@@ -1,32 +1,35 @@
-import {
-    CheckIcon,
-    CopyIcon,
-    ExternalLinkIcon,
-    EyeIcon,
-    EyeOffIcon,
-    Trash2Icon,
-} from 'lucide-react';
-
 import type { TLink } from '@/types/models';
 
 import { deleteLink, toggleLinkStatus } from '@/collections/links';
-import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
-import { cn } from '@/lib/utils';
+import { formatCode, formatDate, formatNumber } from '@/lib/formats';
+import { toastError } from '@/lib/toast';
 import { useNavigate } from 'react-router';
 
+import { CopyButton } from '@/components/composite/copy-button';
 import { Sparkline, StatusBadge } from '@/components/composite/urlz-ui';
 import { Button } from '@/components/ui/button';
 import { TableCell, TableRow } from '@/components/ui/table';
+import { ExternalLinkIcon, EyeIcon, EyeOffIcon, Trash2Icon } from 'lucide-react';
 
 export const LinkRow = ({ link }: { link: TLink }) => {
     const navigate = useNavigate();
 
-    const [copiedText, handleCopy] = useCopyToClipboard();
+    const handleClick = () => {
+        navigate(`/links/${link.id}`);
+    };
+
+    const handleLinkToggle = async () => {
+        try {
+            await toggleLinkStatus(link.id, link.status);
+        } catch (e) {
+            toastError(e instanceof Error ? e.message : 'Failed to toggle link status');
+        }
+    };
 
     return (
         <TableRow className="group">
             <TableCell className="max-w-55">
-                <div className="cursor-pointer" onClick={() => navigate(`/links/${link.id}`)}>
+                <div className="cursor-pointer" onClick={handleClick}>
                     <div className="truncate font-medium">{link.title}</div>
                     <div className="truncate font-mono text-xs text-muted-foreground">
                         {link.url}
@@ -35,34 +38,18 @@ export const LinkRow = ({ link }: { link: TLink }) => {
             </TableCell>
             <TableCell>
                 <div className="flex items-center gap-1.5">
-                    <span className="font-mono text-xs text-primary">urlz.io/{link.code}</span>
-                    <button
-                        onClick={() => handleCopy(link.code)}
-                        className={cn(
-                            'rounded p-1 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 hover:text-foreground',
-                            copiedText === link.code &&
-                                'text-green-600 dark:text-green-400 opacity-100',
-                        )}
-                    >
-                        {copiedText === link.code ? (
-                            <CheckIcon className="size-3" />
-                        ) : (
-                            <CopyIcon className="size-3" />
-                        )}
-                    </button>
+                    <span className="font-mono text-xs text-primary">{formatCode(link.code)}</span>
+                    <CopyButton text={link.code} />
                 </div>
             </TableCell>
             <TableCell className="text-right font-mono font-bold">
-                {link.clicks.toLocaleString()}
+                {formatNumber(link.clicks)}
             </TableCell>
             <TableCell className="text-right">
                 <Sparkline data={link.series.slice(-14)} width={64} height={22} />
             </TableCell>
             <TableCell className="text-right font-mono text-xs text-muted-foreground">
-                {new Date(link.created).toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                })}
+                {formatDate(link.created)}
             </TableCell>
             <TableCell>
                 <StatusBadge status={link.status} />
@@ -73,8 +60,8 @@ export const LinkRow = ({ link }: { link: TLink }) => {
                         variant="ghost"
                         size="icon"
                         className="size-7"
-                        onClick={() => toggleLinkStatus(link.id, link.status)}
                         title={link.status === 'active' ? 'Disable' : 'Enable'}
+                        onClick={handleLinkToggle}
                     >
                         {link.status === 'active' ? (
                             <EyeOffIcon className="size-3.5" />
