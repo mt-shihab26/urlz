@@ -1,4 +1,4 @@
-import type { TLinkDetailRange } from '@/components/screens/link-detail/link-detail-header';
+import type { TLinkDetailRange } from '@/components/screens/links/show/link-detail-header';
 import type { TLink } from '@/types/models';
 
 import { getLinkById } from '@/collections/links';
@@ -6,12 +6,12 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
-import { LinkClicksChart } from '@/components/screens/link-detail/link-clicks-chart';
-import { LinkDetailHeader } from '@/components/screens/link-detail/link-detail-header';
-import { LinkDetailPageSkeleton } from '@/components/screens/link-detail/link-detail-page-skeleton';
-import { LinkDetailStats } from '@/components/screens/link-detail/link-detail-stats';
-import { ReferrersCard } from '@/components/screens/link-detail/referrers-card';
-import { TopCountriesCard } from '@/components/screens/link-detail/top-countries-card';
+import { LinkClicksChart } from '@/components/screens/links/show/link-clicks-chart';
+import { LinkDetailHeader } from '@/components/screens/links/show/link-detail-header';
+import { LinkDetailPageSkeleton } from '@/components/screens/links/show/link-detail-page-skeleton';
+import { LinkDetailStats } from '@/components/screens/links/show/link-detail-stats';
+import { ReferrersCard } from '@/components/screens/links/show/referrers-card';
+import { TopCountriesCard } from '@/components/screens/links/show/top-countries-card';
 import { Button } from '@/components/ui/button';
 
 const LinkDetail = () => {

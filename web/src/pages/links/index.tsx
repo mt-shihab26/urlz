@@ -1,4 +1,4 @@
-import type { TFilter } from '@/components/screens/links/filters-toggle';
+import type { TFilter } from '@/components/screens/links/index/filters-toggle';
 import type { TLink } from '@/types/models';
 
 import { subscribeLinks, unsubscribeLinks } from '@/collections/links';
@@ -8,11 +8,11 @@ import { useEffect, useState } from 'react';
 
 import { Header } from '@/components/composite/site-header';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
-import { CreateLinkButton } from '@/components/screens/links/create-link-button';
-import { FiltersToggle } from '@/components/screens/links/filters-toggle';
-import { LinksPageSkeleton } from '@/components/screens/links/links-page-skeleton';
-import { LinksTable } from '@/components/screens/links/links-table';
-import { SearchBox } from '@/components/screens/links/search-box';
+import { CreateLinkButton } from '@/components/screens/links/index/create-link-button';
+import { FiltersToggle } from '@/components/screens/links/index/filters-toggle';
+import { LinksPageSkeleton } from '@/components/screens/links/index/links-page-skeleton';
+import { LinksTable } from '@/components/screens/links/index/links-table';
+import { SearchBox } from '@/components/screens/links/index/search-box';
 
 const Links = () => {
     const [links, setLinks] = useState<TLink[]>([]);

@@ -17,12 +17,12 @@ export const routes: TRoute[] = [
     },
     {
         path: '/links',
-        component: lazy(() => import('@/pages/links')),
+        component: lazy(() => import('@/pages/links/index')),
         guard: 'auth',
     },
     {
         path: '/links/:id',
-        component: lazy(() => import('@/pages/link-detail')),
+        component: lazy(() => import('@/pages/links/show')),
         guard: 'auth',
     },
     {
