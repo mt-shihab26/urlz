@@ -1,4 +1,3 @@
-import type { TLink } from '@/types/models';
 import type { ComponentProps, ReactNode } from 'react';
 
 import { cn } from '@/lib/utils';
@@ -13,13 +12,11 @@ export const CreateLinkButton = ({
     children,
     variant,
     size,
-    onCreated,
 }: {
     className?: string;
     children?: ReactNode;
     variant?: ComponentProps<typeof Button>['variant'];
     size?: ComponentProps<typeof Button>['size'];
-    onCreated?: (link: TLink) => void;
 }) => {
     const [open, setOpen] = useState(false);
     return (
@@ -33,7 +30,7 @@ export const CreateLinkButton = ({
                 <PlusIcon className="size-4" />
                 {children ?? 'New Link'}
             </Button>
-            <CreateLinkDialog open={open} onOpenChange={setOpen} onCreated={onCreated} />
+            <CreateLinkDialog open={open} onOpenChange={setOpen} />
         </>
     );
 };

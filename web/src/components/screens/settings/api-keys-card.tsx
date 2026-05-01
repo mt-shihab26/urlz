@@ -3,8 +3,34 @@ import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { API_KEYS_DATA } from '@/lib/urlz-data';
 import { cn } from '@/lib/utils';
+
+export const API_KEYS_DATA = [
+    {
+        id: 'k1',
+        name: 'Production',
+        key: 'urlz_live_sk_aBcDeFgHiJkLmNoPqRsTuVwX',
+        created: makeDate(90),
+        lastUsed: makeDate(0),
+        status: 'active' as const,
+    },
+    {
+        id: 'k2',
+        name: 'CI / Tests',
+        key: 'urlz_live_sk_YzAbCdEfGhIjKlMnOpQrStUv',
+        created: makeDate(45),
+        lastUsed: makeDate(3),
+        status: 'active' as const,
+    },
+    {
+        id: 'k3',
+        name: 'Local Dev',
+        key: 'urlz_live_sk_WxYzAbCdEfGhIjKlMnOpQrSt',
+        created: makeDate(120),
+        lastUsed: makeDate(14),
+        status: 'revoked' as const,
+    },
+];
 
 type ApiKeyStatus = 'active' | 'revoked';
 

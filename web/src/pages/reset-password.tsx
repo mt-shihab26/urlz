@@ -54,7 +54,7 @@ function ResetPassword() {
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <Button asChild className="w-full">
+                        <Button className="w-full">
                             <Link to="/sign-in">Sign in with new password</Link>
                         </Button>
                     </CardContent>
