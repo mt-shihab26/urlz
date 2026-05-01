@@ -21,16 +21,7 @@ const Links = () => {
     const [filter, setFilter] = useState<TFilter>('all');
 
     useEffect(() => {
-        subscribeLinks({
-            onData: (data) => {
-                setLinks(data);
-                setLoading(false);
-            },
-            onError: (error) => {
-                setLoading(false);
-                toastError(error);
-            },
-        });
+        subscribeLinks({ onData: setLinks, onError: toastError, onLoading: setLoading });
         return () => unsubscribeLinks({ onError: toastError });
     }, []);
 

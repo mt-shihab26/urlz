@@ -27,16 +27,21 @@ export const getLinkById = async (id: string): Promise<TLink> => {
 export const subscribeLinks = ({
     onData,
     onError,
+    onLoading,
 }: {
     onData: (links: TLink[]) => void;
     onError?: (error: string) => void;
+    onLoading?: (loading: boolean) => void;
 }) => {
     try {
         (async () => {
+            onLoading && onLoading(true);
             try {
                 onData(await getLinks());
             } catch (e: any) {
                 onError && onError(e.message);
+            } finally {
+                onLoading && onLoading(false);
             }
         })();
 
@@ -45,6 +50,7 @@ export const subscribeLinks = ({
                 onData(await getLinks());
             } catch (e: any) {
                 onError && onError(e.message);
+            } finally {
             }
         });
     } catch (e) {
