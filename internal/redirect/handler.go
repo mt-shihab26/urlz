@@ -14,15 +14,10 @@ func Handler(e *core.RequestEvent) error {
 	if err != nil {
 		return apis.NewNotFoundError("Link not found", nil)
 	}
-	switch record.GetString("status") {
-	case "disabled", "expired":
+	if record.GetString("status") == "disabled" {
 		return apis.NewNotFoundError("Link not available", nil)
 	}
 	if exp := record.GetDateTime("expires"); !exp.IsZero() && time.Now().After(exp.Time()) {
-		go func() {
-			record.Set("status", "expired")
-			_ = e.App.Save(record)
-		}()
 		return apis.NewNotFoundError("Link expired", nil)
 	}
 	targetURL := record.GetString("url")

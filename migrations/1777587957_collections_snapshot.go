@@ -926,8 +926,7 @@ func init() {
 						"type": "select",
 						"values": [
 							"active",
-							"disabled",
-							"expired"
+							"disabled"
 						]
 					},
 					{
