@@ -11,15 +11,7 @@ import type { TLink } from '@/types/models';
 
 import { LinkRow } from '@/components/screens/links/link-row';
 
-export const LinksTable = ({
-    links,
-    onToggle,
-    onDelete,
-}: {
-    links: TLink[];
-    onToggle: (id: string) => void;
-    onDelete: (id: string) => void;
-}) => {
+export const LinksTable = ({ links }: { links: TLink[] }) => {
     return (
         <div className="overflow-hidden rounded-lg border">
             <Table>
@@ -45,14 +37,7 @@ export const LinksTable = ({
                             </TableCell>
                         </TableRow>
                     ) : (
-                        links.map((link) => (
-                            <LinkRow
-                                key={link.id}
-                                link={link}
-                                onToggle={onToggle}
-                                onDelete={onDelete}
-                            />
-                        ))
+                        links.map((link) => <LinkRow key={link.id} link={link} />)
                     )}
                 </TableBody>
             </Table>

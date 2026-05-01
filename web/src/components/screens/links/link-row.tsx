@@ -9,40 +9,24 @@ import {
 
 import type { TLink } from '@/types/models';
 
+import { deleteLink, toggleLinkStatus } from '@/collections/links';
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { Sparkline, StatusBadge } from '@/components/composite/urlz-ui';
 import { Button } from '@/components/ui/button';
 import { TableCell, TableRow } from '@/components/ui/table';
 
-export const LinkRow = ({
-    link,
-    onToggle,
-    onDelete,
-}: {
-    link: TLink;
-    onToggle: (id: string) => void;
-    onDelete: (id: string) => void;
-}) => {
+export const LinkRow = ({ link }: { link: TLink }) => {
     const navigate = useNavigate();
 
-    const [copied, setCopied] = useState<string | null>(null);
-
-    const copyLink = (code: string) => {
-        setCopied(code);
-        setTimeout(() => setCopied(null), 1800);
-    };
-
-    const handleClick = () => {
-        navigate(`/links/${link.id}`);
-    };
+    const [copiedText, handleCopy] = useCopyToClipboard();
 
     return (
         <TableRow className="group">
             <TableCell className="max-w-55">
-                <div className="cursor-pointer" onClick={handleClick}>
+                <div className="cursor-pointer" onClick={() => navigate(`/links/${link.id}`)}>
                     <div className="truncate font-medium">{link.title}</div>
                     <div className="truncate font-mono text-xs text-muted-foreground">
                         {link.url}
@@ -53,14 +37,14 @@ export const LinkRow = ({
                 <div className="flex items-center gap-1.5">
                     <span className="font-mono text-xs text-primary">urlz.io/{link.code}</span>
                     <button
-                        onClick={() => copyLink(link.code)}
+                        onClick={() => handleCopy(link.code)}
                         className={cn(
                             'rounded p-1 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 hover:text-foreground',
-                            copied === link.code &&
+                            copiedText === link.code &&
                                 'text-green-600 dark:text-green-400 opacity-100',
                         )}
                     >
-                        {copied === link.code ? (
+                        {copiedText === link.code ? (
                             <CheckIcon className="size-3" />
                         ) : (
                             <CopyIcon className="size-3" />
@@ -89,7 +73,7 @@ export const LinkRow = ({
                         variant="ghost"
                         size="icon"
                         className="size-7"
-                        onClick={() => onToggle(link.id)}
+                        onClick={() => toggleLinkStatus(link.id, link.status)}
                         title={link.status === 'active' ? 'Disable' : 'Enable'}
                     >
                         {link.status === 'active' ? (
@@ -111,7 +95,7 @@ export const LinkRow = ({
                         variant="ghost"
                         size="icon"
                         className="size-7 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                        onClick={() => onDelete(link.id)}
+                        onClick={() => deleteLink(link.id)}
                         title="Delete"
                     >
                         <Trash2Icon className="size-3.5" />

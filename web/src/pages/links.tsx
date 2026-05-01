@@ -1,6 +1,6 @@
 import type { TLink, TLinkStatus } from '@/types/models';
 
-import { deleteLink, getLinks, toggleLinkStatus } from '@/collections/links';
+import { getLinks } from '@/collections/links';
 import { useEffect, useState } from 'react';
 
 import { Header } from '@/components/composite/site-header';
@@ -45,17 +45,6 @@ const Links = () => {
         expired: links.filter((l) => l.status === 'expired').length,
     };
 
-    const handleToggle = async (id: string) => {
-        const link = links.find((l) => l.id === id)!;
-        const updated = await toggleLinkStatus(id, link.status);
-        setLinks((prev) => prev.map((l) => (l.id === id ? updated : l)));
-    };
-
-    const handleDelete = async (id: string) => {
-        await deleteLink(id);
-        setLinks((prev) => prev.filter((l) => l.id !== id));
-    };
-
     return (
         <DashboardLayout title="Links">
             <Header
@@ -88,7 +77,7 @@ const Links = () => {
                         ))}
                     </ToggleGroup>
                 </div>
-                <LinksTable links={filtered} onToggle={handleToggle} onDelete={handleDelete} />
+                <LinksTable links={filtered} />
             </div>
         </DashboardLayout>
     );
