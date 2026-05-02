@@ -1,8 +1,11 @@
 import { CopyButton } from '@/components/composite/copy-button';
 import { StatusBadge } from '@/components/composite/status-badge';
-import { LinkDeleteButton } from '@/components/screens/links/index/link-delete-button';
-import { LinkOpenButton } from '@/components/screens/links/index/link-open-button';
-import { LinkToggleButton } from '@/components/screens/links/index/link-toggle-button';
+
+import { LinkDeleteButton } from '@/components/screens/links/link-delete-button';
+import { LinkEditButton } from '@/components/screens/links/link-edit-button';
+import { LinkOpenButton } from '@/components/screens/links/link-open-button';
+import { LinkToggleButton } from '@/components/screens/links/link-toggle-button';
+
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { ChevronLeftIcon } from 'lucide-react';
 
@@ -55,6 +58,7 @@ export const LinkDetailHeader = ({ link, range, onRangeChange, onBack }: LinkDet
                         )}
                     </div>
                     <div className="mt-2 flex items-center gap-1">
+                        <LinkEditButton link={link} />
                         <LinkToggleButton link={link} />
                         <LinkOpenButton link={link} />
                         <LinkDeleteButton link={link} />

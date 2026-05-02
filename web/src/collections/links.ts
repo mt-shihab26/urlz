@@ -139,6 +139,16 @@ export const createLink = async (data: {
 };
 
 /**
+ * Updates editable fields of a link record.
+ */
+export const updateLink = async (
+    id: string,
+    data: { url: string; title: string; code: string; expires?: string },
+): Promise<TLink> => {
+    return pb.collection(LINKS).update<TLink>(id, data);
+};
+
+/**
  * Toggles a link's status between `active` and `disabled` and updates it in the `links` collection.
  */
 export const toggleLinkStatus = async (id: string, current: TLinkStatus): Promise<TLink> => {

@@ -4,13 +4,15 @@ import { formatCode, formatDate, formatNumber } from '@/lib/formats';
 import { isLinkExpired } from '@/lib/links';
 import { useNavigate } from 'react-router';
 
+import { LinkDeleteButton } from '@/components/screens/links/link-delete-button';
+import { LinkEditButton } from '@/components/screens/links/link-edit-button';
+import { LinkOpenButton } from '@/components/screens/links/link-open-button';
+import { LinkToggleButton } from '@/components/screens/links/link-toggle-button';
+
 import { CopyButton } from '@/components/composite/copy-button';
 import { StatusBadge } from '@/components/composite/status-badge';
 import { TableCell, TableRow } from '@/components/ui/table';
-import { LinkDeleteButton } from './link-delete-button';
-import { LinkOpenButton } from './link-open-button';
 import { LinkSparkline } from './link-sparkline';
-import { LinkToggleButton } from './link-toggle-button';
 
 export const LinkRow = ({ link }: { link: TLink }) => {
     const navigate = useNavigate();
@@ -48,6 +50,7 @@ export const LinkRow = ({ link }: { link: TLink }) => {
             </TableCell>
             <TableCell>
                 <div className="flex items-center justify-end gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+                    <LinkEditButton link={link} />
                     <LinkToggleButton link={link} />
                     <LinkOpenButton link={link} />
                     <LinkDeleteButton link={link} />
