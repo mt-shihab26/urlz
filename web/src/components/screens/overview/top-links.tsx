@@ -12,8 +12,11 @@ import type { TLink } from '@/types/models';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router';
 
-import { Sparkline } from '@/components/composite/sparkline';
+import { formatCode, formatNumber } from '@/lib/formats';
+
+import { CopyButton } from '@/components/composite/copy-button';
 import { StatusBadge } from '@/components/composite/status-badge';
+import { LinkSparkline } from '@/components/screens/links/index/link-sparkline';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export const TopLinks = ({ links }: { links: TLink[] }) => {
@@ -52,7 +55,7 @@ export const TopLinks = ({ links }: { links: TLink[] }) => {
                             topLinks.map((link, i) => (
                                 <TableRow
                                     key={link.id}
-                                    className="cursor-pointer"
+                                    className="group cursor-pointer"
                                     onClick={() => navigate(`/links/${link.id}`)}
                                 >
                                     <TableCell>
@@ -62,21 +65,20 @@ export const TopLinks = ({ links }: { links: TLink[] }) => {
                                             </span>
                                             <div>
                                                 <div className="font-medium">{link.title}</div>
-                                                <div className="font-mono text-xs text-muted-foreground">
-                                                    urlz.io/{link.code}
+                                                <div className="flex items-center gap-1">
+                                                    <span className="font-mono text-xs text-primary">
+                                                        {formatCode(link.code)}
+                                                    </span>
+                                                    <CopyButton text={formatCode(link.code)} />
                                                 </div>
                                             </div>
                                         </div>
                                     </TableCell>
                                     <TableCell className="text-right font-mono font-bold">
-                                        {link.clicks.toLocaleString()}
+                                        {formatNumber(link.clicks)}
                                     </TableCell>
                                     <TableCell className="text-right">
-                                        <Sparkline
-                                            data={link.series.slice(-14)}
-                                            width={72}
-                                            height={24}
-                                        />
+                                        <LinkSparkline series={link.series} />
                                     </TableCell>
                                     <TableCell>
                                         <StatusBadge status={link.status} />

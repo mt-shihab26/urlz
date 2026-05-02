@@ -13,3 +13,10 @@ export const formatDate = (dateString: string) => {
         year: 'numeric',
     });
 };
+
+export const formatChartDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+    });
+};

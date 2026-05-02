@@ -4,6 +4,8 @@ import type { TLink } from '@/types/models';
 
 import { useMemo } from 'react';
 
+import { formatChartDate, formatNumber } from '@/lib/formats';
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
@@ -45,7 +47,7 @@ export const ClickVolumeChart = ({ links, range }: { links: TLink[]; range: TRan
                 <div>
                     <CardTitle>Click Volume</CardTitle>
                     <CardDescription className="mt-0.5 font-mono text-xs">
-                        {curr30.toLocaleString()} this period
+                        {formatNumber(curr30)} this period
                     </CardDescription>
                 </div>
             </CardHeader>
@@ -73,24 +75,10 @@ export const ClickVolumeChart = ({ links, range }: { links: TLink[]; range: TRan
                             axisLine={false}
                             tickMargin={8}
                             minTickGap={32}
-                            tickFormatter={(v) =>
-                                new Date(v).toLocaleDateString('en-US', {
-                                    month: 'short',
-                                    day: 'numeric',
-                                })
-                            }
+                            tickFormatter={formatChartDate}
                         />
                         <ChartTooltip
-                            content={
-                                <ChartTooltipContent
-                                    labelFormatter={(v) =>
-                                        new Date(v).toLocaleDateString('en-US', {
-                                            month: 'short',
-                                            day: 'numeric',
-                                        })
-                                    }
-                                />
-                            }
+                            content={<ChartTooltipContent labelFormatter={formatChartDate} />}
                         />
                         <Area
                             dataKey="clicks"

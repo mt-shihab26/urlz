@@ -2,6 +2,8 @@ import type { TLink } from '@/types/models';
 
 import { useMemo } from 'react';
 
+import { formatNumber } from '@/lib/formats';
+
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { TrendingDownIcon, TrendingUpIcon } from 'lucide-react';
 
@@ -24,12 +26,13 @@ export const StatsCards = ({ links }: { links: TLink[] }) => {
         const curr30 = totalSeries.slice(-30).reduce((s, d) => s + d.clicks, 0);
         const delta = prev30 > 0 ? Math.round(((curr30 - prev30) / prev30) * 100) : 0;
         const activeLinks = links.filter((l) => l.status === 'active').length;
+        const uniqueCountries = new Set(links.flatMap((l) => l.countries.map((c) => c.code))).size;
 
         return {
             stats: [
                 {
                     label: 'Total Clicks',
-                    value: totalClicks.toLocaleString(),
+                    value: formatNumber(totalClicks),
                     delta,
                     sub: 'vs prev 30d',
                 },
@@ -38,11 +41,11 @@ export const StatsCards = ({ links }: { links: TLink[] }) => {
                     label: 'Avg Clicks / Link',
                     value:
                         links.length > 0
-                            ? Math.round(totalClicks / links.length).toLocaleString()
+                            ? formatNumber(Math.round(totalClicks / links.length))
                             : '0',
                     sub: 'lifetime',
                 },
-                { label: 'Countries', value: '—', sub: 'reached' },
+                { label: 'Countries', value: uniqueCountries || '—', sub: 'reached' },
             ],
         };
     }, [links]);
