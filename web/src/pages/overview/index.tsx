@@ -31,8 +31,12 @@ const Overview = () => {
         };
     }, []);
 
-    const linksWithClicks = useMemo(
-        () => links.map((link) => ({ ...link, clicks: clicks.filter((c) => c.link === link.id) })),
+    const clicksByLink = useMemo(
+        () =>
+            links.map((link) => ({
+                ...link,
+                clicks: clicks.filter((c) => c.link === link.id),
+            })),
         [links, clicks],
     );
 
@@ -62,9 +66,9 @@ const Overview = () => {
                     <Loading />
                 ) : (
                     <>
-                        <StatsCards links={linksWithClicks} />
-                        <ClickVolumeChart links={linksWithClicks} range={range} />
-                        <TopLinks links={linksWithClicks} />
+                        <StatsCards clicks={clicks} links={links} />
+                        <ClickVolumeChart links={clicksByLink} range={range} />
+                        <TopLinks links={clicksByLink} />
                     </>
                 )}
             </div>

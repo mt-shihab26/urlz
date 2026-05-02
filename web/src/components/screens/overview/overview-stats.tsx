@@ -1,4 +1,4 @@
-import type { TLink } from '@/types/models';
+import type { TClick, TLink } from '@/types/models';
 
 import { clicksToSeries } from '@/lib/clicks';
 import { formatNumber } from '@/lib/formats';
@@ -7,18 +7,17 @@ import { useMemo } from 'react';
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { TrendingDownIcon, TrendingUpIcon } from 'lucide-react';
 
-export const StatsCards = ({ links }: { links: TLink[] }) => {
+export const StatsCards = ({ clicks, links }: { clicks: TClick[]; links: TLink[] }) => {
     const { stats } = useMemo(() => {
-        const allClicks = links.flatMap((l) => l.clicks);
-        const totalClicks = allClicks.length;
-        const totalSeries = clicksToSeries(allClicks);
+        const totalClicks = clicks.length;
+        const totalSeries = clicksToSeries(clicks);
 
         const prev30 = totalSeries.slice(-60, -30).reduce((s, d) => s + d.clicks, 0);
         const curr30 = totalSeries.slice(-30).reduce((s, d) => s + d.clicks, 0);
         const delta = prev30 > 0 ? Math.round(((curr30 - prev30) / prev30) * 100) : 0;
 
         const activeLinks = links.filter((l) => l.status === 'active').length;
-        const uniqueCountries = new Set(allClicks.map((c) => c.country_code).filter(Boolean)).size;
+        const uniqueCountries = new Set(clicks.map((c) => c.country_code).filter(Boolean)).size;
 
         return {
             stats: [
@@ -40,7 +39,7 @@ export const StatsCards = ({ links }: { links: TLink[] }) => {
                 { label: 'Countries', value: uniqueCountries || '—', sub: 'reached' },
             ],
         };
-    }, [links]);
+    }, [clicks, links]);
 
     return (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
