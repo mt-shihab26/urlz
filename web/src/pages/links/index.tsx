@@ -16,12 +16,13 @@ import { LinksTable } from '@/components/screens/links/index/links-table';
 import { SearchBox } from '@/components/screens/links/index/search-box';
 
 const Links = () => {
+    const [filter, setFilter] = useState<TFilter>('all');
+
     const [loading, setLoading] = useState(true);
 
     const [links, setLinks] = useState<TLink[]>([]);
     const [clicks, setClicks] = useState<TClick[]>([]);
     const [search, setSearch] = useState('');
-    const [filter, setFilter] = useState<TFilter>('all');
 
     useEffect(() => {
         subscribeLinks('All', { onData: setLinks, onError: toastError, onLoading: setLoading });
