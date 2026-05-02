@@ -8,12 +8,7 @@ func trackClick(app core.App, id, refHeader, ip, ua string) {
 		app.Logger().Error("trackClick: find record", "id", id, "err", err)
 		return
 	}
-	record.Set("clicks", record.GetInt("clicks")+1)
-	record.Set("series", updatedSeries(app, record))
-	record.Set("referrers", updatedReferrers(app, record, refHeader))
-	record.Set("countries", updatedCountries(app, record, ip))
-	record.Set("browsers", updatedBrowsers(app, record, ua))
-	record.Set("oses", updatedOS(app, record, ua))
+	appendClick(app, record, refHeader, ip, ua)
 	if err := app.Save(record); err != nil {
 		app.Logger().Error("trackClick: save record", "id", id, "err", err)
 	}

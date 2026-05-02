@@ -904,15 +904,13 @@ func init() {
 					{
 						"help": "",
 						"hidden": false,
-						"id": "number4444444444",
-						"max": null,
-						"min": 0,
+						"id": "json4444444444",
+						"maxSize": 0,
 						"name": "clicks",
-						"onlyInt": true,
 						"presentable": false,
 						"required": false,
 						"system": false,
-						"type": "number"
+						"type": "json"
 					},
 					{
 						"help": "",
@@ -940,61 +938,6 @@ func init() {
 						"required": false,
 						"system": false,
 						"type": "date"
-					},
-					{
-						"help": "",
-						"hidden": false,
-						"id": "json7777777777",
-						"maxSize": 0,
-						"name": "series",
-						"presentable": false,
-						"required": false,
-						"system": false,
-						"type": "json"
-					},
-					{
-						"help": "",
-						"hidden": false,
-						"id": "json1010101010",
-						"maxSize": 0,
-						"name": "countries",
-						"presentable": false,
-						"required": false,
-						"system": false,
-						"type": "json"
-					},
-					{
-						"help": "",
-						"hidden": false,
-						"id": "json2020202020",
-						"maxSize": 0,
-						"name": "referrers",
-						"presentable": false,
-						"required": false,
-						"system": false,
-						"type": "json"
-					},
-					{
-						"help": "",
-						"hidden": false,
-						"id": "json3030303030",
-						"maxSize": 0,
-						"name": "browsers",
-						"presentable": false,
-						"required": false,
-						"system": false,
-						"type": "json"
-					},
-					{
-						"help": "",
-						"hidden": false,
-						"id": "json4040404040",
-						"maxSize": 0,
-						"name": "oses",
-						"presentable": false,
-						"required": false,
-						"system": false,
-						"type": "json"
 					},
 					{
 						"hidden": false,
