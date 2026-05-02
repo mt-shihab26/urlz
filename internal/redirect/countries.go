@@ -22,7 +22,6 @@ func updatedCountries(app core.App, record *core.Record, ip string) []country {
 	if data, err := json.Marshal(record.Get("countries")); err == nil {
 		_ = json.Unmarshal(data, &countries)
 	}
-
 	name, code, err := lookupCountry(ip)
 	if err != nil {
 		app.Logger().Warn("updatedCountries: lookup failed", "ip", ip, "err", err)
@@ -31,14 +30,12 @@ func updatedCountries(app core.App, record *core.Record, ip string) []country {
 	if name == "" {
 		return countries
 	}
-
 	for i, c := range countries {
 		if c.Code == code {
 			countries[i].Clicks++
 			return withPct(countries)
 		}
 	}
-
 	return withPct(append(countries, country{Country: name, Code: code, Clicks: 1}))
 }
 
@@ -60,13 +57,11 @@ func lookupCountry(ip string) (name, code string, err error) {
 	if ip == "" || isPrivateIP(ip) {
 		return "", "", nil
 	}
-
 	resp, err := http.Get("http://ip-api.com/json/" + ip + "?fields=country,countryCode")
 	if err != nil {
 		return "", "", err
 	}
 	defer resp.Body.Close()
-
 	var result struct {
 		Country     string `json:"country"`
 		CountryCode string `json:"countryCode"`

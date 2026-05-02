@@ -12,24 +12,27 @@ type referrer struct {
 	Clicks int    `json:"clicks"`
 }
 
-func updatedReferrers(record *core.Record, refHeader string) []referrer {
+func updatedReferrers(app core.App, record *core.Record, refHeader string) []referrer {
 	var referrers []referrer
-	if data, err := json.Marshal(record.Get("referrers")); err == nil {
-		_ = json.Unmarshal(data, &referrers)
+	data, err := json.Marshal(record.Get("referrers"))
+	if err != nil {
+		app.Logger().Error("updatedReferrers: marshal", "id", record.Id, "err", err)
+		return referrers
 	}
-
+	if err := json.Unmarshal(data, &referrers); err != nil {
+		app.Logger().Error("updatedReferrers: unmarshal", "id", record.Id, "err", err)
+		return referrers
+	}
 	source := parseReferrerSource(refHeader)
 	if source == "" {
 		return referrers
 	}
-
 	for i, r := range referrers {
 		if r.Source == source {
 			referrers[i].Clicks++
 			return referrers
 		}
 	}
-
 	return append(referrers, referrer{Source: source, Clicks: 1})
 }
 
