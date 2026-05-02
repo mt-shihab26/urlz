@@ -16,12 +16,30 @@ export const AnalyticsStats = ({ links }: { links: TLink[] }) => {
             allReferrers.length > 0
                 ? allReferrers.reduce((a, b) => (a.clicks > b.clicks ? a : b)).source
                 : '—';
+        const avgClicks =
+            links.length > 0 ? formatNumber(Math.round(totalClicks / links.length)) : '0';
+        const expiringSoon = links.filter((l) => {
+            if (!l.expires) return false;
+            const t = new Date(l.expires).getTime();
+            const now = Date.now();
+            return t > now && t <= now + 30 * 24 * 60 * 60 * 1000;
+        }).length;
+        const allCountries = links.flatMap((l) => l.countries);
+        const topCountry =
+            allCountries.length > 0
+                ? allCountries.reduce((a, b) => (a.clicks > b.clicks ? a : b)).country
+                : '—';
+        const noClicks = links.filter((l) => l.clicks === 0).length;
 
         return [
             { label: 'Total Clicks', value: formatNumber(totalClicks) },
             { label: 'Active Links', value: `${activeLinks} / ${links.length}` },
+            { label: 'Avg Clicks / Link', value: avgClicks },
             { label: 'Unique Countries', value: uniqueCountries || '—' },
+            { label: 'Top Country', value: topCountry },
             { label: 'Top Referrer', value: topReferrer },
+            { label: 'No Clicks', value: noClicks || '—' },
+            { label: 'Expiring Soon', value: expiringSoon || '—' },
         ];
     }, [links]);
 
