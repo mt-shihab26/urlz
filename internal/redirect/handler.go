@@ -24,6 +24,6 @@ func Handler(e *core.RequestEvent) error {
 	if targetURL == "" {
 		return apis.NewNotFoundError("Link has no target URL", nil)
 	}
-	go createClick(e.App, record.Id, record.GetString("user"), e.Request.Header.Get("Referer"), realIP(e.Request), e.Request.Header.Get("User-Agent"))
+	go createClick(e.App, record.Id, record.GetString("user"), e.Request.Header.Get("Referer"), realIP(e.Request), e.Request.Header.Get("User-Agent"), e.Request.Header.Get("Accept-Language"))
 	return e.Redirect(http.StatusFound, targetURL)
 }

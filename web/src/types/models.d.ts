@@ -15,10 +15,18 @@ export type TClick = {
     date: string;
     country_name: string;
     country_code: string;
+    city: string;
+    region: string;
+    timezone: string;
     referrer: string;
     browser: string;
     os: string;
+    device: string;
+    ip: string;
+    user_agent: string;
+    language: string;
     created: string;
+    updated: string;
 };
 
 export type TLink = {
