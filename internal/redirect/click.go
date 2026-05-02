@@ -19,6 +19,7 @@ type click struct {
 	CountryName string `json:"country_name"`
 	CountryCode string `json:"country_code"`
 	Referrer    string `json:"referrer"`
+	Browser     string `json:"browser"`
 	OS          string `json:"os"`
 }
 
@@ -41,6 +42,7 @@ func appendClick(app core.App, record *core.Record, refHeader, ip, ua string) {
 		CountryName: countryName,
 		CountryCode: countryCode,
 		Referrer:    parseReferrer(refHeader),
+		Browser:     parseBrowser(ua),
 		OS:          parseOS(ua),
 	}))
 }
@@ -54,6 +56,25 @@ func parseReferrer(refHeader string) string {
 		return ""
 	}
 	return u.Hostname()
+}
+
+func parseBrowser(ua string) string {
+	switch {
+	case strings.Contains(ua, "Edg/"):
+		return "Edge"
+	case strings.Contains(ua, "OPR/") || strings.Contains(ua, "Opera"):
+		return "Opera"
+	case strings.Contains(ua, "Firefox/"):
+		return "Firefox"
+	case strings.Contains(ua, "Chrome/"):
+		return "Chrome"
+	case strings.Contains(ua, "Safari/"):
+		return "Safari"
+	case strings.Contains(ua, "Trident/") || strings.Contains(ua, "MSIE"):
+		return "IE"
+	default:
+		return "Other"
+	}
 }
 
 func parseOS(ua string) string {

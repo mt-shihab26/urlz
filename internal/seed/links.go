@@ -22,6 +22,7 @@ var sampleCountries = []struct{ name, code string }{
 }
 
 var sampleOS = []string{"Windows", "macOS", "Linux", "Android", "iOS"}
+var sampleBrowsers = []string{"Chrome", "Firefox", "Safari", "Edge", "Opera"}
 
 func seedLinks(app core.App, userID string, count int) error {
 	collection, err := app.FindCollectionByNameOrId("links")
@@ -80,6 +81,7 @@ func fakeClicks(total int) []map[string]any {
 			"country_name": country.name,
 			"country_code": country.code,
 			"referrer":     referrer,
+			"browser":      sampleBrowsers[rand.Intn(len(sampleBrowsers))],
 			"os":           sampleOS[rand.Intn(len(sampleOS))],
 		}
 	}
