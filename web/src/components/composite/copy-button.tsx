@@ -10,7 +10,7 @@ export const CopyButton = ({ text }: { text: string }) => {
         <button
             onClick={() => handleCopy(text)}
             className={cn(
-                'rounded p-1 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 hover:text-foreground',
+                'p-1 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 hover:text-foreground',
                 copiedText === text && 'text-green-600 dark:text-green-400 opacity-100',
             )}
         >

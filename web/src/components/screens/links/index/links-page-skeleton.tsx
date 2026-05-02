@@ -7,7 +7,7 @@ export const LinksPageSkeleton = () => {
                 <Skeleton className="h-10 w-80 max-w-xs" />
                 <Skeleton className="h-9 w-96 max-w-full" />
             </div>
-            <div className="overflow-hidden rounded-xl border">
+            <div className="overflow-hidden border">
                 <div className="border-b px-4 py-3">
                     <div className="grid grid-cols-[minmax(0,2fr)_minmax(0,1.2fr)_100px_100px_110px_100px_48px] gap-4">
                         {Array.from({ length: 7 }).map((_, index) => (
@@ -29,8 +29,8 @@ export const LinksPageSkeleton = () => {
                             <Skeleton className="h-4 w-16" />
                             <Skeleton className="h-4 w-16" />
                             <Skeleton className="h-4 w-20" />
-                            <Skeleton className="h-5 w-18 rounded-full" />
-                            <Skeleton className="h-8 w-8 justify-self-end rounded-md" />
+                            <Skeleton className="h-5 w-18" />
+                            <Skeleton className="h-8 w-8 justify-self-end" />
                         </div>
                     ))}
                 </div>
