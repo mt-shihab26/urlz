@@ -9,10 +9,8 @@ import { useEffect, useState } from 'react';
 import { RangeTabs } from '@/components/composite/range-tabs';
 import { Header } from '@/components/composite/site-header';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
-import { ClicksTable } from '@/components/screens/clicks/clicks-table';
+import { ClicksTable, PER_PAGE } from '@/components/screens/clicks/clicks-table';
 import { DetailDrawer } from '@/components/screens/clicks/detail-drawer';
-
-const PER_PAGE = 20;
 
 const Clicks = () => {
     const [range, setRange] = useState<TRange>('30d');

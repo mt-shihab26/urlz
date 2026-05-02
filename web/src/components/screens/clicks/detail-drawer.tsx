@@ -36,7 +36,7 @@ export const DetailDrawer = ({
 }) => {
     return (
         <Drawer direction="right" open={open} onClose={onClose}>
-            <DrawerContent className="sm:max-w-sm overflow-y-auto">
+            <DrawerContent className="!w-[40%] sm:!max-w-[40%] overflow-y-auto">
                 <DrawerHeader>
                     <DrawerTitle>Click Details</DrawerTitle>
                     {click && <DrawerDescription>{formatDate(click.date)}</DrawerDescription>}

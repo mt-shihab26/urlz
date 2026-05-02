@@ -13,7 +13,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 
-const PER_PAGE = 20;
+export const PER_PAGE = 20;
 
 const getClickLabel = (value: string) => value?.trim() || '—';
 
