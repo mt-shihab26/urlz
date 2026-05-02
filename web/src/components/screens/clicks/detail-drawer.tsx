@@ -1,5 +1,6 @@
 import {
     Drawer,
+    DrawerClose,
     DrawerContent,
     DrawerDescription,
     DrawerHeader,
@@ -10,7 +11,9 @@ import type { TClick, TLink } from '@/types/models';
 
 import { formatDate } from '@/lib/formats';
 
+import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { X } from 'lucide-react';
 
 const Field = ({ label, value }: { label: string; value: string }) => {
     if (!value?.trim()) return null;
@@ -37,9 +40,16 @@ export const DetailDrawer = ({
     return (
         <Drawer direction="right" open={open} onClose={onClose}>
             <DrawerContent className="!w-[40%] sm:!max-w-[40%] overflow-y-auto overflow-x-hidden">
-                <DrawerHeader>
-                    <DrawerTitle>Click Details</DrawerTitle>
-                    {click && <DrawerDescription>{formatDate(click.date)}</DrawerDescription>}
+                <DrawerHeader className="flex-row items-start justify-between">
+                    <div className="flex flex-col gap-1">
+                        <DrawerTitle>Click Details</DrawerTitle>
+                        {click && <DrawerDescription>{formatDate(click.date)}</DrawerDescription>}
+                    </div>
+                    <DrawerClose asChild>
+                        <Button variant="ghost" size="icon" className="shrink-0">
+                            <X className="h-4 w-4" />
+                        </Button>
+                    </DrawerClose>
                 </DrawerHeader>
 
                 {click && (
