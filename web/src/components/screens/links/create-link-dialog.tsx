@@ -38,15 +38,15 @@ export const CreateLinkDialog = ({
             });
             handleClose();
         } catch (e: any) {
-            const data = e?.response?.data;
-            if (data?.url?.message) {
-                setErrors('url', data.url.message);
-            } else if (data?.code?.message) {
-                setErrors('code', data.slug.message);
-            } else if (data?.title?.message) {
-                setErrors('title', data.title.message);
-            } else if (data?.expiry?.message) {
-                setErrors('expiry', data.expiry.message);
+            const fieldErrors = e?.response?.data;
+            if (fieldErrors?.url?.message) {
+                setErrors('url', fieldErrors.url.message);
+            } else if (fieldErrors?.code?.message) {
+                setErrors('code', fieldErrors.code.message);
+            } else if (fieldErrors?.title?.message) {
+                setErrors('title', fieldErrors.title.message);
+            } else if (fieldErrors?.expires?.message) {
+                setErrors('expiry', fieldErrors.expires.message);
             } else {
                 toastError(e?.message ?? 'Something went wrong. Please try again.');
             }

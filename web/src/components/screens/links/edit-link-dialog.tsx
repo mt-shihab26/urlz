@@ -41,15 +41,15 @@ export const EditLinkDialog = ({
             });
             onOpenChange(false);
         } catch (e: any) {
-            const res = e?.response?.data;
-            if (res?.url?.message) {
-                setErrors('url', res.url.message);
-            } else if (res?.code?.message) {
-                setErrors('code', res.code.message);
-            } else if (res?.title?.message) {
-                setErrors('title', res.title.message);
-            } else if (res?.expires?.message) {
-                setErrors('expiry', res.expires.message);
+            const fieldErrors = e?.response?.data;
+            if (fieldErrors?.url?.message) {
+                setErrors('url', fieldErrors.url.message);
+            } else if (fieldErrors?.code?.message) {
+                setErrors('code', fieldErrors.code.message);
+            } else if (fieldErrors?.title?.message) {
+                setErrors('title', fieldErrors.title.message);
+            } else if (fieldErrors?.expires?.message) {
+                setErrors('expiry', fieldErrors.expires.message);
             } else {
                 toastError(e?.message ?? 'Something went wrong. Please try again.');
             }
