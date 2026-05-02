@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router';
 import { CopyButton } from '@/components/composite/copy-button';
 import { StatusBadge } from '@/components/composite/status-badge';
 import { TableCell, TableRow } from '@/components/ui/table';
+import { isLinkExpired } from '@/lib/links';
 import { LinkDeleteButton } from './link-delete-button';
 import { LinkOpenButton } from './link-open-button';
 import { LinkSparkline } from './link-sparkline';
@@ -40,7 +41,7 @@ export const LinkRow = ({ link }: { link: TLink }) => {
                 {formatDate(link.created)}
             </TableCell>
             <TableCell>
-                <StatusBadge status={link.status} />
+                <StatusBadge status={isLinkExpired(link) ? 'expired' : link.status} />
             </TableCell>
             <TableCell>
                 <div className="flex items-center justify-end gap-1 opacity-0 transition-opacity group-hover:opacity-100">

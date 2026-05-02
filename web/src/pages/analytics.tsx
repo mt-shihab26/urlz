@@ -140,6 +140,7 @@ function Analytics() {
                             {countries.map((d) => (
                                 <CountryBar
                                     key={d.code}
+                                    country={d.country}
                                     code={d.code}
                                     pct={d.pct}
                                     max={maxCountryPct}

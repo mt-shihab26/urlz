@@ -25,6 +25,7 @@ export const TopCountriesCard = ({ countries }: TopCountriesCardProps) => {
                         .map((country) => (
                             <CountryBar
                                 key={country.code}
+                                country={country.country}
                                 code={country.code}
                                 pct={country.pct}
                                 max={maxCountryPct}
