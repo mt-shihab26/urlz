@@ -9,12 +9,16 @@ export type TUser = {
 export type TLinkStatus = 'active' | 'disabled';
 
 export type TClick = {
+    id: string;
+    user: string;
+    link: string;
     date: string;
     country_name: string;
     country_code: string;
     referrer: string;
     browser: string;
     os: string;
+    created: string;
 };
 
 export type TLink = {
@@ -27,5 +31,4 @@ export type TLink = {
     updated: string;
     status: TLinkStatus;
     expires: string;
-    clicks: TClick[];
 };

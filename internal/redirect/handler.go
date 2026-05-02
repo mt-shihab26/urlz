@@ -24,18 +24,6 @@ func Handler(e *core.RequestEvent) error {
 	if targetURL == "" {
 		return apis.NewNotFoundError("Link has no target URL", nil)
 	}
-	go trackClick(e.App, record.Id, e.Request.Header.Get("Referer"), realIP(e.Request), e.Request.Header.Get("User-Agent"))
+	go createClick(e.App, record.Id, record.GetString("user"), e.Request.Header.Get("Referer"), realIP(e.Request), e.Request.Header.Get("User-Agent"))
 	return e.Redirect(http.StatusFound, targetURL)
-}
-
-func trackClick(app core.App, id, refHeader, ip, ua string) {
-	record, err := app.FindRecordById("links", id)
-	if err != nil {
-		app.Logger().Error("trackClick: find record", "id", id, "err", err)
-		return
-	}
-	appendClick(app, record, refHeader, ip, ua)
-	if err := app.Save(record); err != nil {
-		app.Logger().Error("trackClick: save record", "id", id, "err", err)
-	}
 }
