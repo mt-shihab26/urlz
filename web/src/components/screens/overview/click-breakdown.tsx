@@ -34,11 +34,11 @@ export const ClickBreakdown = ({ clicks }: { clicks: TClick[] }) => {
 
     const cards = [
         { title: 'Top Countries', items: countries },
-        { title: 'Devices', items: devices },
+        { title: 'Top Devices', items: devices },
         { title: 'Top Referrers', items: referrers },
-        { title: 'Browsers', items: browsers },
-        { title: 'Operating Systems', items: os },
-        { title: 'Languages', items: languages },
+        { title: 'Top Browsers', items: browsers },
+        { title: 'Top Operating Systems', items: os },
+        { title: 'Top Languages', items: languages },
     ];
 
     return (
