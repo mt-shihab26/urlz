@@ -12,6 +12,7 @@ import { DashboardLayout } from '@/components/layouts/dashboard-layout';
 import { Referrers } from '@/components/screens/analytics/referrers';
 import { TopCountries } from '@/components/screens/analytics/top-countries';
 import { LinkClicksChart } from '@/components/screens/links/show/link-clicks-chart';
+import { LinkClicksTable } from '@/components/screens/links/show/link-clicks-table';
 import { LinkDetailHeader } from '@/components/screens/links/show/link-detail-header';
 import { LinkDetailPageSkeleton } from '@/components/screens/links/show/link-detail-page-skeleton';
 import { LinkDetailStats } from '@/components/screens/links/show/link-detail-stats';
@@ -67,6 +68,7 @@ const LinkDetail = () => {
                             <TopCountries clicks={clicks} />
                             <Referrers clicks={clicks} />
                         </div>
+                        <LinkClicksTable clicks={clicks} range={range} />
                     </div>
                 </>
             )}
