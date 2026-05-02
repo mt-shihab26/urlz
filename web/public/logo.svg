@@ -9,8 +9,11 @@
       <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
     </linearGradient>
   </defs>
+  <!-- Rounded square background -->
   <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+  <!-- Subtle top-shine -->
   <rect width="64" height="32" rx="14" fill="url(#shine)"/>
+  <!-- Lightning-bolt Z mark, original viewBox 0 0 48 46, padded to 8 10 48 46 -->
   <g transform="translate(8,9)">
     <path
       fill="white"

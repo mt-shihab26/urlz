@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="web/public/logo.svg" width="96" height="96" alt="urlz logo"/>
+</p>
+
 # urlz
 
 A self-hosted URL shortener with a **real-time analytics dashboard** — tracks geography, browser, device, OS, language, and referrer for every click.
