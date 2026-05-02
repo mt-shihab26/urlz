@@ -17,7 +17,8 @@ export const StatsCards = ({ clicks, links }: { clicks: TClick[]; links: TLink[]
         const delta = prev30 > 0 ? Math.round(((curr30 - prev30) / prev30) * 100) : 0;
 
         const activeLinks = links.filter((l) => l.status === 'active').length;
-        const uniqueCountries = new Set(clicks.map((c) => c.country_code).filter(Boolean)).size;
+        const uniqueVisitors = new Set(clicks.map((c) => c.ip).filter(Boolean)).size;
+        const last7 = totalSeries.slice(-7).reduce((s, d) => s + d.clicks, 0);
 
         return {
             stats: [
@@ -33,17 +34,14 @@ export const StatsCards = ({ clicks, links }: { clicks: TClick[]; links: TLink[]
                     sub: `of ${links.length} total`,
                 },
                 {
-                    label: 'Avg Clicks / Link',
-                    value:
-                        links.length > 0
-                            ? formatNumber(Math.round(totalClicks / links.length))
-                            : '0',
-                    sub: 'lifetime',
+                    label: 'Unique Visitors',
+                    value: formatNumber(uniqueVisitors),
+                    sub: 'by IP',
                 },
                 {
-                    label: 'Countries',
-                    value: uniqueCountries || '—',
-                    sub: 'reached',
+                    label: 'Clicks Last 7d',
+                    value: formatNumber(last7),
+                    sub: 'recent activity',
                 },
             ],
         };
