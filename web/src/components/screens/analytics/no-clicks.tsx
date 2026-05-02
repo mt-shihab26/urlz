@@ -10,6 +10,7 @@ import {
 import type { TClick, TLink } from '@/types/models';
 
 import { formatCode, formatDate } from '@/lib/formats';
+import { isLinkActive } from '@/lib/links';
 import { route } from '@/routes';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router';
@@ -22,7 +23,7 @@ export const NoClicks = ({ links, clicks }: { links: TLink[]; clicks: TClick[] }
     const dead = useMemo(() => {
         const clickedIds = new Set(clicks.map((c) => c.link));
         return links
-            .filter((l) => l.status === 'active' && !clickedIds.has(l.id))
+            .filter((l) => isLinkActive(l) && !clickedIds.has(l.id))
             .sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime());
     }, [links, clicks]);
 

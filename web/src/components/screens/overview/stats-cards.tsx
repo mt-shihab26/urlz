@@ -2,7 +2,7 @@ import type { TClick, TLink } from '@/types/models';
 
 import { clicksToSeries } from '@/lib/clicks';
 import { formatNumber } from '@/lib/formats';
-import { isLinkExpired } from '@/lib/links';
+import { isLinkActive } from '@/lib/links';
 import { useMemo } from 'react';
 
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,7 +17,7 @@ export const StatsCards = ({ clicks, links }: { clicks: TClick[]; links: TLink[]
         const curr30 = totalSeries.slice(-30).reduce((s, d) => s + d.clicks, 0);
         const delta = prev30 > 0 ? Math.round(((curr30 - prev30) / prev30) * 100) : 0;
 
-        const activeLinks = links.filter((l) => l.status === 'active' && !isLinkExpired(l)).length;
+        const activeLinks = links.filter(isLinkActive).length;
         const uniqueVisitors = new Set(clicks.map((c) => c.ip).filter(Boolean)).size;
 
         const activeDays = totalSeries.filter((d) => d.clicks > 0).length;

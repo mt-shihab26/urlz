@@ -1,13 +1,23 @@
-import type { TFilter } from '@/components/screens/links/index/filters-toggle';
 import type { TLink } from '@/types/models';
-
-export const isLinkExpired = (link: TLink) => !!link.expires && new Date(link.expires) < new Date();
+import type { TFilter } from '@/types/utils';
 
 export const isLinkExpiringSoon = (link: TLink, withinDays = 30) => {
     if (!link.expires) return false;
     const t = new Date(link.expires).getTime();
     const now = Date.now();
     return t > now && t <= now + withinDays * 24 * 60 * 60 * 1000;
+};
+
+export const isLinkExpired = (link: TLink) => {
+    return !!link.expires && new Date(link.expires) < new Date();
+};
+
+export const isLinkActive = (link: TLink) => {
+    return link.status === 'active' && !isLinkExpired(link);
+};
+
+export const isLinkDisabled = (link: TLink) => {
+    return link.status === 'disabled';
 };
 
 export const filterLinks = ({
@@ -31,8 +41,10 @@ export const filterLinks = ({
             matchFilter = true;
         } else if (filter === 'expired') {
             matchFilter = isLinkExpired(l);
+        } else if (filter === 'active') {
+            matchFilter = isLinkActive(l);
         } else {
-            matchFilter = l.status === filter && !isLinkExpired(l);
+            matchFilter = isLinkDisabled(l);
         }
 
         return matchSearch && matchFilter;
