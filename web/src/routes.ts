@@ -8,6 +8,7 @@ export const route = {
     linksIndex: () => '/dashboard/links',
     linksShow: (id: string = ':id') => `/dashboard/links/${id}`,
     analyticsIndex: () => '/dashboard/analytics',
+    clicksIndex: () => '/dashboard/clicks',
     settingsIndex: () => '/dashboard/settings',
     signIn: () => '/dashboard/sign-in',
     signUp: () => '/dashboard/sign-up',
@@ -42,6 +43,11 @@ export const routes: TRoute[] = [
     {
         path: route.analyticsIndex(),
         component: lazy(() => import('@/pages/analytics/index')),
+        guard: 'auth',
+    },
+    {
+        path: route.clicksIndex(),
+        component: lazy(() => import('@/pages/clicks/index')),
         guard: 'auth',
     },
     {
