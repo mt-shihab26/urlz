@@ -12,13 +12,14 @@ import (
 	"github.com/pocketbase/pocketbase/tools/osutils"
 
 	"github.com/mt-shihab26/urlz/internal/redirect"
+	"github.com/mt-shihab26/urlz/internal/seed"
 	_ "github.com/mt-shihab26/urlz/migrations"
 	"github.com/mt-shihab26/urlz/web"
 )
 
 func main() {
 	if err := godotenv.Load(); err != nil {
-		log.Fatal("No .env file found, using system environment")
+		log.Println("No .env file found, using system environment")
 	}
 	app := pocketbase.NewWithConfig(pocketbase.Config{
 		DefaultDev:     true,
@@ -27,6 +28,7 @@ func main() {
 	migratecmd.MustRegister(app, app.RootCmd, migratecmd.Config{
 		Automigrate: osutils.IsProbablyGoRun(),
 	})
+	seed.RegisterCmd(app)
 	app.OnServe().BindFunc(func(se *core.ServeEvent) error {
 		se.Router.GET("/{code}", redirect.Handler)
 		sub, err := fs.Sub(web.DistFS, "dist")
