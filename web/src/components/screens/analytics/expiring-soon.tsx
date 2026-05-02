@@ -28,6 +28,7 @@ export const ExpiringSoon = ({ links }: { links: TLink[] }) => {
                 <Table>
                     <TableHeader>
                         <TableRow>
+                            <TableHead className="w-8 text-center">#</TableHead>
                             <TableHead>Link</TableHead>
                             <TableHead className="text-right">Expires</TableHead>
                         </TableRow>
@@ -35,17 +36,20 @@ export const ExpiringSoon = ({ links }: { links: TLink[] }) => {
                     <TableBody>
                         {expiring.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={2} className="h-24 text-center text-muted-foreground">
+                                <TableCell colSpan={3} className="h-24 text-center text-muted-foreground">
                                     No links expiring in the next 30 days
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            expiring.map((link) => (
+                            expiring.map((link, i) => (
                                 <TableRow
                                     key={link.id}
                                     className="cursor-pointer"
                                     onClick={() => navigate(`/links/${link.id}`)}
                                 >
+                                    <TableCell className="text-center font-mono text-xs text-muted-foreground">
+                                        {i + 1}
+                                    </TableCell>
                                     <TableCell>
                                         <div className="font-medium">{link.title}</div>
                                         <div className="font-mono text-xs text-muted-foreground">
