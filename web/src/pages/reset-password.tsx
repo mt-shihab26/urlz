@@ -11,6 +11,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
+import { route } from '@/routes';
 import { ArrowLeftIcon, CheckIcon } from 'lucide-react';
 import * as React from 'react';
 import { Link } from 'react-router';
@@ -55,7 +56,7 @@ function ResetPassword() {
                     </CardHeader>
                     <CardContent>
                         <Button className="w-full">
-                            <Link to="/dashboard/sign-in">Sign in with new password</Link>
+                            <Link to={route.signIn()}>Sign in with new password</Link>
                         </Button>
                     </CardContent>
                 </Card>
@@ -131,7 +132,7 @@ function ResetPassword() {
 
                 <CardFooter className="justify-center">
                     <Link
-                        to="/dashboard/sign-in"
+                        to={route.signIn()}
                         className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
                     >
                         <ArrowLeftIcon className="size-3.5" />

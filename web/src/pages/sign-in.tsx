@@ -9,6 +9,7 @@ import {
 
 import { signIn } from '@/collections/users';
 import { useForm } from '@/hooks/use-form';
+import { route } from '@/routes';
 import { useNavigate } from 'react-router';
 
 import { CheckboxField } from '@/components/composite/checkbox-field';
@@ -35,7 +36,7 @@ const SignIn = () => {
         setLoading(true);
         try {
             await signIn(data.email, data.password);
-            navigate('/dashboard/overview');
+            navigate(route.overviewIndex());
         } catch (e: any) {
             const resData = e?.response?.data;
             if (resData?.email?.message) {
@@ -82,7 +83,7 @@ const SignIn = () => {
                             autoComplete="current-password"
                             labelExtra={
                                 <Link
-                                    to="/dashboard/forgot-password"
+                                    to={route.forgotPassword()}
                                     className="text-xs text-muted-foreground hover:text-foreground"
                                 >
                                     Forgot password?
@@ -103,7 +104,7 @@ const SignIn = () => {
                     <LinkPrompt
                         text="Don't have an account?"
                         linkText="Sign up"
-                        linkTo="/dashboard/sign-up"
+                        linkTo={route.signUp()}
                     />
                 </CardFooter>
             </Card>

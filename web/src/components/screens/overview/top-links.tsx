@@ -13,6 +13,7 @@ import { useMemo } from 'react';
 import { useNavigate } from 'react-router';
 
 import { formatCode, formatNumber } from '@/lib/formats';
+import { route } from '@/routes';
 
 import { LinkStatusBadge } from '@/components/composite/link-status-badge';
 import { LinkSparkline } from '@/components/screens/links/index/link-sparkline';
@@ -55,7 +56,7 @@ export const TopLinks = ({ links }: { links: TLink[] }) => {
                                 <TableRow
                                     key={link.id}
                                     className="group cursor-pointer"
-                                    onClick={() => navigate(`/dashboard/links/${link.id}`)}
+                                    onClick={() => navigate(route.linksShow(link.id))}
                                 >
                                     <TableCell>
                                         <div className="flex items-center gap-3">

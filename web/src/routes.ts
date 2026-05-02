@@ -2,60 +2,74 @@ import { lazy } from 'react';
 
 import type { TRoute } from '@/types/routes';
 
+export const route = {
+    root: () => '/',
+    overviewIndex: () => '/dashboard/overview',
+    linksIndex: () => '/dashboard/links',
+    linksShow: (id: string = ':id') => `/dashboard/links/${id}`,
+    analyticsIndex: () => '/dashboard/analytics',
+    settingsIndex: () => '/dashboard/settings',
+    signIn: () => '/dashboard/sign-in',
+    signUp: () => '/dashboard/sign-up',
+    forgotPassword: () => '/dashboard/forgot-password',
+    resetPassword: () => '/dashboard/reset-password',
+    notFound: () => '*',
+} as const;
+
 export const routes: TRoute[] = [
     // Redirect
     {
-        path: '/',
-        redirect: '/dashboard/overview',
+        path: route.root(),
+        redirect: route.overviewIndex(),
         guard: 'public',
     },
     // App (auth protected)
     {
-        path: '/dashboard/overview',
+        path: route.overviewIndex(),
         component: lazy(() => import('@/pages/overview/index')),
         guard: 'auth',
     },
     {
-        path: '/dashboard/links',
+        path: route.linksIndex(),
         component: lazy(() => import('@/pages/links/index')),
         guard: 'auth',
     },
     {
-        path: '/dashboard/links/:id',
+        path: route.linksShow(),
         component: lazy(() => import('@/pages/links/show')),
         guard: 'auth',
     },
     {
-        path: '/dashboard/analytics',
+        path: route.analyticsIndex(),
         component: lazy(() => import('@/pages/analytics/index')),
         guard: 'auth',
     },
     {
-        path: '/dashboard/settings',
+        path: route.settingsIndex(),
         component: lazy(() => import('@/pages/settings/index')),
         guard: 'auth',
     },
     // Auth (guest only)
     {
-        path: '/dashboard/sign-in',
+        path: route.signIn(),
         component: lazy(() => import('@/pages/sign-in')),
         guard: 'guest',
     },
     {
-        path: '/dashboard/sign-up',
+        path: route.signUp(),
         component: lazy(() => import('@/pages/sign-up')),
         guard: 'guest',
     },
     {
-        path: '/dashboard/forgot-password',
+        path: route.forgotPassword(),
         component: lazy(() => import('@/pages/forgot-password')),
         guard: 'guest',
     },
     {
-        path: '/dashboard/reset-password',
+        path: route.resetPassword(),
         component: lazy(() => import('@/pages/reset-password')),
         guard: 'guest',
     },
     // Public
-    { path: '*', component: lazy(() => import('@/pages/not-found')), guard: 'public' },
+    { path: route.notFound(), component: lazy(() => import('@/pages/not-found')), guard: 'public' },
 ];

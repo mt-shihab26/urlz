@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { route } from '@/routes';
 import { Link } from 'react-router';
 
 const NotFound = () => {
@@ -13,7 +14,7 @@ const NotFound = () => {
                     This page doesn't exist or was moved.
                 </p>
             </div>
-            <Link to="/dashboard/overview">
+            <Link to={route.overviewIndex()}>
                 <Button>Go home</Button>
             </Link>
         </div>

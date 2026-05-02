@@ -1,14 +1,22 @@
-import type { TLink } from '@/types/models';
 import type { TRange } from '@/lib/ranges';
+import type { TLink } from '@/types/models';
 
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router';
 
 import { formatNumber } from '@/lib/formats';
+import { route } from '@/routes';
 
 import { LinkSparkline } from '@/components/screens/links/index/link-sparkline';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
 
 const rangeDays: Record<TRange, number | null> = {
     '7d': 7,
@@ -50,7 +58,10 @@ export const TopPerforming = ({ links, range }: { links: TLink[]; range: TRange 
                     <TableBody>
                         {ranked.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={4} className="h-24 text-center text-muted-foreground">
+                                <TableCell
+                                    colSpan={4}
+                                    className="h-24 text-center text-muted-foreground"
+                                >
                                     No data yet
                                 </TableCell>
                             </TableRow>
@@ -59,7 +70,7 @@ export const TopPerforming = ({ links, range }: { links: TLink[]; range: TRange 
                                 <TableRow
                                     key={link.id}
                                     className="cursor-pointer"
-                                    onClick={() => navigate(`/dashboard/links/${link.id}`)}
+                                    onClick={() => navigate(route.linksShow(link.id))}
                                 >
                                     <TableCell className="font-mono text-xs text-muted-foreground w-8">
                                         {i + 1}

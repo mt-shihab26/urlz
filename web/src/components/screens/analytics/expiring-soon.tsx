@@ -4,9 +4,17 @@ import { useMemo } from 'react';
 import { useNavigate } from 'react-router';
 
 import { formatDate } from '@/lib/formats';
+import { route } from '@/routes';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
 
 export const ExpiringSoon = ({ links }: { links: TLink[] }) => {
     const navigate = useNavigate();
@@ -15,7 +23,12 @@ export const ExpiringSoon = ({ links }: { links: TLink[] }) => {
         const now = Date.now();
         const in30Days = now + 30 * 24 * 60 * 60 * 1000;
         return links
-            .filter((l) => l.expires && new Date(l.expires).getTime() > now && new Date(l.expires).getTime() <= in30Days)
+            .filter(
+                (l) =>
+                    l.expires &&
+                    new Date(l.expires).getTime() > now &&
+                    new Date(l.expires).getTime() <= in30Days,
+            )
             .sort((a, b) => new Date(a.expires).getTime() - new Date(b.expires).getTime());
     }, [links]);
 
@@ -36,7 +49,10 @@ export const ExpiringSoon = ({ links }: { links: TLink[] }) => {
                     <TableBody>
                         {expiring.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={3} className="h-24 text-center text-muted-foreground">
+                                <TableCell
+                                    colSpan={3}
+                                    className="h-24 text-center text-muted-foreground"
+                                >
                                     No links expiring in the next 30 days
                                 </TableCell>
                             </TableRow>
@@ -45,7 +61,7 @@ export const ExpiringSoon = ({ links }: { links: TLink[] }) => {
                                 <TableRow
                                     key={link.id}
                                     className="cursor-pointer"
-                                    onClick={() => navigate(`/dashboard/links/${link.id}`)}
+                                    onClick={() => navigate(route.linksShow(link.id))}
                                 >
                                     <TableCell className="text-center font-mono text-xs text-muted-foreground">
                                         {i + 1}

@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { route } from '@/routes';
 import { ArrowLeftIcon, MailIcon } from 'lucide-react';
 import * as React from 'react';
 import { Link } from 'react-router';
@@ -56,7 +57,7 @@ function ForgotPassword() {
                     </CardContent>
                     <CardFooter className="justify-center">
                         <Link
-                            to="/dashboard/sign-in"
+                            to={route.signIn()}
                             className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
                         >
                             <ArrowLeftIcon className="size-3.5" />
@@ -100,7 +101,7 @@ function ForgotPassword() {
 
                 <CardFooter className="justify-center">
                     <Link
-                        to="/dashboard/sign-in"
+                        to={route.signIn()}
                         className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
                     >
                         <ArrowLeftIcon className="size-3.5" />

@@ -1,3 +1,4 @@
+import { route } from '@/routes';
 import { LinkIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
@@ -9,7 +10,7 @@ export const AuthLayout = ({ children }: { children: ReactNode }) => {
                 <div className="flex size-8 items-center justify-center rounded-lg bg-primary">
                     <LinkIcon className="size-4 text-primary-foreground" />
                 </div>
-                <Link to="/dashboard/overview" className="text-lg font-bold tracking-tight">
+                <Link to={route.overviewIndex()} className="text-lg font-bold tracking-tight">
                     urlz
                 </Link>
             </div>

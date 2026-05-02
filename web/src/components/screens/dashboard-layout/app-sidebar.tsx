@@ -20,6 +20,7 @@ import type { ComponentProps } from 'react';
 
 import { useUser } from '@/components/providers/auth-provider';
 import { useSidebar } from '@/components/ui/sidebar';
+import { route } from '@/routes';
 
 import { Link } from 'react-router';
 import { NavMain } from './nav-main';
@@ -28,22 +29,22 @@ import { NavUser } from './nav-user';
 const navMain = [
     {
         title: 'Overview',
-        url: '/dashboard/overview',
+        url: route.overviewIndex(),
         icon: <LayoutDashboardIcon />,
     },
     {
         title: 'Links',
-        url: '/dashboard/links',
+        url: route.linksIndex(),
         icon: <LinkIcon />,
     },
     {
         title: 'Analytics',
-        url: '/dashboard/analytics',
+        url: route.analyticsIndex(),
         icon: <ChartBarIcon />,
     },
     {
         title: 'Settings',
-        url: '/dashboard/settings',
+        url: route.settingsIndex(),
         icon: <SettingsIcon />,
     },
 ];
@@ -59,7 +60,7 @@ export const AppSidebar = (props: ComponentProps<typeof Sidebar>) => {
                     <SidebarMenuItem>
                         <SidebarMenuButton
                             className="data-[slot=sidebar-menu-button]:p-1.5!"
-                            render={<Link to="/dashboard/overview" />}
+                            render={<Link to={route.overviewIndex()} />}
                         >
                             <LinkIcon className="size-5!" />
                             <span className="text-base font-semibold">urlz</span>

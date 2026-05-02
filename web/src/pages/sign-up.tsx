@@ -9,6 +9,7 @@ import {
 
 import { signUp } from '@/collections/users';
 import { useForm } from '@/hooks/use-form';
+import { route } from '@/routes';
 import { useNavigate } from 'react-router';
 
 import { CheckboxField } from '@/components/composite/checkbox-field';
@@ -38,7 +39,7 @@ const SignUp = () => {
         setLoading(true);
         try {
             await signUp(data.name, data.email, data.password);
-            navigate('/dashboard/overview');
+            navigate(route.overviewIndex());
         } catch (e: any) {
             const resData = e?.response?.data;
             if (resData?.email?.message) {
@@ -123,7 +124,7 @@ const SignUp = () => {
                     <LinkPrompt
                         text="Already have an account?"
                         linkText="Sign in"
-                        linkTo="/dashboard/sign-in"
+                        linkTo={route.signIn()}
                     />
                 </CardFooter>
             </Card>
