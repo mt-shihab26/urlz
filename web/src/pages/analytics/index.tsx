@@ -29,13 +29,23 @@ const Analytics = () => {
     const [clicks, setClicks] = useState<TClick[]>([]);
 
     useEffect(() => {
-        subscribeLinks({ onData: setLinks, onError: toastError, onLoading: setLinksLoading });
-        subscribeClicks({ onData: setClicks, onError: toastError, onLoading: setClicksLoading });
+        subscribeLinks(range, {
+            onData: setLinks,
+            onError: toastError,
+            onLoading: setLinksLoading,
+        });
+
+        subscribeClicks(range, {
+            onData: setClicks,
+            onError: toastError,
+            onLoading: setClicksLoading,
+        });
+
         return () => {
             unsubscribeLinks({ onError: toastError });
             unsubscribeClicks({ onError: toastError });
         };
-    }, []);
+    }, [range]);
 
     return (
         <DashboardLayout title="Analytics">
@@ -49,7 +59,7 @@ const Analytics = () => {
                     <AnalyticsSkeleton />
                 ) : (
                     <>
-                        <AnalyticsStats clicks={clicks} links={links} />
+                        <AnalyticsStats links={links} clicks={clicks} />
                         <AnalyticsChart clicks={clicks} range={range} />
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                             <AnalyticsCountries clicks={clicks} />

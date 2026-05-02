@@ -1,6 +1,8 @@
 import type { TLink, TLinkStatus } from '@/types/models';
 
 import { pb } from '@/lib/pb';
+import type { TRange } from '@/lib/ranges';
+import { getRangeStartDate } from '@/lib/ranges';
 
 const LINKS = 'links';
 
@@ -9,9 +11,14 @@ const LINKS = 'links';
  *
  * @throws {Error} When fetching links fails.
  */
-const getLinks = async (): Promise<TLink[]> => {
+const getLinks = async (range: TRange = 'All'): Promise<TLink[]> => {
     try {
-        return await pb.collection(LINKS).getFullList<TLink>({ sort: '-created' });
+        const startDate = getRangeStartDate(range);
+
+        return await pb.collection(LINKS).getFullList<TLink>({
+            filter: startDate ? pb.filter('created >= {:startDate}', { startDate }) : undefined,
+            sort: '-created',
+        });
     } catch (e) {
         throw new Error(e instanceof Error ? e.message : 'Failed to fetch links');
     }
@@ -20,20 +27,23 @@ const getLinks = async (): Promise<TLink[]> => {
 /**
  * Subscribes to real-time updates from the `links` collection.
  */
-export const subscribeLinks = ({
-    onData,
-    onError,
-    onLoading,
-}: {
-    onData: (links: TLink[]) => void;
-    onError?: (error: string) => void;
-    onLoading?: (loading: boolean) => void;
-}) => {
+export const subscribeLinks = (
+    range: TRange,
+    {
+        onData,
+        onError,
+        onLoading,
+    }: {
+        onData: (links: TLink[]) => void;
+        onError?: (error: string) => void;
+        onLoading?: (loading: boolean) => void;
+    },
+) => {
     try {
         (async () => {
             onLoading?.(true);
             try {
-                onData(await getLinks());
+                onData(await getLinks(range));
             } catch (e: any) {
                 onError?.(e.message);
             } finally {
@@ -43,7 +53,7 @@ export const subscribeLinks = ({
 
         pb.collection(LINKS).subscribe('*', async () => {
             try {
-                onData(await getLinks());
+                onData(await getLinks(range));
             } catch (e: any) {
                 onError?.(e.message);
             }

@@ -1,6 +1,8 @@
+import type { TRange } from '@/lib/ranges';
 import type { TClick } from '@/types/models';
 
 import { pb } from '@/lib/pb';
+import { getRangeStartDate } from '@/lib/ranges';
 
 const CLICKS = 'clicks';
 
@@ -9,9 +11,14 @@ const CLICKS = 'clicks';
  *
  * @throws {Error} When fetching clicks fails.
  */
-const getClicks = async (): Promise<TClick[]> => {
+const getClicks = async (range: TRange = 'All'): Promise<TClick[]> => {
     try {
-        return await pb.collection(CLICKS).getFullList<TClick>({ sort: '-created' });
+        const startDate = getRangeStartDate(range);
+
+        return await pb.collection(CLICKS).getFullList<TClick>({
+            filter: startDate ? pb.filter('date >= {:startDate}', { startDate }) : undefined,
+            sort: '-created',
+        });
     } catch (e) {
         throw new Error(e instanceof Error ? e.message : 'Failed to fetch clicks');
     }
@@ -20,20 +27,23 @@ const getClicks = async (): Promise<TClick[]> => {
 /**
  * Subscribes to real-time updates from the `clicks` collection.
  */
-export const subscribeClicks = ({
-    onData,
-    onError,
-    onLoading,
-}: {
-    onData: (clicks: TClick[]) => void;
-    onError?: (error: string) => void;
-    onLoading?: (loading: boolean) => void;
-}) => {
+export const subscribeClicks = (
+    range: TRange,
+    {
+        onData,
+        onError,
+        onLoading,
+    }: {
+        onData: (clicks: TClick[]) => void;
+        onError?: (error: string) => void;
+        onLoading?: (loading: boolean) => void;
+    },
+) => {
     try {
         (async () => {
             onLoading?.(true);
             try {
-                onData(await getClicks());
+                onData(await getClicks(range));
             } catch (e: any) {
                 onError?.(e.message);
             } finally {
@@ -43,7 +53,7 @@ export const subscribeClicks = ({
 
         pb.collection(CLICKS).subscribe('*', async () => {
             try {
-                onData(await getClicks());
+                onData(await getClicks(range));
             } catch (e: any) {
                 onError?.(e.message);
             }
