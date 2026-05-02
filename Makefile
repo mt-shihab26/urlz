@@ -1,4 +1,16 @@
-.PHONY: build dev migrate-snapshot migrate-up setup
+.PHONY: build dev migrate-snapshot migrate-up setup seed
+
+EMAIL    ?= dev@example.com
+PASSWORD ?= password1234
+LINKS    ?= 30
+
+# Seed the database with fake data for development
+# Examples:
+#   make seed
+#   make seed LINKS=100
+#   make seed EMAIL=me@test.com PASSWORD=secret LINKS=50
+seed:
+	go run . seed --email $(EMAIL) --password $(PASSWORD) --links $(LINKS)
 
 # Apply all pending migrations
 migrate-up:

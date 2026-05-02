@@ -3,13 +3,13 @@ module github.com/mt-shihab26/urlz
 go 1.26.2
 
 require (
+	github.com/brianvoe/gofakeit/v6 v6.28.0
 	github.com/joho/godotenv v1.5.1
 	github.com/pocketbase/pocketbase v0.37.3
 )
 
 require (
 	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2 // indirect
-	github.com/brianvoe/gofakeit/v6 v6.28.0 // indirect
 	github.com/disintegration/imaging v1.6.2 // indirect
 	github.com/domodwyer/mailyak/v3 v3.6.2 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
