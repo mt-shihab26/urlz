@@ -9,8 +9,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
+import { Countries } from '@/components/screens/analytics/countries';
 import { Referrers } from '@/components/screens/analytics/referrers';
-import { TopCountries } from '@/components/screens/analytics/top-countries';
 import { LinkClicksChart } from '@/components/screens/links/show/link-clicks-chart';
 import { LinkClicksTable } from '@/components/screens/links/show/link-clicks-table';
 import { LinkDetailHeader } from '@/components/screens/links/show/link-detail-header';
@@ -66,7 +66,7 @@ const LinkDetail = () => {
                         <LinkDetailStats range={range} link={link} clicks={clicks} />
                         <LinkClicksChart range={range} clicks={clicks} />
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <TopCountries clicks={clicks} />
+                            <Countries clicks={clicks} />
                             <Referrers clicks={clicks} />
                         </div>
                         <LinkClicksTable clicks={clicks} range={range} />

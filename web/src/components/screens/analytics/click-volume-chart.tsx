@@ -15,7 +15,7 @@ export const ClickVolumeChart = ({ clicks }: { clicks: TClick[] }) => {
             <CardHeader>
                 <CardTitle>Click Volume</CardTitle>
             </CardHeader>
-            <CardContent className="px-2 pb-4">
+            <CardContent>
                 <ChartContainer
                     config={{
                         clicks: { label: 'Clicks', color: 'var(--primary)' },

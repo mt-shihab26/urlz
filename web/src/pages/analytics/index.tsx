@@ -11,6 +11,7 @@ import { Header } from '@/components/composite/site-header';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
 import { Browsers } from '@/components/screens/analytics/browsers';
 import { ClickVolumeChart } from '@/components/screens/analytics/click-volume-chart';
+import { Countries } from '@/components/screens/analytics/countries';
 import { Devices } from '@/components/screens/analytics/devices';
 import { ExpiringSoon } from '@/components/screens/analytics/expiring-soon';
 import { Languages } from '@/components/screens/analytics/languages';
@@ -19,7 +20,6 @@ import { NoClicks } from '@/components/screens/analytics/no-clicks';
 import { OperatingSystems } from '@/components/screens/analytics/operating-systems';
 import { Referrers } from '@/components/screens/analytics/referrers';
 import { StatsCards } from '@/components/screens/analytics/stats-cards';
-import { TopCountries } from '@/components/screens/analytics/top-countries';
 import { TopPerforming } from '@/components/screens/analytics/top-performing';
 
 const Analytics = () => {
@@ -65,7 +65,7 @@ const Analytics = () => {
                         <StatsCards links={links} clicks={clicks} />
                         <ClickVolumeChart clicks={clicks} />
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-                            <TopCountries clicks={clicks} />
+                            <Countries clicks={clicks} />
                             <Devices clicks={clicks} />
                             <Referrers clicks={clicks} />
                             <Browsers clicks={clicks} />
