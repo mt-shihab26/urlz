@@ -1,13 +1,10 @@
 package redirect
 
 import (
-	"net/http"
 	"time"
 
 	"github.com/pocketbase/pocketbase/core"
 )
-
-var geoClient = &http.Client{Timeout: 3 * time.Second}
 
 func createClick(app core.App, linkID, userID, refHeader, ip, ua, acceptLang string) {
 	collection, err := app.FindCollectionByNameOrId("clicks")
