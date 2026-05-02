@@ -1,9 +1,7 @@
-import type { TRange } from '@/lib/ranges';
-import type { TClick } from '@/types/models';
-import type { TLinkDetailRange } from './link-detail-header';
-
 import { formatChartDate } from '@/lib/formats';
+import type { TRange } from '@/lib/ranges';
 import { getRangeStartDate } from '@/lib/ranges';
+import type { TClick } from '@/types/models';
 import { useEffect, useMemo, useState } from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -30,13 +28,7 @@ const getClickLabel = (value: string) => {
     return value.trim() || 'Direct';
 };
 
-export const LinkClicksTable = ({
-    clicks,
-    range,
-}: {
-    clicks: TClick[];
-    range: TLinkDetailRange;
-}) => {
+export const LinkClicksTable = ({ clicks, range }: { clicks: TClick[]; range: TRange }) => {
     const [page, setPage] = useState(1);
 
     const filteredClicks = useMemo(() => {
