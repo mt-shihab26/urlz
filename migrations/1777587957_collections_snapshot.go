@@ -975,6 +975,28 @@ func init() {
 						"type": "json"
 					},
 					{
+						"help": "",
+						"hidden": false,
+						"id": "json3030303030",
+						"maxSize": 0,
+						"name": "browsers",
+						"presentable": false,
+						"required": false,
+						"system": false,
+						"type": "json"
+					},
+					{
+						"help": "",
+						"hidden": false,
+						"id": "json4040404040",
+						"maxSize": 0,
+						"name": "oses",
+						"presentable": false,
+						"required": false,
+						"system": false,
+						"type": "json"
+					},
+					{
 						"hidden": false,
 						"id": "autodate8888888888",
 						"name": "created",

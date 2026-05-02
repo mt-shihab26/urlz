@@ -26,7 +26,7 @@ func Handler(e *core.RequestEvent) error {
 	if targetURL == "" {
 		return apis.NewNotFoundError("Link has no target URL", nil)
 	}
-	go trackClick(e.App, record.Id, e.Request.Header.Get("Referer"), realIP(e.Request))
+	go trackClick(e.App, record.Id, e.Request.Header.Get("Referer"), realIP(e.Request), e.Request.Header.Get("User-Agent"))
 	return e.Redirect(http.StatusFound, targetURL)
 }
 
