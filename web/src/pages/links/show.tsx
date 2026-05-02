@@ -9,12 +9,12 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
+import { Referrers } from '@/components/screens/analytics/referrers';
+import { TopCountries } from '@/components/screens/analytics/top-countries';
 import { LinkClicksChart } from '@/components/screens/links/show/link-clicks-chart';
 import { LinkDetailHeader } from '@/components/screens/links/show/link-detail-header';
 import { LinkDetailPageSkeleton } from '@/components/screens/links/show/link-detail-page-skeleton';
 import { LinkDetailStats } from '@/components/screens/links/show/link-detail-stats';
-import { ReferrersCard } from '@/components/screens/links/show/referrers-card';
-import { TopCountriesCard } from '@/components/screens/links/show/top-countries-card';
 import { Button } from '@/components/ui/button';
 
 const LinkDetail = () => {
@@ -64,8 +64,8 @@ const LinkDetail = () => {
                         <LinkDetailStats range={range} link={link} clicks={clicks} />
                         <LinkClicksChart range={range} clicks={clicks} />
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <TopCountriesCard clicks={clicks} />
-                            <ReferrersCard clicks={clicks} />
+                            <TopCountries clicks={clicks} />
+                            <Referrers clicks={clicks} />
                         </div>
                     </div>
                 </>
