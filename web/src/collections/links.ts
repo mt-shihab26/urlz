@@ -1,15 +1,8 @@
-import type { TClick, TLink, TLinkStatus } from '@/types/models';
+import type { TLink, TLinkStatus } from '@/types/models';
 
 import { pb } from '@/lib/pb';
 
 const LINKS = 'links';
-const CLICKS = 'clicks';
-const EXPAND = 'clicks_via_link';
-
-const mapClicks = (raw: any): TLink => ({
-    ...raw,
-    clicks: (raw.expand?.[EXPAND] as TClick[] | undefined) ?? [],
-});
 
 /**
  * Fetches all links sorted by newest first.
@@ -18,10 +11,7 @@ const mapClicks = (raw: any): TLink => ({
  */
 const getLinks = async (): Promise<TLink[]> => {
     try {
-        const records = await pb
-            .collection(LINKS)
-            .getFullList({ sort: '-created', expand: EXPAND });
-        return records.map(mapClicks);
+        return await pb.collection(LINKS).getFullList<TLink>({ sort: '-created' });
     } catch (e) {
         throw new Error(e instanceof Error ? e.message : 'Failed to fetch links');
     }
@@ -39,23 +29,25 @@ export const subscribeLinks = ({
     onError?: (error: string) => void;
     onLoading?: (loading: boolean) => void;
 }) => {
-    const refresh = async () => {
-        try {
-            onData(await getLinks());
-        } catch (e: any) {
-            onError?.(e.message);
-        }
-    };
-
     try {
         (async () => {
             onLoading?.(true);
-            await refresh();
-            onLoading?.(false);
+            try {
+                onData(await getLinks());
+            } catch (e: any) {
+                onError?.(e.message);
+            } finally {
+                onLoading?.(false);
+            }
         })();
 
-        pb.collection(LINKS).subscribe('*', refresh);
-        pb.collection(CLICKS).subscribe('*', refresh);
+        pb.collection(LINKS).subscribe('*', async () => {
+            try {
+                onData(await getLinks());
+            } catch (e: any) {
+                onError?.(e.message);
+            }
+        });
     } catch (e) {
         onError?.(e instanceof Error ? e.message : 'Failed to subscribe to links');
     }
@@ -67,7 +59,6 @@ export const subscribeLinks = ({
 export const unsubscribeLinks = ({ onError }: { onError?: (error: string) => void }) => {
     try {
         pb.collection(LINKS).unsubscribe('*');
-        pb.collection(CLICKS).unsubscribe('*');
     } catch (e) {
         onError?.(e instanceof Error ? e.message : 'Failed to unsubscribe from links');
     }
@@ -80,8 +71,7 @@ export const unsubscribeLinks = ({ onError }: { onError?: (error: string) => voi
  */
 const getLinkById = async (id: string): Promise<TLink> => {
     try {
-        const record = await pb.collection(LINKS).getOne(id, { expand: EXPAND });
-        return mapClicks(record);
+        return await pb.collection(LINKS).getOne<TLink>(id);
     } catch (e) {
         throw new Error(e instanceof Error ? e.message : 'Failed to fetch link');
     }
@@ -102,24 +92,24 @@ export const subscribeLink = (
         onLoading?: (loading: boolean) => void;
     },
 ) => {
-    const refresh = async () => {
-        try {
-            onData(await getLinkById(id));
-        } catch (e: any) {
-            onError?.(e.message);
-        }
-    };
-
     try {
         (async () => {
             onLoading?.(true);
-            await refresh();
-            onLoading?.(false);
+            try {
+                onData(await getLinkById(id));
+            } catch (e: any) {
+                onError?.(e.message);
+            } finally {
+                onLoading?.(false);
+            }
         })();
 
-        pb.collection(LINKS).subscribe(id, refresh);
-        pb.collection(CLICKS).subscribe('*', async (e) => {
-            if (e.record['link'] === id) await refresh();
+        pb.collection(LINKS).subscribe(id, async () => {
+            try {
+                onData(await getLinkById(id));
+            } catch (e: any) {
+                onError?.(e.message);
+            }
         });
     } catch (e) {
         onError?.(e instanceof Error ? e.message : 'Failed to subscribe to link');
@@ -132,7 +122,6 @@ export const subscribeLink = (
 export const unsubscribeLink = (id: string, { onError }: { onError?: (error: string) => void }) => {
     try {
         pb.collection(LINKS).unsubscribe(id);
-        pb.collection(CLICKS).unsubscribe('*');
     } catch (e) {
         onError?.(e instanceof Error ? e.message : 'Failed to unsubscribe from link');
     }
@@ -147,12 +136,11 @@ export const createLink = async (data: {
     code: string;
     expires?: string;
 }): Promise<TLink> => {
-    const record = await pb.collection(LINKS).create({
+    return pb.collection(LINKS).create<TLink>({
         ...data,
         user: pb.authStore.record!.id,
         status: 'active',
     });
-    return mapClicks(record);
 };
 
 /**

@@ -18,7 +18,6 @@ export type TLink = {
     updated: string;
     status: TLinkStatus;
     expires: string;
-    clicks: TClick[];
 };
 
 export type TClick = {

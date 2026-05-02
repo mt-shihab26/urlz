@@ -1,9 +1,10 @@
 import type { TRange } from '@/lib/ranges';
-import type { TLink } from '@/types/models';
+import type { TClick, TLink } from '@/types/models';
 
+import { subscribeClicks, unsubscribeClicks } from '@/collections/clicks';
 import { subscribeLinks, unsubscribeLinks } from '@/collections/links';
 import { toastError } from '@/lib/toast';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { Header } from '@/components/composite/site-header';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
@@ -21,14 +22,25 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { RANGES } from '@/lib/ranges';
 
 const Analytics = () => {
+    const [linksLoading, setLinksLoading] = useState(true);
+
     const [links, setLinks] = useState<TLink[]>([]);
+    const [clicks, setClicks] = useState<TClick[]>([]);
     const [range, setRange] = useState<TRange>('30d');
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        subscribeLinks({ onData: setLinks, onError: toastError, onLoading: setLoading });
-        return () => unsubscribeLinks({ onError: toastError });
+        subscribeLinks({ onData: setLinks, onError: toastError, onLoading: setLinksLoading });
+        subscribeClicks({ onData: setClicks, onError: toastError });
+        return () => {
+            unsubscribeLinks({ onError: toastError });
+            unsubscribeClicks({ onError: toastError });
+        };
     }, []);
+
+    const linksWithClicks = useMemo(
+        () => links.map((link) => ({ ...link, clicks: clicks.filter((c) => c.link === link.id) })),
+        [links, clicks],
+    );
 
     return (
         <DashboardLayout title="Analytics">
@@ -52,22 +64,22 @@ const Analytics = () => {
                 }
             />
             <div className="flex flex-col gap-6 p-4 lg:p-6">
-                {loading ? (
+                {linksLoading ? (
                     <AnalyticsSkeleton />
                 ) : (
                     <>
-                        <AnalyticsStats links={links} />
-                        <AnalyticsChart links={links} range={range} />
+                        <AnalyticsStats links={linksWithClicks} />
+                        <AnalyticsChart links={linksWithClicks} range={range} />
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <AnalyticsCountries links={links} />
-                            <AnalyticsReferrers links={links} />
+                            <AnalyticsCountries links={linksWithClicks} />
+                            <AnalyticsReferrers links={linksWithClicks} />
                         </div>
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <AnalyticsBrowsers links={links} range={range} />
-                            <AnalyticsOses links={links} range={range} />
+                            <AnalyticsBrowsers links={linksWithClicks} range={range} />
+                            <AnalyticsOses links={linksWithClicks} range={range} />
                         </div>
-                        <ExpiringSoon links={links} />
-                        <TopPerforming links={links} range={range} />
+                        <ExpiringSoon links={linksWithClicks} />
+                        <TopPerforming links={linksWithClicks} range={range} />
                     </>
                 )}
             </div>

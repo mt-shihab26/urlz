@@ -1,10 +1,11 @@
 import type { TRange } from '@/lib/ranges';
-import type { TLink } from '@/types/models';
+import type { TClick, TLink } from '@/types/models';
 
+import { subscribeClicks, unsubscribeClicks } from '@/collections/clicks';
 import { subscribeLinks, unsubscribeLinks } from '@/collections/links';
 import { RANGES } from '@/lib/ranges';
 import { toastError } from '@/lib/toast';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { Header } from '@/components/composite/site-header';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
@@ -15,15 +16,25 @@ import { TopLinks } from '@/components/screens/overview/top-links';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
 const Overview = () => {
-    const [loading, setLoading] = useState(true);
+    const [linksLoading, setLinksLoading] = useState(true);
 
     const [links, setLinks] = useState<TLink[]>([]);
+    const [clicks, setClicks] = useState<TClick[]>([]);
     const [range, setRange] = useState<TRange>('30d');
 
     useEffect(() => {
-        subscribeLinks({ onData: setLinks, onError: toastError, onLoading: setLoading });
-        return () => unsubscribeLinks({ onError: toastError });
+        subscribeLinks({ onData: setLinks, onError: toastError, onLoading: setLinksLoading });
+        subscribeClicks({ onData: setClicks, onError: toastError });
+        return () => {
+            unsubscribeLinks({ onError: toastError });
+            unsubscribeClicks({ onError: toastError });
+        };
     }, []);
+
+    const linksWithClicks = useMemo(
+        () => links.map((link) => ({ ...link, clicks: clicks.filter((c) => c.link === link.id) })),
+        [links, clicks],
+    );
 
     return (
         <DashboardLayout title="Overview">
@@ -47,13 +58,13 @@ const Overview = () => {
                 }
             />
             <div className="flex flex-col gap-6 p-4 lg:p-6">
-                {loading ? (
+                {linksLoading ? (
                     <Loading />
                 ) : (
                     <>
-                        <StatsCards links={links} />
-                        <ClickVolumeChart links={links} range={range} />
-                        <TopLinks links={links} />
+                        <StatsCards links={linksWithClicks} />
+                        <ClickVolumeChart links={linksWithClicks} range={range} />
+                        <TopLinks links={linksWithClicks} />
                     </>
                 )}
             </div>
