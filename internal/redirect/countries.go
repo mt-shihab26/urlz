@@ -19,8 +19,14 @@ type country struct {
 
 func updatedCountries(app core.App, record *core.Record, ip string) []country {
 	var countries []country
-	if data, err := json.Marshal(record.Get("countries")); err == nil {
-		_ = json.Unmarshal(data, &countries)
+	data, err := json.Marshal(record.Get("countries"))
+	if err != nil {
+		app.Logger().Error("updatedCountries: marshal", "id", record.Id, "err", err)
+		return countries
+	}
+	if err := json.Unmarshal(data, &countries); err != nil {
+		app.Logger().Error("updatedCountries: unmarshal", "id", record.Id, "err", err)
+		return countries
 	}
 	name, code, err := lookupCountry(ip)
 	if err != nil {
