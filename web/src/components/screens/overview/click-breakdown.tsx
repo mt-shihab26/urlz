@@ -38,7 +38,8 @@ const BreakdownList = ({ items, empty }: { items: BreakdownItem[]; empty: string
 const topN = (clicks: TClick[], key: keyof TClick, n = 5): BreakdownItem[] => {
     const counts: Record<string, number> = {};
     for (const c of clicks) {
-        const v = (c[key] as string) || 'Unknown';
+        const v = (c[key] as string) || '';
+        if (!v) continue;
         counts[v] = (counts[v] ?? 0) + 1;
     }
     return Object.entries(counts)
@@ -48,41 +49,39 @@ const topN = (clicks: TClick[], key: keyof TClick, n = 5): BreakdownItem[] => {
 };
 
 export const ClickBreakdown = ({ clicks }: { clicks: TClick[] }) => {
-    const { countries, devices, referrers } = useMemo(
+    const { countries, devices, referrers, browsers, os, languages } = useMemo(
         () => ({
             countries: topN(clicks, 'country_name'),
             devices: topN(clicks, 'device'),
             referrers: topN(clicks, 'referrer'),
+            browsers: topN(clicks, 'browser'),
+            os: topN(clicks, 'os'),
+            languages: topN(clicks, 'language'),
         }),
         [clicks],
     );
 
+    const cards = [
+        { title: 'Top Countries', items: countries },
+        { title: 'Devices', items: devices },
+        { title: 'Top Referrers', items: referrers },
+        { title: 'Browsers', items: browsers },
+        { title: 'Operating Systems', items: os },
+        { title: 'Languages', items: languages },
+    ];
+
     return (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <Card>
-                <CardHeader className="pb-3">
-                    <CardTitle className="text-sm font-medium">Top Countries</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <BreakdownList items={countries} empty="No data" />
-                </CardContent>
-            </Card>
-            <Card>
-                <CardHeader className="pb-3">
-                    <CardTitle className="text-sm font-medium">Devices</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <BreakdownList items={devices} empty="No data" />
-                </CardContent>
-            </Card>
-            <Card>
-                <CardHeader className="pb-3">
-                    <CardTitle className="text-sm font-medium">Top Referrers</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <BreakdownList items={referrers} empty="No data" />
-                </CardContent>
-            </Card>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {cards.map(({ title, items }) => (
+                <Card key={title}>
+                    <CardHeader className="pb-3">
+                        <CardTitle className="text-sm font-medium">{title}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <BreakdownList items={items} empty="No data" />
+                    </CardContent>
+                </Card>
+            ))}
         </div>
     );
 };

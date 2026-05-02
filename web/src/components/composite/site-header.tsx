@@ -1,14 +1,18 @@
-import { cn } from '@/lib/utils';
 import type { ReactNode } from 'react';
 
-interface HeaderProps {
+import { cn } from '@/lib/utils';
+
+export const Header = ({
+    title,
+    description,
+    action,
+    className,
+}: {
     title: string;
     description?: string;
     action?: ReactNode;
     className?: string;
-}
-
-export const Header = ({ title, description, action, className }: HeaderProps) => {
+}) => {
     return (
         <header
             className={cn('flex shrink-0 items-start gap-2 border-b px-4 py-4 lg:px-6', className)}
