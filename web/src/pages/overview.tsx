@@ -5,7 +5,8 @@ import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 
 import { subscribeLinks } from '@/collections/links';
 import { Header } from '@/components/composite/site-header';
-import { Sparkline, StatusBadge } from '@/components/composite/urlz-ui';
+import { Sparkline } from '@/components/composite/sparkline';
+import { StatusBadge } from '@/components/composite/status-badge';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
 import {
     Card,

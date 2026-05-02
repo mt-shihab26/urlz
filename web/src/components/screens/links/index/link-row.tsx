@@ -4,7 +4,7 @@ import { formatCode, formatDate, formatNumber } from '@/lib/formats';
 import { useNavigate } from 'react-router';
 
 import { CopyButton } from '@/components/composite/copy-button';
-import { StatusBadge } from '@/components/composite/urlz-ui';
+import { StatusBadge } from '@/components/composite/status-badge';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { LinkDeleteButton } from './link-delete-button';
 import { LinkOpenButton } from './link-open-button';

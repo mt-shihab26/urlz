@@ -1,5 +1,5 @@
 import { CopyButton } from '@/components/composite/copy-button';
-import { StatusBadge } from '@/components/composite/urlz-ui';
+import { StatusBadge } from '@/components/composite/status-badge';
 import { LinkDeleteButton } from '@/components/screens/links/index/link-delete-button';
 import { LinkOpenButton } from '@/components/screens/links/index/link-open-button';
 import { LinkToggleButton } from '@/components/screens/links/index/link-toggle-button';

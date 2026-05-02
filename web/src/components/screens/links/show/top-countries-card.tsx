@@ -1,4 +1,4 @@
-import { CountryBar } from '@/components/composite/urlz-ui';
+import { CountryBar } from '@/components/composite/country-bar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { TLinkCountry } from '@/types/models';
 
