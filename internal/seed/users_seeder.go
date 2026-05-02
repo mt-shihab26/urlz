@@ -1,12 +1,15 @@
 package seed
 
 import (
+	"fmt"
+
 	"github.com/brianvoe/gofakeit/v6"
 	"github.com/pocketbase/pocketbase/core"
 )
 
-func ensureUser(app core.App, email, password string) (*core.Record, error) {
+func seedUsers(app core.App, email, password string) (*core.Record, error) {
 	if existing, err := app.FindAuthRecordByEmail("users", email); err == nil {
+		fmt.Printf("user: %s (%s) [existing]\n", existing.GetString("email"), existing.Id)
 		return existing, nil
 	}
 
@@ -24,5 +27,7 @@ func ensureUser(app core.App, email, password string) (*core.Record, error) {
 	if err := app.Save(user); err != nil {
 		return nil, err
 	}
+
+	fmt.Printf("user: %s (%s) [created]\n", user.GetString("email"), user.Id)
 	return user, nil
 }

@@ -27,7 +27,7 @@ func main() {
 		DefaultDataDir: ".data",
 	})
 	if len(os.Args) > 1 && os.Args[1] == "seed" {
-		seed.RunCmd(app)
+		seed.Run(app)
 		return
 	}
 	migratecmd.MustRegister(app, app.RootCmd, migratecmd.Config{
