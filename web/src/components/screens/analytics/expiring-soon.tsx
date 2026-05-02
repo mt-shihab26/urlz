@@ -9,7 +9,7 @@ import {
 
 import type { TLink } from '@/types/models';
 
-import { formatDate } from '@/lib/formats';
+import { formatCode, formatDate } from '@/lib/formats';
 import { route } from '@/routes';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router';
@@ -69,7 +69,7 @@ export const ExpiringSoon = ({ links }: { links: TLink[] }) => {
                                     <TableCell>
                                         <div className="font-medium">{link.title}</div>
                                         <div className="font-mono text-xs text-muted-foreground">
-                                            urlz.io/{link.code}
+                                            {formatCode(link.code)}
                                         </div>
                                     </TableCell>
                                     <TableCell className="text-right font-mono text-xs text-destructive">

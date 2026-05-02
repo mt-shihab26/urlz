@@ -9,7 +9,7 @@ import {
 
 import type { TClick, TLink } from '@/types/models';
 
-import { formatNumber } from '@/lib/formats';
+import { formatCode, formatNumber } from '@/lib/formats';
 import { route } from '@/routes';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router';
@@ -17,13 +17,7 @@ import { useNavigate } from 'react-router';
 import { LinkSparkline } from '@/components/screens/links/index/link-sparkline';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-export const TopPerforming = ({
-    links,
-    clicks,
-}: {
-    links: TLink[];
-    clicks: TClick[];
-}) => {
+export const TopPerforming = ({ links, clicks }: { links: TLink[]; clicks: TClick[] }) => {
     const navigate = useNavigate();
 
     const ranked = useMemo(() => {
@@ -75,7 +69,7 @@ export const TopPerforming = ({
                                     <TableCell>
                                         <div className="font-medium">{link.title}</div>
                                         <div className="font-mono text-xs text-muted-foreground">
-                                            urlz.io/{link.code}
+                                            {formatCode(link.code)}
                                         </div>
                                     </TableCell>
                                     <TableCell className="text-right font-mono font-bold">
