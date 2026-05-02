@@ -1,66 +1,32 @@
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
-
 import type { TClick } from '@/types/models';
 
-import { formatNumber } from '@/lib/formats';
 import { useMemo } from 'react';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { PctListCard } from '@/components/screens/analytics/pct-list-card';
+
+const PALETTE = [
+    '#4285F4', '#FF7139', '#22C55E', '#F59E0B', '#8B5CF6',
+    '#06B6D4', '#EF4444', '#EC4899', '#14B8A6', '#F97316',
+];
 
 export const Referrers = ({ clicks }: { clicks: TClick[] }) => {
-    const referrers = useMemo(() => {
+    const data = useMemo(() => {
         const map = new Map<string, number>();
         clicks.forEach(({ referrer }) => {
-            if (referrer) map.set(referrer, (map.get(referrer) ?? 0) + 1);
+            if (!referrer) return;
+            map.set(referrer, (map.get(referrer) ?? 0) + 1);
         });
+        const total = Array.from(map.values()).reduce((a, b) => a + b, 0);
+        if (total === 0) return [];
         return Array.from(map.entries())
-            .map(([source, clicks]) => ({ source, clicks }))
-            .sort((a, b) => b.clicks - a.clicks);
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 6)
+            .map(([name, count], i) => ({
+                name,
+                pct: Math.round((count / total) * 1000) / 10,
+                color: PALETTE[i % PALETTE.length],
+            }));
     }, [clicks]);
 
-    return (
-        <Card>
-            <CardHeader>
-                <CardTitle>Referrers</CardTitle>
-            </CardHeader>
-            <CardContent className="p-0">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Source</TableHead>
-                            <TableHead className="text-right">Clicks</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {referrers.length === 0 ? (
-                            <TableRow>
-                                <TableCell
-                                    colSpan={2}
-                                    className="h-24 text-center text-muted-foreground"
-                                >
-                                    No referrers yet
-                                </TableCell>
-                            </TableRow>
-                        ) : (
-                            referrers.slice(0, 6).map((r) => (
-                                <TableRow key={r.source}>
-                                    <TableCell>{r.source}</TableCell>
-                                    <TableCell className="text-right font-mono text-sm text-muted-foreground">
-                                        {formatNumber(r.clicks)}
-                                    </TableCell>
-                                </TableRow>
-                            ))
-                        )}
-                    </TableBody>
-                </Table>
-            </CardContent>
-        </Card>
-    );
+    return <PctListCard title="Referrers" data={data} />;
 };
