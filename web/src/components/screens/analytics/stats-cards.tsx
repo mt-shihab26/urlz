@@ -24,7 +24,9 @@ export const StatsCards = ({ clicks, links }: { clicks: TClick[]; links: TLink[]
         const avgDaily = activeDays > 0 ? Math.round(totalClicks / activeDays) : 0;
 
         const peakDay = series.reduce((max, d) => (d.clicks > max ? d.clicks : max), 0);
-        const uniqueCountries = new Set(clicks.map((c) => c.country_code).filter(Boolean)).size;
+        const expiredLinks = links.filter(
+            (l) => l.expires && new Date(l.expires).getTime() < Date.now(),
+        ).length;
         const disabledLinks = links.filter((l) => l.status === 'disabled').length;
 
         return {
@@ -44,6 +46,11 @@ export const StatsCards = ({ clicks, links }: { clicks: TClick[]; links: TLink[]
                     label: 'Disabled Links',
                     value: disabledLinks || '—',
                     sub: `of ${links.length} total`,
+                },
+                {
+                    label: 'Expired Links',
+                    value: expiredLinks || '—',
+                    sub: 'past expiry date',
                 },
                 {
                     label: 'Unique Visitors',
@@ -67,11 +74,6 @@ export const StatsCards = ({ clicks, links }: { clicks: TClick[]; links: TLink[]
                             ? formatNumber(Math.round(totalClicks / links.length))
                             : '0',
                     sub: 'this period',
-                },
-                {
-                    label: 'Unique Countries',
-                    value: uniqueCountries || '—',
-                    sub: 'reached',
                 },
             ],
         };
