@@ -60,17 +60,17 @@ const Analytics = () => {
                 ) : (
                     <>
                         <AnalyticsStats links={links} clicks={clicks} />
-                        <AnalyticsChart clicks={clicks} range={range} />
+                        <AnalyticsChart clicks={clicks} />
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                             <AnalyticsCountries clicks={clicks} />
                             <AnalyticsReferrers clicks={clicks} />
                         </div>
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <AnalyticsBrowsers clicks={clicks} range={range} />
-                            <AnalyticsOses clicks={clicks} range={range} />
+                            <AnalyticsBrowsers clicks={clicks} />
+                            <AnalyticsOses clicks={clicks} />
                         </div>
                         <ExpiringSoon links={links} />
-                        <TopPerforming links={links} clicks={clicks} range={range} />
+                        <TopPerforming links={links} clicks={clicks} />
                     </>
                 )}
             </div>

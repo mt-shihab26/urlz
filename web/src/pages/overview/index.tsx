@@ -23,8 +23,8 @@ const Overview = () => {
     const [range, setRange] = useState<TRange>('30d');
 
     useEffect(() => {
-        subscribeLinks({ onData: setLinks, onError: toastError, onLoading: setLinksLoading });
-        subscribeClicks({ onData: setClicks, onError: toastError });
+        subscribeLinks('All', { onData: setLinks, onError: toastError, onLoading: setLinksLoading });
+        subscribeClicks('All', { onData: setClicks, onError: toastError });
         return () => {
             unsubscribeLinks({ onError: toastError });
             unsubscribeClicks({ onError: toastError });

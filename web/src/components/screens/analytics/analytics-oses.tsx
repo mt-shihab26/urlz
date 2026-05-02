@@ -1,4 +1,3 @@
-import type { TRange } from '@/lib/ranges';
 import type { TClick } from '@/types/models';
 
 import { useMemo } from 'react';
@@ -14,7 +13,7 @@ const COLORS: Record<string, string> = {
     Other: '#888888',
 };
 
-export const AnalyticsOses = ({ clicks }: { clicks: TClick[]; range: TRange }) => {
+export const AnalyticsOses = ({ clicks }: { clicks: TClick[] }) => {
     const data = useMemo(() => {
         const totals = new Map<string, number>();
         clicks.forEach(({ os }) => totals.set(os, (totals.get(os) ?? 0) + 1));
