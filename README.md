@@ -50,8 +50,8 @@ Every redirect captures:
 
 ### Prerequisites
 - Go 1.22+
-- Bun
-- [air](https://github.com/air-verse/air) (hot reload for Go)
+- Bun 1.3+
+- Node 25.6+
 
 ### Setup
 
