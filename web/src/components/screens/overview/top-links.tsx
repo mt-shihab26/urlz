@@ -7,7 +7,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 
-import type { TLink } from '@/types/models';
+import type { TClick, TLink } from '@/types/models';
 
 import { formatCode, formatNumber } from '@/lib/formats';
 import { route } from '@/routes';
@@ -18,11 +18,18 @@ import { LinkStatusBadge } from '@/components/composite/link-status-badge';
 import { LinkSparkline } from '@/components/screens/links/index/link-sparkline';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-export const TopLinks = ({ links }: { links: TLink[] }) => {
+export const TopLinks = ({ links, clicks }: { links: TLink[]; clicks: TClick[] }) => {
     const navigate = useNavigate();
     const topLinks = useMemo(
-        () => [...links].sort((a, b) => b.clicks.length - a.clicks.length).slice(0, 6),
-        [links],
+        () =>
+            [...links]
+                .map((link) => ({
+                    link,
+                    linkClicks: clicks.filter((c) => c.link === link.id),
+                }))
+                .sort((a, b) => b.linkClicks.length - a.linkClicks.length)
+                .slice(0, 6),
+        [links, clicks],
     );
 
     return (
@@ -51,7 +58,7 @@ export const TopLinks = ({ links }: { links: TLink[] }) => {
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            topLinks.map((link, i) => (
+                            topLinks.map(({ link, linkClicks }, i) => (
                                 <TableRow
                                     key={link.id}
                                     className="group cursor-pointer"
@@ -73,10 +80,10 @@ export const TopLinks = ({ links }: { links: TLink[] }) => {
                                         </div>
                                     </TableCell>
                                     <TableCell className="text-right font-mono font-bold">
-                                        {formatNumber(link.clicks.length)}
+                                        {formatNumber(linkClicks.length)}
                                     </TableCell>
                                     <TableCell className="text-right flex justify-end">
-                                        <LinkSparkline clicks={link.clicks} />
+                                        <LinkSparkline clicks={linkClicks} />
                                     </TableCell>
                                     <TableCell className="text-right">
                                         <LinkStatusBadge link={link} />

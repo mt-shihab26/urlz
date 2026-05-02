@@ -1,6 +1,7 @@
 import type { TFilter } from '@/components/screens/links/index/filters-toggle';
-import type { TLink } from '@/types/models';
+import type { TClick, TLink } from '@/types/models';
 
+import { subscribeClicks, unsubscribeClicks } from '@/collections/clicks';
 import { subscribeLinks, unsubscribeLinks } from '@/collections/links';
 import { filterLinks } from '@/lib/links';
 import { toastError } from '@/lib/toast';
@@ -18,12 +19,17 @@ const Links = () => {
     const [loading, setLoading] = useState(true);
 
     const [links, setLinks] = useState<TLink[]>([]);
+    const [clicks, setClicks] = useState<TClick[]>([]);
     const [search, setSearch] = useState('');
     const [filter, setFilter] = useState<TFilter>('all');
 
     useEffect(() => {
         subscribeLinks({ onData: setLinks, onError: toastError, onLoading: setLoading });
-        return () => unsubscribeLinks({ onError: toastError });
+        subscribeClicks({ onData: setClicks, onError: toastError });
+        return () => {
+            unsubscribeLinks({ onError: toastError });
+            unsubscribeClicks({ onError: toastError });
+        };
     }, []);
 
     return (
@@ -42,7 +48,10 @@ const Links = () => {
                             <SearchBox search={search} onSearch={setSearch} />
                             <FiltersToggle links={links} filter={filter} onFilter={setFilter} />
                         </div>
-                        <LinksTable links={filterLinks({ links, search, filter })} />
+                        <LinksTable
+                            links={filterLinks({ links, search, filter })}
+                            clicks={clicks}
+                        />
                     </>
                 )}
             </div>

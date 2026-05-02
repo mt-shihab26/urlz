@@ -21,7 +21,9 @@ export const PctListCard = ({ title, data }: { title: string; data: PctItem[] })
                                 style={{ background: d.color }}
                             />
                             <span className="flex-1 text-sm">{d.name}</span>
-                            <span className="font-mono text-xs text-muted-foreground">{d.pct}%</span>
+                            <span className="font-mono text-xs text-muted-foreground">
+                                {d.pct}%
+                            </span>
                         </div>
                     ))
                 )}

@@ -1,19 +1,18 @@
-import type { TLink } from '@/types/models';
+import type { TClick, TLink } from '@/types/models';
 
 import { formatNumber } from '@/lib/formats';
 import { useMemo } from 'react';
 
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-export const AnalyticsStats = ({ links }: { links: TLink[] }) => {
+export const AnalyticsStats = ({ clicks, links }: { clicks: TClick[]; links: TLink[] }) => {
     const stats = useMemo(() => {
-        const allClicks = links.flatMap((l) => l.clicks);
-        const totalClicks = allClicks.length;
+        const totalClicks = clicks.length;
         const activeLinks = links.filter((l) => l.status === 'active').length;
-        const uniqueCountries = new Set(allClicks.map((c) => c.country_code).filter(Boolean)).size;
+        const uniqueCountries = new Set(clicks.map((c) => c.country_code).filter(Boolean)).size;
 
         const referrerCounts = new Map<string, number>();
-        allClicks.forEach(({ referrer }) => {
+        clicks.forEach(({ referrer }) => {
             if (referrer) referrerCounts.set(referrer, (referrerCounts.get(referrer) ?? 0) + 1);
         });
         const topReferrer =
@@ -22,7 +21,7 @@ export const AnalyticsStats = ({ links }: { links: TLink[] }) => {
                 : '—';
 
         const countryCounts = new Map<string, { name: string; count: number }>();
-        allClicks.forEach(({ country_code, country_name }) => {
+        clicks.forEach(({ country_code, country_name }) => {
             if (country_code) {
                 const prev = countryCounts.get(country_code);
                 countryCounts.set(country_code, {
@@ -46,7 +45,8 @@ export const AnalyticsStats = ({ links }: { links: TLink[] }) => {
             return t > now && t <= now + 30 * 24 * 60 * 60 * 1000;
         }).length;
 
-        const noClicks = links.filter((l) => l.clicks.length === 0).length;
+        const linkedIds = new Set(clicks.map((c) => c.link));
+        const noClicks = links.filter((l) => !linkedIds.has(l.id)).length;
 
         return [
             { label: 'Total Clicks', value: formatNumber(totalClicks) },
@@ -58,7 +58,7 @@ export const AnalyticsStats = ({ links }: { links: TLink[] }) => {
             { label: 'No Clicks', value: noClicks || '—' },
             { label: 'Expiring Soon', value: expiringSoon || '—' },
         ];
-    }, [links]);
+    }, [clicks, links]);
 
     return (
         <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">

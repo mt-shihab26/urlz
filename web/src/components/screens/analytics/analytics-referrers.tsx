@@ -1,10 +1,7 @@
-import type { TLink } from '@/types/models';
-
-import { useMemo } from 'react';
+import type { TClick } from '@/types/models';
 
 import { ReferrersCard } from '@/components/screens/links/show/referrers-card';
 
-export const AnalyticsReferrers = ({ links }: { links: TLink[] }) => {
-    const allClicks = useMemo(() => links.flatMap((l) => l.clicks), [links]);
-    return <ReferrersCard clicks={allClicks} />;
+export const AnalyticsReferrers = ({ clicks }: { clicks: TClick[] }) => {
+    return <ReferrersCard clicks={clicks} />;
 };

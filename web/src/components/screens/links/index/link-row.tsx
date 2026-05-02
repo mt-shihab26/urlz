@@ -1,4 +1,4 @@
-import type { TLink } from '@/types/models';
+import type { TClick, TLink } from '@/types/models';
 
 import { formatCode, formatDate, formatNumber } from '@/lib/formats';
 import { route } from '@/routes';
@@ -13,8 +13,17 @@ import { LinkToggleButton } from '@/components/screens/links/link-toggle-button'
 import { TableCell, TableRow } from '@/components/ui/table';
 import { LinkSparkline } from './link-sparkline';
 
-export const LinkRow = ({ link, index }: { link: TLink; index: number }) => {
+export const LinkRow = ({
+    link,
+    index,
+    clicks,
+}: {
+    link: TLink;
+    index: number;
+    clicks: TClick[];
+}) => {
     const navigate = useNavigate();
+    const linkClicks = clicks.filter((c) => c.link === link.id);
 
     return (
         <TableRow className="group">
@@ -36,10 +45,10 @@ export const LinkRow = ({ link, index }: { link: TLink; index: number }) => {
                 </div>
             </TableCell>
             <TableCell className="text-right font-mono font-bold">
-                {formatNumber(link.clicks.length)}
+                {formatNumber(linkClicks.length)}
             </TableCell>
             <TableCell className="text-right">
-                <LinkSparkline clicks={link.clicks} />
+                <LinkSparkline clicks={linkClicks} />
             </TableCell>
             <TableCell className="text-right font-mono text-xs text-muted-foreground">
                 {formatDate(link.created)}

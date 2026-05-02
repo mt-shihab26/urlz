@@ -5,7 +5,7 @@ import { subscribeClicks, unsubscribeClicks } from '@/collections/clicks';
 import { subscribeLinks, unsubscribeLinks } from '@/collections/links';
 import { RANGES } from '@/lib/ranges';
 import { toastError } from '@/lib/toast';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Header } from '@/components/composite/site-header';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
@@ -30,15 +30,6 @@ const Overview = () => {
             unsubscribeClicks({ onError: toastError });
         };
     }, []);
-
-    const clicksByLink = useMemo(
-        () =>
-            links.map((link) => ({
-                ...link,
-                clicks: clicks.filter((c) => c.link === link.id),
-            })),
-        [links, clicks],
-    );
 
     return (
         <DashboardLayout title="Overview">
@@ -67,8 +58,8 @@ const Overview = () => {
                 ) : (
                     <>
                         <StatsCards clicks={clicks} links={links} />
-                        <ClickVolumeChart links={clicksByLink} range={range} />
-                        <TopLinks links={clicksByLink} />
+                        <ClickVolumeChart clicks={clicks} range={range} />
+                        <TopLinks links={links} clicks={clicks} />
                     </>
                 )}
             </div>

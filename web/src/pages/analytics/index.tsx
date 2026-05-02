@@ -4,7 +4,7 @@ import type { TClick, TLink } from '@/types/models';
 import { subscribeClicks, unsubscribeClicks } from '@/collections/clicks';
 import { subscribeLinks, unsubscribeLinks } from '@/collections/links';
 import { toastError } from '@/lib/toast';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Header } from '@/components/composite/site-header';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
@@ -37,11 +37,6 @@ const Analytics = () => {
         };
     }, []);
 
-    const linksWithClicks = useMemo(
-        () => links.map((link) => ({ ...link, clicks: clicks.filter((c) => c.link === link.id) })),
-        [links, clicks],
-    );
-
     return (
         <DashboardLayout title="Analytics">
             <Header
@@ -68,18 +63,18 @@ const Analytics = () => {
                     <AnalyticsSkeleton />
                 ) : (
                     <>
-                        <AnalyticsStats links={linksWithClicks} />
-                        <AnalyticsChart links={linksWithClicks} range={range} />
+                        <AnalyticsStats clicks={clicks} links={links} />
+                        <AnalyticsChart clicks={clicks} range={range} />
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <AnalyticsCountries links={linksWithClicks} />
-                            <AnalyticsReferrers links={linksWithClicks} />
+                            <AnalyticsCountries clicks={clicks} />
+                            <AnalyticsReferrers clicks={clicks} />
                         </div>
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <AnalyticsBrowsers links={linksWithClicks} range={range} />
-                            <AnalyticsOses links={linksWithClicks} range={range} />
+                            <AnalyticsBrowsers clicks={clicks} range={range} />
+                            <AnalyticsOses clicks={clicks} range={range} />
                         </div>
-                        <ExpiringSoon links={linksWithClicks} />
-                        <TopPerforming links={linksWithClicks} range={range} />
+                        <ExpiringSoon links={links} />
+                        <TopPerforming links={links} clicks={clicks} range={range} />
                     </>
                 )}
             </div>

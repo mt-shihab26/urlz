@@ -5,7 +5,7 @@ import { subscribeClicksByLink, unsubscribeClicksByLink } from '@/collections/cl
 import { subscribeLink, unsubscribeLink } from '@/collections/links';
 import { toastError } from '@/lib/toast';
 import { route } from '@/routes';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
@@ -41,16 +41,11 @@ const LinkDetail = () => {
         };
     }, [id]);
 
-    const linkWithClicks = useMemo(
-        () => (link ? { ...link, clicks } : null),
-        [link, clicks],
-    );
-
     return (
         <DashboardLayout title={loading ? 'Link' : (link?.title ?? 'Link Not Found')}>
             {loading ? (
                 <LinkDetailPageSkeleton />
-            ) : !linkWithClicks ? (
+            ) : !link ? (
                 <div className="flex flex-col items-center justify-center gap-4 p-12 text-center">
                     <p className="text-muted-foreground">Link not found.</p>
                     <Button variant="outline" onClick={() => navigate(route.linksIndex())}>
@@ -60,17 +55,17 @@ const LinkDetail = () => {
             ) : (
                 <>
                     <LinkDetailHeader
-                        link={linkWithClicks}
+                        link={link}
                         range={range}
                         onRangeChange={setRange}
                         onBack={() => navigate(route.linksIndex())}
                     />
                     <div className="flex flex-col gap-6 p-4 lg:p-6">
-                        <LinkDetailStats range={range} link={linkWithClicks} />
-                        <LinkClicksChart range={range} link={linkWithClicks} />
+                        <LinkDetailStats range={range} link={link} clicks={clicks} />
+                        <LinkClicksChart range={range} clicks={clicks} />
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <TopCountriesCard clicks={linkWithClicks.clicks} />
-                            <ReferrersCard clicks={linkWithClicks.clicks} />
+                            <TopCountriesCard clicks={clicks} />
+                            <ReferrersCard clicks={clicks} />
                         </div>
                     </div>
                 </>

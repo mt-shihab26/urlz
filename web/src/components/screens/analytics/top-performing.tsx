@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/table';
 
 import type { TRange } from '@/lib/ranges';
-import type { TLink } from '@/types/models';
+import type { TClick, TLink } from '@/types/models';
 
 import { formatNumber } from '@/lib/formats';
 import { route } from '@/routes';
@@ -31,7 +31,15 @@ const cutoffDate = (days: number) => {
     return d.toISOString().slice(0, 10);
 };
 
-export const TopPerforming = ({ links, range }: { links: TLink[]; range: TRange }) => {
+export const TopPerforming = ({
+    links,
+    clicks,
+    range,
+}: {
+    links: TLink[];
+    clicks: TClick[];
+    range: TRange;
+}) => {
     const navigate = useNavigate();
 
     const ranked = useMemo(() => {
@@ -39,14 +47,15 @@ export const TopPerforming = ({ links, range }: { links: TLink[]; range: TRange 
         const cutoff = days ? cutoffDate(days) : null;
         return [...links]
             .map((link) => {
+                const linkClicks = clicks.filter((c) => c.link === link.id);
                 const periodClicks = cutoff
-                    ? link.clicks.filter((c) => c.date >= cutoff).length
-                    : link.clicks.length;
-                return { link, periodClicks };
+                    ? linkClicks.filter((c) => c.date >= cutoff).length
+                    : linkClicks.length;
+                return { link, periodClicks, linkClicks };
             })
             .sort((a, b) => b.periodClicks - a.periodClicks)
             .slice(0, 10);
-    }, [links, range]);
+    }, [links, clicks, range]);
 
     return (
         <Card>
@@ -93,7 +102,7 @@ export const TopPerforming = ({ links, range }: { links: TLink[]; range: TRange 
                                         {formatNumber(periodClicks)}
                                     </TableCell>
                                     <TableCell className="text-right">
-                                        <LinkSparkline clicks={link.clicks} />
+                                        <LinkSparkline clicks={linkClicks} />
                                     </TableCell>
                                 </TableRow>
                             ))

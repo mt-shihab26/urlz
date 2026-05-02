@@ -1,4 +1,4 @@
-import type { TLink } from '@/types/models';
+import type { TClick, TLink } from '@/types/models';
 import type { TLinkDetailRange } from './link-detail-header';
 
 import { formatDate, formatNumber } from '@/lib/formats';
@@ -12,7 +12,15 @@ const cutoffDate = (days: number) => {
     return d.toISOString().slice(0, 10);
 };
 
-export const LinkDetailStats = ({ range, link }: { range: TLinkDetailRange; link: TLink }) => {
+export const LinkDetailStats = ({
+    range,
+    link,
+    clicks,
+}: {
+    range: TLinkDetailRange;
+    link: TLink;
+    clicks: TClick[];
+}) => {
     const stats = useMemo(() => {
         const cutoff =
             range === '7d'
@@ -23,20 +31,17 @@ export const LinkDetailStats = ({ range, link }: { range: TLinkDetailRange; link
                     ? cutoffDate(30)
                     : null;
 
-        const periodClicks = cutoff
-            ? link.clicks.filter((c) => c.date >= cutoff).length
-            : link.clicks.length;
+        const periodClicks = cutoff ? clicks.filter((c) => c.date >= cutoff).length : clicks.length;
 
-        const uniqueCountries = new Set(link.clicks.map((c) => c.country_code).filter(Boolean))
-            .size;
+        const uniqueCountries = new Set(clicks.map((c) => c.country_code).filter(Boolean)).size;
 
         return [
             { label: 'Period Clicks', value: formatNumber(periodClicks) },
-            { label: 'Total Clicks', value: formatNumber(link.clicks.length) },
+            { label: 'Total Clicks', value: formatNumber(clicks.length) },
             { label: 'Countries', value: formatNumber(uniqueCountries) },
             { label: 'Created', value: formatDate(link.created) },
         ];
-    }, [range, link]);
+    }, [range, link, clicks]);
 
     return (
         <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">

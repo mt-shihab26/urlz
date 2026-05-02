@@ -1,6 +1,6 @@
 import type { ChartConfig } from '@/components/ui/chart';
 import type { TRange } from '@/lib/ranges';
-import type { TLink } from '@/types/models';
+import type { TClick } from '@/types/models';
 
 import { clicksToSeries } from '@/lib/clicks';
 import { formatChartDate, formatNumber } from '@/lib/formats';
@@ -14,10 +14,9 @@ const chartConfig: ChartConfig = {
     clicks: { label: 'Clicks', color: 'var(--primary)' },
 };
 
-export const ClickVolumeChart = ({ links, range }: { links: TLink[]; range: TRange }) => {
+export const ClickVolumeChart = ({ clicks, range }: { clicks: TClick[]; range: TRange }) => {
     const { series, curr30 } = useMemo(() => {
-        const allClicks = links.flatMap((l) => l.clicks);
-        const totalSeries = clicksToSeries(allClicks);
+        const totalSeries = clicksToSeries(clicks);
 
         const sliced =
             range === '7d'
@@ -32,7 +31,7 @@ export const ClickVolumeChart = ({ links, range }: { links: TLink[]; range: TRan
             series: sliced,
             curr30: totalSeries.slice(-30).reduce((s, d) => s + d.clicks, 0),
         };
-    }, [links, range]);
+    }, [clicks, range]);
 
     return (
         <Card>

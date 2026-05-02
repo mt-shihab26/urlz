@@ -1,5 +1,5 @@
 import type { TRange } from '@/lib/ranges';
-import type { TLink } from '@/types/models';
+import type { TClick } from '@/types/models';
 
 import { useMemo } from 'react';
 
@@ -14,14 +14,10 @@ const COLORS: Record<string, string> = {
     Other: '#888888',
 };
 
-export const AnalyticsOses = ({ links }: { links: TLink[]; range: TRange }) => {
+export const AnalyticsOses = ({ clicks }: { clicks: TClick[]; range: TRange }) => {
     const data = useMemo(() => {
         const totals = new Map<string, number>();
-        links.forEach((link) =>
-            link.clicks.forEach(({ os }) =>
-                totals.set(os, (totals.get(os) ?? 0) + 1),
-            ),
-        );
+        clicks.forEach(({ os }) => totals.set(os, (totals.get(os) ?? 0) + 1));
         const total = Array.from(totals.values()).reduce((a, b) => a + b, 0);
         if (total === 0) return [];
         return Array.from(totals.entries())
@@ -31,7 +27,7 @@ export const AnalyticsOses = ({ links }: { links: TLink[]; range: TRange }) => {
                 color: COLORS[name] ?? COLORS['Other'],
             }))
             .sort((a, b) => b.pct - a.pct);
-    }, [links]);
+    }, [clicks]);
 
     return <PctListCard title="Operating Systems" data={data} />;
 };

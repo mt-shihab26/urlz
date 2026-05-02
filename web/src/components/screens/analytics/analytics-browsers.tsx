@@ -1,5 +1,5 @@
 import type { TRange } from '@/lib/ranges';
-import type { TLink } from '@/types/models';
+import type { TClick } from '@/types/models';
 
 import { useMemo } from 'react';
 
@@ -15,14 +15,10 @@ const COLORS: Record<string, string> = {
     Other: '#888888',
 };
 
-export const AnalyticsBrowsers = ({ links }: { links: TLink[]; range: TRange }) => {
+export const AnalyticsBrowsers = ({ clicks }: { clicks: TClick[]; range: TRange }) => {
     const data = useMemo(() => {
         const totals = new Map<string, number>();
-        links.forEach((link) =>
-            link.clicks.forEach(({ browser }) =>
-                totals.set(browser, (totals.get(browser) ?? 0) + 1),
-            ),
-        );
+        clicks.forEach(({ browser }) => totals.set(browser, (totals.get(browser) ?? 0) + 1));
         const total = Array.from(totals.values()).reduce((a, b) => a + b, 0);
         if (total === 0) return [];
         return Array.from(totals.entries())
@@ -32,7 +28,7 @@ export const AnalyticsBrowsers = ({ links }: { links: TLink[]; range: TRange }) 
                 color: COLORS[name] ?? COLORS['Other'],
             }))
             .sort((a, b) => b.pct - a.pct);
-    }, [links]);
+    }, [clicks]);
 
     return <PctListCard title="Browsers" data={data} />;
 };

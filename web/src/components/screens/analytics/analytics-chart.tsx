@@ -1,6 +1,6 @@
 import type { ChartConfig } from '@/components/ui/chart';
 import type { TRange } from '@/lib/ranges';
-import type { TLink } from '@/types/models';
+import type { TClick } from '@/types/models';
 
 import { clicksToSeries } from '@/lib/clicks';
 import { formatChartDate } from '@/lib/formats';
@@ -14,10 +14,9 @@ const chartConfig: ChartConfig = {
     clicks: { label: 'Clicks', color: 'var(--primary)' },
 };
 
-export const AnalyticsChart = ({ links, range }: { links: TLink[]; range: TRange }) => {
+export const AnalyticsChart = ({ clicks, range }: { clicks: TClick[]; range: TRange }) => {
     const sliced = useMemo(() => {
-        const allClicks = links.flatMap((l) => l.clicks);
-        const total = clicksToSeries(allClicks);
+        const total = clicksToSeries(clicks);
         return range === '7d'
             ? total.slice(-7)
             : range === '30d'
@@ -25,7 +24,7 @@ export const AnalyticsChart = ({ links, range }: { links: TLink[]; range: TRange
               : range === '90d'
                 ? total.slice(-90)
                 : total;
-    }, [links, range]);
+    }, [clicks, range]);
 
     return (
         <Card>

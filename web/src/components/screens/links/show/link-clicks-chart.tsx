@@ -1,5 +1,5 @@
 import type { ChartConfig } from '@/components/ui/chart';
-import type { TLink } from '@/types/models';
+import type { TClick } from '@/types/models';
 import type { TLinkDetailRange } from './link-detail-header';
 
 import { clicksToSeries } from '@/lib/clicks';
@@ -20,7 +20,13 @@ const cutoffDate = (days: number) => {
     return d.toISOString().slice(0, 10);
 };
 
-export const LinkClicksChart = ({ range, link }: { range: TLinkDetailRange; link: TLink }) => {
+export const LinkClicksChart = ({
+    range,
+    clicks,
+}: {
+    range: TLinkDetailRange;
+    clicks: TClick[];
+}) => {
     const series = useMemo(() => {
         const cutoff =
             range === '7d'
@@ -30,9 +36,9 @@ export const LinkClicksChart = ({ range, link }: { range: TLinkDetailRange; link
                   : range === '30d'
                     ? cutoffDate(30)
                     : null;
-        const filtered = cutoff ? link.clicks.filter((c) => c.date >= cutoff) : link.clicks;
+        const filtered = cutoff ? clicks.filter((c) => c.date >= cutoff) : clicks;
         return clicksToSeries(filtered);
-    }, [range, link]);
+    }, [range, clicks]);
 
     return (
         <Card>
