@@ -23,14 +23,16 @@ import { RANGES } from '@/lib/ranges';
 
 const Analytics = () => {
     const [linksLoading, setLinksLoading] = useState(true);
+    const [clicksLoading, setClicksLoading] = useState(true);
+
+    const [range, setRange] = useState<TRange>('30d');
 
     const [links, setLinks] = useState<TLink[]>([]);
     const [clicks, setClicks] = useState<TClick[]>([]);
-    const [range, setRange] = useState<TRange>('30d');
 
     useEffect(() => {
         subscribeLinks({ onData: setLinks, onError: toastError, onLoading: setLinksLoading });
-        subscribeClicks({ onData: setClicks, onError: toastError });
+        subscribeClicks({ onData: setClicks, onError: toastError, onLoading: setClicksLoading });
         return () => {
             unsubscribeLinks({ onError: toastError });
             unsubscribeClicks({ onError: toastError });
@@ -59,7 +61,7 @@ const Analytics = () => {
                 }
             />
             <div className="flex flex-col gap-6 p-4 lg:p-6">
-                {linksLoading ? (
+                {linksLoading || clicksLoading ? (
                     <AnalyticsSkeleton />
                 ) : (
                     <>
