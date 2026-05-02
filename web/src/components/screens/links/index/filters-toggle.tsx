@@ -1,5 +1,7 @@
 import type { TLink, TLinkStatus } from '@/types/models';
 
+import { isLinkExpired } from '@/lib/links';
+
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
 export type TFilter = 'all' | TLinkStatus | 'expired';
@@ -10,8 +12,6 @@ const filterEntries: { key: TFilter; label: string }[] = [
     { key: 'disabled', label: 'Disabled' },
     { key: 'expired', label: 'Expired' },
 ];
-
-const isExpired = (link: TLink) => !!link.expires && new Date(link.expires) < new Date();
 
 export const FiltersToggle = ({
     links,
@@ -24,9 +24,9 @@ export const FiltersToggle = ({
 }) => {
     const counts = {
         all: links.length,
-        active: links.filter((l) => l.status === 'active' && !isExpired(l)).length,
-        disabled: links.filter((l) => l.status === 'disabled' && !isExpired(l)).length,
-        expired: links.filter(isExpired).length,
+        active: links.filter((l) => l.status === 'active' && !isLinkExpired(l)).length,
+        disabled: links.filter((l) => l.status === 'disabled' && !isLinkExpired(l)).length,
+        expired: links.filter(isLinkExpired).length,
     };
 
     return (

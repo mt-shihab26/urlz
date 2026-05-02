@@ -10,6 +10,7 @@ import {
 import type { TLink } from '@/types/models';
 
 import { formatCode, formatDate } from '@/lib/formats';
+import { isLinkExpiringSoon } from '@/lib/links';
 import { route } from '@/routes';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router';
@@ -20,15 +21,8 @@ export const ExpiringSoon = ({ links }: { links: TLink[] }) => {
     const navigate = useNavigate();
 
     const expiring = useMemo(() => {
-        const now = Date.now();
-        const in30Days = now + 30 * 24 * 60 * 60 * 1000;
         return links
-            .filter(
-                (l) =>
-                    l.expires &&
-                    new Date(l.expires).getTime() > now &&
-                    new Date(l.expires).getTime() <= in30Days,
-            )
+            .filter((l) => isLinkExpiringSoon(l, 30))
             .sort((a, b) => new Date(a.expires).getTime() - new Date(b.expires).getTime());
     }, [links]);
 
