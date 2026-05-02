@@ -37,7 +37,7 @@ export const TopLinks = ({ links, clicks }: { links: TLink[]; clicks: TClick[] }
             <CardHeader>
                 <CardTitle>Top Links</CardTitle>
             </CardHeader>
-            <CardContent className="p-0">
+            <CardContent>
                 <Table>
                     <TableHeader>
                         <TableRow>
