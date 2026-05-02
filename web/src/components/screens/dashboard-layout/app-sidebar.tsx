@@ -2,6 +2,7 @@ import {
     ChartBarIcon,
     LayoutDashboardIcon,
     LinkIcon,
+    MousePointerClickIcon,
     PanelLeftIcon,
     SettingsIcon,
 } from 'lucide-react';
@@ -41,6 +42,11 @@ const navMain = [
         title: 'Analytics',
         url: route.analyticsIndex(),
         icon: <ChartBarIcon />,
+    },
+    {
+        title: 'Clicks',
+        url: route.clicksIndex(),
+        icon: <MousePointerClickIcon />,
     },
     {
         title: 'Settings',
