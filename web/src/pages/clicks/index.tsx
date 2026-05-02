@@ -13,17 +13,23 @@ import { ClicksTable, PER_PAGE } from '@/components/screens/clicks/clicks-table'
 import { DetailDrawer } from '@/components/screens/clicks/detail-drawer';
 
 const Clicks = () => {
+    const [clicksLoading, setclicksLoading] = useState(true);
+    const [linksLoading, setLinksLoading] = useState(true);
+
     const [range, setRange] = useState<TRange>('30d');
     const [page, setPage] = useState(1);
-    const [loading, setLoading] = useState(true);
+
     const [result, setResult] = useState<TClicksPage | null>(null);
+
     const [links, setLinks] = useState<TLink[]>([]);
+
     const [selectedClick, setSelectedClick] = useState<TClick | null>(null);
 
     useEffect(() => {
         subscribeLinks('All', {
             onData: setLinks,
             onError: toastError,
+            onLoading: setLinksLoading,
         });
         return () => {
             unsubscribeLinks({ onError: toastError });
@@ -38,7 +44,7 @@ const Clicks = () => {
         subscribeClicksPage(page, PER_PAGE, range, {
             onData: setResult,
             onError: toastError,
-            onLoading: setLoading,
+            onLoading: setclicksLoading,
         });
         return () => {
             unsubscribeClicksPage({ onError: toastError });
@@ -63,7 +69,7 @@ const Clicks = () => {
                 <ClicksTable
                     result={result}
                     links={links}
-                    loading={loading}
+                    loading={clicksLoading || linksLoading}
                     page={page}
                     onPage={handlePage}
                     onClickRow={setSelectedClick}
