@@ -1,24 +1,18 @@
-import { useMemo } from 'react';
-
-import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
-
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-    ChartContainer,
-    ChartTooltip,
-    ChartTooltipContent,
-    type ChartConfig,
-} from '@/components/ui/chart';
+import type { ChartConfig } from '@/components/ui/chart';
+import type { TRange } from '@/lib/overview';
 import type { TLink } from '@/types/models';
 
-const chartConfig = {
+import { useMemo } from 'react';
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
+
+const chartConfig: ChartConfig = {
     clicks: { label: 'Clicks', color: 'var(--primary)' },
-} satisfies ChartConfig;
+};
 
-const RANGES = ['7d', '30d', '90d', 'All'] as const;
-export type TRange = (typeof RANGES)[number];
-
-export const OverviewChart = ({ links, range }: { links: TLink[]; range: TRange }) => {
+export const ClickVolumeChart = ({ links, range }: { links: TLink[]; range: TRange }) => {
     const { series, curr30 } = useMemo(() => {
         const byDate = new Map<string, number>();
         links.forEach((link) =>
@@ -56,7 +50,7 @@ export const OverviewChart = ({ links, range }: { links: TLink[]; range: TRange 
                 </div>
             </CardHeader>
             <CardContent className="px-2 pb-4">
-                <ChartContainer config={chartConfig} className="h-[200px] w-full">
+                <ChartContainer config={chartConfig} className="h-50 w-full">
                     <AreaChart data={series}>
                         <defs>
                             <linearGradient id="fillClicksOv" x1="0" y1="0" x2="0" y2="1">

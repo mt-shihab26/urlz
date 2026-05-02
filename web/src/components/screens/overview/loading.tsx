@@ -1,6 +1,6 @@
 import { Skeleton } from '@/components/ui/skeleton';
 
-export const OverviewSkeleton = () => {
+export const Loading = () => {
     return (
         <>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -14,7 +14,7 @@ export const OverviewSkeleton = () => {
             </div>
             <div className="rounded-xl border p-6 flex flex-col gap-4">
                 <Skeleton className="h-5 w-32" />
-                <Skeleton className="h-[200px] w-full" />
+                <Skeleton className="h-50 w-full" />
             </div>
             <div className="rounded-xl border overflow-hidden">
                 <div className="px-6 py-4 border-b">

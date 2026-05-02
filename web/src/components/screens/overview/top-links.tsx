@@ -1,10 +1,3 @@
-import { useMemo } from 'react';
-
-import { useNavigate } from 'react-router';
-
-import { Sparkline } from '@/components/composite/sparkline';
-import { StatusBadge } from '@/components/composite/status-badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Table,
     TableBody,
@@ -13,7 +6,15 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+
 import type { TLink } from '@/types/models';
+
+import { useMemo } from 'react';
+import { useNavigate } from 'react-router';
+
+import { Sparkline } from '@/components/composite/sparkline';
+import { StatusBadge } from '@/components/composite/status-badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export const TopLinks = ({ links }: { links: TLink[] }) => {
     const navigate = useNavigate();

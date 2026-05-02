@@ -1,19 +1,18 @@
-import type { TRange } from '@/components/screens/overview/overview-chart';
+import type { TRange } from '@/lib/overview';
 import type { TLink } from '@/types/models';
 
 import { subscribeLinks, unsubscribeLinks } from '@/collections/links';
+import { RANGES } from '@/lib/overview';
 import { toastError } from '@/lib/toast';
 import { useEffect, useState } from 'react';
 
 import { Header } from '@/components/composite/site-header';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
-import { OverviewChart } from '@/components/screens/overview/overview-chart';
-import { OverviewSkeleton } from '@/components/screens/overview/overview-skeleton';
-import { OverviewStats } from '@/components/screens/overview/overview-stats';
+import { ClickVolumeChart } from '@/components/screens/overview/click-volume-chart';
+import { Loading } from '@/components/screens/overview/loading';
+import { StatsCards } from '@/components/screens/overview/overview-stats';
 import { TopLinks } from '@/components/screens/overview/top-links';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-
-const RANGES = ['7d', '30d', '90d', 'All'] as const;
 
 const Overview = () => {
     const [loading, setLoading] = useState(true);
@@ -49,11 +48,11 @@ const Overview = () => {
             />
             <div className="flex flex-col gap-6 p-4 lg:p-6">
                 {loading ? (
-                    <OverviewSkeleton />
+                    <Loading />
                 ) : (
                     <>
-                        <OverviewStats links={links} />
-                        <OverviewChart links={links} range={range} />
+                        <StatsCards links={links} />
+                        <ClickVolumeChart links={links} range={range} />
                         <TopLinks links={links} />
                     </>
                 )}

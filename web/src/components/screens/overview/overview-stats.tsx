@@ -1,11 +1,11 @@
-import { useMemo } from 'react';
-
-import { TrendingDownIcon, TrendingUpIcon } from 'lucide-react';
-
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import type { TLink } from '@/types/models';
 
-export const OverviewStats = ({ links }: { links: TLink[] }) => {
+import { useMemo } from 'react';
+
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { TrendingDownIcon, TrendingUpIcon } from 'lucide-react';
+
+export const StatsCards = ({ links }: { links: TLink[] }) => {
     const { stats } = useMemo(() => {
         const totalSeries = (() => {
             const byDate = new Map<string, number>();
