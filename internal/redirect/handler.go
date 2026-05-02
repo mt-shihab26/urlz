@@ -23,6 +23,9 @@ func Handler(e *core.RequestEvent) error {
 		return apis.NewNotFoundError("Link expired", nil)
 	}
 	targetURL := record.GetString("url")
+	if targetURL == "" {
+		return apis.NewNotFoundError("Link has no target URL", nil)
+	}
 	go trackClick(e.App, record.Id, e.Request.Header.Get("Referer"), realIP(e.Request))
 	return e.Redirect(http.StatusFound, targetURL)
 }
@@ -34,6 +37,9 @@ func realIP(r *http.Request) string {
 	if fwd := r.Header.Get("X-Forwarded-For"); fwd != "" {
 		return strings.TrimSpace(strings.Split(fwd, ",")[0])
 	}
-	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
+	ip, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		return r.RemoteAddr
+	}
 	return ip
 }
