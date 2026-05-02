@@ -3,9 +3,11 @@ package seed
 import (
 	"fmt"
 	"math/rand"
+	"strings"
 	"time"
 
 	"github.com/brianvoe/gofakeit/v6"
+	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase/core"
 )
 
@@ -28,33 +30,74 @@ var referrerSources = []string{
 	"t.co", "bing.com",
 }
 
-func seedClicks(app core.App, col *core.Collection, userID, linkID string, total int) error {
-	for range total {
-		click := core.NewRecord(col)
-		country := sampleCountries[rand.Intn(len(sampleCountries))]
-		idx := rand.Intn(len(sampleCountries))
-		referrer := ""
-		if rand.Intn(3) != 0 {
-			referrer = referrerSources[rand.Intn(len(referrerSources))]
+const (
+	clickBatchSize = 500
+	clickIDAlpha   = "abcdefghijklmnopqrstuvwxyz0123456789"
+)
+
+var clickColNames = []string{
+	"id", "user", "link", "date",
+	"country_name", "country_code", "city", "region", "timezone",
+	"referrer", "browser", "os", "device",
+	"ip", "user_agent", "language",
+	"created", "updated",
+}
+
+func seedClicks(app core.App, userID, linkID string, total int) error {
+	if total == 0 {
+		return nil
+	}
+
+	colList := strings.Join(clickColNames, ", ")
+	now := time.Now().UTC().Format("2006-01-02 15:04:05.000Z")
+
+	for start := 0; start < total; start += clickBatchSize {
+		end := min(start+clickBatchSize, total)
+		n := end - start
+
+		rows := make([]string, n)
+		params := make(dbx.Params, n*len(clickColNames))
+
+		for i := range n {
+			placeholders := make([]string, len(clickColNames))
+			for j, col := range clickColNames {
+				key := fmt.Sprintf("%s%d", col, i)
+				placeholders[j] = "{:" + key + "}"
+			}
+			rows[i] = "(" + strings.Join(placeholders, ", ") + ")"
+
+			country := sampleCountries[rand.Intn(len(sampleCountries))]
+			idx := rand.Intn(len(sampleCountries))
+			referrer := ""
+			if rand.Intn(3) != 0 {
+				referrer = referrerSources[rand.Intn(len(referrerSources))]
+			}
+			date := time.Now().UTC().AddDate(0, 0, -rand.Intn(90)).Format("2006-01-02")
+
+			vals := []any{
+				randomID(), userID, linkID, date,
+				country.name, country.code, sampleCities[idx], sampleRegions[idx], sampleTimezones[idx],
+				referrer, sampleBrowsers[rand.Intn(len(sampleBrowsers))], sampleOS[rand.Intn(len(sampleOS))], sampleDevices[rand.Intn(len(sampleDevices))],
+				gofakeit.IPv4Address(), gofakeit.UserAgent(), sampleLanguages[rand.Intn(len(sampleLanguages))],
+				now, now,
+			}
+			for j, col := range clickColNames {
+				params[fmt.Sprintf("%s%d", col, i)] = vals[j]
+			}
 		}
-		click.Set("user", userID)
-		click.Set("link", linkID)
-		click.Set("date", time.Now().UTC().AddDate(0, 0, -rand.Intn(90)).Format("2006-01-02"))
-		click.Set("country_name", country.name)
-		click.Set("country_code", country.code)
-		click.Set("city", sampleCities[idx])
-		click.Set("region", sampleRegions[idx])
-		click.Set("timezone", sampleTimezones[idx])
-		click.Set("referrer", referrer)
-		click.Set("browser", sampleBrowsers[rand.Intn(len(sampleBrowsers))])
-		click.Set("os", sampleOS[rand.Intn(len(sampleOS))])
-		click.Set("device", sampleDevices[rand.Intn(len(sampleDevices))])
-		click.Set("ip", gofakeit.IPv4Address())
-		click.Set("user_agent", gofakeit.UserAgent())
-		click.Set("language", sampleLanguages[rand.Intn(len(sampleLanguages))])
-		if err := app.Save(click); err != nil {
-			return fmt.Errorf("save click for link %s: %w", linkID, err)
+
+		sql := fmt.Sprintf("INSERT INTO clicks (%s) VALUES %s", colList, strings.Join(rows, ", "))
+		if _, err := app.DB().NewQuery(sql).Bind(params).Execute(); err != nil {
+			return fmt.Errorf("bulk insert clicks batch %d: %w", start/clickBatchSize, err)
 		}
 	}
 	return nil
+}
+
+func randomID() string {
+	b := make([]byte, 15)
+	for i := range b {
+		b[i] = clickIDAlpha[rand.Intn(len(clickIDAlpha))]
+	}
+	return string(b)
 }

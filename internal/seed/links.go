@@ -14,11 +14,6 @@ func seedLinks(app core.App, userID string, count int) error {
 	if err != nil {
 		return fmt.Errorf("find links collection: %w", err)
 	}
-	clicksCol, err := app.FindCollectionByNameOrId("clicks")
-	if err != nil {
-		return fmt.Errorf("find clicks collection: %w", err)
-	}
-
 	for i := range count {
 		link := core.NewRecord(linksCol)
 		link.Set("user", userID)
@@ -32,7 +27,7 @@ func seedLinks(app core.App, userID string, count int) error {
 		}
 
 		totalClicks := rand.Intn(5000)
-		if err := seedClicks(app, clicksCol, userID, link.Id, totalClicks); err != nil {
+		if err := seedClicks(app, userID, link.Id, totalClicks); err != nil {
 			return err
 		}
 
