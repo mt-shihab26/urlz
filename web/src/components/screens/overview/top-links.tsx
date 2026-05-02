@@ -14,7 +14,6 @@ import { useNavigate } from 'react-router';
 
 import { formatCode, formatNumber } from '@/lib/formats';
 
-import { CopyButton } from '@/components/composite/copy-button';
 import { LinkStatusBadge } from '@/components/composite/link-status-badge';
 import { LinkSparkline } from '@/components/screens/links/index/link-sparkline';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -69,7 +68,6 @@ export const TopLinks = ({ links }: { links: TLink[] }) => {
                                                     <span className="font-mono text-xs text-primary">
                                                         {formatCode(link.code)}
                                                     </span>
-                                                    <CopyButton text={formatCode(link.code)} />
                                                 </div>
                                             </div>
                                         </div>
