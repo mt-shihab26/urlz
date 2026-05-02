@@ -27,7 +27,11 @@ export const StatsCards = ({ clicks, links }: { clicks: TClick[]; links: TLink[]
                     delta,
                     sub: 'vs prev 30d',
                 },
-                { label: 'Active Links', value: activeLinks, sub: `of ${links.length} total` },
+                {
+                    label: 'Active Links',
+                    value: activeLinks,
+                    sub: `of ${links.length} total`,
+                },
                 {
                     label: 'Avg Clicks / Link',
                     value:
@@ -36,7 +40,11 @@ export const StatsCards = ({ clicks, links }: { clicks: TClick[]; links: TLink[]
                             : '0',
                     sub: 'lifetime',
                 },
-                { label: 'Countries', value: uniqueCountries || '—', sub: 'reached' },
+                {
+                    label: 'Countries',
+                    value: uniqueCountries || '—',
+                    sub: 'reached',
+                },
             ],
         };
     }, [clicks, links]);

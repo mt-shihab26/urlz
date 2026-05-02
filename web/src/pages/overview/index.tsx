@@ -9,7 +9,7 @@ import { Header } from '@/components/composite/site-header';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
 import { ClickVolumeChart } from '@/components/screens/overview/click-volume-chart';
 import { Loading } from '@/components/screens/overview/loading';
-import { StatsCards } from '@/components/screens/overview/overview-stats';
+import { StatsCards } from '@/components/screens/overview/stats-cards';
 import { TopLinks } from '@/components/screens/overview/top-links';
 
 const Overview = () => {
@@ -38,10 +38,7 @@ const Overview = () => {
 
     return (
         <DashboardLayout title="Overview">
-            <Header
-                title="Overview"
-                description="All your links at a glance"
-            />
+            <Header title="Overview" description="All your links at a glance" />
             <div className="flex flex-col gap-6 p-4 lg:p-6">
                 {linksLoading || clicksLoading ? (
                     <Loading />
