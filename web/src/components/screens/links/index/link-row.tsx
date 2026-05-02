@@ -1,12 +1,12 @@
 import type { TLink } from '@/types/models';
 
 import { formatCode, formatDate, formatNumber } from '@/lib/formats';
+import { isLinkExpired } from '@/lib/links';
 import { useNavigate } from 'react-router';
 
 import { CopyButton } from '@/components/composite/copy-button';
 import { StatusBadge } from '@/components/composite/status-badge';
 import { TableCell, TableRow } from '@/components/ui/table';
-import { isLinkExpired } from '@/lib/links';
 import { LinkDeleteButton } from './link-delete-button';
 import { LinkOpenButton } from './link-open-button';
 import { LinkSparkline } from './link-sparkline';
@@ -40,10 +40,10 @@ export const LinkRow = ({ link }: { link: TLink }) => {
             <TableCell className="text-right font-mono text-xs text-muted-foreground">
                 {formatDate(link.created)}
             </TableCell>
-            <TableCell className="font-mono text-xs text-muted-foreground">
+            <TableCell className="text-right font-mono text-xs text-muted-foreground">
                 {link.expires ? formatDate(link.expires) : '—'}
             </TableCell>
-            <TableCell>
+            <TableCell className="text-right">
                 <StatusBadge status={isLinkExpired(link) ? 'expired' : link.status} />
             </TableCell>
             <TableCell>

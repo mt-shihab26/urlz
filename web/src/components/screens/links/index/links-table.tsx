@@ -22,8 +22,8 @@ export const LinksTable = ({ links }: { links: TLink[] }) => {
                         <TableHead className="text-right">Clicks</TableHead>
                         <TableHead className="text-right">Trend</TableHead>
                         <TableHead className="text-right">Created</TableHead>
-                        <TableHead>Expires</TableHead>
-                        <TableHead>Status</TableHead>
+                        <TableHead className="text-right">Expires</TableHead>
+                        <TableHead className="text-right">Status</TableHead>
                         <TableHead />
                     </TableRow>
                 </TableHeader>
