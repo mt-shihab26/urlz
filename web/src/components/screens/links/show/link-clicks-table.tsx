@@ -53,7 +53,7 @@ export const LinkClicksTable = ({ clicks, range }: { clicks: TClick[]; range: TR
             <CardHeader>
                 <CardTitle>Click History</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4 px-0 pb-4">
+            <CardContent>
                 <Table>
                     <TableHeader>
                         <TableRow>
