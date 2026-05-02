@@ -41,7 +41,7 @@ export const ThemeCard = () => {
                         key={value}
                         variant={theme === value ? 'secondary' : 'outline'}
                         className={cn(
-                            'h-auto flex-col items-start justify-start gap-2 px-4 py-4 text-left normal-case tracking-normal',
+                            'h-auto w-full flex-col items-start justify-start gap-2 px-4 py-4 text-left whitespace-normal normal-case tracking-normal',
                             theme === value && 'border-border',
                         )}
                         onClick={() => setTheme(value)}
