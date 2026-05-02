@@ -7,6 +7,8 @@ import {
     TableRow,
 } from '@/components/ui/table';
 
+import { formatNumber } from '@/lib/formats';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { TLinkReferrer } from '@/types/models';
 
@@ -39,7 +41,7 @@ export const ReferrersCard = ({ referrers }: { referrers: TLinkReferrer[] }) => 
                                 <TableRow key={referrer.source}>
                                     <TableCell>{referrer.source}</TableCell>
                                     <TableCell className="text-right font-mono text-sm text-muted-foreground">
-                                        {referrer.clicks.toLocaleString()}
+                                        {formatNumber(referrer.clicks)}
                                     </TableCell>
                                 </TableRow>
                             ))

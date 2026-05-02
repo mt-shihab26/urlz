@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router';
 import { formatCode, formatNumber } from '@/lib/formats';
 
 import { CopyButton } from '@/components/composite/copy-button';
-import { StatusBadge } from '@/components/composite/status-badge';
+import { LinkStatusBadge } from '@/components/composite/link-status-badge';
 import { LinkSparkline } from '@/components/screens/links/index/link-sparkline';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -38,7 +38,7 @@ export const TopLinks = ({ links }: { links: TLink[] }) => {
                             <TableHead>Link</TableHead>
                             <TableHead className="text-right">Clicks</TableHead>
                             <TableHead className="text-right">Trend</TableHead>
-                            <TableHead>Status</TableHead>
+                            <TableHead className="text-right">Status</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -77,11 +77,11 @@ export const TopLinks = ({ links }: { links: TLink[] }) => {
                                     <TableCell className="text-right font-mono font-bold">
                                         {formatNumber(link.clicks)}
                                     </TableCell>
-                                    <TableCell className="text-right">
+                                    <TableCell className="text-right flex justify-end">
                                         <LinkSparkline series={link.series} />
                                     </TableCell>
-                                    <TableCell>
-                                        <StatusBadge status={link.status} />
+                                    <TableCell className="text-right">
+                                        <LinkStatusBadge link={link} />
                                     </TableCell>
                                 </TableRow>
                             ))

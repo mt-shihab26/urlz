@@ -1,5 +1,5 @@
 import { CopyButton } from '@/components/composite/copy-button';
-import { StatusBadge } from '@/components/composite/status-badge';
+import { LinkStatusBadge } from '@/components/composite/link-status-badge';
 
 import { LinkDeleteButton } from '@/components/screens/links/link-delete-button';
 import { LinkEditButton } from '@/components/screens/links/link-edit-button';
@@ -10,7 +10,6 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { ChevronLeftIcon } from 'lucide-react';
 
 import { formatCode, formatDate } from '@/lib/formats';
-import { isLinkExpired } from '@/lib/links';
 import type { TLink } from '@/types/models';
 
 const RANGES = ['7d', '30d', '90d', 'All'] as const;
@@ -38,7 +37,7 @@ export const LinkDetailHeader = ({ link, range, onRangeChange, onBack }: LinkDet
                 <div>
                     <div className="flex items-center gap-2">
                         <h1 className="text-xl font-bold tracking-tight">{link.title}</h1>
-                        <StatusBadge status={isLinkExpired(link) ? 'expired' : link.status} />
+                        <LinkStatusBadge link={link} />
                     </div>
                     <div className="group mt-1 flex items-center gap-2 text-sm">
                         <span className="font-mono text-primary">{formatCode(link.code)}</span>

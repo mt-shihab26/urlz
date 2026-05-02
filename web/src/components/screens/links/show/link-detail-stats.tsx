@@ -1,6 +1,8 @@
 import type { TLink } from '@/types/models';
 import type { TLinkDetailRange } from './link-detail-header';
 
+import { formatDate, formatNumber } from '@/lib/formats';
+
 import { Card, CardHeader } from '@/components/ui/card';
 
 export const LinkDetailStats = ({ range, link }: { range: TLinkDetailRange; link: TLink }) => {
@@ -10,17 +12,10 @@ export const LinkDetailStats = ({ range, link }: { range: TLinkDetailRange; link
     const periodClicks = slicedSeries.reduce((s, d) => s + d.clicks, 0);
 
     const stats = [
-        { label: 'Period Clicks', value: periodClicks.toLocaleString() },
-        { label: 'Total Clicks', value: link.clicks.toLocaleString() },
-        { label: 'Countries', value: link.countries.length.toLocaleString() },
-        {
-            label: 'Created',
-            value: new Date(link.created).toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric',
-                year: '2-digit',
-            }),
-        },
+        { label: 'Period Clicks', value: formatNumber(periodClicks) },
+        { label: 'Total Clicks', value: formatNumber(link.clicks) },
+        { label: 'Countries', value: formatNumber(link.countries.length) },
+        { label: 'Created', value: formatDate(link.created) },
     ];
 
     return (

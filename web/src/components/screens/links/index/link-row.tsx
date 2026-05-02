@@ -1,7 +1,6 @@
 import type { TLink } from '@/types/models';
 
 import { formatCode, formatDate, formatNumber } from '@/lib/formats';
-import { isLinkExpired } from '@/lib/links';
 import { useNavigate } from 'react-router';
 
 import { LinkDeleteButton } from '@/components/screens/links/link-delete-button';
@@ -10,15 +9,18 @@ import { LinkOpenButton } from '@/components/screens/links/link-open-button';
 import { LinkToggleButton } from '@/components/screens/links/link-toggle-button';
 
 import { CopyButton } from '@/components/composite/copy-button';
-import { StatusBadge } from '@/components/composite/status-badge';
+import { LinkStatusBadge } from '@/components/composite/link-status-badge';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { LinkSparkline } from './link-sparkline';
 
-export const LinkRow = ({ link }: { link: TLink }) => {
+export const LinkRow = ({ link, index }: { link: TLink; index: number }) => {
     const navigate = useNavigate();
 
     return (
         <TableRow className="group">
+            <TableCell className="w-10 text-center font-mono text-xs text-muted-foreground">
+                {index + 1}
+            </TableCell>
             <TableCell className="max-w-55">
                 <div className="cursor-pointer" onClick={() => navigate(`/links/${link.id}`)}>
                     <div className="truncate font-medium">{link.title}</div>
@@ -46,7 +48,7 @@ export const LinkRow = ({ link }: { link: TLink }) => {
                 {link.expires ? formatDate(link.expires) : '—'}
             </TableCell>
             <TableCell className="text-right">
-                <StatusBadge status={isLinkExpired(link) ? 'expired' : link.status} />
+                <LinkStatusBadge link={link} />
             </TableCell>
             <TableCell>
                 <div className="flex items-center justify-end gap-1 opacity-0 transition-opacity group-hover:opacity-100">

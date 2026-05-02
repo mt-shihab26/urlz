@@ -2,6 +2,8 @@ import type { ChartConfig } from '@/components/ui/chart';
 import type { TLink } from '@/types/models';
 import type { TLinkDetailRange } from './link-detail-header';
 
+import { formatChartDate } from '@/lib/formats';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
@@ -45,24 +47,10 @@ export const LinkClicksChart = ({ range, link }: { range: TLinkDetailRange; link
                             axisLine={false}
                             tickMargin={8}
                             minTickGap={32}
-                            tickFormatter={(value) =>
-                                new Date(value).toLocaleDateString('en-US', {
-                                    month: 'short',
-                                    day: 'numeric',
-                                })
-                            }
+                            tickFormatter={formatChartDate}
                         />
                         <ChartTooltip
-                            content={
-                                <ChartTooltipContent
-                                    labelFormatter={(value) =>
-                                        new Date(value).toLocaleDateString('en-US', {
-                                            month: 'short',
-                                            day: 'numeric',
-                                        })
-                                    }
-                                />
-                            }
+                            content={<ChartTooltipContent labelFormatter={formatChartDate} />}
                         />
                         <Area
                             dataKey="clicks"

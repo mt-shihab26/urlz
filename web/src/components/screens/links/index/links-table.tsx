@@ -17,6 +17,7 @@ export const LinksTable = ({ links }: { links: TLink[] }) => {
             <Table>
                 <TableHeader>
                     <TableRow>
+                        <TableHead className="w-10 text-center">#</TableHead>
                         <TableHead>Link</TableHead>
                         <TableHead>Short URL</TableHead>
                         <TableHead className="text-right">Clicks</TableHead>
@@ -31,14 +32,14 @@ export const LinksTable = ({ links }: { links: TLink[] }) => {
                     {links.length === 0 ? (
                         <TableRow>
                             <TableCell
-                                colSpan={8}
+                                colSpan={9}
                                 className="h-24 text-center text-muted-foreground"
                             >
                                 No links found
                             </TableCell>
                         </TableRow>
                     ) : (
-                        links.map((link) => <LinkRow key={link.id} link={link} />)
+                        links.map((link, i) => <LinkRow key={link.id} link={link} index={i} />)
                     )}
                 </TableBody>
             </Table>
