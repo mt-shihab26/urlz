@@ -76,6 +76,7 @@ export const AppSidebar = (props: ComponentProps<typeof Sidebar>) => {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton
+                            size="lg"
                             className="justify-start group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0"
                             onClick={toggleSidebar}
                         >
