@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 
 import { Header } from '@/components/composite/site-header';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
-import { ClickVolumeChart } from '@/components/screens/overview/click-volume-chart';
+import { ClickBreakdown } from '@/components/screens/overview/click-breakdown';
 import { Loading } from '@/components/screens/overview/loading';
 import { StatsCards } from '@/components/screens/overview/stats-cards';
 import { TopLinks } from '@/components/screens/overview/top-links';
@@ -45,7 +45,7 @@ const Overview = () => {
                 ) : (
                     <>
                         <StatsCards clicks={clicks} links={links} />
-                        <ClickVolumeChart clicks={clicks} />
+                        <ClickBreakdown clicks={clicks} />
                         <TopLinks links={links} clicks={clicks} />
                     </>
                 )}
