@@ -4,10 +4,11 @@ import { formatCode, formatDate, formatNumber } from '@/lib/formats';
 import { useNavigate } from 'react-router';
 
 import { CopyButton } from '@/components/composite/copy-button';
-import { Sparkline, StatusBadge } from '@/components/composite/urlz-ui';
+import { StatusBadge } from '@/components/composite/urlz-ui';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { LinkDeleteButton } from './link-delete-button';
 import { LinkOpenButton } from './link-open-button';
+import { LinkSparkline } from './link-sparkline';
 import { LinkToggleButton } from './link-toggle-button';
 
 export const LinkRow = ({ link }: { link: TLink }) => {
@@ -33,7 +34,7 @@ export const LinkRow = ({ link }: { link: TLink }) => {
                 {formatNumber(link.clicks)}
             </TableCell>
             <TableCell className="text-right">
-                <Sparkline data={link.series.slice(-14)} width={64} height={22} />
+                <LinkSparkline series={link.series} />
             </TableCell>
             <TableCell className="text-right font-mono text-xs text-muted-foreground">
                 {formatDate(link.created)}

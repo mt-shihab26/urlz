@@ -1,6 +1,9 @@
 import type { TFilter } from '@/components/screens/links/index/filters-toggle';
 import type { TLink } from '@/types/models';
 
+export const isLinkExpired = (link: TLink) =>
+    !!link.expires && new Date(link.expires) < new Date();
+
 export const filterLinks = ({
     links,
     search,
@@ -16,7 +19,16 @@ export const filterLinks = ({
             l.title.toLowerCase().includes(search.toLowerCase()) ||
             l.code.includes(search) ||
             l.url.includes(search);
-        const matchFilter = filter === 'all' || l.status === filter;
+
+        let matchFilter: boolean;
+        if (filter === 'all') {
+            matchFilter = true;
+        } else if (filter === 'expired') {
+            matchFilter = isLinkExpired(l);
+        } else {
+            matchFilter = l.status === filter && !isLinkExpired(l);
+        }
+
         return matchSearch && matchFilter;
     });
 };

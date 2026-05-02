@@ -1,7 +1,12 @@
+import { CopyButton } from '@/components/composite/copy-button';
 import { StatusBadge } from '@/components/composite/urlz-ui';
+import { LinkDeleteButton } from '@/components/screens/links/index/link-delete-button';
+import { LinkOpenButton } from '@/components/screens/links/index/link-open-button';
+import { LinkToggleButton } from '@/components/screens/links/index/link-toggle-button';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { ChevronLeftIcon } from 'lucide-react';
 
+import { formatCode } from '@/lib/formats';
 import type { TLink } from '@/types/models';
 
 const RANGES = ['7d', '30d', '90d', 'All'] as const;
@@ -31,12 +36,18 @@ export const LinkDetailHeader = ({ link, range, onRangeChange, onBack }: LinkDet
                         <h1 className="text-xl font-bold tracking-tight">{link.title}</h1>
                         <StatusBadge status={link.status} />
                     </div>
-                    <div className="mt-1 flex items-center gap-2 text-sm">
-                        <span className="font-mono text-primary">urlz.io/{link.code}</span>
+                    <div className="group mt-1 flex items-center gap-2 text-sm">
+                        <span className="font-mono text-primary">{formatCode(link.code)}</span>
+                        <CopyButton text={formatCode(link.code)} />
                         <span className="text-muted-foreground">·</span>
                         <span className="max-w-xs truncate font-mono text-xs text-muted-foreground">
                             {link.url}
                         </span>
+                    </div>
+                    <div className="mt-2 flex items-center gap-1">
+                        <LinkToggleButton link={link} />
+                        <LinkOpenButton link={link} />
+                        <LinkDeleteButton link={link} />
                     </div>
                 </div>
                 <ToggleGroup
