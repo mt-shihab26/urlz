@@ -6,53 +6,53 @@ export const routes: TRoute[] = [
     // Redirect
     {
         path: '/',
-        redirect: '/overview',
+        redirect: '/dashboard/overview',
         guard: 'public',
     },
     // App (auth protected)
     {
-        path: '/overview',
+        path: '/dashboard/overview',
         component: lazy(() => import('@/pages/overview/index')),
         guard: 'auth',
     },
     {
-        path: '/links',
+        path: '/dashboard/links',
         component: lazy(() => import('@/pages/links/index')),
         guard: 'auth',
     },
     {
-        path: '/links/:id',
+        path: '/dashboard/links/:id',
         component: lazy(() => import('@/pages/links/show')),
         guard: 'auth',
     },
     {
-        path: '/analytics',
+        path: '/dashboard/analytics',
         component: lazy(() => import('@/pages/analytics/index')),
         guard: 'auth',
     },
     {
-        path: '/settings',
+        path: '/dashboard/settings',
         component: lazy(() => import('@/pages/settings/index')),
         guard: 'auth',
     },
     // Auth (guest only)
     {
-        path: '/sign-in',
+        path: '/dashboard/sign-in',
         component: lazy(() => import('@/pages/sign-in')),
         guard: 'guest',
     },
     {
-        path: '/sign-up',
+        path: '/dashboard/sign-up',
         component: lazy(() => import('@/pages/sign-up')),
         guard: 'guest',
     },
     {
-        path: '/forgot-password',
+        path: '/dashboard/forgot-password',
         component: lazy(() => import('@/pages/forgot-password')),
         guard: 'guest',
     },
     {
-        path: '/reset-password',
+        path: '/dashboard/reset-password',
         component: lazy(() => import('@/pages/reset-password')),
         guard: 'guest',
     },
