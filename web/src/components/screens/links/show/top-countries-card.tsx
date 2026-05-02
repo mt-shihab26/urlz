@@ -20,14 +20,16 @@ export const TopCountriesCard = ({ countries }: TopCountriesCardProps) => {
                         No data yet
                     </p>
                 ) : (
-                    countries.slice(0, 6).map((country) => (
-                        <CountryBar
-                            key={country.code}
-                            code={country.code}
-                            pct={country.pct}
-                            max={maxCountryPct}
-                        />
-                    ))
+                    countries
+                        .slice(0, 6)
+                        .map((country) => (
+                            <CountryBar
+                                key={country.code}
+                                code={country.code}
+                                pct={country.pct}
+                                max={maxCountryPct}
+                            />
+                        ))
                 )}
             </CardContent>
         </Card>

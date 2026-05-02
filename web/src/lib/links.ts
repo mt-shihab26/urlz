@@ -1,8 +1,7 @@
 import type { TFilter } from '@/components/screens/links/index/filters-toggle';
 import type { TLink } from '@/types/models';
 
-export const isLinkExpired = (link: TLink) =>
-    !!link.expires && new Date(link.expires) < new Date();
+export const isLinkExpired = (link: TLink) => !!link.expires && new Date(link.expires) < new Date();
 
 export const filterLinks = ({
     links,

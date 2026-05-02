@@ -27,7 +27,10 @@ export const ReferrersCard = ({ referrers }: { referrers: TLinkReferrer[] }) => 
                     <TableBody>
                         {referrers.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={2} className="h-24 text-center text-muted-foreground">
+                                <TableCell
+                                    colSpan={2}
+                                    className="h-24 text-center text-muted-foreground"
+                                >
                                     No referrers yet
                                 </TableCell>
                             </TableRow>
