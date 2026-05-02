@@ -2,13 +2,17 @@ package redirect
 
 import (
 	"encoding/json"
+	"fmt"
 	"math"
 	"net"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/pocketbase/pocketbase/core"
 )
+
+var geoClient = &http.Client{Timeout: 3 * time.Second}
 
 type country struct {
 	Country string  `json:"country"`
@@ -63,11 +67,14 @@ func lookupCountry(ip string) (name, code string, err error) {
 	if ip == "" || isPrivateIP(ip) {
 		return "", "", nil
 	}
-	resp, err := http.Get("http://ip-api.com/json/" + ip + "?fields=country,countryCode")
+	resp, err := geoClient.Get("http://ip-api.com/json/" + ip + "?fields=country,countryCode")
 	if err != nil {
 		return "", "", err
 	}
 	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return "", "", fmt.Errorf("ip-api.com returned status %d", resp.StatusCode)
+	}
 	var result struct {
 		Country     string `json:"country"`
 		CountryCode string `json:"countryCode"`
