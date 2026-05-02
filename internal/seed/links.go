@@ -14,27 +14,30 @@ func seedLinks(app core.App, userID string, count int) error {
 	if err != nil {
 		return fmt.Errorf("find links collection: %w", err)
 	}
-	for i := range count {
-		link := core.NewRecord(linksCol)
-		link.Set("user", userID)
-		link.Set("code", gofakeit.LetterN(5))
-		link.Set("url", gofakeit.URL())
-		link.Set("title", gofakeit.Sentence(4))
-		link.Set("status", randomStatus())
-		link.Set("expires", randomExpiry())
-		if err := app.Save(link); err != nil {
-			return fmt.Errorf("save link %d: %w", i+1, err)
-		}
 
-		totalClicks := rand.Intn(5000)
-		if err := seedClicks(app, userID, link.Id, totalClicks); err != nil {
-			return err
-		}
+	return app.RunInTransaction(func(txApp core.App) error {
+		for i := range count {
+			link := core.NewRecord(linksCol)
+			link.Set("user", userID)
+			link.Set("code", gofakeit.LetterN(5))
+			link.Set("url", gofakeit.URL())
+			link.Set("title", gofakeit.Sentence(4))
+			link.Set("status", randomStatus())
+			link.Set("expires", randomExpiry())
+			if err := txApp.Save(link); err != nil {
+				return fmt.Errorf("save link %d: %w", i+1, err)
+			}
 
-		fmt.Printf("  link %d: %s → %s (%d clicks)\n", i+1, link.GetString("code"), link.GetString("title"), totalClicks)
-	}
-	fmt.Printf("seeded %d links\n", count)
-	return nil
+			totalClicks := rand.Intn(500)
+			if err := seedClicks(txApp, userID, link.Id, totalClicks); err != nil {
+				return err
+			}
+
+			fmt.Printf("  link %d: %s → %s (%d clicks)\n", i+1, link.GetString("code"), link.GetString("title"), totalClicks)
+		}
+		fmt.Printf("seeded %d links\n", count)
+		return nil
+	})
 }
 
 func randomStatus() string {
