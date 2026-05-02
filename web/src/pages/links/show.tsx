@@ -1,4 +1,4 @@
-import type { TLinkDetailRange } from '@/components/screens/links/show/link-detail-header';
+import type { TRange } from '@/lib/ranges';
 import type { TClick, TLink } from '@/types/models';
 
 import { subscribeClicksByLink, unsubscribeClicksByLink } from '@/collections/clicks';
@@ -23,11 +23,12 @@ const LinkDetail = () => {
 
     const { id } = useParams<{ id: string }>();
 
+    const [range, setRange] = useState<TRange>('30d');
+
     const [loading, setLoading] = useState(true);
 
     const [link, setLink] = useState<TLink | null>(null);
     const [clicks, setClicks] = useState<TClick[]>([]);
-    const [range, setRange] = useState<TLinkDetailRange>('30d');
 
     useEffect(() => {
         if (!id) {
@@ -35,12 +36,12 @@ const LinkDetail = () => {
             return;
         }
         subscribeLink(id, { onData: setLink, onError: toastError, onLoading: setLoading });
-        subscribeClicksByLink(id, { onData: setClicks, onError: toastError });
+        subscribeClicksByLink(id, range, { onData: setClicks, onError: toastError });
         return () => {
             unsubscribeLink(id, { onError: toastError });
             unsubscribeClicksByLink({ onError: toastError });
         };
-    }, [id]);
+    }, [id, range]);
 
     return (
         <DashboardLayout title={loading ? 'Link' : (link?.title ?? 'Link Not Found')}>

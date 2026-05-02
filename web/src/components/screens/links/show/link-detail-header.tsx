@@ -1,25 +1,21 @@
+import type { TRange } from '@/lib/ranges';
+import type { TLink } from '@/types/models';
+
+import { formatCode, formatDate } from '@/lib/formats';
+
 import { CopyButton } from '@/components/composite/copy-button';
 import { LinkStatusBadge } from '@/components/composite/link-status-badge';
-
+import { RangeTabs } from '@/components/composite/range-tabs';
 import { LinkDeleteButton } from '@/components/screens/links/link-delete-button';
 import { LinkEditButton } from '@/components/screens/links/link-edit-button';
 import { LinkOpenButton } from '@/components/screens/links/link-open-button';
 import { LinkToggleButton } from '@/components/screens/links/link-toggle-button';
-
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { ChevronLeftIcon } from 'lucide-react';
-
-import { formatCode, formatDate } from '@/lib/formats';
-import type { TLink } from '@/types/models';
-
-const RANGES = ['7d', '30d', '90d', 'All'] as const;
-
-export type TLinkDetailRange = (typeof RANGES)[number];
 
 type LinkDetailHeaderProps = {
     link: TLink;
-    range: TLinkDetailRange;
-    onRangeChange: (range: TLinkDetailRange) => void;
+    range: TRange;
+    onRangeChange: (range: TRange) => void;
     onBack: () => void;
 };
 
@@ -63,21 +59,7 @@ export const LinkDetailHeader = ({ link, range, onRangeChange, onBack }: LinkDet
                         <LinkDeleteButton link={link} />
                     </div>
                 </div>
-                <ToggleGroup
-                    multiple={false}
-                    value={range ? [range] : []}
-                    onValueChange={(value) =>
-                        onRangeChange((value[0] as TLinkDetailRange) ?? '30d')
-                    }
-                    variant="outline"
-                    size="sm"
-                >
-                    {RANGES.map((item) => (
-                        <ToggleGroupItem key={item} value={item}>
-                            {item}
-                        </ToggleGroupItem>
-                    ))}
-                </ToggleGroup>
+                <RangeTabs range={range} onRange={onRangeChange} />
             </div>
         </div>
     );

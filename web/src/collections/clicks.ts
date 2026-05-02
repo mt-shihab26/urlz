@@ -79,10 +79,14 @@ export const unsubscribeClicks = ({ onError }: { onError?: (error: string) => vo
  *
  * @throws {Error} When fetching clicks fails.
  */
-const getClicksByLink = async (linkId: string): Promise<TClick[]> => {
+const getClicksByLink = async (linkId: string, range: TRange = 'All'): Promise<TClick[]> => {
     try {
+        const startDate = getRangeStartDate(range);
+
         return await pb.collection(CLICKS).getFullList<TClick>({
-            filter: pb.filter('link = {:linkId}', { linkId }),
+            filter: startDate
+                ? pb.filter('link = {:linkId} && date >= {:startDate}', { linkId, startDate })
+                : pb.filter('link = {:linkId}', { linkId }),
             sort: '-created',
         });
     } catch (e) {
@@ -95,6 +99,7 @@ const getClicksByLink = async (linkId: string): Promise<TClick[]> => {
  */
 export const subscribeClicksByLink = (
     linkId: string,
+    range: TRange,
     {
         onData,
         onError,
@@ -109,7 +114,7 @@ export const subscribeClicksByLink = (
         (async () => {
             onLoading?.(true);
             try {
-                onData(await getClicksByLink(linkId));
+                onData(await getClicksByLink(linkId, range));
             } catch (e: any) {
                 onError?.(e.message);
             } finally {
@@ -120,7 +125,7 @@ export const subscribeClicksByLink = (
         pb.collection(CLICKS).subscribe('*', async (e) => {
             if (e.record['link'] === linkId) {
                 try {
-                    onData(await getClicksByLink(linkId));
+                    onData(await getClicksByLink(linkId, range));
                 } catch (err: any) {
                     onError?.(err.message);
                 }
