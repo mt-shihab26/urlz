@@ -3,6 +3,7 @@ package main
 import (
 	"io/fs"
 	"log"
+	"os"
 
 	"github.com/joho/godotenv"
 	"github.com/pocketbase/pocketbase"
@@ -25,10 +26,13 @@ func main() {
 		DefaultDev:     true,
 		DefaultDataDir: ".data",
 	})
+	if len(os.Args) > 1 && os.Args[1] == "seed" {
+		seed.RunCmd(app)
+		return
+	}
 	migratecmd.MustRegister(app, app.RootCmd, migratecmd.Config{
 		Automigrate: osutils.IsProbablyGoRun(),
 	})
-	seed.RegisterCmd(app)
 	app.OnServe().BindFunc(func(se *core.ServeEvent) error {
 		se.Router.GET("/{code}", redirect.Handler)
 		sub, err := fs.Sub(web.DistFS, "dist")
