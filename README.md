@@ -1,6 +1,4 @@
-<p align="center">
-  <img src="web/public/logo.svg" width="96" height="96" alt="urlz logo"/>
-</p>
+<img src="web/public/favicon.svg" width="96" height="96" alt="urlz logo"/>
 
 # urlz
 
