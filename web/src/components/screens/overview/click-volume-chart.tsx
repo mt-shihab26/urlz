@@ -78,7 +78,11 @@ export const ClickVolumeChart = ({ links, range }: { links: TLink[]; range: TRan
                             tickFormatter={formatChartDate}
                         />
                         <ChartTooltip
-                            content={<ChartTooltipContent labelFormatter={formatChartDate} />}
+                            content={
+                                <ChartTooltipContent
+                                    labelFormatter={(v) => formatChartDate(String(v))}
+                                />
+                            }
                         />
                         <Area
                             dataKey="clicks"

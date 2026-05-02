@@ -50,7 +50,11 @@ export const LinkClicksChart = ({ range, link }: { range: TLinkDetailRange; link
                             tickFormatter={formatChartDate}
                         />
                         <ChartTooltip
-                            content={<ChartTooltipContent labelFormatter={formatChartDate} />}
+                            content={
+                                <ChartTooltipContent
+                                    labelFormatter={(v) => formatChartDate(String(v))}
+                                />
+                            }
                         />
                         <Area
                             dataKey="clicks"
