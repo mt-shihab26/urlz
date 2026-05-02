@@ -160,7 +160,11 @@ export const getClicksPage = async (
             filter: startDate ? pb.filter('date >= {:startDate}', { startDate }) : undefined,
             sort: '-created',
         });
-        return { items: result.items, totalItems: result.totalItems, totalPages: result.totalPages };
+        return {
+            items: result.items,
+            totalItems: result.totalItems,
+            totalPages: result.totalPages,
+        };
     } catch (e) {
         throw new Error(e instanceof Error ? e.message : 'Failed to fetch clicks');
     }

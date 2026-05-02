@@ -39,15 +39,16 @@ const navMain = [
         icon: <LinkIcon />,
     },
     {
-        title: 'Analytics',
-        url: route.analyticsIndex(),
-        icon: <ChartBarIcon />,
-    },
-    {
         title: 'Clicks',
         url: route.clicksIndex(),
         icon: <MousePointerClickIcon />,
     },
+    {
+        title: 'Analytics',
+        url: route.analyticsIndex(),
+        icon: <ChartBarIcon />,
+    },
+
     {
         title: 'Settings',
         url: route.settingsIndex(),

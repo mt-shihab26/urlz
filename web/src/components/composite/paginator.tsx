@@ -39,7 +39,10 @@ export const Paginator = ({
                 <PaginationItem>
                     <PaginationPrevious
                         href="#"
-                        onClick={(e) => { e.preventDefault(); onPage(Math.max(1, currentPage - 1)); }}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            onPage(Math.max(1, currentPage - 1));
+                        }}
                         aria-disabled={currentPage === 1}
                         className={currentPage === 1 ? 'pointer-events-none opacity-50' : undefined}
                     />
@@ -54,7 +57,10 @@ export const Paginator = ({
                             <PaginationLink
                                 href="#"
                                 isActive={item === currentPage}
-                                onClick={(e) => { e.preventDefault(); onPage(item as number); }}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    onPage(item as number);
+                                }}
                             >
                                 {item}
                             </PaginationLink>
@@ -64,9 +70,16 @@ export const Paginator = ({
                 <PaginationItem>
                     <PaginationNext
                         href="#"
-                        onClick={(e) => { e.preventDefault(); onPage(Math.min(totalPages, currentPage + 1)); }}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            onPage(Math.min(totalPages, currentPage + 1));
+                        }}
                         aria-disabled={currentPage === totalPages}
-                        className={currentPage === totalPages ? 'pointer-events-none opacity-50' : undefined}
+                        className={
+                            currentPage === totalPages
+                                ? 'pointer-events-none opacity-50'
+                                : undefined
+                        }
                     />
                 </PaginationItem>
             </PaginationContent>
