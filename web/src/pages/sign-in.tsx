@@ -35,7 +35,7 @@ const SignIn = () => {
         setLoading(true);
         try {
             await signIn(data.email, data.password);
-            navigate('/');
+            navigate('/dashboard/overview');
         } catch (e: any) {
             const resData = e?.response?.data;
             if (resData?.email?.message) {
@@ -82,7 +82,7 @@ const SignIn = () => {
                             autoComplete="current-password"
                             labelExtra={
                                 <Link
-                                    to="/forgot-password"
+                                    to="/dashboard/forgot-password"
                                     className="text-xs text-muted-foreground hover:text-foreground"
                                 >
                                     Forgot password?
@@ -103,7 +103,7 @@ const SignIn = () => {
                     <LinkPrompt
                         text="Don't have an account?"
                         linkText="Sign up"
-                        linkTo="/sign-up"
+                        linkTo="/dashboard/sign-up"
                     />
                 </CardFooter>
             </Card>

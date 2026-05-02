@@ -22,7 +22,10 @@ export const LinkRow = ({ link, index }: { link: TLink; index: number }) => {
                 {index + 1}
             </TableCell>
             <TableCell className="max-w-55">
-                <div className="cursor-pointer" onClick={() => navigate(`/links/${link.id}`)}>
+                <div
+                    className="cursor-pointer"
+                    onClick={() => navigate(`/dashboard/links/${link.id}`)}
+                >
                     <div className="truncate font-medium">{link.title}</div>
                     <div className="truncate font-mono text-xs text-muted-foreground">
                         {link.url}

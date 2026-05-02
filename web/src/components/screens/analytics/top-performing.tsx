@@ -59,7 +59,7 @@ export const TopPerforming = ({ links, range }: { links: TLink[]; range: TRange 
                                 <TableRow
                                     key={link.id}
                                     className="cursor-pointer"
-                                    onClick={() => navigate(`/links/${link.id}`)}
+                                    onClick={() => navigate(`/dashboard/links/${link.id}`)}
                                 >
                                     <TableCell className="font-mono text-xs text-muted-foreground w-8">
                                         {i + 1}

@@ -41,7 +41,7 @@ const LinkDetail = () => {
             ) : !link ? (
                 <div className="flex flex-col items-center justify-center gap-4 p-12 text-center">
                     <p className="text-muted-foreground">Link not found.</p>
-                    <Button variant="outline" onClick={() => navigate('/links')}>
+                    <Button variant="outline" onClick={() => navigate('/dashboard/links')}>
                         Back to Links
                     </Button>
                 </div>
@@ -51,7 +51,7 @@ const LinkDetail = () => {
                         link={link}
                         range={range}
                         onRangeChange={setRange}
-                        onBack={() => navigate('/links')}
+                        onBack={() => navigate('/dashboard/links')}
                     />
                     <div className="flex flex-col gap-6 p-4 lg:p-6">
                         <LinkDetailStats range={range} link={link} />

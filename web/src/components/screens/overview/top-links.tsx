@@ -55,7 +55,7 @@ export const TopLinks = ({ links }: { links: TLink[] }) => {
                                 <TableRow
                                     key={link.id}
                                     className="group cursor-pointer"
-                                    onClick={() => navigate(`/links/${link.id}`)}
+                                    onClick={() => navigate(`/dashboard/links/${link.id}`)}
                                 >
                                     <TableCell>
                                         <div className="flex items-center gap-3">

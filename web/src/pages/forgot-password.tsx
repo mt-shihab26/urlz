@@ -56,7 +56,7 @@ function ForgotPassword() {
                     </CardContent>
                     <CardFooter className="justify-center">
                         <Link
-                            to="/sign-in"
+                            to="/dashboard/sign-in"
                             className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
                         >
                             <ArrowLeftIcon className="size-3.5" />
@@ -100,7 +100,7 @@ function ForgotPassword() {
 
                 <CardFooter className="justify-center">
                     <Link
-                        to="/sign-in"
+                        to="/dashboard/sign-in"
                         className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
                     >
                         <ArrowLeftIcon className="size-3.5" />

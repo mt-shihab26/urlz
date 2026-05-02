@@ -38,7 +38,7 @@ const SignUp = () => {
         setLoading(true);
         try {
             await signUp(data.name, data.email, data.password);
-            navigate('/');
+            navigate('/dashboard/overview');
         } catch (e: any) {
             const resData = e?.response?.data;
             if (resData?.email?.message) {
@@ -123,7 +123,7 @@ const SignUp = () => {
                     <LinkPrompt
                         text="Already have an account?"
                         linkText="Sign in"
-                        linkTo="/sign-in"
+                        linkTo="/dashboard/sign-in"
                     />
                 </CardFooter>
             </Card>

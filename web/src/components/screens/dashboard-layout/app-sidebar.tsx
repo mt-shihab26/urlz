@@ -28,22 +28,22 @@ import { NavUser } from './nav-user';
 const navMain = [
     {
         title: 'Overview',
-        url: '/overview',
+        url: '/dashboard/overview',
         icon: <LayoutDashboardIcon />,
     },
     {
         title: 'Links',
-        url: '/links',
+        url: '/dashboard/links',
         icon: <LinkIcon />,
     },
     {
         title: 'Analytics',
-        url: '/analytics',
+        url: '/dashboard/analytics',
         icon: <ChartBarIcon />,
     },
     {
         title: 'Settings',
-        url: '/settings',
+        url: '/dashboard/settings',
         icon: <SettingsIcon />,
     },
 ];
@@ -59,7 +59,7 @@ export const AppSidebar = (props: ComponentProps<typeof Sidebar>) => {
                     <SidebarMenuItem>
                         <SidebarMenuButton
                             className="data-[slot=sidebar-menu-button]:p-1.5!"
-                            render={<Link to="/overview" />}
+                            render={<Link to="/dashboard/overview" />}
                         >
                             <LinkIcon className="size-5!" />
                             <span className="text-base font-semibold">urlz</span>

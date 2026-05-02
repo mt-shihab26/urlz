@@ -45,7 +45,7 @@ export const ExpiringSoon = ({ links }: { links: TLink[] }) => {
                                 <TableRow
                                     key={link.id}
                                     className="cursor-pointer"
-                                    onClick={() => navigate(`/links/${link.id}`)}
+                                    onClick={() => navigate(`/dashboard/links/${link.id}`)}
                                 >
                                     <TableCell className="text-center font-mono text-xs text-muted-foreground">
                                         {i + 1}

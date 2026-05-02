@@ -55,7 +55,7 @@ function ResetPassword() {
                     </CardHeader>
                     <CardContent>
                         <Button className="w-full">
-                            <Link to="/sign-in">Sign in with new password</Link>
+                            <Link to="/dashboard/sign-in">Sign in with new password</Link>
                         </Button>
                     </CardContent>
                 </Card>
@@ -131,7 +131,7 @@ function ResetPassword() {
 
                 <CardFooter className="justify-center">
                     <Link
-                        to="/sign-in"
+                        to="/dashboard/sign-in"
                         className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
                     >
                         <ArrowLeftIcon className="size-3.5" />

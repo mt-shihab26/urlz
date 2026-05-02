@@ -6,7 +6,7 @@ import { Navigate } from 'react-router';
 export const GuestGuard = ({ children }: { children: ReactNode }) => {
     const { user } = useAuth();
 
-    if (user) return <Navigate to="/overview" replace />;
+    if (user) return <Navigate to="/dashboard/overview" replace />;
 
     return <>{children}</>;
 };
