@@ -8,33 +8,12 @@ export type TUser = {
 
 export type TLinkStatus = 'active' | 'disabled';
 
-export type TSerie = {
+export type TClick = {
     date: string;
-    clicks: number;
-};
-
-export type TLinkCountry = {
-    country: string;
-    code: string;
-    clicks: number;
-    pct: number;
-};
-
-export type TLinkReferrer = {
-    source: string;
-    clicks: number;
-};
-
-export type TLinkBrowser = {
-    name: string;
-    clicks: number;
-    pct: number;
-};
-
-export type TLinkOS = {
-    name: string;
-    clicks: number;
-    pct: number;
+    country_name: string;
+    country_code: string;
+    referrer: string;
+    os: string;
 };
 
 export type TLink = {
@@ -43,14 +22,9 @@ export type TLink = {
     code: string;
     url: string;
     title: string;
-    clicks: number;
     created: string;
     updated: string;
     status: TLinkStatus;
     expires: string;
-    series: TSerie[];
-    countries: TLinkCountry[];
-    referrers: TLinkReferrer[];
-    browsers: TLinkBrowser[];
-    oses: TLinkOS[];
+    clicks: TClick[];
 };
