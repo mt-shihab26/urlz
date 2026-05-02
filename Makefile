@@ -1,7 +1,9 @@
-.PHONY: build dev migrate-snapshot migrate-up setup seed
+.PHONY: build dev migrate-snapshot migrate-up setup seed superuser
 
 EMAIL    ?= dev@example.com
 PASSWORD ?= password1234
+SUPERUSER_EMAIL ?= mt.shihab26@gmail.com
+SUPERUSER_PASS  ?= password1234
 LINKS    ?= 30
 
 # Seed the database with fake data for development
@@ -11,6 +13,10 @@ LINKS    ?= 30
 #   make seed EMAIL=me@test.com PASSWORD=secret LINKS=50
 seed:
 	go run . seed --email $(EMAIL) --password $(PASSWORD) --links $(LINKS)
+
+# Create a superuser account
+superuser:
+	go run ./main.go superuser create $(SUPERUSER_EMAIL) $(SUPERUSER_PASS)
 
 # Apply all pending migrations
 migrate-up:
