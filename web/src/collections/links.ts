@@ -64,8 +64,17 @@ export const unsubscribeLinks = ({ onError }: { onError?: (error: string) => voi
     }
 };
 
+/**
+ * Fetches a single link by its ID.
+ *
+ * @throws {Error} When the link is not found or the request fails.
+ */
 const getLinkById = async (id: string): Promise<TLink> => {
-    return pb.collection(LINKS).getOne<TLink>(id);
+    try {
+        return await pb.collection(LINKS).getOne<TLink>(id);
+    } catch (e) {
+        throw new Error(e instanceof Error ? e.message : 'Failed to fetch link');
+    }
 };
 
 /**
