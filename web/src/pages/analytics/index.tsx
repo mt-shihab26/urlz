@@ -1,49 +1,71 @@
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
+import type { TLink } from '@/types/models';
 
-import type { ChartConfig } from '@/components/ui/chart';
+import { subscribeLinks, unsubscribeLinks } from '@/collections/links';
 import { RANGES, type TRange } from '@/lib/ranges';
-import type { TLinkCountry, TLinkReferrer, TSerie } from '@/types/models';
+import { toastError } from '@/lib/toast';
+import { useEffect, useMemo, useState } from 'react';
 
-import { useState } from 'react';
-
-import { CountryBar } from '@/components/composite/country-bar';
 import { Header } from '@/components/composite/site-header';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { AnalyticsChart } from '@/components/screens/analytics/analytics-chart';
+import { AnalyticsSkeleton } from '@/components/screens/analytics/analytics-skeleton';
+import { AnalyticsStats } from '@/components/screens/analytics/analytics-stats';
+import { ClicksByLink } from '@/components/screens/analytics/clicks-by-link';
+import { PctListCard } from '@/components/screens/analytics/pct-list-card';
+import { ReferrersCard } from '@/components/screens/links/show/referrers-card';
+import { TopCountriesCard } from '@/components/screens/links/show/top-countries-card';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 
-const chartConfig: ChartConfig = {
-    clicks: { label: 'Clicks', color: 'var(--primary)' },
-};
-
-const totalSeries: TSerie[] = [];
-const countries: TLinkCountry[] = [];
-const referrers: TLinkReferrer[] = [];
 const browsersData: { name: string; pct: number; color: string }[] = [];
 const osData: { name: string; pct: number; color: string }[] = [];
 
-function Analytics() {
+const Analytics = () => {
+    const [links, setLinks] = useState<TLink[]>([]);
     const [range, setRange] = useState<TRange>('30d');
+    const [loading, setLoading] = useState(true);
 
-    const slicedSeries =
-        range === '7d'
-            ? totalSeries.slice(-7)
-            : range === '30d'
-              ? totalSeries.slice(-30)
-              : range === '90d'
-                ? totalSeries.slice(-90)
-                : totalSeries;
+    useEffect(() => {
+        subscribeLinks({ onData: setLinks, onError: toastError, onLoading: setLoading });
+        return () => unsubscribeLinks({ onError: toastError });
+    }, []);
 
-    const maxCountryPct = countries[0]?.pct ?? 100;
+    const totalSeries = useMemo(() => {
+        const byDate = new Map<string, number>();
+        links.forEach((link) =>
+            link.series.forEach(({ date, clicks }) =>
+                byDate.set(date, (byDate.get(date) ?? 0) + clicks),
+            ),
+        );
+        return Array.from(byDate.entries())
+            .map(([date, clicks]) => ({ date, clicks }))
+            .sort((a, b) => a.date.localeCompare(b.date));
+    }, [links]);
+
+    const countries = useMemo(() => {
+        const map = new Map<string, { country: string; code: string; clicks: number }>();
+        links.forEach((link) =>
+            link.countries.forEach(({ country, code, clicks }) => {
+                const prev = map.get(code);
+                map.set(code, { country, code, clicks: (prev?.clicks ?? 0) + clicks });
+            }),
+        );
+        const total = Array.from(map.values()).reduce((s, c) => s + c.clicks, 0) || 1;
+        return Array.from(map.values())
+            .sort((a, b) => b.clicks - a.clicks)
+            .map((c) => ({ ...c, pct: Math.round((c.clicks / total) * 100) }));
+    }, [links]);
+
+    const referrers = useMemo(() => {
+        const map = new Map<string, number>();
+        links.forEach((link) =>
+            link.referrers.forEach(({ source, clicks }) =>
+                map.set(source, (map.get(source) ?? 0) + clicks),
+            ),
+        );
+        return Array.from(map.entries())
+            .map(([source, clicks]) => ({ source, clicks }))
+            .sort((a, b) => b.clicks - a.clicks);
+    }, [links]);
 
     return (
         <DashboardLayout title="Analytics">
@@ -66,154 +88,27 @@ function Analytics() {
                     </ToggleGroup>
                 }
             />
-
             <div className="flex flex-col gap-6 p-4 lg:p-6">
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Click Volume</CardTitle>
-                    </CardHeader>
-                    <CardContent className="px-2 pb-4">
-                        <ChartContainer config={chartConfig} className="h-50 w-full">
-                            <AreaChart data={slicedSeries}>
-                                <defs>
-                                    <linearGradient id="fillClicksAn" x1="0" y1="0" x2="0" y2="1">
-                                        <stop
-                                            offset="5%"
-                                            stopColor="var(--color-clicks)"
-                                            stopOpacity={0.8}
-                                        />
-                                        <stop
-                                            offset="95%"
-                                            stopColor="var(--color-clicks)"
-                                            stopOpacity={0.1}
-                                        />
-                                    </linearGradient>
-                                </defs>
-                                <CartesianGrid vertical={false} />
-                                <XAxis
-                                    dataKey="date"
-                                    tickLine={false}
-                                    axisLine={false}
-                                    tickMargin={8}
-                                    minTickGap={32}
-                                    tickFormatter={(v) =>
-                                        new Date(v).toLocaleDateString('en-US', {
-                                            month: 'short',
-                                            day: 'numeric',
-                                        })
-                                    }
-                                />
-                                <ChartTooltip
-                                    content={
-                                        <ChartTooltipContent
-                                            labelFormatter={(v) =>
-                                                new Date(v).toLocaleDateString('en-US', {
-                                                    month: 'short',
-                                                    day: 'numeric',
-                                                })
-                                            }
-                                        />
-                                    }
-                                />
-                                <Area
-                                    dataKey="clicks"
-                                    type="natural"
-                                    fill="url(#fillClicksAn)"
-                                    stroke="var(--color-clicks)"
-                                />
-                            </AreaChart>
-                        </ChartContainer>
-                    </CardContent>
-                </Card>
-
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Top Countries</CardTitle>
-                        </CardHeader>
-                        <CardContent className="flex flex-col gap-2.5">
-                            {countries.map((d) => (
-                                <CountryBar
-                                    key={d.code}
-                                    country={d.country}
-                                    code={d.code}
-                                    pct={d.pct}
-                                    max={maxCountryPct}
-                                />
-                            ))}
-                        </CardContent>
-                    </Card>
-
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Referrers</CardTitle>
-                        </CardHeader>
-                        <CardContent className="p-0">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Source</TableHead>
-                                        <TableHead className="text-right">Clicks</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {referrers.map((r) => (
-                                        <TableRow key={r.source}>
-                                            <TableCell>{r.source}</TableCell>
-                                            <TableCell className="text-right font-mono text-sm text-muted-foreground">
-                                                {r.clicks.toLocaleString()}
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </CardContent>
-                    </Card>
-                </div>
-
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Browsers</CardTitle>
-                        </CardHeader>
-                        <CardContent className="flex flex-col gap-3">
-                            {browsersData.map((d) => (
-                                <div key={d.name} className="flex items-center gap-2.5">
-                                    <span
-                                        className="size-2.5 shrink-0 rounded-sm"
-                                        style={{ background: d.color }}
-                                    />
-                                    <span className="flex-1 text-sm">{d.name}</span>
-                                    <span className="font-mono text-xs text-muted-foreground">
-                                        {d.pct}%
-                                    </span>
-                                </div>
-                            ))}
-                        </CardContent>
-                    </Card>
-
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Operating Systems</CardTitle>
-                        </CardHeader>
-                        <CardContent className="flex flex-col gap-3">
-                            {osData.map((d) => (
-                                <div key={d.name} className="flex items-center gap-2.5">
-                                    <span
-                                        className="size-2.5 shrink-0 rounded-sm"
-                                        style={{ background: d.color }}
-                                    />
-                                    <span className="flex-1 text-sm">{d.name}</span>
-                                    <span className="font-mono text-xs text-muted-foreground">
-                                        {d.pct}%
-                                    </span>
-                                </div>
-                            ))}
-                        </CardContent>
-                    </Card>
-                </div>
+                {loading ? (
+                    <AnalyticsSkeleton />
+                ) : (
+                    <>
+                        <AnalyticsStats links={links} />
+                        <AnalyticsChart series={totalSeries} range={range} />
+                        <ClicksByLink links={links} />
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                            <TopCountriesCard countries={countries} />
+                            <ReferrersCard referrers={referrers} />
+                        </div>
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                            <PctListCard title="Browsers" data={browsersData} />
+                            <PctListCard title="Operating Systems" data={osData} />
+                        </div>
+                    </>
+                )}
             </div>
         </DashboardLayout>
     );
-}
+};
+
 export default Analytics;
