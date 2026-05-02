@@ -40,6 +40,9 @@ export const LinkRow = ({ link }: { link: TLink }) => {
             <TableCell className="text-right font-mono text-xs text-muted-foreground">
                 {formatDate(link.created)}
             </TableCell>
+            <TableCell className="font-mono text-xs text-muted-foreground">
+                {link.expires ? formatDate(link.expires) : '—'}
+            </TableCell>
             <TableCell>
                 <StatusBadge status={isLinkExpired(link) ? 'expired' : link.status} />
             </TableCell>

@@ -6,7 +6,8 @@ import { LinkToggleButton } from '@/components/screens/links/index/link-toggle-b
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { ChevronLeftIcon } from 'lucide-react';
 
-import { formatCode } from '@/lib/formats';
+import { formatCode, formatDate } from '@/lib/formats';
+import { isLinkExpired } from '@/lib/links';
 import type { TLink } from '@/types/models';
 
 const RANGES = ['7d', '30d', '90d', 'All'] as const;
@@ -34,7 +35,7 @@ export const LinkDetailHeader = ({ link, range, onRangeChange, onBack }: LinkDet
                 <div>
                     <div className="flex items-center gap-2">
                         <h1 className="text-xl font-bold tracking-tight">{link.title}</h1>
-                        <StatusBadge status={link.status} />
+                        <StatusBadge status={isLinkExpired(link) ? 'expired' : link.status} />
                     </div>
                     <div className="group mt-1 flex items-center gap-2 text-sm">
                         <span className="font-mono text-primary">{formatCode(link.code)}</span>
@@ -43,6 +44,15 @@ export const LinkDetailHeader = ({ link, range, onRangeChange, onBack }: LinkDet
                         <span className="max-w-xs truncate font-mono text-xs text-muted-foreground">
                             {link.url}
                         </span>
+                    </div>
+                    <div className="mt-1 flex items-center gap-3 text-xs text-muted-foreground">
+                        <span>Updated {formatDate(link.updated)}</span>
+                        {link.expires && (
+                            <>
+                                <span>·</span>
+                                <span>Expires {formatDate(link.expires)}</span>
+                            </>
+                        )}
                     </div>
                     <div className="mt-2 flex items-center gap-1">
                         <LinkToggleButton link={link} />

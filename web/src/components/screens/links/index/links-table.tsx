@@ -22,6 +22,7 @@ export const LinksTable = ({ links }: { links: TLink[] }) => {
                         <TableHead className="text-right">Clicks</TableHead>
                         <TableHead className="text-right">Trend</TableHead>
                         <TableHead className="text-right">Created</TableHead>
+                        <TableHead>Expires</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead />
                     </TableRow>
@@ -30,7 +31,7 @@ export const LinksTable = ({ links }: { links: TLink[] }) => {
                     {links.length === 0 ? (
                         <TableRow>
                             <TableCell
-                                colSpan={7}
+                                colSpan={8}
                                 className="h-24 text-center text-muted-foreground"
                             >
                                 No links found
