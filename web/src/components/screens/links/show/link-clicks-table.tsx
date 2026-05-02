@@ -4,15 +4,8 @@ import { getRangeStartDate } from '@/lib/ranges';
 import type { TClick } from '@/types/models';
 import { useEffect, useMemo, useState } from 'react';
 
+import { Paginator } from '@/components/composite/paginator';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from '@/components/ui/pagination';
 import {
     Table,
     TableBody,
@@ -96,62 +89,17 @@ export const LinkClicksTable = ({ clicks, range }: { clicks: TClick[]; range: TR
                     </TableBody>
                 </Table>
                 {filteredClicks.length > PAGE_SIZE && (
-                    <div className="flex flex-col gap-3 px-8 sm:flex-row sm:items-center sm:justify-between">
-                        <p className="text-sm text-muted-foreground">
-                            Showing {(currentPage - 1) * PAGE_SIZE + 1}-
+                    <div className="flex flex-col mt-2 gap-3 px-3 sm:flex-row sm:items-center sm:justify-between">
+                        <p className="shrink-0 text-sm text-muted-foreground">
+                            Showing {(currentPage - 1) * PAGE_SIZE + 1}–
                             {Math.min(currentPage * PAGE_SIZE, filteredClicks.length)} of{' '}
                             {filteredClicks.length}
                         </p>
-                        <Pagination className="mx-0 w-auto justify-start sm:justify-end">
-                            <PaginationContent>
-                                <PaginationItem>
-                                    <PaginationPrevious
-                                        href="#"
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            setPage((value) => Math.max(1, value - 1));
-                                        }}
-                                        aria-disabled={currentPage === 1}
-                                        className={
-                                            currentPage === 1
-                                                ? 'pointer-events-none opacity-50'
-                                                : undefined
-                                        }
-                                    />
-                                </PaginationItem>
-                                {Array.from({ length: pageCount }, (_, index) => index + 1).map(
-                                    (item) => (
-                                        <PaginationItem key={item}>
-                                            <PaginationLink
-                                                href="#"
-                                                isActive={item === currentPage}
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    setPage(item);
-                                                }}
-                                            >
-                                                {item}
-                                            </PaginationLink>
-                                        </PaginationItem>
-                                    ),
-                                )}
-                                <PaginationItem>
-                                    <PaginationNext
-                                        href="#"
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            setPage((value) => Math.min(pageCount, value + 1));
-                                        }}
-                                        aria-disabled={currentPage === pageCount}
-                                        className={
-                                            currentPage === pageCount
-                                                ? 'pointer-events-none opacity-50'
-                                                : undefined
-                                        }
-                                    />
-                                </PaginationItem>
-                            </PaginationContent>
-                        </Pagination>
+                        <Paginator
+                            currentPage={currentPage}
+                            totalPages={pageCount}
+                            onPage={setPage}
+                        />
                     </div>
                 )}
             </CardContent>

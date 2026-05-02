@@ -146,3 +146,22 @@ export const unsubscribeClicksByLink = ({ onError }: { onError?: (error: string)
         onError?.(e instanceof Error ? e.message : 'Failed to unsubscribe from clicks');
     }
 };
+
+export type TClicksPage = { items: TClick[]; totalItems: number; totalPages: number };
+
+export const getClicksPage = async (
+    page: number,
+    perPage = 20,
+    range: TRange = 'All',
+): Promise<TClicksPage> => {
+    try {
+        const startDate = getRangeStartDate(range);
+        const result = await pb.collection(CLICKS).getList<TClick>(page, perPage, {
+            filter: startDate ? pb.filter('date >= {:startDate}', { startDate }) : undefined,
+            sort: '-created',
+        });
+        return { items: result.items, totalItems: result.totalItems, totalPages: result.totalPages };
+    } catch (e) {
+        throw new Error(e instanceof Error ? e.message : 'Failed to fetch clicks');
+    }
+};
