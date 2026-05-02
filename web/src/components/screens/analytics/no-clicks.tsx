@@ -32,7 +32,7 @@ export const NoClicks = ({ links, clicks }: { links: TLink[]; clicks: TClick[] }
             <CardHeader>
                 <CardTitle>No Clicks Yet</CardTitle>
             </CardHeader>
-            <CardContent className="p-0">
+            <CardContent>
                 <Table>
                     <TableHeader>
                         <TableRow>

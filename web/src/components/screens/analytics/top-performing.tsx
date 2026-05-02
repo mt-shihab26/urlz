@@ -36,7 +36,7 @@ export const TopPerforming = ({ links, clicks }: { links: TLink[]; clicks: TClic
             <CardHeader>
                 <CardTitle>Top Performing</CardTitle>
             </CardHeader>
-            <CardContent className="p-0">
+            <CardContent>
                 <Table>
                     <TableHeader>
                         <TableRow>
