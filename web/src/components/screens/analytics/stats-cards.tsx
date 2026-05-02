@@ -24,11 +24,13 @@ export const StatsCards = ({ clicks, links }: { clicks: TClick[]; links: TLink[]
         const avgDaily = activeDays > 0 ? Math.round(totalClicks / activeDays) : 0;
 
         const peakDay = series.reduce((max, d) => (d.clicks > max ? d.clicks : max), 0);
+        const uniqueCountries = new Set(clicks.map((c) => c.country_code).filter(Boolean)).size;
+        const disabledLinks = links.filter((l) => l.status === 'disabled').length;
 
         return {
             stats: [
                 {
-                    label: 'Total Clicks',
+                    label: 'Clicks Count',
                     value: formatNumber(totalClicks),
                     delta,
                     sub: 'period trend',
@@ -36,6 +38,11 @@ export const StatsCards = ({ clicks, links }: { clicks: TClick[]; links: TLink[]
                 {
                     label: 'Active Links',
                     value: activeLinks,
+                    sub: `of ${links.length} total`,
+                },
+                {
+                    label: 'Disabled Links',
+                    value: disabledLinks || '—',
                     sub: `of ${links.length} total`,
                 },
                 {
@@ -55,15 +62,23 @@ export const StatsCards = ({ clicks, links }: { clicks: TClick[]; links: TLink[]
                 },
                 {
                     label: 'Avg Clicks / Link',
-                    value: links.length > 0 ? formatNumber(Math.round(totalClicks / links.length)) : '0',
+                    value:
+                        links.length > 0
+                            ? formatNumber(Math.round(totalClicks / links.length))
+                            : '0',
                     sub: 'this period',
+                },
+                {
+                    label: 'Unique Countries',
+                    value: uniqueCountries || '—',
+                    sub: 'reached',
                 },
             ],
         };
     }, [clicks, links]);
 
     return (
-        <div className="grid grid-cols-2 gap-4 xl:grid-cols-3 2xl:grid-cols-6">
+        <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
             {stats.map((s) => (
                 <Card key={s.label}>
                     <CardHeader className="pb-2">
