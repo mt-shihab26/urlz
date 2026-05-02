@@ -1,7 +1,6 @@
 import type { TClicksPage } from '@/collections/clicks';
 import type { TClick, TLink } from '@/types/models';
 
-import { formatChartDate } from '@/lib/formats';
 import { Paginator } from '@/components/composite/paginator';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
@@ -12,6 +11,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { formatChartDate } from '@/lib/formats';
 
 export const PER_PAGE = 20;
 
