@@ -32,7 +32,7 @@ export const routes: TRoute[] = [
     },
     {
         path: '/settings',
-        component: lazy(() => import('@/pages/settings')),
+        component: lazy(() => import('@/pages/settings/index')),
         guard: 'auth',
     },
     // Auth (guest only)
