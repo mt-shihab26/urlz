@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import { CountryBar } from '@/components/composite/country-bar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-export const AnalyticsCountries = ({ clicks }: { clicks: TClick[] }) => {
+export const TopCountries = ({ clicks }: { clicks: TClick[] }) => {
     const countries = useMemo(() => {
         const map = new Map<string, { country: string; code: string; count: number }>();
         clicks.forEach(({ country_name, country_code }) => {

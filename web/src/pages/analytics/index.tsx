@@ -6,17 +6,17 @@ import { subscribeLinks, unsubscribeLinks } from '@/collections/links';
 import { toastError } from '@/lib/toast';
 import { useEffect, useState } from 'react';
 
-import { RangeGroups } from '@/components/composite/range-groups';
+import { RangeTabs } from '@/components/composite/range-tabs';
 import { Header } from '@/components/composite/site-header';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
-import { AnalyticsBrowsers } from '@/components/screens/analytics/analytics-browsers';
-import { AnalyticsChart } from '@/components/screens/analytics/analytics-chart';
-import { AnalyticsCountries } from '@/components/screens/analytics/analytics-countries';
-import { AnalyticsOses } from '@/components/screens/analytics/analytics-oses';
-import { AnalyticsReferrers } from '@/components/screens/analytics/analytics-referrers';
-import { AnalyticsSkeleton } from '@/components/screens/analytics/analytics-skeleton';
-import { AnalyticsStats } from '@/components/screens/analytics/analytics-stats';
+import { Browsers } from '@/components/screens/analytics/browsers';
+import { ClickVolumeChart } from '@/components/screens/analytics/click-volume-chart';
 import { ExpiringSoon } from '@/components/screens/analytics/expiring-soon';
+import { Loading } from '@/components/screens/analytics/loading';
+import { OperatingSystems } from '@/components/screens/analytics/operating-systems';
+import { Referrers } from '@/components/screens/analytics/referrers';
+import { StatsCards } from '@/components/screens/analytics/stats-cards';
+import { TopCountries } from '@/components/screens/analytics/top-countries';
 import { TopPerforming } from '@/components/screens/analytics/top-performing';
 
 const Analytics = () => {
@@ -52,22 +52,22 @@ const Analytics = () => {
             <Header
                 title="Analytics"
                 description="Aggregated traffic across all links"
-                action={<RangeGroups range={range} onRange={setRange} />}
+                action={<RangeTabs range={range} onRange={setRange} />}
             />
             <div className="flex flex-col gap-6 p-4 lg:p-6">
                 {linksLoading || clicksLoading ? (
-                    <AnalyticsSkeleton />
+                    <Loading />
                 ) : (
                     <>
-                        <AnalyticsStats links={links} clicks={clicks} />
-                        <AnalyticsChart clicks={clicks} />
+                        <StatsCards links={links} clicks={clicks} />
+                        <ClickVolumeChart clicks={clicks} />
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <AnalyticsCountries clicks={clicks} />
-                            <AnalyticsReferrers clicks={clicks} />
+                            <TopCountries clicks={clicks} />
+                            <Referrers clicks={clicks} />
                         </div>
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <AnalyticsBrowsers clicks={clicks} />
-                            <AnalyticsOses clicks={clicks} />
+                            <Browsers clicks={clicks} />
+                            <OperatingSystems clicks={clicks} />
                         </div>
                         <ExpiringSoon links={links} />
                         <TopPerforming links={links} clicks={clicks} />

@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-export const AnalyticsStats = ({ clicks, links }: { clicks: TClick[]; links: TLink[] }) => {
+export const StatsCards = ({ clicks, links }: { clicks: TClick[]; links: TLink[] }) => {
     const stats = useMemo(() => {
         const totalClicks = clicks.length;
         const activeLinks = links.filter((l) => l.status === 'active').length;

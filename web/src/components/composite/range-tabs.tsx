@@ -4,7 +4,7 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
 import { RANGES } from '@/lib/ranges';
 
-export const RangeGroups = ({
+export const RangeTabs = ({
     range,
     onRange,
 }: {

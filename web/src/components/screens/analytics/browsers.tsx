@@ -14,7 +14,7 @@ const COLORS: Record<string, string> = {
     Other: '#888888',
 };
 
-export const AnalyticsBrowsers = ({ clicks }: { clicks: TClick[] }) => {
+export const Browsers = ({ clicks }: { clicks: TClick[] }) => {
     const data = useMemo(() => {
         const totals = new Map<string, number>();
         clicks.forEach(({ browser }) => totals.set(browser, (totals.get(browser) ?? 0) + 1));

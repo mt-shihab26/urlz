@@ -14,7 +14,7 @@ import { useMemo } from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-export const AnalyticsReferrers = ({ clicks }: { clicks: TClick[] }) => {
+export const Referrers = ({ clicks }: { clicks: TClick[] }) => {
     const referrers = useMemo(() => {
         const map = new Map<string, number>();
         clicks.forEach(({ referrer }) => {

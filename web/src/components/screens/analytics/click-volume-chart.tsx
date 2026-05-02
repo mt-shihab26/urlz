@@ -1,4 +1,3 @@
-import type { ChartConfig } from '@/components/ui/chart';
 import type { TClick } from '@/types/models';
 
 import { clicksToSeries } from '@/lib/clicks';
@@ -8,11 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 
-const chartConfig: ChartConfig = {
-    clicks: { label: 'Clicks', color: 'var(--primary)' },
-};
-
-export const AnalyticsChart = ({ clicks }: { clicks: TClick[] }) => {
+export const ClickVolumeChart = ({ clicks }: { clicks: TClick[] }) => {
     const series = clicksToSeries(clicks);
 
     return (
@@ -21,7 +16,12 @@ export const AnalyticsChart = ({ clicks }: { clicks: TClick[] }) => {
                 <CardTitle>Click Volume</CardTitle>
             </CardHeader>
             <CardContent className="px-2 pb-4">
-                <ChartContainer config={chartConfig} className="h-50 w-full">
+                <ChartContainer
+                    config={{
+                        clicks: { label: 'Clicks', color: 'var(--primary)' },
+                    }}
+                    className="h-50 w-full"
+                >
                     <AreaChart data={series}>
                         <defs>
                             <linearGradient id="fillClicksAn" x1="0" y1="0" x2="0" y2="1">
