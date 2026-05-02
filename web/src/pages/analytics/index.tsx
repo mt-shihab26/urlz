@@ -6,6 +6,7 @@ import { subscribeLinks, unsubscribeLinks } from '@/collections/links';
 import { toastError } from '@/lib/toast';
 import { useEffect, useState } from 'react';
 
+import { RangeGroups } from '@/components/composite/range-groups';
 import { Header } from '@/components/composite/site-header';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
 import { AnalyticsBrowsers } from '@/components/screens/analytics/analytics-browsers';
@@ -17,9 +18,6 @@ import { AnalyticsSkeleton } from '@/components/screens/analytics/analytics-skel
 import { AnalyticsStats } from '@/components/screens/analytics/analytics-stats';
 import { ExpiringSoon } from '@/components/screens/analytics/expiring-soon';
 import { TopPerforming } from '@/components/screens/analytics/top-performing';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-
-import { RANGES } from '@/lib/ranges';
 
 const Analytics = () => {
     const [linksLoading, setLinksLoading] = useState(true);
@@ -44,21 +42,7 @@ const Analytics = () => {
             <Header
                 title="Analytics"
                 description="Aggregated traffic across all links"
-                action={
-                    <ToggleGroup
-                        multiple={false}
-                        value={range ? [range] : []}
-                        onValueChange={(v) => setRange((v[0] as TRange) ?? '30d')}
-                        variant="outline"
-                        size="sm"
-                    >
-                        {RANGES.map((r) => (
-                            <ToggleGroupItem key={r} value={r}>
-                                {r}
-                            </ToggleGroupItem>
-                        ))}
-                    </ToggleGroup>
-                }
+                action={<RangeGroups range={range} onRange={setRange} />}
             />
             <div className="flex flex-col gap-6 p-4 lg:p-6">
                 {linksLoading || clicksLoading ? (
