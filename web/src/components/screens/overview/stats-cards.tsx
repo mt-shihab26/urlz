@@ -18,7 +18,9 @@ export const StatsCards = ({ clicks, links }: { clicks: TClick[]; links: TLink[]
 
         const activeLinks = links.filter((l) => l.status === 'active').length;
         const uniqueVisitors = new Set(clicks.map((c) => c.ip).filter(Boolean)).size;
-        const last7 = totalSeries.slice(-7).reduce((s, d) => s + d.clicks, 0);
+
+        const activeDays = totalSeries.filter((d) => d.clicks > 0).length;
+        const avgDaily = activeDays > 0 ? Math.round(totalClicks / activeDays) : 0;
 
         return {
             stats: [
@@ -39,9 +41,9 @@ export const StatsCards = ({ clicks, links }: { clicks: TClick[]; links: TLink[]
                     sub: 'by IP',
                 },
                 {
-                    label: 'Clicks Last 7d',
-                    value: formatNumber(last7),
-                    sub: 'recent activity',
+                    label: 'Avg Daily Clicks',
+                    value: formatNumber(avgDaily),
+                    sub: 'on active days',
                 },
             ],
         };
