@@ -5,10 +5,10 @@ import { useMemo } from 'react';
 import { PctListCard } from '@/components/screens/analytics/pct-list-card';
 
 const COLORS: Record<string, string> = {
-    desktop: '#6366F1',
-    mobile: '#22C55E',
-    tablet: '#F59E0B',
-    Other: '#888888',
+    desktop: '#3B82F6',
+    mobile: '#10B981',
+    tablet: '#A855F7',
+    other: '#94A3B8',
 };
 
 export const Devices = ({ clicks }: { clicks: TClick[] }) => {
@@ -24,7 +24,7 @@ export const Devices = ({ clicks }: { clicks: TClick[] }) => {
             .map(([name, count]) => ({
                 name,
                 pct: Math.round((count / total) * 1000) / 10,
-                color: COLORS[name] ?? COLORS['Other'],
+                color: COLORS[name] ?? COLORS['other'],
             }))
             .sort((a, b) => b.pct - a.pct);
     }, [clicks]);
