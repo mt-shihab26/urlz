@@ -8,6 +8,19 @@ export type TUser = {
 
 export type TLinkStatus = 'active' | 'disabled';
 
+export type TLink = {
+    id: string;
+    user: string;
+    code: string;
+    url: string;
+    title: string;
+    created: string;
+    updated: string;
+    status: TLinkStatus;
+    expires: string;
+    clicks: TClick[];
+};
+
 export type TClick = {
     id: string;
     user: string;
@@ -27,16 +40,4 @@ export type TClick = {
     language: string;
     created: string;
     updated: string;
-};
-
-export type TLink = {
-    id: string;
-    user: string;
-    code: string;
-    url: string;
-    title: string;
-    created: string;
-    updated: string;
-    status: TLinkStatus;
-    expires: string;
 };
