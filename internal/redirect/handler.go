@@ -1,9 +1,7 @@
 package redirect
 
 import (
-	"net"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/pocketbase/pocketbase/apis"
@@ -30,16 +28,14 @@ func Handler(e *core.RequestEvent) error {
 	return e.Redirect(http.StatusFound, targetURL)
 }
 
-func realIP(r *http.Request) string {
-	if ip := r.Header.Get("X-Real-IP"); ip != "" {
-		return strings.TrimSpace(ip)
-	}
-	if fwd := r.Header.Get("X-Forwarded-For"); fwd != "" {
-		return strings.TrimSpace(strings.Split(fwd, ",")[0])
-	}
-	ip, _, err := net.SplitHostPort(r.RemoteAddr)
+func trackClick(app core.App, id, refHeader, ip, ua string) {
+	record, err := app.FindRecordById("links", id)
 	if err != nil {
-		return r.RemoteAddr
+		app.Logger().Error("trackClick: find record", "id", id, "err", err)
+		return
 	}
-	return ip
+	appendClick(app, record, refHeader, ip, ua)
+	if err := app.Save(record); err != nil {
+		app.Logger().Error("trackClick: save record", "id", id, "err", err)
+	}
 }
