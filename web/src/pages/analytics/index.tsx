@@ -1,7 +1,8 @@
+import type { TRange } from '@/lib/ranges';
 import type { TLink } from '@/types/models';
 
 import { subscribeLinks, unsubscribeLinks } from '@/collections/links';
-import { RANGES, type TRange } from '@/lib/ranges';
+import { RANGES } from '@/lib/ranges';
 import { toastError } from '@/lib/toast';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -11,7 +12,9 @@ import { AnalyticsChart } from '@/components/screens/analytics/analytics-chart';
 import { AnalyticsSkeleton } from '@/components/screens/analytics/analytics-skeleton';
 import { AnalyticsStats } from '@/components/screens/analytics/analytics-stats';
 import { ClicksByLink } from '@/components/screens/analytics/clicks-by-link';
+import { ExpiringSoon } from '@/components/screens/analytics/expiring-soon';
 import { PctListCard } from '@/components/screens/analytics/pct-list-card';
+import { TopPerforming } from '@/components/screens/analytics/top-performing';
 import { ReferrersCard } from '@/components/screens/links/show/referrers-card';
 import { TopCountriesCard } from '@/components/screens/links/show/top-countries-card';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
@@ -95,7 +98,7 @@ const Analytics = () => {
                     <>
                         <AnalyticsStats links={links} />
                         <AnalyticsChart series={totalSeries} range={range} />
-                        <ClicksByLink links={links} />
+
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                             <TopCountriesCard countries={countries} />
                             <ReferrersCard referrers={referrers} />
@@ -104,6 +107,9 @@ const Analytics = () => {
                             <PctListCard title="Browsers" data={browsersData} />
                             <PctListCard title="Operating Systems" data={osData} />
                         </div>
+                        <ExpiringSoon links={links} />
+                        <TopPerforming links={links} range={range} />
+                        <ClicksByLink links={links} />
                     </>
                 )}
             </div>
