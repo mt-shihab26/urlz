@@ -7,12 +7,24 @@ import {
     TableRow,
 } from '@/components/ui/table';
 
+import type { TClick } from '@/types/models';
+
 import { formatNumber } from '@/lib/formats';
+import { useMemo } from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import type { TLinkReferrer } from '@/types/models';
 
-export const ReferrersCard = ({ referrers }: { referrers: TLinkReferrer[] }) => {
+export const ReferrersCard = ({ clicks }: { clicks: TClick[] }) => {
+    const referrers = useMemo(() => {
+        const map = new Map<string, number>();
+        clicks.forEach(({ referrer }) => {
+            if (referrer) map.set(referrer, (map.get(referrer) ?? 0) + 1);
+        });
+        return Array.from(map.entries())
+            .map(([source, clicks]) => ({ source, clicks }))
+            .sort((a, b) => b.clicks - a.clicks);
+    }, [clicks]);
+
     return (
         <Card>
             <CardHeader>
@@ -37,11 +49,11 @@ export const ReferrersCard = ({ referrers }: { referrers: TLinkReferrer[] }) => 
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            referrers.slice(0, 6).map((referrer) => (
-                                <TableRow key={referrer.source}>
-                                    <TableCell>{referrer.source}</TableCell>
+                            referrers.slice(0, 6).map((r) => (
+                                <TableRow key={r.source}>
+                                    <TableCell>{r.source}</TableCell>
                                     <TableCell className="text-right font-mono text-sm text-muted-foreground">
-                                        {formatNumber(referrer.clicks)}
+                                        {formatNumber(r.clicks)}
                                     </TableCell>
                                 </TableRow>
                             ))

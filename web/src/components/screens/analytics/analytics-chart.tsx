@@ -2,9 +2,9 @@ import type { ChartConfig } from '@/components/ui/chart';
 import type { TRange } from '@/lib/ranges';
 import type { TLink } from '@/types/models';
 
-import { useMemo } from 'react';
-
+import { clicksToSeries } from '@/lib/clicks';
 import { formatChartDate } from '@/lib/formats';
+import { useMemo } from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
@@ -16,16 +16,8 @@ const chartConfig: ChartConfig = {
 
 export const AnalyticsChart = ({ links, range }: { links: TLink[]; range: TRange }) => {
     const sliced = useMemo(() => {
-        const byDate = new Map<string, number>();
-        links.forEach((link) =>
-            link.series.forEach(({ date, clicks }) =>
-                byDate.set(date, (byDate.get(date) ?? 0) + clicks),
-            ),
-        );
-        const total = Array.from(byDate.entries())
-            .map(([date, clicks]) => ({ date, clicks }))
-            .sort((a, b) => a.date.localeCompare(b.date));
-
+        const allClicks = links.flatMap((l) => l.clicks);
+        const total = clicksToSeries(allClicks);
         return range === '7d'
             ? total.slice(-7)
             : range === '30d'

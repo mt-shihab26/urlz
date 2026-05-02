@@ -2,9 +2,9 @@ import type { ChartConfig } from '@/components/ui/chart';
 import type { TRange } from '@/lib/ranges';
 import type { TLink } from '@/types/models';
 
-import { useMemo } from 'react';
-
+import { clicksToSeries } from '@/lib/clicks';
 import { formatChartDate, formatNumber } from '@/lib/formats';
+import { useMemo } from 'react';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
@@ -16,15 +16,8 @@ const chartConfig: ChartConfig = {
 
 export const ClickVolumeChart = ({ links, range }: { links: TLink[]; range: TRange }) => {
     const { series, curr30 } = useMemo(() => {
-        const byDate = new Map<string, number>();
-        links.forEach((link) =>
-            link.series.forEach(({ date, clicks }) =>
-                byDate.set(date, (byDate.get(date) ?? 0) + clicks),
-            ),
-        );
-        const totalSeries = Array.from(byDate.entries())
-            .map(([date, clicks]) => ({ date, clicks }))
-            .sort((a, b) => a.date.localeCompare(b.date));
+        const allClicks = links.flatMap((l) => l.clicks);
+        const totalSeries = clicksToSeries(allClicks);
 
         const sliced =
             range === '7d'

@@ -1,13 +1,29 @@
+import type { TClick } from '@/types/models';
+
+import { useMemo } from 'react';
+
 import { CountryBar } from '@/components/composite/country-bar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import type { TLinkCountry } from '@/types/models';
 
-type TopCountriesCardProps = {
-    countries: TLinkCountry[];
-};
+export const TopCountriesCard = ({ clicks }: { clicks: TClick[] }) => {
+    const countries = useMemo(() => {
+        const map = new Map<string, { country: string; code: string; count: number }>();
+        clicks.forEach(({ country_name, country_code }) => {
+            if (!country_code) return;
+            const prev = map.get(country_code);
+            map.set(country_code, {
+                country: country_name,
+                code: country_code,
+                count: (prev?.count ?? 0) + 1,
+            });
+        });
+        const total = clicks.filter((c) => c.country_code).length || 1;
+        return Array.from(map.values())
+            .sort((a, b) => b.count - a.count)
+            .map((c) => ({ ...c, pct: Math.round((c.count / total) * 100) }));
+    }, [clicks]);
 
-export const TopCountriesCard = ({ countries }: TopCountriesCardProps) => {
-    const maxCountryPct = countries[0]?.pct ?? 100;
+    const maxPct = countries[0]?.pct ?? 100;
 
     return (
         <Card>
@@ -22,13 +38,13 @@ export const TopCountriesCard = ({ countries }: TopCountriesCardProps) => {
                 ) : (
                     countries
                         .slice(0, 6)
-                        .map((country) => (
+                        .map((c) => (
                             <CountryBar
-                                key={country.code}
-                                country={country.country}
-                                code={country.code}
-                                pct={country.pct}
-                                max={maxCountryPct}
+                                key={c.code}
+                                country={c.country}
+                                code={c.code}
+                                pct={c.pct}
+                                max={maxPct}
                             />
                         ))
                 )}

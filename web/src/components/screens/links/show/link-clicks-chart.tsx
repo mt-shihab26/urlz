@@ -2,7 +2,9 @@ import type { ChartConfig } from '@/components/ui/chart';
 import type { TLink } from '@/types/models';
 import type { TLinkDetailRange } from './link-detail-header';
 
+import { clicksToSeries } from '@/lib/clicks';
 import { formatChartDate } from '@/lib/formats';
+import { useMemo } from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
@@ -12,11 +14,25 @@ const chartConfig: ChartConfig = {
     clicks: { label: 'Clicks', color: 'var(--primary)' },
 };
 
-export const LinkClicksChart = ({ range, link }: { range: TLinkDetailRange; link: TLink }) => {
-    const days =
-        range === '7d' ? 7 : range === '90d' ? 90 : range === 'All' ? link.series.length : 30;
+const cutoffDate = (days: number) => {
+    const d = new Date();
+    d.setDate(d.getDate() - days);
+    return d.toISOString().slice(0, 10);
+};
 
-    const slicedSeries = link.series.slice(-days);
+export const LinkClicksChart = ({ range, link }: { range: TLinkDetailRange; link: TLink }) => {
+    const series = useMemo(() => {
+        const cutoff =
+            range === '7d'
+                ? cutoffDate(7)
+                : range === '90d'
+                  ? cutoffDate(90)
+                  : range === '30d'
+                    ? cutoffDate(30)
+                    : null;
+        const filtered = cutoff ? link.clicks.filter((c) => c.date >= cutoff) : link.clicks;
+        return clicksToSeries(filtered);
+    }, [range, link]);
 
     return (
         <Card>
@@ -25,7 +41,7 @@ export const LinkClicksChart = ({ range, link }: { range: TLinkDetailRange; link
             </CardHeader>
             <CardContent className="px-2 pb-4">
                 <ChartContainer config={chartConfig} className="h-45 w-full">
-                    <AreaChart data={slicedSeries}>
+                    <AreaChart data={series}>
                         <defs>
                             <linearGradient id="fillClicksDt" x1="0" y1="0" x2="0" y2="1">
                                 <stop

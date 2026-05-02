@@ -58,8 +58,8 @@ const LinkDetail = () => {
                         <LinkDetailStats range={range} link={link} />
                         <LinkClicksChart range={range} link={link} />
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <TopCountriesCard countries={link.countries} />
-                            <ReferrersCard referrers={link.referrers} />
+                            <TopCountriesCard clicks={link.clicks} />
+                            <ReferrersCard clicks={link.clicks} />
                         </div>
                     </div>
                 </>

@@ -9,11 +9,10 @@ import {
 
 import type { TLink } from '@/types/models';
 
-import { useMemo } from 'react';
-import { useNavigate } from 'react-router';
-
 import { formatCode, formatNumber } from '@/lib/formats';
 import { route } from '@/routes';
+import { useMemo } from 'react';
+import { useNavigate } from 'react-router';
 
 import { LinkStatusBadge } from '@/components/composite/link-status-badge';
 import { LinkSparkline } from '@/components/screens/links/index/link-sparkline';
@@ -22,7 +21,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 export const TopLinks = ({ links }: { links: TLink[] }) => {
     const navigate = useNavigate();
     const topLinks = useMemo(
-        () => [...links].sort((a, b) => b.clicks - a.clicks).slice(0, 6),
+        () => [...links].sort((a, b) => b.clicks.length - a.clicks.length).slice(0, 6),
         [links],
     );
 
@@ -74,10 +73,10 @@ export const TopLinks = ({ links }: { links: TLink[] }) => {
                                         </div>
                                     </TableCell>
                                     <TableCell className="text-right font-mono font-bold">
-                                        {formatNumber(link.clicks)}
+                                        {formatNumber(link.clicks.length)}
                                     </TableCell>
                                     <TableCell className="text-right flex justify-end">
-                                        <LinkSparkline series={link.series} />
+                                        <LinkSparkline clicks={link.clicks} />
                                     </TableCell>
                                     <TableCell className="text-right">
                                         <LinkStatusBadge link={link} />

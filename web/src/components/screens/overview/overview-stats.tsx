@@ -1,32 +1,24 @@
 import type { TLink } from '@/types/models';
 
-import { useMemo } from 'react';
-
+import { clicksToSeries } from '@/lib/clicks';
 import { formatNumber } from '@/lib/formats';
+import { useMemo } from 'react';
 
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { TrendingDownIcon, TrendingUpIcon } from 'lucide-react';
 
 export const StatsCards = ({ links }: { links: TLink[] }) => {
     const { stats } = useMemo(() => {
-        const totalSeries = (() => {
-            const byDate = new Map<string, number>();
-            links.forEach((link) =>
-                link.series.forEach(({ date, clicks }) =>
-                    byDate.set(date, (byDate.get(date) ?? 0) + clicks),
-                ),
-            );
-            return Array.from(byDate.entries())
-                .map(([date, clicks]) => ({ date, clicks }))
-                .sort((a, b) => a.date.localeCompare(b.date));
-        })();
+        const allClicks = links.flatMap((l) => l.clicks);
+        const totalClicks = allClicks.length;
+        const totalSeries = clicksToSeries(allClicks);
 
-        const totalClicks = links.reduce((s, l) => s + l.clicks, 0);
         const prev30 = totalSeries.slice(-60, -30).reduce((s, d) => s + d.clicks, 0);
         const curr30 = totalSeries.slice(-30).reduce((s, d) => s + d.clicks, 0);
         const delta = prev30 > 0 ? Math.round(((curr30 - prev30) / prev30) * 100) : 0;
+
         const activeLinks = links.filter((l) => l.status === 'active').length;
-        const uniqueCountries = new Set(links.flatMap((l) => l.countries.map((c) => c.code))).size;
+        const uniqueCountries = new Set(allClicks.map((c) => c.country_code).filter(Boolean)).size;
 
         return {
             stats: [

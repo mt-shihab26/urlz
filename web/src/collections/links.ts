@@ -17,10 +17,6 @@ const getLinks = async (): Promise<TLink[]> => {
     }
 };
 
-const getLinkById = async (id: string): Promise<TLink> => {
-    return pb.collection(LINKS).getOne<TLink>(id);
-};
-
 /**
  * Subscribes to real-time updates from the `links` collection.
  */
@@ -66,6 +62,10 @@ export const unsubscribeLinks = ({ onError }: { onError?: (error: string) => voi
     } catch (e) {
         onError?.(e instanceof Error ? e.message : 'Failed to unsubscribe from links');
     }
+};
+
+const getLinkById = async (id: string): Promise<TLink> => {
+    return pb.collection(LINKS).getOne<TLink>(id);
 };
 
 /**
@@ -130,11 +130,8 @@ export const createLink = async (data: {
     return pb.collection(LINKS).create<TLink>({
         ...data,
         user: pb.authStore.record!.id,
-        clicks: 0,
+        clicks: [],
         status: 'active',
-        series: [],
-        countries: [],
-        referrers: [],
     });
 };
 

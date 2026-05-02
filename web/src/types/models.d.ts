@@ -13,6 +13,7 @@ export type TClick = {
     country_name: string;
     country_code: string;
     referrer: string;
+    browser: string;
     os: string;
 };
 

@@ -18,16 +18,16 @@ export const AnalyticsOses = ({ links }: { links: TLink[]; range: TRange }) => {
     const data = useMemo(() => {
         const totals = new Map<string, number>();
         links.forEach((link) =>
-            link.oses?.forEach(({ name, clicks }) =>
-                totals.set(name, (totals.get(name) ?? 0) + clicks),
+            link.clicks.forEach(({ os }) =>
+                totals.set(os, (totals.get(os) ?? 0) + 1),
             ),
         );
         const total = Array.from(totals.values()).reduce((a, b) => a + b, 0);
         if (total === 0) return [];
         return Array.from(totals.entries())
-            .map(([name, clicks]) => ({
+            .map(([name, count]) => ({
                 name,
-                pct: Math.round((clicks / total) * 1000) / 10,
+                pct: Math.round((count / total) * 1000) / 10,
                 color: COLORS[name] ?? COLORS['Other'],
             }))
             .sort((a, b) => b.pct - a.pct);

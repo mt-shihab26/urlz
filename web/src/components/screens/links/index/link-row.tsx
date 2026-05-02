@@ -4,13 +4,12 @@ import { formatCode, formatDate, formatNumber } from '@/lib/formats';
 import { route } from '@/routes';
 import { useNavigate } from 'react-router';
 
+import { CopyButton } from '@/components/composite/copy-button';
+import { LinkStatusBadge } from '@/components/composite/link-status-badge';
 import { LinkDeleteButton } from '@/components/screens/links/link-delete-button';
 import { LinkEditButton } from '@/components/screens/links/link-edit-button';
 import { LinkOpenButton } from '@/components/screens/links/link-open-button';
 import { LinkToggleButton } from '@/components/screens/links/link-toggle-button';
-
-import { CopyButton } from '@/components/composite/copy-button';
-import { LinkStatusBadge } from '@/components/composite/link-status-badge';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { LinkSparkline } from './link-sparkline';
 
@@ -37,10 +36,10 @@ export const LinkRow = ({ link, index }: { link: TLink; index: number }) => {
                 </div>
             </TableCell>
             <TableCell className="text-right font-mono font-bold">
-                {formatNumber(link.clicks)}
+                {formatNumber(link.clicks.length)}
             </TableCell>
             <TableCell className="text-right">
-                <LinkSparkline series={link.series} />
+                <LinkSparkline clicks={link.clicks} />
             </TableCell>
             <TableCell className="text-right font-mono text-xs text-muted-foreground">
                 {formatDate(link.created)}

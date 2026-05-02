@@ -1,12 +1,3 @@
-import type { TLink } from '@/types/models';
-
-import { useMemo } from 'react';
-import { useNavigate } from 'react-router';
-
-import { formatDate } from '@/lib/formats';
-import { route } from '@/routes';
-
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Table,
     TableBody,
@@ -15,6 +6,15 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+
+import type { TLink } from '@/types/models';
+
+import { formatDate } from '@/lib/formats';
+import { route } from '@/routes';
+import { useMemo } from 'react';
+import { useNavigate } from 'react-router';
+
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export const ExpiringSoon = ({ links }: { links: TLink[] }) => {
     const navigate = useNavigate();

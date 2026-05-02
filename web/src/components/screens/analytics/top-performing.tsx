@@ -1,14 +1,3 @@
-import type { TRange } from '@/lib/ranges';
-import type { TLink } from '@/types/models';
-
-import { useMemo } from 'react';
-import { useNavigate } from 'react-router';
-
-import { formatNumber } from '@/lib/formats';
-import { route } from '@/routes';
-
-import { LinkSparkline } from '@/components/screens/links/index/link-sparkline';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Table,
     TableBody,
@@ -18,6 +7,17 @@ import {
     TableRow,
 } from '@/components/ui/table';
 
+import type { TRange } from '@/lib/ranges';
+import type { TLink } from '@/types/models';
+
+import { formatNumber } from '@/lib/formats';
+import { route } from '@/routes';
+import { useMemo } from 'react';
+import { useNavigate } from 'react-router';
+
+import { LinkSparkline } from '@/components/screens/links/index/link-sparkline';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
 const rangeDays: Record<TRange, number | null> = {
     '7d': 7,
     '30d': 30,
@@ -25,15 +25,23 @@ const rangeDays: Record<TRange, number | null> = {
     All: null,
 };
 
+const cutoffDate = (days: number) => {
+    const d = new Date();
+    d.setDate(d.getDate() - days);
+    return d.toISOString().slice(0, 10);
+};
+
 export const TopPerforming = ({ links, range }: { links: TLink[]; range: TRange }) => {
     const navigate = useNavigate();
 
     const ranked = useMemo(() => {
         const days = rangeDays[range];
+        const cutoff = days ? cutoffDate(days) : null;
         return [...links]
             .map((link) => {
-                const sliced = days ? link.series.slice(-days) : link.series;
-                const periodClicks = sliced.reduce((s, d) => s + d.clicks, 0);
+                const periodClicks = cutoff
+                    ? link.clicks.filter((c) => c.date >= cutoff).length
+                    : link.clicks.length;
                 return { link, periodClicks };
             })
             .sort((a, b) => b.periodClicks - a.periodClicks)
@@ -85,7 +93,7 @@ export const TopPerforming = ({ links, range }: { links: TLink[]; range: TRange 
                                         {formatNumber(periodClicks)}
                                     </TableCell>
                                     <TableCell className="text-right">
-                                        <LinkSparkline series={link.series} />
+                                        <LinkSparkline clicks={link.clicks} />
                                     </TableCell>
                                 </TableRow>
                             ))

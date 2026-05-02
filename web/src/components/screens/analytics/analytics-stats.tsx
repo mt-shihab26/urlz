@@ -1,35 +1,52 @@
 import type { TLink } from '@/types/models';
 
-import { useMemo } from 'react';
-
 import { formatNumber } from '@/lib/formats';
+import { useMemo } from 'react';
 
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export const AnalyticsStats = ({ links }: { links: TLink[] }) => {
     const stats = useMemo(() => {
-        const totalClicks = links.reduce((s, l) => s + l.clicks, 0);
+        const allClicks = links.flatMap((l) => l.clicks);
+        const totalClicks = allClicks.length;
         const activeLinks = links.filter((l) => l.status === 'active').length;
-        const uniqueCountries = new Set(links.flatMap((l) => l.countries.map((c) => c.code))).size;
-        const allReferrers = links.flatMap((l) => l.referrers);
+        const uniqueCountries = new Set(allClicks.map((c) => c.country_code).filter(Boolean)).size;
+
+        const referrerCounts = new Map<string, number>();
+        allClicks.forEach(({ referrer }) => {
+            if (referrer) referrerCounts.set(referrer, (referrerCounts.get(referrer) ?? 0) + 1);
+        });
         const topReferrer =
-            allReferrers.length > 0
-                ? allReferrers.reduce((a, b) => (a.clicks > b.clicks ? a : b)).source
+            referrerCounts.size > 0
+                ? [...referrerCounts.entries()].reduce((a, b) => (a[1] > b[1] ? a : b))[0]
                 : '—';
+
+        const countryCounts = new Map<string, { name: string; count: number }>();
+        allClicks.forEach(({ country_code, country_name }) => {
+            if (country_code) {
+                const prev = countryCounts.get(country_code);
+                countryCounts.set(country_code, {
+                    name: country_name,
+                    count: (prev?.count ?? 0) + 1,
+                });
+            }
+        });
+        const topCountry =
+            countryCounts.size > 0
+                ? [...countryCounts.values()].reduce((a, b) => (a.count > b.count ? a : b)).name
+                : '—';
+
         const avgClicks =
             links.length > 0 ? formatNumber(Math.round(totalClicks / links.length)) : '0';
+
         const expiringSoon = links.filter((l) => {
             if (!l.expires) return false;
             const t = new Date(l.expires).getTime();
             const now = Date.now();
             return t > now && t <= now + 30 * 24 * 60 * 60 * 1000;
         }).length;
-        const allCountries = links.flatMap((l) => l.countries);
-        const topCountry =
-            allCountries.length > 0
-                ? allCountries.reduce((a, b) => (a.clicks > b.clicks ? a : b)).country
-                : '—';
-        const noClicks = links.filter((l) => l.clicks === 0).length;
+
+        const noClicks = links.filter((l) => l.clicks.length === 0).length;
 
         return [
             { label: 'Total Clicks', value: formatNumber(totalClicks) },

@@ -19,16 +19,16 @@ export const AnalyticsBrowsers = ({ links }: { links: TLink[]; range: TRange }) 
     const data = useMemo(() => {
         const totals = new Map<string, number>();
         links.forEach((link) =>
-            link.browsers?.forEach(({ name, clicks }) =>
-                totals.set(name, (totals.get(name) ?? 0) + clicks),
+            link.clicks.forEach(({ browser }) =>
+                totals.set(browser, (totals.get(browser) ?? 0) + 1),
             ),
         );
         const total = Array.from(totals.values()).reduce((a, b) => a + b, 0);
         if (total === 0) return [];
         return Array.from(totals.entries())
-            .map(([name, clicks]) => ({
+            .map(([name, count]) => ({
                 name,
-                pct: Math.round((clicks / total) * 1000) / 10,
+                pct: Math.round((count / total) * 1000) / 10,
                 color: COLORS[name] ?? COLORS['Other'],
             }))
             .sort((a, b) => b.pct - a.pct);
