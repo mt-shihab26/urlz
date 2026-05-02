@@ -1,8 +1,8 @@
-import type { TRange } from '@/lib/overview';
+import type { TRange } from '@/lib/ranges';
 import type { TLink } from '@/types/models';
 
 import { subscribeLinks, unsubscribeLinks } from '@/collections/links';
-import { RANGES } from '@/lib/overview';
+import { RANGES } from '@/lib/ranges';
 import { toastError } from '@/lib/toast';
 import { useEffect, useState } from 'react';
 

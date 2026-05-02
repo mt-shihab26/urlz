@@ -1,18 +1,3 @@
-import * as React from 'react';
-import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
-
-import type { TLinkCountry, TLinkReferrer, TSerie } from '@/types/models';
-
-import { CountryBar } from '@/components/composite/country-bar';
-import { Header } from '@/components/composite/site-header';
-import { DashboardLayout } from '@/components/layouts/dashboard-layout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-    ChartContainer,
-    ChartTooltip,
-    ChartTooltipContent,
-    type ChartConfig,
-} from '@/components/ui/chart';
 import {
     Table,
     TableBody,
@@ -21,14 +6,24 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+
+import type { ChartConfig } from '@/components/ui/chart';
+import { RANGES, type TRange } from '@/lib/ranges';
+import type { TLinkCountry, TLinkReferrer, TSerie } from '@/types/models';
+
+import { useState } from 'react';
+
+import { CountryBar } from '@/components/composite/country-bar';
+import { Header } from '@/components/composite/site-header';
+import { DashboardLayout } from '@/components/layouts/dashboard-layout';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 
-const chartConfig = {
+const chartConfig: ChartConfig = {
     clicks: { label: 'Clicks', color: 'var(--primary)' },
-} satisfies ChartConfig;
-
-const RANGES = ['7d', '30d', '90d', 'All'] as const;
-type Range = (typeof RANGES)[number];
+};
 
 const totalSeries: TSerie[] = [];
 const countries: TLinkCountry[] = [];
@@ -37,7 +32,7 @@ const browsersData: { name: string; pct: number; color: string }[] = [];
 const osData: { name: string; pct: number; color: string }[] = [];
 
 function Analytics() {
-    const [range, setRange] = React.useState<Range>('30d');
+    const [range, setRange] = useState<TRange>('30d');
 
     const slicedSeries =
         range === '7d'
@@ -59,7 +54,7 @@ function Analytics() {
                     <ToggleGroup
                         multiple={false}
                         value={range ? [range] : []}
-                        onValueChange={(v) => setRange((v[0] as Range) ?? '30d')}
+                        onValueChange={(v) => setRange((v[0] as TRange) ?? '30d')}
                         variant="outline"
                         size="sm"
                     >
@@ -78,7 +73,7 @@ function Analytics() {
                         <CardTitle>Click Volume</CardTitle>
                     </CardHeader>
                     <CardContent className="px-2 pb-4">
-                        <ChartContainer config={chartConfig} className="h-[200px] w-full">
+                        <ChartContainer config={chartConfig} className="h-50 w-full">
                             <AreaChart data={slicedSeries}>
                                 <defs>
                                     <linearGradient id="fillClicksAn" x1="0" y1="0" x2="0" y2="1">

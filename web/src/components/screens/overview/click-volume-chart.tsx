@@ -1,5 +1,5 @@
 import type { ChartConfig } from '@/components/ui/chart';
-import type { TRange } from '@/lib/overview';
+import type { TRange } from '@/lib/ranges';
 import type { TLink } from '@/types/models';
 
 import { useMemo } from 'react';

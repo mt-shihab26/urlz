@@ -27,7 +27,7 @@ export const routes: TRoute[] = [
     },
     {
         path: '/analytics',
-        component: lazy(() => import('@/pages/analytics')),
+        component: lazy(() => import('@/pages/analytics/index')),
         guard: 'auth',
     },
     {
