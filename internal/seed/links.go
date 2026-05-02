@@ -29,11 +29,9 @@ func seedLinks(app core.App, userID string, count int) error {
 	if err != nil {
 		return fmt.Errorf("find links collection: %w", err)
 	}
-
 	for i := range count {
 		link := core.NewRecord(collection)
 		totalClicks := rand.Intn(5000)
-
 		link.Set("user", userID)
 		link.Set("code", gofakeit.LetterN(5))
 		link.Set("url", gofakeit.URL())
@@ -44,13 +42,11 @@ func seedLinks(app core.App, userID string, count int) error {
 		link.Set("series", fakeSeries(totalClicks))
 		link.Set("referrers", fakeReferrers(totalClicks))
 		link.Set("countries", fakeCountries(totalClicks))
-
 		if err := app.Save(link); err != nil {
 			return fmt.Errorf("save link %d: %w", i+1, err)
 		}
 		fmt.Printf("  link %d: %s → %s\n", i+1, link.GetString("code"), link.GetString("title"))
 	}
-
 	fmt.Printf("seeded %d links\n", count)
 	return nil
 }
@@ -80,10 +76,7 @@ func fakeSeries(total int) []map[string]any {
 		day := time.Now().UTC().AddDate(0, 0, -(seriesDays - 1 - i))
 		clicks := 0
 		if remaining > 0 {
-			clicks = rand.Intn(remaining/seriesDays*3 + 1)
-			if clicks > remaining {
-				clicks = remaining
-			}
+			clicks = min(rand.Intn(remaining/seriesDays*3+1), remaining)
 			remaining -= clicks
 		}
 		series[i] = map[string]any{
@@ -116,10 +109,7 @@ func fakeCountries(total int) []map[string]any {
 	if total == 0 {
 		return nil
 	}
-	count := rand.Intn(6) + 2
-	if count > len(sampleCountries) {
-		count = len(sampleCountries)
-	}
+	count := min(rand.Intn(6)+2, len(sampleCountries))
 	perm := rand.Perm(len(sampleCountries))[:count]
 	weights := randomWeights(count)
 	countries := make([]map[string]any, count)
