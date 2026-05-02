@@ -1,7 +1,7 @@
 import type { TRange } from '@/lib/ranges';
 import type { TClick, TLink } from '@/types/models';
 
-import { getClicksPage, type TClicksPage } from '@/collections/clicks';
+import { subscribeClicksPage, unsubscribeClicksPage, type TClicksPage } from '@/collections/clicks';
 import { subscribeLinks, unsubscribeLinks } from '@/collections/links';
 import { toastError } from '@/lib/toast';
 import { useEffect, useState } from 'react';
@@ -35,11 +35,14 @@ const Clicks = () => {
     }, [range]);
 
     useEffect(() => {
-        setLoading(true);
-        getClicksPage(page, PER_PAGE, range)
-            .then(setResult)
-            .catch((e) => toastError(e.message))
-            .finally(() => setLoading(false));
+        subscribeClicksPage(page, PER_PAGE, range, {
+            onData: setResult,
+            onError: toastError,
+            onLoading: setLoading,
+        });
+        return () => {
+            unsubscribeClicksPage({ onError: toastError });
+        };
     }, [page, range]);
 
     const handlePage = (p: number) => {

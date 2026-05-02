@@ -149,6 +149,45 @@ export const unsubscribeClicksByLink = ({ onError }: { onError?: (error: string)
 
 export type TClicksPage = { items: TClick[]; totalItems: number; totalPages: number };
 
+export const subscribeClicksPage = (
+    page: number,
+    perPage: number,
+    range: TRange,
+    {
+        onData,
+        onError,
+        onLoading,
+    }: {
+        onData: (result: TClicksPage) => void;
+        onError?: (error: string) => void;
+        onLoading?: (loading: boolean) => void;
+    },
+) => {
+    const fetch = async () => {
+        try {
+            onData(await getClicksPage(page, perPage, range));
+        } catch (e: any) {
+            onError?.(e.message);
+        }
+    };
+
+    (async () => {
+        onLoading?.(true);
+        await fetch();
+        onLoading?.(false);
+    })();
+
+    pb.collection(CLICKS).subscribe('*', fetch);
+};
+
+export const unsubscribeClicksPage = ({ onError }: { onError?: (error: string) => void }) => {
+    try {
+        pb.collection(CLICKS).unsubscribe('*');
+    } catch (e) {
+        onError?.(e instanceof Error ? e.message : 'Failed to unsubscribe from clicks');
+    }
+};
+
 export const getClicksPage = async (
     page: number,
     perPage = 20,
