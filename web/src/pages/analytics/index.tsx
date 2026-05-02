@@ -11,8 +11,11 @@ import { Header } from '@/components/composite/site-header';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
 import { Browsers } from '@/components/screens/analytics/browsers';
 import { ClickVolumeChart } from '@/components/screens/analytics/click-volume-chart';
+import { Devices } from '@/components/screens/analytics/devices';
 import { ExpiringSoon } from '@/components/screens/analytics/expiring-soon';
+import { Languages } from '@/components/screens/analytics/languages';
 import { Loading } from '@/components/screens/analytics/loading';
+import { NoClicks } from '@/components/screens/analytics/no-clicks';
 import { OperatingSystems } from '@/components/screens/analytics/operating-systems';
 import { Referrers } from '@/components/screens/analytics/referrers';
 import { StatsCards } from '@/components/screens/analytics/stats-cards';
@@ -61,15 +64,18 @@ const Analytics = () => {
                     <>
                         <StatsCards links={links} clicks={clicks} />
                         <ClickVolumeChart clicks={clicks} />
-                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
                             <TopCountries clicks={clicks} />
+                            <Devices clicks={clicks} />
                             <Referrers clicks={clicks} />
-                        </div>
-                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                             <Browsers clicks={clicks} />
                             <OperatingSystems clicks={clicks} />
+                            <Languages clicks={clicks} />
                         </div>
-                        <ExpiringSoon links={links} />
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                            <ExpiringSoon links={links} />
+                            <NoClicks links={links} clicks={clicks} />
+                        </div>
                         <TopPerforming links={links} clicks={clicks} />
                     </>
                 )}
