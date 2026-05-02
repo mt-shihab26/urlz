@@ -12,7 +12,7 @@ export const routes: TRoute[] = [
     // App (auth protected)
     {
         path: '/overview',
-        component: lazy(() => import('@/pages/overview')),
+        component: lazy(() => import('@/pages/overview/index')),
         guard: 'auth',
     },
     {
