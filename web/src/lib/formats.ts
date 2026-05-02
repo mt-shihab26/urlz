@@ -1,5 +1,7 @@
+import { codePrefix } from './utils';
+
 export const formatCode = (code: string) => {
-    return `http://localhost:8090/${code}`;
+    return `${codePrefix()}/${code}`;
 };
 
 export const formatNumber = (valueNumber: number) => {

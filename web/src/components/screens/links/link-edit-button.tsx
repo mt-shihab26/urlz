@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { PencilIcon } from 'lucide-react';
-import { EditLinkDialog } from './index/edit-link-dialog';
+import { EditLinkDialog } from './edit-link-dialog';
 
 export const LinkEditButton = ({ link }: { link: TLink }) => {
     const [open, setOpen] = useState(false);

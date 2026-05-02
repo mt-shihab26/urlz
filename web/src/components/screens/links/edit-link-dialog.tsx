@@ -11,6 +11,7 @@ import { TextField } from '@/components/composite/text-field';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
+import { codePrefix } from '@/lib/utils';
 
 export const EditLinkDialog = ({
     link,
@@ -23,7 +24,7 @@ export const EditLinkDialog = ({
 }) => {
     const { data, setData, loading, setLoading, errors, setErrors } = useForm({
         url: link.url,
-        slug: link.code,
+        code: link.code,
         title: link.title,
         expiry: link.expires ?? '',
     });
@@ -35,7 +36,7 @@ export const EditLinkDialog = ({
             await updateLink(link.id, {
                 url: data.url,
                 title: data.title || data.url,
-                code: data.slug,
+                code: data.code,
                 expires: data.expiry || undefined,
             });
             onOpenChange(false);
@@ -44,7 +45,7 @@ export const EditLinkDialog = ({
             if (res?.url?.message) {
                 setErrors('url', res.url.message);
             } else if (res?.code?.message) {
-                setErrors('slug', res.code.message);
+                setErrors('code', res.code.message);
             } else if (res?.title?.message) {
                 setErrors('title', res.title.message);
             } else if (res?.expires?.message) {
@@ -77,20 +78,20 @@ export const EditLinkDialog = ({
                         <Label>Custom Slug</Label>
                         <div className="flex overflow-hidden rounded-md border">
                             <span className="flex items-center border-r bg-muted px-3 text-sm text-muted-foreground font-mono">
-                                urlz.io/
+                                {codePrefix()}/
                             </span>
                             <TextField
                                 id="slug"
-                                value={data.slug}
+                                value={data.code}
                                 onChange={(e) =>
                                     setData(
-                                        'slug',
+                                        'code',
                                         e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''),
                                     )
                                 }
                                 placeholder="my-link"
                                 className="rounded-none border-0 shadow-none focus-visible:ring-0"
-                                error={errors.slug}
+                                error={errors.code}
                             />
                         </div>
                     </div>
