@@ -83,7 +83,7 @@ export const TopPerforming = ({
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            ranked.map(({ link, periodClicks }, i) => (
+                            ranked.map(({ link, periodClicks, linkClicks }, i) => (
                                 <TableRow
                                     key={link.id}
                                     className="cursor-pointer"
