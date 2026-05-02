@@ -25,6 +25,18 @@ export type TLinkReferrer = {
     clicks: number;
 };
 
+export type TLinkBrowser = {
+    name: string;
+    clicks: number;
+    pct: number;
+};
+
+export type TLinkOS = {
+    name: string;
+    clicks: number;
+    pct: number;
+};
+
 export type TLink = {
     id: string;
     user: string;
@@ -39,4 +51,6 @@ export type TLink = {
     series: TSerie[];
     countries: TLinkCountry[];
     referrers: TLinkReferrer[];
+    browsers: TLinkBrowser[];
+    oses: TLinkOS[];
 };

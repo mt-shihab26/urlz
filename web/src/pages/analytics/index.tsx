@@ -7,20 +7,18 @@ import { useEffect, useState } from 'react';
 
 import { Header } from '@/components/composite/site-header';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
+import { AnalyticsBrowsers } from '@/components/screens/analytics/analytics-browsers';
 import { AnalyticsChart } from '@/components/screens/analytics/analytics-chart';
 import { AnalyticsCountries } from '@/components/screens/analytics/analytics-countries';
+import { AnalyticsOses } from '@/components/screens/analytics/analytics-oses';
 import { AnalyticsReferrers } from '@/components/screens/analytics/analytics-referrers';
 import { AnalyticsSkeleton } from '@/components/screens/analytics/analytics-skeleton';
 import { AnalyticsStats } from '@/components/screens/analytics/analytics-stats';
 import { ExpiringSoon } from '@/components/screens/analytics/expiring-soon';
-import { PctListCard } from '@/components/screens/analytics/pct-list-card';
 import { TopPerforming } from '@/components/screens/analytics/top-performing';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
 import { RANGES } from '@/lib/ranges';
-
-const browsersData: { name: string; pct: number; color: string }[] = [];
-const osData: { name: string; pct: number; color: string }[] = [];
 
 const Analytics = () => {
     const [links, setLinks] = useState<TLink[]>([]);
@@ -65,8 +63,8 @@ const Analytics = () => {
                             <AnalyticsReferrers links={links} />
                         </div>
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <PctListCard title="Browsers" data={browsersData} />
-                            <PctListCard title="Operating Systems" data={osData} />
+                            <AnalyticsBrowsers links={links} range={range} />
+                            <AnalyticsOses links={links} range={range} />
                         </div>
                         <ExpiringSoon links={links} />
                         <TopPerforming links={links} range={range} />
