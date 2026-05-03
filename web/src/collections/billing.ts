@@ -2,6 +2,35 @@ import type { TPlan } from '@/types/models';
 
 import { pb } from '@/lib/pb';
 
+export type TInvoice = {
+    id: string;
+    number: string;
+    amount_paid: number;
+    currency: string;
+    status: string;
+    created: number;
+    period_start: number;
+    period_end: number;
+    hosted_invoice_url: string;
+    invoice_pdf: string;
+};
+
+export type TSubscriptionInfo = {
+    id: string;
+    status: string;
+    start_date: number;
+    current_period_start: number;
+    current_period_end: number;
+    cancel_at_period_end: boolean;
+    cancel_at?: number;
+    trial_end?: number;
+};
+
+export type TBillingInfo = {
+    subscription: TSubscriptionInfo | null;
+    invoices: TInvoice[];
+};
+
 export const createCheckoutSession = async (plan: TPlan, coupon?: string): Promise<string> => {
     const data = await pb.send<{ url: string }>('/api/billing/checkout', {
         method: 'POST',
@@ -33,4 +62,8 @@ export const createPortalSession = async (): Promise<string> => {
         method: 'POST',
     });
     return data.url;
+};
+
+export const getBillingInfo = async (): Promise<TBillingInfo> => {
+    return pb.send<TBillingInfo>('/api/billing/info', { method: 'GET' });
 };

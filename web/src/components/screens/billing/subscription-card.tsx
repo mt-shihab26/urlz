@@ -1,3 +1,4 @@
+import type { TSubscriptionInfo } from '@/collections/billing';
 import type { TSubscriptionStatus, TUser } from '@/types/models';
 
 import { createCancelFlowSession, createPortalSession } from '@/collections/billing';
@@ -41,13 +42,19 @@ const PLAN_LABEL: Record<string, string> = {
 
 type LoadingAction = 'manage' | 'cancel' | null;
 
-export const SubscriptionCard = ({ user }: { user: TUser }) => {
+export const SubscriptionCard = ({
+    user,
+    sub,
+}: {
+    user: TUser;
+    sub?: TSubscriptionInfo | null;
+}) => {
     const [loading, setLoading] = useState<LoadingAction>(null);
 
     const plan = user.plan || 'free';
     const status = user.subscription_status;
     const isActive =
-        plan !== 'free' && (status === 'active' || status === 'trialing');
+        plan !== 'free' && (status === 'active' || status === 'trialing') && !sub?.cancel_at_period_end;
 
     const handleManage = async () => {
         setLoading('manage');
@@ -82,6 +89,16 @@ export const SubscriptionCard = ({ user }: { user: TUser }) => {
                     {status && (
                         <Badge variant={STATUS_VARIANT[status] ?? 'outline'}>
                             {STATUS_LABEL[status] ?? status}
+                        </Badge>
+                    )}
+                    {sub?.cancel_at_period_end && (
+                        <Badge variant="outline">
+                            Cancels{' '}
+                            {sub.cancel_at
+                                ? new Date(sub.cancel_at * 1000).toLocaleDateString(undefined, { dateStyle: 'medium' })
+                                : sub.current_period_end
+                                  ? new Date(sub.current_period_end * 1000).toLocaleDateString(undefined, { dateStyle: 'medium' })
+                                  : 'at period end'}
                         </Badge>
                     )}
                 </div>
