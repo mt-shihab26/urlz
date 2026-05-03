@@ -29,12 +29,11 @@ const Billing = () => {
     const [billingInfo, setBillingInfo] = useState<TBillingInfo | null>(null);
 
     const fetchBillingInfo = async (autoSync = false) => {
-        if (!user.plan || user.plan === 'free') return;
         try {
             const info = await getBillingInfo();
             setBillingInfo(info);
-            // Stripe says canceled/gone but PB still shows paid plan — sync
-            if (autoSync && (!info.subscription || info.subscription.status === 'canceled')) {
+            // Stripe says canceled but PB still shows paid plan — auto sync
+            if (autoSync && user.plan !== 'free' && (!info.subscription || info.subscription.status === 'canceled')) {
                 await syncPortalReturn().catch(() => {});
                 await pb.collection('users').authRefresh().catch(() => {});
             }

@@ -68,16 +68,17 @@ func SyncPortalHandler(e *core.RequestEvent) error {
 		return e.JSON(200, map[string]any{"ok": true})
 	}
 
+	// List all statuses so we can see canceled subs too
 	params := &stripe.SubscriptionListParams{
 		Customer: stripe.String(customerID),
+		Status:   stripe.String("all"),
 	}
 	params.Limit = stripe.Int64(1)
-	params.AddExpand("data.plan.product")
 
 	iter := stripesubscription.List(params)
 
 	plan := "free"
-	subID := ""
+	subID := user.GetString("subscription_id") // preserve existing if none found
 	subStatus := "canceled"
 
 	if iter.Next() {

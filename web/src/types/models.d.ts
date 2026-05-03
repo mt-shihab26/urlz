@@ -18,6 +18,7 @@ export type TUser = {
     deleted?: string;
     plan?: TPlan;
     subscription_status?: TSubscriptionStatus;
+    subscription_id?: string;
 };
 
 export type TLinkStatus = 'active' | 'disabled';
