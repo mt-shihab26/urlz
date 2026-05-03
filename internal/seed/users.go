@@ -21,6 +21,7 @@ func seedUsers(app core.App, email, password string) (*core.Record, error) {
 	user.Set("name", gofakeit.Name())
 	user.SetPassword(password)
 	user.Set("emailVisibility", true)
+	user.Set("plan", "free")
 	if err := app.Save(user); err != nil {
 		return nil, err
 	}

@@ -19,6 +19,7 @@ func main() {
 
 	billing.Init()
 	hooks.RegisterLinkHooks(a)
+	hooks.RegisterUserHooks(a)
 
 	a.OnServe().BindFunc(func(se *core.ServeEvent) error {
 		se.Router.POST("/api/billing/checkout", billing.CheckoutHandler)

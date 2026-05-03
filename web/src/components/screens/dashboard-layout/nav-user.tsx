@@ -11,12 +11,20 @@ import {
 import type { TUser } from '@/types/models';
 
 import { getAvatarUrl, signOut } from '@/collections/users';
-import { useSidebar } from '@/components/ui/sidebar';
+import { cn } from '@/lib/utils';
 import { getInitial } from '@/lib/utils';
+import { useSidebar } from '@/components/ui/sidebar';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { EllipsisVerticalIcon, LogOutIcon } from 'lucide-react';
+
+const PLAN_LABEL: Record<string, string> = { free: 'Free', pro: 'Pro', business: 'Business' };
+const PLAN_CLASS: Record<string, string> = {
+    free: 'text-foreground/50',
+    pro: 'text-violet-500',
+    business: 'text-amber-500',
+};
 
 export const NavUser = ({ user }: { user: TUser }) => {
     const { isMobile } = useSidebar();
@@ -38,6 +46,14 @@ export const NavUser = ({ user }: { user: TUser }) => {
                             <span className="truncate font-medium">{user.name}</span>
                             <span className="truncate text-xs text-foreground/70">
                                 {user.email}
+                            </span>
+                            <span
+                                className={cn(
+                                    'truncate text-xs font-medium',
+                                    PLAN_CLASS[user.plan ?? 'free'],
+                                )}
+                            >
+                                {PLAN_LABEL[user.plan ?? 'free']}
                             </span>
                         </div>
                         <EllipsisVerticalIcon className="ml-auto size-4" />

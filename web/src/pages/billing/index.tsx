@@ -2,6 +2,7 @@ import type { TPlan } from '@/types/models';
 
 import { createCheckoutSession } from '@/collections/billing';
 import { useUser } from '@/components/providers/auth-provider';
+import { pb } from '@/lib/pb';
 import { toastError } from '@/lib/toast';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
@@ -19,8 +20,15 @@ const Billing = () => {
 
     useEffect(() => {
         if (searchParams.get('success') === '1') {
-            toast.success('Subscription activated! It may take a moment to reflect.');
             setSearchParams({}, { replace: true });
+            pb.collection('users')
+                .authRefresh()
+                .then(() => {
+                    toast.success('Subscription activated!');
+                })
+                .catch(() => {
+                    toast.success('Subscription activated! Refresh if plan does not update.');
+                });
         }
     }, []);
 
@@ -41,7 +49,7 @@ const Billing = () => {
             <div className="flex flex-col gap-6 p-4 lg:p-6 max-w-4xl">
                 <SubscriptionCard user={user} />
                 <PlanCards
-                    currentPlan={user.plan ?? 'free'}
+                    currentPlan={user.plan || 'free'}
                     onUpgrade={handleUpgrade}
                     loading={loading}
                 />
