@@ -1,11 +1,3 @@
-import { formatChartDate } from '@/lib/formats';
-import type { TRange } from '@/lib/ranges';
-import { getRangeStartDate } from '@/lib/ranges';
-import type { TClick } from '@/types/models';
-import { useEffect, useMemo, useState } from 'react';
-
-import { Paginator } from '@/components/composite/paginator';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Table,
     TableBody,
@@ -14,6 +6,16 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+
+import type { TRange } from '@/lib/ranges';
+import type { TClick } from '@/types/models';
+
+import { formatChartDate } from '@/lib/formats';
+import { getRangeStartDate } from '@/lib/ranges';
+import { useEffect, useMemo, useState } from 'react';
+
+import { Paginator } from '@/components/composite/paginator';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const PAGE_SIZE = 10;
 
