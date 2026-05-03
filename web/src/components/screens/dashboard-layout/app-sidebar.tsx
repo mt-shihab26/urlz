@@ -1,3 +1,5 @@
+import logo from '@/assets/logo.svg';
+
 import {
     ChartBarIcon,
     CreditCardIcon,
@@ -75,7 +77,7 @@ export const AppSidebar = (props: ComponentProps<typeof Sidebar>) => {
                             className="data-[slot=sidebar-menu-button]:p-1.5!"
                             render={<Link to={route.overviewIndex()} />}
                         >
-                            <LinkIcon className="size-5!" />
+                            <img src={logo} alt="urlz" className="size-5! shrink-0" />
                             <span className="text-base font-semibold">urlz</span>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
