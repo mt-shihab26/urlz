@@ -12,19 +12,19 @@ LINKS    ?= 30
 #   make seed LINKS=100
 #   make seed EMAIL=me@test.com PASSWORD=secret LINKS=50
 seed:
-	go run . seed --email $(EMAIL) --password $(PASSWORD) --links $(LINKS)
+	go run ./cmd/seed --email $(EMAIL) --password $(PASSWORD) --links $(LINKS)
 
 # Create a superuser account
 superuser:
-	go run ./main.go superuser create $(SUPERUSER_EMAIL) $(SUPERUSER_PASS)
+	go run ./cmd/server superuser create $(SUPERUSER_EMAIL) $(SUPERUSER_PASS)
 
 # Apply all pending migrations
 migrate-up:
-	go run main.go migrate up
+	go run ./cmd/server migrate up
 
 # Pull a snapshot of the current collections into a new migration file
 migrate-snapshot:
-	go run main.go migrate collections
+	go run ./cmd/server migrate collections
 
 # Setup the project (copy .env files, install dependencies)
 setup:

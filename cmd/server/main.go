@@ -3,7 +3,6 @@ package main
 import (
 	"io/fs"
 	"log"
-	"os"
 
 	"github.com/joho/godotenv"
 	"github.com/pocketbase/pocketbase"
@@ -13,7 +12,6 @@ import (
 	"github.com/pocketbase/pocketbase/tools/osutils"
 
 	"github.com/mt-shihab26/urlz/internal/redirect"
-	"github.com/mt-shihab26/urlz/internal/seed"
 	_ "github.com/mt-shihab26/urlz/migrations"
 	"github.com/mt-shihab26/urlz/web"
 )
@@ -26,10 +24,6 @@ func main() {
 		DefaultDev:     true,
 		DefaultDataDir: ".data",
 	})
-	if len(os.Args) > 1 && os.Args[1] == "seed" {
-		seed.Run(app)
-		return
-	}
 	migratecmd.MustRegister(app, app.RootCmd, migratecmd.Config{
 		Automigrate: osutils.IsProbablyGoRun(),
 	})
