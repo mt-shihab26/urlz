@@ -5,6 +5,7 @@ go 1.26.2
 require (
 	github.com/brianvoe/gofakeit/v6 v6.28.0
 	github.com/joho/godotenv v1.5.1
+	github.com/pocketbase/dbx v1.12.0
 	github.com/pocketbase/pocketbase v0.37.3
 )
 
@@ -23,7 +24,6 @@ require (
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.21 // indirect
 	github.com/ncruces/go-strftime v1.0.0 // indirect
-	github.com/pocketbase/dbx v1.12.0 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/spf13/cast v1.10.0 // indirect
 	github.com/spf13/cobra v1.10.2 // indirect
