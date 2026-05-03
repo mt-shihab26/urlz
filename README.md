@@ -1,4 +1,4 @@
-<img src="web/public/favicon.svg" width="96" height="96" alt="urlz logo"/>
+<img src="web/src/assets/logo.svg" width="96" height="96" alt="urlz logo"/>
 
 # urlz
 
