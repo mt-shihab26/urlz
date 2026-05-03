@@ -17,6 +17,13 @@ export const syncCheckoutSession = async (sessionId: string): Promise<void> => {
     });
 };
 
+export const createCancelFlowSession = async (): Promise<string> => {
+    const data = await pb.send<{ url: string }>('/api/billing/cancel-flow', {
+        method: 'POST',
+    });
+    return data.url;
+};
+
 export const syncPortalReturn = async (): Promise<void> => {
     await pb.send('/api/billing/sync-portal', { method: 'POST' });
 };

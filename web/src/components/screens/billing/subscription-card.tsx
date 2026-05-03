@@ -1,6 +1,6 @@
 import type { TSubscriptionStatus, TUser } from '@/types/models';
 
-import { createPortalSession } from '@/collections/billing';
+import { createCancelFlowSession, createPortalSession } from '@/collections/billing';
 import { toastError } from '@/lib/toast';
 import { useState } from 'react';
 
@@ -39,20 +39,35 @@ const PLAN_LABEL: Record<string, string> = {
     business: 'Business',
 };
 
-export const SubscriptionCard = ({ user }: { user: TUser }) => {
-    const [loading, setLoading] = useState(false);
+type LoadingAction = 'manage' | 'cancel' | null;
 
-    const plan = user.plan ?? 'free';
+export const SubscriptionCard = ({ user }: { user: TUser }) => {
+    const [loading, setLoading] = useState<LoadingAction>(null);
+
+    const plan = user.plan || 'free';
     const status = user.subscription_status;
+    const isActive =
+        plan !== 'free' && (status === 'active' || status === 'trialing');
 
     const handleManage = async () => {
-        setLoading(true);
+        setLoading('manage');
         try {
             const url = await createPortalSession();
             window.location.href = url;
         } catch (e: any) {
             toastError(e?.message ?? 'Failed to open billing portal');
-            setLoading(false);
+            setLoading(null);
+        }
+    };
+
+    const handleCancel = async () => {
+        setLoading('cancel');
+        try {
+            const url = await createCancelFlowSession();
+            window.location.href = url;
+        } catch (e: any) {
+            toastError(e?.message ?? 'Failed to open cancellation');
+            setLoading(null);
         }
     };
 
@@ -71,9 +86,24 @@ export const SubscriptionCard = ({ user }: { user: TUser }) => {
                     )}
                 </div>
                 {plan !== 'free' && (
-                    <Button variant="outline" onClick={handleManage} disabled={loading}>
-                        {loading ? 'Opening…' : 'Manage Subscription'}
-                    </Button>
+                    <div className="flex items-center gap-2">
+                        <Button
+                            variant="outline"
+                            onClick={handleManage}
+                            disabled={!!loading}
+                        >
+                            {loading === 'manage' ? 'Opening…' : 'Manage'}
+                        </Button>
+                        {isActive && (
+                            <Button
+                                variant="destructive"
+                                onClick={handleCancel}
+                                disabled={!!loading}
+                            >
+                                {loading === 'cancel' ? 'Opening…' : 'Cancel'}
+                            </Button>
+                        )}
+                    </div>
                 )}
             </CardContent>
         </Card>

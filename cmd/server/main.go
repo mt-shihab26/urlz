@@ -26,6 +26,7 @@ func main() {
 		se.Router.POST("/api/billing/sync", billing.SyncHandler)
 		se.Router.POST("/api/billing/sync-portal", billing.SyncPortalHandler)
 		se.Router.POST("/api/billing/portal", billing.PortalHandler)
+		se.Router.POST("/api/billing/cancel-flow", billing.CancelFlowHandler)
 
 
 		se.Router.GET("/{code}", redirect.Handler)
