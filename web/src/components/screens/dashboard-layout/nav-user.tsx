@@ -11,9 +11,8 @@ import {
 import type { TUser } from '@/types/models';
 
 import { getAvatarUrl, signOut } from '@/collections/users';
-import { cn } from '@/lib/utils';
-import { getInitial } from '@/lib/utils';
 import { useSidebar } from '@/components/ui/sidebar';
+import { cn, getInitial } from '@/lib/utils';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';

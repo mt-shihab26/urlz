@@ -1,6 +1,6 @@
 import type { TPlan } from '@/types/models';
 
-import { createCheckoutSession } from '@/collections/billing';
+import { createCheckoutSession, syncCheckoutSession } from '@/collections/billing';
 import { useUser } from '@/components/providers/auth-provider';
 import { pb } from '@/lib/pb';
 import { toastError } from '@/lib/toast';
@@ -19,10 +19,18 @@ const Billing = () => {
     const [loading, setLoading] = useState<TPlan | null>(null);
 
     useEffect(() => {
-        if (searchParams.get('success') === '1') {
+        const sessionId = searchParams.get('session_id');
+        if (searchParams.get('success') === '1' && sessionId) {
             setSearchParams({}, { replace: true });
-            toast.success('Subscription activated! Your plan will update shortly.');
-            pb.collection('users').authRefresh().catch(() => {});
+            syncCheckoutSession(sessionId)
+                .then(() =>
+                    pb
+                        .collection('users')
+                        .authRefresh()
+                        .catch(() => {}),
+                )
+                .then(() => toast.success('Subscription activated!'))
+                .catch(() => toast.error('Failed to activate plan. Contact support.'));
         }
     }, []);
 

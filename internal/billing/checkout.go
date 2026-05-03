@@ -22,7 +22,7 @@ func priceIDForProduct(productID string) (string, error) {
 		Product: stripe.String(productID),
 		Active:  stripe.Bool(true),
 	}
-	params.Filters.AddFilter("limit", "", "1")
+	params.Limit = stripe.Int64(1)
 	i := price.List(params)
 	if i.Next() {
 		return i.Price().ID, nil
@@ -54,6 +54,10 @@ func CheckoutHandler(e *core.RequestEvent) error {
 	}
 	if productID == "" {
 		return apis.NewBadRequestError("product not configured for plan: "+body.Plan, nil)
+	}
+
+	if user.GetString("plan") == body.Plan {
+		return apis.NewBadRequestError("already on this plan", nil)
 	}
 
 	priceID, err := priceIDForProduct(productID)
@@ -88,13 +92,17 @@ func CheckoutHandler(e *core.RequestEvent) error {
 	s, err := session.New(&stripe.CheckoutSessionParams{
 		Customer: stripe.String(customerID),
 		Mode:     stripe.String(string(stripe.CheckoutSessionModeSubscription)),
+		Metadata: map[string]string{
+			"pb_user_id": user.Id,
+			"plan":       body.Plan,
+		},
 		LineItems: []*stripe.CheckoutSessionLineItemParams{
 			{
 				Price:    stripe.String(priceID),
 				Quantity: stripe.Int64(1),
 			},
 		},
-		SuccessURL: stripe.String(appURL + "/dashboard/billing?success=1"),
+		SuccessURL: stripe.String(appURL + "/dashboard/billing?success=1&session_id={CHECKOUT_SESSION_ID}"),
 		CancelURL:  stripe.String(appURL + "/dashboard/billing"),
 		SubscriptionData: &stripe.CheckoutSessionSubscriptionDataParams{
 			Metadata: map[string]string{
