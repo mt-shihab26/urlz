@@ -55,9 +55,15 @@ export const SubscriptionCard = ({
     const [loading, setLoading] = useState<LoadingAction>(null);
 
     const plan = user.plan || 'free';
-    const status = user.subscription_status;
+    // Prefer live Stripe status from billing info over stale PB value
+    const stripeStatus = sub?.status as TSubscriptionStatus | undefined;
+    const status = (stripeStatus ?? user.subscription_status) as TSubscriptionStatus | undefined;
+    const alreadyCanceled = stripeStatus === 'canceled' || status === 'canceled';
     const canceling = !!sub?.cancel_at_period_end;
-    const canCancel = plan !== 'free' && (status === 'active' || status === 'trialing');
+    const canCancel =
+        !alreadyCanceled &&
+        plan !== 'free' &&
+        (status === 'active' || status === 'trialing');
 
     const cancelDate = sub?.cancel_at
         ? fmtDate(sub.cancel_at)
@@ -124,11 +130,16 @@ export const SubscriptionCard = ({
                         </div>
                     )}
                 </div>
-                {canceling && (
+                {canceling && !alreadyCanceled && (
                     <p className="text-sm text-amber-600 dark:text-amber-400">
                         Your subscription is scheduled to cancel
                         {cancelDate ? ` on ${cancelDate}` : ' at the end of the billing period'}.
                         You'll keep access until then.
+                    </p>
+                )}
+                {alreadyCanceled && (
+                    <p className="text-sm text-muted-foreground">
+                        Your subscription has been canceled. Upgrade below to reactivate.
                     </p>
                 )}
             </CardContent>

@@ -7,6 +7,7 @@ import (
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/stripe/stripe-go/v85"
 	portalsession "github.com/stripe/stripe-go/v85/billingportal/session"
+	stripesubscription "github.com/stripe/stripe-go/v85/subscription"
 )
 
 func PortalHandler(e *core.RequestEvent) error {
@@ -53,6 +54,18 @@ func CancelFlowHandler(e *core.RequestEvent) error {
 	subscriptionID := user.GetString("subscription_id")
 	if subscriptionID == "" {
 		return apis.NewBadRequestError("no subscription found", nil)
+	}
+
+	// Verify subscription is still cancellable before creating flow
+	sub, err := stripesubscription.Get(subscriptionID, nil)
+	if err != nil {
+		return apis.NewBadRequestError("failed to fetch subscription", nil)
+	}
+	if sub.Status == stripe.SubscriptionStatusCanceled {
+		return apis.NewBadRequestError("subscription is already canceled", nil)
+	}
+	if sub.CancelAtPeriodEnd {
+		return apis.NewBadRequestError("subscription is already scheduled for cancellation", nil)
 	}
 
 	appURL := os.Getenv("APP_URL")
