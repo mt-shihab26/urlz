@@ -21,14 +21,8 @@ const Billing = () => {
     useEffect(() => {
         if (searchParams.get('success') === '1') {
             setSearchParams({}, { replace: true });
-            pb.collection('users')
-                .authRefresh()
-                .then(() => {
-                    toast.success('Subscription activated!');
-                })
-                .catch(() => {
-                    toast.success('Subscription activated! Refresh if plan does not update.');
-                });
+            toast.success('Subscription activated! Your plan will update shortly.');
+            pb.collection('users').authRefresh().catch(() => {});
         }
     }, []);
 

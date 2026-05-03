@@ -15,10 +15,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<TUser | null>(getAuth);
 
     useEffect(() => {
-        return pb.authStore.onChange(() => {
+        const unsub = pb.authStore.onChange(() => {
             setUser(getAuth());
         });
+        return unsub;
     }, []);
+
+    useEffect(() => {
+        const id = pb.authStore.record?.id;
+        if (!id) return;
+        pb.collection('users').subscribe(id, async () => {
+            await pb.collection('users').authRefresh();
+        });
+        return () => {
+            pb.collection('users').unsubscribe(id);
+        };
+    }, [user?.id]);
 
     return <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>;
 };
