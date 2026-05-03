@@ -97,10 +97,15 @@ make superuser            # Create a PocketBase superuser
 
 ```
 urlz/
-├── main.go                  # Entry point, redirect handler
-├── internal/                # Go handlers and business logic
+├── cmd/
+│   ├── server/              # Main server binary
+│   └── seed/                # Seed CLI binary
+├── internal/
+│   ├── app/                 # PocketBase app factory
+│   ├── redirect/            # Short-code redirect handler + click tracking
+│   └── seed/                # Seed logic (users, links, clicks)
 ├── migrations/              # PocketBase schema migrations
-└── web/
+└── web/                     # React frontend (embedded into server binary)
     └── src/
         ├── pages/           # Route-level page components
         ├── components/
