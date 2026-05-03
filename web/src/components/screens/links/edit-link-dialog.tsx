@@ -3,6 +3,7 @@ import type { TLink } from '@/types/models';
 import { updateLink } from '@/collections/links';
 import { useForm } from '@/hooks/use-form';
 import { toastError } from '@/lib/toast';
+import { codePrefix } from '@/lib/utils';
 
 import { DateField } from '@/components/composite/date-field';
 import { Form } from '@/components/composite/form';
@@ -11,7 +12,6 @@ import { TextField } from '@/components/composite/text-field';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import { codePrefix } from '@/lib/utils';
 
 export const EditLinkDialog = ({
     link,

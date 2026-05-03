@@ -12,7 +12,7 @@ const filterEntries: { key: TFilter; label: string }[] = [
     { key: 'expired', label: 'Expired' },
 ];
 
-export const FiltersToggle = ({
+export const FiltersTabs = ({
     links,
     filter,
     onFilter,

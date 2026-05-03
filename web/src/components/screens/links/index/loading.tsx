@@ -1,6 +1,6 @@
 import { Skeleton } from '@/components/ui/skeleton';
 
-export const LinksPageSkeleton = () => {
+export const Loading = () => {
     return (
         <>
             <div className="flex flex-wrap items-center gap-3">
