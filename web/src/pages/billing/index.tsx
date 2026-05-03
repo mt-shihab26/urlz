@@ -1,6 +1,10 @@
 import type { TPlan } from '@/types/models';
 
-import { createCheckoutSession, syncCheckoutSession } from '@/collections/billing';
+import {
+    createCheckoutSession,
+    syncCheckoutSession,
+    syncPortalReturn,
+} from '@/collections/billing';
 import { useUser } from '@/components/providers/auth-provider';
 import { pb } from '@/lib/pb';
 import { toastError } from '@/lib/toast';
@@ -17,27 +21,34 @@ const Billing = () => {
     const { user } = useUser();
     const [searchParams, setSearchParams] = useSearchParams();
     const [loading, setLoading] = useState<TPlan | null>(null);
+    const [coupon, setCoupon] = useState('');
 
     useEffect(() => {
         const sessionId = searchParams.get('session_id');
+        const portalReturn = searchParams.get('portal_return');
+
         if (searchParams.get('success') === '1' && sessionId) {
             setSearchParams({}, { replace: true });
             syncCheckoutSession(sessionId)
-                .then(() =>
-                    pb
-                        .collection('users')
-                        .authRefresh()
-                        .catch(() => {}),
-                )
+                .then(() => pb.collection('users').authRefresh().catch(() => {}))
                 .then(() => toast.success('Subscription activated!'))
                 .catch(() => toast.error('Failed to activate plan. Contact support.'));
+            return;
+        }
+
+        if (portalReturn === '1') {
+            setSearchParams({}, { replace: true });
+            syncPortalReturn()
+                .then(() => pb.collection('users').authRefresh().catch(() => {}))
+                .then(() => toast.success('Subscription updated!'))
+                .catch(() => toast.error('Failed to sync subscription. Please refresh.'));
         }
     }, []);
 
     const handleUpgrade = async (plan: TPlan) => {
         setLoading(plan);
         try {
-            const url = await createCheckoutSession(plan);
+            const url = await createCheckoutSession(plan, coupon.trim() || undefined);
             window.location.href = url;
         } catch (e: any) {
             toastError(e?.message ?? 'Failed to start checkout');
@@ -54,6 +65,8 @@ const Billing = () => {
                     currentPlan={user.plan || 'free'}
                     onUpgrade={handleUpgrade}
                     loading={loading}
+                    coupon={coupon}
+                    onCouponChange={setCoupon}
                 />
             </div>
         </DashboardLayout>

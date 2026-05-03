@@ -5,6 +5,7 @@ import (
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/stripe/stripe-go/v85"
 	"github.com/stripe/stripe-go/v85/checkout/session"
+	stripesubscription "github.com/stripe/stripe-go/v85/subscription"
 )
 
 type syncBody struct {
@@ -43,6 +44,53 @@ func SyncHandler(e *core.RequestEvent) error {
 	}
 	subID := s.Subscription.ID
 	subStatus := string(s.Subscription.Status)
+
+	user.Set("plan", plan)
+	user.Set("subscription_id", subID)
+	user.Set("subscription_status", subStatus)
+	if err := e.App.Save(user); err != nil {
+		return apis.NewBadRequestError("failed to update user", err)
+	}
+
+	return e.JSON(200, map[string]any{"ok": true})
+}
+
+// SyncPortalHandler refreshes subscription status after the user returns
+// from the Stripe billing portal (e.g. after canceling).
+func SyncPortalHandler(e *core.RequestEvent) error {
+	user := e.Auth
+	if user == nil {
+		return apis.NewUnauthorizedError("unauthorized", nil)
+	}
+
+	customerID := user.GetString("stripe_customer_id")
+	if customerID == "" {
+		return e.JSON(200, map[string]any{"ok": true})
+	}
+
+	params := &stripe.SubscriptionListParams{
+		Customer: stripe.String(customerID),
+	}
+	params.Limit = stripe.Int64(1)
+	params.AddExpand("data.plan.product")
+
+	iter := stripesubscription.List(params)
+
+	plan := "free"
+	subID := ""
+	subStatus := "canceled"
+
+	if iter.Next() {
+		sub := iter.Subscription()
+		subID = sub.ID
+		subStatus = string(sub.Status)
+		if sub.Status == stripe.SubscriptionStatusActive || sub.Status == stripe.SubscriptionStatusTrialing {
+			plan = sub.Metadata["plan"]
+			if plan == "" {
+				plan = "pro"
+			}
+		}
+	}
 
 	user.Set("plan", plan)
 	user.Set("subscription_id", subID)

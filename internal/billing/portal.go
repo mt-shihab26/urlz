@@ -27,7 +27,7 @@ func PortalHandler(e *core.RequestEvent) error {
 
 	s, err := portalsession.New(&stripe.BillingPortalSessionParams{
 		Customer:  stripe.String(customerID),
-		ReturnURL: stripe.String(appURL + "/dashboard/billing"),
+		ReturnURL: stripe.String(appURL + "/dashboard/billing?portal_return=1"),
 	})
 	if err != nil {
 		return apis.NewBadRequestError("failed to create portal session", err)

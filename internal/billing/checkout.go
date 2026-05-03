@@ -14,7 +14,8 @@ import (
 )
 
 type checkoutBody struct {
-	Plan string `json:"plan"`
+	Plan   string `json:"plan"`
+	Coupon string `json:"coupon"`
 }
 
 func priceIDForProduct(productID string) (string, error) {
@@ -84,12 +85,28 @@ func CheckoutHandler(e *core.RequestEvent) error {
 		}
 	}
 
+	// Resolve coupon code → Stripe coupon ID via PocketBase coupons collection
+	var discounts []*stripe.CheckoutSessionDiscountParams
+	if body.Coupon != "" {
+		coupon, err := e.App.FindFirstRecordByFilter(
+			"coupons",
+			"code = {:code} && active = true",
+			map[string]any{"code": body.Coupon},
+		)
+		if err != nil {
+			return apis.NewBadRequestError("invalid or inactive coupon code", nil)
+		}
+		discounts = []*stripe.CheckoutSessionDiscountParams{
+			{Coupon: stripe.String(coupon.GetString("stripe_coupon_id"))},
+		}
+	}
+
 	appURL := os.Getenv("APP_URL")
 	if appURL == "" {
 		appURL = "http://localhost:5173"
 	}
 
-	s, err := session.New(&stripe.CheckoutSessionParams{
+	params := &stripe.CheckoutSessionParams{
 		Customer: stripe.String(customerID),
 		Mode:     stripe.String(string(stripe.CheckoutSessionModeSubscription)),
 		Metadata: map[string]string{
@@ -110,7 +127,12 @@ func CheckoutHandler(e *core.RequestEvent) error {
 				"plan":       body.Plan,
 			},
 		},
-	})
+	}
+	if len(discounts) > 0 {
+		params.Discounts = discounts
+	}
+
+	s, err := session.New(params)
 	if err != nil {
 		return apis.NewBadRequestError("failed to create checkout session", err)
 	}
