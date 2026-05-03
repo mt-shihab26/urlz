@@ -747,6 +747,67 @@ func init() {
 						"type": "date"
 					},
 					{
+						"autogeneratePattern": "",
+						"help": "",
+						"hidden": true,
+						"id": "text_stripe_customer_id",
+						"max": 0,
+						"min": 0,
+						"name": "stripe_customer_id",
+						"pattern": "",
+						"presentable": false,
+						"primaryKey": false,
+						"required": false,
+						"system": false,
+						"type": "text"
+					},
+					{
+						"help": "",
+						"hidden": false,
+						"id": "select_plan_field01",
+						"maxSelect": 1,
+						"name": "plan",
+						"presentable": false,
+						"required": false,
+						"system": false,
+						"type": "select",
+						"values": [
+							"free",
+							"pro",
+							"business"
+						]
+					},
+					{
+						"autogeneratePattern": "",
+						"help": "",
+						"hidden": true,
+						"id": "text_subscription_id01",
+						"max": 0,
+						"min": 0,
+						"name": "subscription_id",
+						"pattern": "",
+						"presentable": false,
+						"primaryKey": false,
+						"required": false,
+						"system": false,
+						"type": "text"
+					},
+					{
+						"autogeneratePattern": "",
+						"help": "",
+						"hidden": false,
+						"id": "text_subscription_status",
+						"max": 0,
+						"min": 0,
+						"name": "subscription_status",
+						"pattern": "",
+						"presentable": false,
+						"primaryKey": false,
+						"required": false,
+						"system": false,
+						"type": "text"
+					},
+					{
 						"hidden": false,
 						"id": "autodate2990389176",
 						"name": "created",

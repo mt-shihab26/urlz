@@ -1,9 +1,23 @@
+export type TPlan = 'free' | 'pro' | 'business';
+
+export type TSubscriptionStatus =
+    | 'active'
+    | 'trialing'
+    | 'past_due'
+    | 'canceled'
+    | 'unpaid'
+    | 'incomplete'
+    | 'incomplete_expired'
+    | 'paused';
+
 export type TUser = {
     id: string;
     name: string;
     email: string;
     avatar?: string;
     deleted?: string;
+    plan?: TPlan;
+    subscription_status?: TSubscriptionStatus;
 };
 
 export type TLinkStatus = 'active' | 'disabled';

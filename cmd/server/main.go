@@ -8,14 +8,23 @@ import (
 	"github.com/pocketbase/pocketbase/core"
 
 	"github.com/mt-shihab26/urlz/internal/app"
+	"github.com/mt-shihab26/urlz/internal/billing"
+	"github.com/mt-shihab26/urlz/internal/hooks"
 	"github.com/mt-shihab26/urlz/internal/redirect"
 	"github.com/mt-shihab26/urlz/web"
 )
 
 func main() {
-	app := app.New()
+	a := app.New()
 
-	app.OnServe().BindFunc(func(se *core.ServeEvent) error {
+	billing.Init()
+	hooks.RegisterLinkHooks(a)
+
+	a.OnServe().BindFunc(func(se *core.ServeEvent) error {
+		se.Router.POST("/api/billing/checkout", billing.CheckoutHandler)
+		se.Router.POST("/api/billing/portal", billing.PortalHandler)
+		se.Router.POST("/api/webhooks/stripe", billing.WebhookHandler)
+
 		se.Router.GET("/{code}", redirect.Handler)
 		sub, err := fs.Sub(web.DistFS, "dist")
 		if err != nil {
@@ -24,7 +33,7 @@ func main() {
 		se.Router.GET("/{path...}", apis.Static(sub, true))
 		return se.Next()
 	})
-	if err := app.Start(); err != nil {
+	if err := a.Start(); err != nil {
 		log.Fatal(err)
 	}
 }

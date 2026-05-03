@@ -11,6 +11,9 @@ import { TextField } from '@/components/composite/text-field';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
+import { route } from '@/routes';
+import { useState } from 'react';
+import { Link } from 'react-router';
 
 export const CreateLinkDialog = ({
     open,
@@ -25,10 +28,12 @@ export const CreateLinkDialog = ({
         title: '',
         expiry: '',
     });
+    const [limitReached, setLimitReached] = useState(false);
 
     const handleSubmit = async () => {
         if (!data.url || loading) return;
         setLoading(true);
+        setLimitReached(false);
         try {
             await createLink({
                 url: data.url,
@@ -38,17 +43,22 @@ export const CreateLinkDialog = ({
             });
             handleClose();
         } catch (e: any) {
-            const fieldErrors = e?.response?.data;
-            if (fieldErrors?.url?.message) {
-                setErrors('url', fieldErrors.url.message);
-            } else if (fieldErrors?.code?.message) {
-                setErrors('code', fieldErrors.code.message);
-            } else if (fieldErrors?.title?.message) {
-                setErrors('title', fieldErrors.title.message);
-            } else if (fieldErrors?.expires?.message) {
-                setErrors('expiry', fieldErrors.expires.message);
+            const msg: string = e?.message ?? '';
+            if (msg.includes('Free plan limit reached')) {
+                setLimitReached(true);
             } else {
-                toastError(e?.message ?? 'Something went wrong. Please try again.');
+                const fieldErrors = e?.response?.data;
+                if (fieldErrors?.url?.message) {
+                    setErrors('url', fieldErrors.url.message);
+                } else if (fieldErrors?.code?.message) {
+                    setErrors('code', fieldErrors.code.message);
+                } else if (fieldErrors?.title?.message) {
+                    setErrors('title', fieldErrors.title.message);
+                } else if (fieldErrors?.expires?.message) {
+                    setErrors('expiry', fieldErrors.expires.message);
+                } else {
+                    toastError(msg || 'Something went wrong. Please try again.');
+                }
             }
         } finally {
             setLoading(false);
@@ -58,6 +68,7 @@ export const CreateLinkDialog = ({
     const handleClose = () => {
         onOpenChange(false);
         reset();
+        setLimitReached(false);
     };
 
     return (
@@ -66,6 +77,19 @@ export const CreateLinkDialog = ({
                 <DialogHeader>
                     <DialogTitle>New Short Link</DialogTitle>
                 </DialogHeader>
+                {limitReached && (
+                    <div className="rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+                        Free plan limit reached (5 links).{' '}
+                        <Link
+                            to={route.billingIndex()}
+                            className="font-medium underline underline-offset-2"
+                            onClick={handleClose}
+                        >
+                            Upgrade to Pro
+                        </Link>{' '}
+                        for unlimited links.
+                    </div>
+                )}
                 <Form onSubmit={handleSubmit} className="flex flex-col gap-4 pt-2">
                     <TextField
                         id="url"

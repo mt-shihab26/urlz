@@ -1,5 +1,6 @@
 import {
     ChartBarIcon,
+    CreditCardIcon,
     LayoutDashboardIcon,
     LinkIcon,
     MousePointerClickIcon,
@@ -53,6 +54,11 @@ const navMain = [
         title: 'Settings',
         url: route.settingsIndex(),
         icon: <SettingsIcon />,
+    },
+    {
+        title: 'Billing',
+        url: route.billingIndex(),
+        icon: <CreditCardIcon />,
     },
 ];
 

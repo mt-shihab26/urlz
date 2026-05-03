@@ -10,6 +10,7 @@ export const route = {
     analyticsIndex: () => '/dashboard/analytics',
     clicksIndex: () => '/dashboard/clicks',
     settingsIndex: () => '/dashboard/settings',
+    billingIndex: () => '/dashboard/billing',
     signIn: () => '/dashboard/sign-in',
     signUp: () => '/dashboard/sign-up',
     forgotPassword: () => '/dashboard/forgot-password',
@@ -53,6 +54,11 @@ export const routes: TRoute[] = [
     {
         path: route.settingsIndex(),
         component: lazy(() => import('@/pages/settings/index')),
+        guard: 'auth',
+    },
+    {
+        path: route.billingIndex(),
+        component: lazy(() => import('@/pages/billing/index')),
         guard: 'auth',
     },
     // Auth (guest only)
