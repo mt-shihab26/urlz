@@ -39,7 +39,7 @@ export const DetailDrawer = ({
 }) => {
     return (
         <Drawer direction="right" open={open} onClose={onClose}>
-            <DrawerContent className="!w-[40%] sm:!max-w-[40%] overflow-y-auto overflow-x-hidden">
+            <DrawerContent className="w-[40%]! sm:max-w-[40%]! overflow-y-auto overflow-x-hidden">
                 <DrawerHeader className="flex-row items-start justify-between">
                     <div className="flex flex-col gap-1">
                         <DrawerTitle>Click Details</DrawerTitle>
