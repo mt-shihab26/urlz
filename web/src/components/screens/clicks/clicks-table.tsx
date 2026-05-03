@@ -1,8 +1,3 @@
-import type { TClicksPage } from '@/collections/clicks';
-import type { TClick, TLink } from '@/types/models';
-
-import { Paginator } from '@/components/composite/paginator';
-import { Skeleton } from '@/components/ui/skeleton';
 import {
     Table,
     TableBody,
@@ -11,22 +6,34 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+
+import type { TClicksPage } from '@/collections/clicks';
+import type { TClick, TLink } from '@/types/models';
+
 import { formatChartDate } from '@/lib/formats';
+
+import { Paginator } from '@/components/composite/paginator';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export const PER_PAGE = 20;
 
 const getClickLabel = (value: string) => value?.trim() || '—';
 
-type Props = {
+export const ClicksTable = ({
+    result,
+    links,
+    loading,
+    page,
+    onPage,
+    onClickRow,
+}: {
     result: TClicksPage | null;
     links: TLink[];
     loading: boolean;
     page: number;
     onPage: (p: number) => void;
     onClickRow: (click: TClick) => void;
-};
-
-export const ClicksTable = ({ result, links, loading, page, onPage, onClickRow }: Props) => {
+}) => {
     const linkMap = new Map(links.map((l) => [l.id, l]));
 
     return (
