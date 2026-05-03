@@ -40,6 +40,9 @@ const PLAN_LABEL: Record<string, string> = {
     business: 'Business',
 };
 
+const fmtDate = (ts: number) =>
+    new Date(ts * 1000).toLocaleDateString(undefined, { dateStyle: 'medium' });
+
 type LoadingAction = 'manage' | 'cancel' | null;
 
 export const SubscriptionCard = ({
@@ -53,8 +56,14 @@ export const SubscriptionCard = ({
 
     const plan = user.plan || 'free';
     const status = user.subscription_status;
-    const isActive =
-        plan !== 'free' && (status === 'active' || status === 'trialing') && !sub?.cancel_at_period_end;
+    const canceling = !!sub?.cancel_at_period_end;
+    const canCancel = plan !== 'free' && (status === 'active' || status === 'trialing');
+
+    const cancelDate = sub?.cancel_at
+        ? fmtDate(sub.cancel_at)
+        : sub?.current_period_end
+          ? fmtDate(sub.current_period_end)
+          : null;
 
     const handleManage = async () => {
         setLoading('manage');
@@ -83,44 +92,44 @@ export const SubscriptionCard = ({
             <CardHeader>
                 <CardTitle>Current Plan</CardTitle>
             </CardHeader>
-            <CardContent className="flex items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                    <span className="text-xl font-semibold">{PLAN_LABEL[plan] ?? plan}</span>
-                    {status && (
-                        <Badge variant={STATUS_VARIANT[status] ?? 'outline'}>
-                            {STATUS_LABEL[status] ?? status}
-                        </Badge>
-                    )}
-                    {sub?.cancel_at_period_end && (
-                        <Badge variant="outline">
-                            Cancels{' '}
-                            {sub.cancel_at
-                                ? new Date(sub.cancel_at * 1000).toLocaleDateString(undefined, { dateStyle: 'medium' })
-                                : sub.current_period_end
-                                  ? new Date(sub.current_period_end * 1000).toLocaleDateString(undefined, { dateStyle: 'medium' })
-                                  : 'at period end'}
-                        </Badge>
-                    )}
-                </div>
-                {plan !== 'free' && (
-                    <div className="flex items-center gap-2">
-                        <Button
-                            variant="outline"
-                            onClick={handleManage}
-                            disabled={!!loading}
-                        >
-                            {loading === 'manage' ? 'Opening…' : 'Manage'}
-                        </Button>
-                        {isActive && (
-                            <Button
-                                variant="destructive"
-                                onClick={handleCancel}
-                                disabled={!!loading}
-                            >
-                                {loading === 'cancel' ? 'Opening…' : 'Cancel'}
-                            </Button>
+            <CardContent className="flex flex-col gap-3">
+                <div className="flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                        <span className="text-xl font-semibold">{PLAN_LABEL[plan] ?? plan}</span>
+                        {status && (
+                            <Badge variant={STATUS_VARIANT[status] ?? 'outline'}>
+                                {STATUS_LABEL[status] ?? status}
+                            </Badge>
                         )}
                     </div>
+                    {plan !== 'free' && (
+                        <div className="flex items-center gap-2">
+                            <Button
+                                variant="outline"
+                                onClick={handleManage}
+                                disabled={!!loading}
+                            >
+                                {loading === 'manage' ? 'Opening…' : 'Manage'}
+                            </Button>
+                            {canCancel && (
+                                <Button
+                                    variant="destructive"
+                                    onClick={handleCancel}
+                                    disabled={!!loading || canceling}
+                                    title={canceling ? 'Subscription already scheduled for cancellation' : undefined}
+                                >
+                                    {loading === 'cancel' ? 'Opening…' : 'Cancel plan'}
+                                </Button>
+                            )}
+                        </div>
+                    )}
+                </div>
+                {canceling && (
+                    <p className="text-sm text-amber-600 dark:text-amber-400">
+                        Your subscription is scheduled to cancel
+                        {cancelDate ? ` on ${cancelDate}` : ' at the end of the billing period'}.
+                        You'll keep access until then.
+                    </p>
                 )}
             </CardContent>
         </Card>
