@@ -1,32 +1,16 @@
-import type { ChartConfig } from '@/components/ui/chart';
+import type { TRange } from '@/lib/ranges';
 import type { TClick } from '@/types/models';
-import type { TLinkDetailRange } from './link-detail-header';
 
 import { clicksToSeries } from '@/lib/clicks';
 import { formatChartDate } from '@/lib/formats';
+import { cutoffDate } from '@/lib/utils';
 import { useMemo } from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 
-const chartConfig: ChartConfig = {
-    clicks: { label: 'Clicks', color: 'var(--primary)' },
-};
-
-const cutoffDate = (days: number) => {
-    const d = new Date();
-    d.setDate(d.getDate() - days);
-    return d.toISOString().slice(0, 10);
-};
-
-export const LinkClicksChart = ({
-    range,
-    clicks,
-}: {
-    range: TLinkDetailRange;
-    clicks: TClick[];
-}) => {
+export const ClicksChart = ({ range, clicks }: { range: TRange; clicks: TClick[] }) => {
     const series = useMemo(() => {
         const cutoff =
             range === '7d'
@@ -46,7 +30,12 @@ export const LinkClicksChart = ({
                 <CardTitle>Clicks Over Time</CardTitle>
             </CardHeader>
             <CardContent className="px-2 pb-4">
-                <ChartContainer config={chartConfig} className="h-45 w-full">
+                <ChartContainer
+                    config={{
+                        clicks: { label: 'Clicks', color: 'var(--primary)' },
+                    }}
+                    className="h-45 w-full"
+                >
                     <AreaChart data={series}>
                         <defs>
                             <linearGradient id="fillClicksDt" x1="0" y1="0" x2="0" y2="1">

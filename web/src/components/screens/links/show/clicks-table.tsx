@@ -21,7 +21,7 @@ const getClickLabel = (value: string) => {
     return value.trim() || 'Direct';
 };
 
-export const LinkClicksTable = ({ clicks, range }: { clicks: TClick[]; range: TRange }) => {
+export const ClicksTable = ({ clicks, range }: { clicks: TClick[]; range: TRange }) => {
     const [page, setPage] = useState(1);
 
     const filteredClicks = useMemo(() => {

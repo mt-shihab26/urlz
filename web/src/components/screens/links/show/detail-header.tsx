@@ -12,14 +12,17 @@ import { LinkOpenButton } from '@/components/screens/links/link-open-button';
 import { LinkToggleButton } from '@/components/screens/links/link-toggle-button';
 import { ChevronLeftIcon } from 'lucide-react';
 
-type LinkDetailHeaderProps = {
+export const DetailHeader = ({
+    link,
+    range,
+    onRangeChange,
+    onBack,
+}: {
     link: TLink;
     range: TRange;
     onRangeChange: (range: TRange) => void;
     onBack: () => void;
-};
-
-export const LinkDetailHeader = ({ link, range, onRangeChange, onBack }: LinkDetailHeaderProps) => {
+}) => {
     return (
         <div className="flex flex-col gap-2 border-b px-4 py-4 lg:px-6">
             <button

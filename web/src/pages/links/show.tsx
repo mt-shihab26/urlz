@@ -9,13 +9,17 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
+import { Browsers } from '@/components/screens/analytics/browsers';
 import { Countries } from '@/components/screens/analytics/countries';
+import { Devices } from '@/components/screens/analytics/devices';
+import { Languages } from '@/components/screens/analytics/languages';
+import { OperatingSystems } from '@/components/screens/analytics/operating-systems';
 import { Referrers } from '@/components/screens/analytics/referrers';
-import { LinkClicksChart } from '@/components/screens/links/show/link-clicks-chart';
-import { LinkClicksTable } from '@/components/screens/links/show/link-clicks-table';
-import { LinkDetailHeader } from '@/components/screens/links/show/link-detail-header';
-import { LinkDetailPageSkeleton } from '@/components/screens/links/show/link-detail-page-skeleton';
-import { LinkDetailStats } from '@/components/screens/links/show/link-detail-stats';
+import { ClicksChart } from '@/components/screens/links/show/clicks-chart';
+import { ClicksTable } from '@/components/screens/links/show/clicks-table';
+import { DetailHeader } from '@/components/screens/links/show/detail-header';
+import { DetailStats } from '@/components/screens/links/show/detail-stats';
+import { Loading } from '@/components/screens/links/show/loading';
 import { Button } from '@/components/ui/button';
 
 const LinkDetail = () => {
@@ -46,7 +50,7 @@ const LinkDetail = () => {
     return (
         <DashboardLayout title={loading ? 'Link' : (link?.title ?? 'Link Not Found')}>
             {loading ? (
-                <LinkDetailPageSkeleton />
+                <Loading />
             ) : !link ? (
                 <div className="flex flex-col items-center justify-center gap-4 p-12 text-center">
                     <p className="text-muted-foreground">Link not found.</p>
@@ -56,20 +60,24 @@ const LinkDetail = () => {
                 </div>
             ) : (
                 <>
-                    <LinkDetailHeader
+                    <DetailHeader
                         link={link}
                         range={range}
                         onRangeChange={setRange}
                         onBack={() => navigate(route.linksIndex())}
                     />
                     <div className="flex flex-col gap-6 p-4 lg:p-6">
-                        <LinkDetailStats range={range} link={link} clicks={clicks} />
-                        <LinkClicksChart range={range} clicks={clicks} />
+                        <DetailStats range={range} link={link} clicks={clicks} />
+                        <ClicksChart range={range} clicks={clicks} />
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                             <Countries clicks={clicks} />
+                            <Devices clicks={clicks} />
                             <Referrers clicks={clicks} />
+                            <Browsers clicks={clicks} />
+                            <OperatingSystems clicks={clicks} />
+                            <Languages clicks={clicks} />
                         </div>
-                        <LinkClicksTable clicks={clicks} range={range} />
+                        <ClicksTable clicks={clicks} range={range} />
                     </div>
                 </>
             )}

@@ -1,23 +1,18 @@
+import type { TRange } from '@/lib/ranges';
 import type { TClick, TLink } from '@/types/models';
-import type { TLinkDetailRange } from './link-detail-header';
 
 import { formatDate, formatNumber } from '@/lib/formats';
+import { cutoffDate } from '@/lib/utils';
 import { useMemo } from 'react';
 
 import { Card, CardHeader } from '@/components/ui/card';
 
-const cutoffDate = (days: number) => {
-    const d = new Date();
-    d.setDate(d.getDate() - days);
-    return d.toISOString().slice(0, 10);
-};
-
-export const LinkDetailStats = ({
+export const DetailStats = ({
     range,
     link,
     clicks,
 }: {
-    range: TLinkDetailRange;
+    range: TRange;
     link: TLink;
     clicks: TClick[];
 }) => {

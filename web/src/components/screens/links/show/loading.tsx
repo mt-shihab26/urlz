@@ -1,6 +1,6 @@
 import { Skeleton } from '@/components/ui/skeleton';
 
-export const LinkDetailPageSkeleton = () => {
+export const Loading = () => {
     return (
         <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-3 border-b px-4 py-4 lg:px-6">
