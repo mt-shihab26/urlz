@@ -2,6 +2,7 @@ package billing
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 
 	"github.com/pocketbase/pocketbase/apis"
@@ -9,10 +10,27 @@ import (
 	"github.com/stripe/stripe-go/v85"
 	"github.com/stripe/stripe-go/v85/checkout/session"
 	"github.com/stripe/stripe-go/v85/customer"
+	"github.com/stripe/stripe-go/v85/price"
 )
 
 type checkoutBody struct {
 	Plan string `json:"plan"`
+}
+
+func priceIDForProduct(productID string) (string, error) {
+	params := &stripe.PriceListParams{
+		Product: stripe.String(productID),
+		Active:  stripe.Bool(true),
+	}
+	params.Filters.AddFilter("limit", "", "1")
+	i := price.List(params)
+	if i.Next() {
+		return i.Price().ID, nil
+	}
+	if err := i.Err(); err != nil {
+		return "", err
+	}
+	return "", fmt.Errorf("no active price found for product %s", productID)
 }
 
 func CheckoutHandler(e *core.RequestEvent) error {
@@ -26,16 +44,21 @@ func CheckoutHandler(e *core.RequestEvent) error {
 		body.Plan = "pro"
 	}
 
-	priceID := ""
+	productID := ""
 	switch body.Plan {
 	case "business":
-		priceID = os.Getenv("STRIPE_BUSINESS_PRICE_ID")
+		productID = os.Getenv("STRIPE_BUSINESS_PRODUCT_ID")
 	default:
 		body.Plan = "pro"
-		priceID = os.Getenv("STRIPE_PRO_PRICE_ID")
+		productID = os.Getenv("STRIPE_PRO_PRODUCT_ID")
 	}
-	if priceID == "" {
-		return apis.NewBadRequestError("price not configured for plan: "+body.Plan, nil)
+	if productID == "" {
+		return apis.NewBadRequestError("product not configured for plan: "+body.Plan, nil)
+	}
+
+	priceID, err := priceIDForProduct(productID)
+	if err != nil {
+		return apis.NewBadRequestError("failed to resolve price: "+err.Error(), nil)
 	}
 
 	customerID := user.GetString("stripe_customer_id")

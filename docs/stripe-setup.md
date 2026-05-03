@@ -12,25 +12,25 @@ In the Stripe Dashboard → **Product catalog** → **Add product**:
 
 ### Pro plan
 
-| Field       | Value              |
-|-------------|--------------------|
-| Name        | Pro                |
-| Price       | $9.00              |
+| Field       | Value               |
+|-------------|---------------------|
+| Name        | Pro                 |
+| Price       | $9.00               |
 | Billing     | Recurring / Monthly |
-| Currency    | USD                |
+| Currency    | USD                 |
 
-After saving, copy the **Price ID** (starts with `price_...`).
+After saving, copy the **Product ID** from the product page (starts with `prod_...`).
 
 ### Business plan
 
-| Field       | Value              |
-|-------------|--------------------|
-| Name        | Business           |
-| Price       | $29.00             |
+| Field       | Value               |
+|-------------|---------------------|
+| Name        | Business            |
+| Price       | $29.00              |
 | Billing     | Recurring / Monthly |
-| Currency    | USD                |
+| Currency    | USD                 |
 
-After saving, copy the **Price ID** (starts with `price_...`).
+After saving, copy the **Product ID** from the product page (starts with `prod_...`).
 
 ---
 
@@ -73,9 +73,9 @@ Copy `.env.example` to `.env` and fill in your values:
 ```env
 STRIPE_SECRET_KEY=sk_test_...
 STRIPE_WEBHOOK_SECRET=whsec_...
-STRIPE_PRO_PRICE_ID=price_...        # Price ID from Pro product
-STRIPE_BUSINESS_PRICE_ID=price_...  # Price ID from Business product
-APP_URL=http://localhost:5173        # Change to your production URL
+STRIPE_PRO_PRODUCT_ID=prod_...        # Product ID from Pro product
+STRIPE_BUSINESS_PRODUCT_ID=prod_...  # Product ID from Business product
+APP_URL=http://localhost:5173         # Change to your production URL
 ```
 
 ---
@@ -96,11 +96,11 @@ Save the configuration. Users clicking **Manage Subscription** will be redirecte
 
 Use Stripe test card numbers:
 
-| Card number         | Behavior        |
-|---------------------|-----------------|
-| `4242 4242 4242 4242` | Success         |
-| `4000 0000 0000 9995` | Card declined   |
-| `4000 0025 0000 3155` | 3D Secure auth  |
+| Card number           | Behavior       |
+|-----------------------|----------------|
+| `4242 4242 4242 4242` | Success        |
+| `4000 0000 0000 9995` | Card declined  |
+| `4000 0025 0000 3155` | 3D Secure auth |
 
 Use any future expiry date and any 3-digit CVC.
 
