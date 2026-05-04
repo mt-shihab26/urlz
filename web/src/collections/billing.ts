@@ -13,6 +13,14 @@ export type TSubscription = {
     trial_end?: number;
 };
 
+export const getSubscription = async (): Promise<TSubscription> => {
+    try {
+        return pb.send<TSubscription>('/api/billing/info', { method: 'GET' });
+    } catch (e: any) {
+        throw new Error(e?.message || 'Failed fetching subscription');
+    }
+};
+
 export type TInvoice = {
     id: string;
     number: string;
@@ -32,11 +40,6 @@ export const getInvoices = async (): Promise<TInvoice[]> => {
     } catch (e: any) {
         throw new Error(e?.message || 'Failed fetching invoices');
     }
-};
-
-export type TBillingInfo = {
-    subscription: TSubscription | null;
-    invoices: TInvoice[];
 };
 
 export const createCheckoutSession = async (plan: TPlan, coupon?: string): Promise<string> => {
@@ -70,8 +73,4 @@ export const createPortalSession = async (): Promise<string> => {
         method: 'POST',
     });
     return data.url;
-};
-
-export const getBillingInfo = async (): Promise<TBillingInfo> => {
-    return pb.send<TBillingInfo>('/api/billing/info', { method: 'GET' });
 };

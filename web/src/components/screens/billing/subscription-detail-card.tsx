@@ -1,6 +1,6 @@
 import type { TSubscription } from '@/collections/billing';
 
-import { getBillingInfo } from '@/collections/billing';
+import { getSubscription } from '@/collections/billing';
 import { formatLocaleDate } from '@/lib/formats';
 import { useState } from 'react';
 
@@ -18,7 +18,7 @@ export const SubscriptionDetail = () => {
 
     const fetchBillingInfo = async () => {
         try {
-            const info = await getBillingInfo();
+            const info = await getSubscription();
             setBillingInfo(info);
         } catch {}
     };
