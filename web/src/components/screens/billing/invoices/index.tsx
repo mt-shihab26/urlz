@@ -2,6 +2,7 @@ import type { PaginationState } from '@tanstack/react-table';
 
 import { getInvoices } from '@/collections/billing';
 import { queryKeys } from '@/lib/query-keys';
+import { toastError } from '@/lib/toast';
 import { useQuery } from '@tanstack/react-query';
 import { getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
 import { useState } from 'react';
@@ -18,6 +19,7 @@ export const Invoices = () => {
     const { data, isLoading } = useQuery({
         queryKey: queryKeys.invoices,
         queryFn: getInvoices,
+        throwOnError: (e) => toastError(e),
     });
 
     const table = useReactTable({
