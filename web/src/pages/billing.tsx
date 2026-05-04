@@ -106,9 +106,7 @@ const Billing = () => {
             <Header title="Billing" description="Manage your subscription and plan" />
             <div className="flex flex-col gap-6 p-4 lg:p-6 max-w-4xl">
                 <SubscriptionCard user={user} sub={billingInfo?.subscription} />
-                {billingInfo?.subscription && (
-                    <SubscriptionDetail subscription={billingInfo.subscription} />
-                )}
+                <SubscriptionDetail />
                 <PlanCards
                     currentPlan={user.plan || 'free'}
                     onUpgrade={handleUpgrade}

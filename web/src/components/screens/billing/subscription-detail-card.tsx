@@ -1,6 +1,8 @@
 import type { TSubscription } from '@/collections/billing';
 
+import { getBillingInfo } from '@/collections/billing';
 import { formatLocaleDate } from '@/lib/formats';
+import { useState } from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -11,7 +13,16 @@ const Row = ({ label, value }: { label: string; value: React.ReactNode }) => (
     </div>
 );
 
-export const SubscriptionDetail = ({ subscription }: { subscription: TSubscription }) => {
+export const SubscriptionDetail = () => {
+    const [subscription, setBillingInfo] = useState<TSubscription | null>(null);
+
+    const fetchBillingInfo = async () => {
+        try {
+            const info = await getBillingInfo();
+            setBillingInfo(info);
+        } catch {}
+    };
+
     return (
         <Card>
             <CardHeader>
