@@ -37,7 +37,7 @@ export const Invoices = () => {
             <CardContent>
                 {isLoading ? (
                     <Loading />
-                ) : invoices.length === 0 ? (
+                ) : table.getRowCount() === 0 ? (
                     <p className="text-sm text-muted-foreground">No invoices yet.</p>
                 ) : (
                     <>
