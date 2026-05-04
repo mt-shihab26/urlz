@@ -1,4 +1,4 @@
-import type { TPlan } from '@/types/models';
+import type { TPlan, TSubscriptionStatus } from '@/types/models';
 
 import { pb } from '@/lib/pb';
 
@@ -14,7 +14,7 @@ export const createCancelUrl = async (): Promise<string> => {
 
 export type TSubscription = {
     id: string;
-    status: string;
+    status: TSubscriptionStatus;
     start_date: number;
     current_period_start: number;
     current_period_end: number;
