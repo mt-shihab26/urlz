@@ -31,13 +31,18 @@ func InvoicesHandler(e *core.RequestEvent) error {
 		return e.JSON(200, []invoice{})
 	}
 	params := &stripe.InvoiceListParams{Customer: stripe.String(customerID)}
-	params.Limit = stripe.Int64(12)
 	iter := stripeinvoice.List(params)
 	var invoices []invoice
 	for iter.Next() {
 		inv := iter.Invoice()
 		if inv.Status == stripe.InvoiceStatusDraft {
 			continue
+		}
+		periodStart := inv.PeriodStart
+		periodEnd := inv.PeriodEnd
+		if inv.Lines != nil && len(inv.Lines.Data) > 0 {
+			periodStart = inv.Lines.Data[0].Period.Start
+			periodEnd = inv.Lines.Data[0].Period.End
 		}
 		invoices = append(invoices, invoice{
 			ID:               inv.ID,
@@ -46,8 +51,8 @@ func InvoicesHandler(e *core.RequestEvent) error {
 			Currency:         string(inv.Currency),
 			Status:           string(inv.Status),
 			Created:          inv.Created,
-			PeriodStart:      inv.PeriodStart,
-			PeriodEnd:        inv.PeriodEnd,
+			PeriodStart:      periodStart,
+			PeriodEnd:        periodEnd,
 			HostedInvoiceURL: inv.HostedInvoiceURL,
 			InvoicePDF:       inv.InvoicePDF,
 		})
