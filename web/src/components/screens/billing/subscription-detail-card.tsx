@@ -1,9 +1,8 @@
-import type { TSubscriptionInfo } from '@/collections/billing';
+import type { TSubscription } from '@/collections/billing';
+
+import { formatLocaleDate } from '@/lib/formats';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-
-const fmt = (ts: number) =>
-    ts ? new Date(ts * 1000).toLocaleDateString(undefined, { dateStyle: 'medium' }) : '—';
 
 const Row = ({ label, value }: { label: string; value: React.ReactNode }) => (
     <div className="flex justify-between py-1.5 text-sm border-b last:border-0">
@@ -12,24 +11,34 @@ const Row = ({ label, value }: { label: string; value: React.ReactNode }) => (
     </div>
 );
 
-export const SubscriptionDetailCard = ({ sub }: { sub: TSubscriptionInfo }) => (
-    <Card>
-        <CardHeader>
-            <CardTitle>Subscription Details</CardTitle>
-        </CardHeader>
-        <CardContent className="divide-y-0">
-            <Row label="Subscription ID" value={<span className="font-mono text-xs">{sub.id}</span>} />
-            <Row label="Started" value={fmt(sub.start_date)} />
-            <Row label="Current period" value={`${fmt(sub.current_period_start)} – ${fmt(sub.current_period_end)}`} />
-            <Row
-                label="Renews / ends"
-                value={
-                    sub.cancel_at_period_end
-                        ? `Cancels ${fmt(sub.cancel_at ?? sub.current_period_end)}`
-                        : fmt(sub.current_period_end)
-                }
-            />
-            {sub.trial_end && <Row label="Trial ends" value={fmt(sub.trial_end)} />}
-        </CardContent>
-    </Card>
-);
+export const SubscriptionDetail = ({ subscription }: { subscription: TSubscription }) => {
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Subscription Details</CardTitle>
+            </CardHeader>
+            <CardContent className="divide-y-0">
+                <Row
+                    label="Subscription ID"
+                    value={<span className="font-mono text-xs">{subscription.id}</span>}
+                />
+                <Row label="Started" value={formatLocaleDate(subscription.start_date)} />
+                <Row
+                    label="Current period"
+                    value={`${formatLocaleDate(subscription.current_period_start)} – ${formatLocaleDate(subscription.current_period_end)}`}
+                />
+                <Row
+                    label="Renews / ends"
+                    value={
+                        subscription.cancel_at_period_end
+                            ? `Cancels ${formatLocaleDate(subscription.cancel_at ?? subscription.current_period_end)}`
+                            : formatLocaleDate(subscription.current_period_end)
+                    }
+                />
+                {subscription.trial_end && (
+                    <Row label="Trial ends" value={formatLocaleDate(subscription.trial_end)} />
+                )}
+            </CardContent>
+        </Card>
+    );
+};

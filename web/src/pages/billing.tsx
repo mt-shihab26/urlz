@@ -19,7 +19,7 @@ import { DashboardLayout } from '@/components/layouts/dashboard-layout';
 import { Invoices } from '@/components/screens/billing/invoices';
 import { PlanCards } from '@/components/screens/billing/plan-card';
 import { SubscriptionCard } from '@/components/screens/billing/subscription-card';
-import { SubscriptionDetailCard } from '@/components/screens/billing/subscription-detail-card';
+import { SubscriptionDetail } from '@/components/screens/billing/subscription-detail-card';
 
 const Billing = () => {
     const { user } = useUser();
@@ -107,7 +107,7 @@ const Billing = () => {
             <div className="flex flex-col gap-6 p-4 lg:p-6 max-w-4xl">
                 <SubscriptionCard user={user} sub={billingInfo?.subscription} />
                 {billingInfo?.subscription && (
-                    <SubscriptionDetailCard sub={billingInfo.subscription} />
+                    <SubscriptionDetail subscription={billingInfo.subscription} />
                 )}
                 <PlanCards
                     currentPlan={user.plan || 'free'}

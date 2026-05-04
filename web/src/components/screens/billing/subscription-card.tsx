@@ -1,4 +1,4 @@
-import type { TSubscriptionInfo } from '@/collections/billing';
+import type { TSubscription } from '@/collections/billing';
 import type { TSubscriptionStatus, TUser } from '@/types/models';
 
 import { createCancelFlowSession, createPortalSession } from '@/collections/billing';
@@ -45,13 +45,7 @@ const fmtDate = (ts: number) =>
 
 type LoadingAction = 'manage' | 'cancel' | null;
 
-export const SubscriptionCard = ({
-    user,
-    sub,
-}: {
-    user: TUser;
-    sub?: TSubscriptionInfo | null;
-}) => {
+export const SubscriptionCard = ({ user, sub }: { user: TUser; sub?: TSubscription | null }) => {
     const [loading, setLoading] = useState<LoadingAction>(null);
 
     const plan = user.plan || 'free';
@@ -61,9 +55,7 @@ export const SubscriptionCard = ({
     const alreadyCanceled = stripeStatus === 'canceled' || status === 'canceled';
     const canceling = !!sub?.cancel_at_period_end;
     const canCancel =
-        !alreadyCanceled &&
-        plan !== 'free' &&
-        (status === 'active' || status === 'trialing');
+        !alreadyCanceled && plan !== 'free' && (status === 'active' || status === 'trialing');
 
     const cancelDate = sub?.cancel_at
         ? fmtDate(sub.cancel_at)
@@ -110,11 +102,7 @@ export const SubscriptionCard = ({
                     </div>
                     {plan !== 'free' && (
                         <div className="flex items-center gap-2">
-                            <Button
-                                variant="outline"
-                                onClick={handleManage}
-                                disabled={!!loading}
-                            >
+                            <Button variant="outline" onClick={handleManage} disabled={!!loading}>
                                 {loading === 'manage' ? 'Opening…' : 'Manage'}
                             </Button>
                             {canCancel && (
@@ -122,7 +110,11 @@ export const SubscriptionCard = ({
                                     variant="destructive"
                                     onClick={handleCancel}
                                     disabled={!!loading || canceling}
-                                    title={canceling ? 'Subscription already scheduled for cancellation' : undefined}
+                                    title={
+                                        canceling
+                                            ? 'Subscription already scheduled for cancellation'
+                                            : undefined
+                                    }
                                 >
                                     {loading === 'cancel' ? 'Opening…' : 'Cancel plan'}
                                 </Button>
