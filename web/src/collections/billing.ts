@@ -67,3 +67,7 @@ export const createPortalSession = async (): Promise<string> => {
 export const getBillingInfo = async (): Promise<TBillingInfo> => {
     return pb.send<TBillingInfo>('/api/billing/info', { method: 'GET' });
 };
+
+export const getInvoices = async (): Promise<TInvoice[]> => {
+    return pb.send<TInvoice[]>('/api/billing/invoices', { method: 'GET' });
+};
