@@ -15,6 +15,14 @@ export type TInvoice = {
     invoice_pdf: string;
 };
 
+export const getInvoices = async (): Promise<TInvoice[]> => {
+    try {
+        return await pb.send<TInvoice[]>('/api/billing/invoices', { method: 'GET' });
+    } catch (e: any) {
+        throw new Error(e?.message || 'Failed fetching invoices');
+    }
+};
+
 export type TSubscriptionInfo = {
     id: string;
     status: string;
@@ -66,12 +74,4 @@ export const createPortalSession = async (): Promise<string> => {
 
 export const getBillingInfo = async (): Promise<TBillingInfo> => {
     return pb.send<TBillingInfo>('/api/billing/info', { method: 'GET' });
-};
-
-export const getInvoices = async (): Promise<TInvoice[]> => {
-    try {
-        return await pb.send<TInvoice[]>('/api/billing/invoices', { method: 'GET' });
-    } catch (e: any) {
-        throw new Error(e?.message || 'Failed fetching invoices');
-    }
 };
