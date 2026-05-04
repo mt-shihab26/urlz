@@ -1,7 +1,7 @@
 import type { TSubscription } from '@/collections/billing';
 import type { TSubscriptionStatus, TUser } from '@/types/models';
 
-import { createCancelFlowSession, createPortalSession } from '@/collections/billing';
+import { createCancelUrl, createPortalSession } from '@/collections/billing';
 import { toastError } from '@/lib/toast';
 import { useState } from 'react';
 
@@ -75,7 +75,7 @@ export const SubscriptionCard = ({ user, sub }: { user: TUser; sub?: TSubscripti
     const handleCancel = async () => {
         setLoading('cancel');
         try {
-            const url = await createCancelFlowSession();
+            const url = await createCancelUrl();
             window.location.href = url;
         } catch (e: any) {
             toastError(e?.message ?? 'Failed to open cancellation');

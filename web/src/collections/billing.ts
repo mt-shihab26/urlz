@@ -42,6 +42,11 @@ export const getInvoices = async (): Promise<TInvoice[]> => {
     }
 };
 
+export const createCancelUrl = async (): Promise<string> => {
+    const data = await pb.send<{ url: string }>('/api/billing/cancel', { method: 'POST' });
+    return data.url;
+};
+
 export const createCheckoutSession = async (plan: TPlan, coupon?: string): Promise<string> => {
     const data = await pb.send<{ url: string }>('/api/billing/checkout', {
         method: 'POST',
@@ -55,13 +60,6 @@ export const syncCheckoutSession = async (sessionId: string): Promise<void> => {
         method: 'POST',
         body: JSON.stringify({ session_id: sessionId }),
     });
-};
-
-export const createCancelFlowSession = async (): Promise<string> => {
-    const data = await pb.send<{ url: string }>('/api/billing/cancel-flow', {
-        method: 'POST',
-    });
-    return data.url;
 };
 
 export const syncPortalReturn = async (): Promise<void> => {
