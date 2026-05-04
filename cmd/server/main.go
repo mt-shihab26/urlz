@@ -28,7 +28,7 @@ func main() {
 		se.Router.POST("/api/billing/portal", billing.PortalHandler)
 		se.Router.POST("/api/billing/cancel-flow", billing.CancelFlowHandler)
 		se.Router.GET("/api/billing/info", billing.InfoHandler)
-
+		se.Router.GET("/api/billing/invoices", billing.InvoicesHandler)
 
 		se.Router.GET("/{code}", redirect.Handler)
 		sub, err := fs.Sub(web.DistFS, "dist")

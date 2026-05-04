@@ -36,7 +36,7 @@ export const InvoicesTable = () => {
             try {
                 setInvoices(await getInvoices());
             } catch (e: any) {
-                toastError(e instanceof Error ? e.message : e);
+                toastError(e);
             } finally {
                 setLoading(false);
             }

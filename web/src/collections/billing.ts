@@ -69,5 +69,9 @@ export const getBillingInfo = async (): Promise<TBillingInfo> => {
 };
 
 export const getInvoices = async (): Promise<TInvoice[]> => {
-    return pb.send<TInvoice[]>('/api/billing/invoices', { method: 'GET' });
+    try {
+        return await pb.send<TInvoice[]>('/api/billing/invoices', { method: 'GET' });
+    } catch (e: any) {
+        throw new Error(e?.message || 'Failed fetching invoices');
+    }
 };
