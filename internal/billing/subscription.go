@@ -8,15 +8,14 @@ import (
 )
 
 type subscription struct {
-	ID                 string    `json:"id"`
-	Status             string    `json:"status"`
-	StartDate          int64     `json:"start_date"`
-	CurrentPeriodStart int64     `json:"current_period_start"`
-	CurrentPeriodEnd   int64     `json:"current_period_end"`
-	CancelAtPeriodEnd  bool      `json:"cancel_at_period_end"`
-	CancelAt           *int64    `json:"cancel_at,omitempty"`
-	TrialEnd           *int64    `json:"trial_end,omitempty"`
-	Invoices           []invoice `json:"invoices"`
+	ID                 string `json:"id"`
+	Status             string `json:"status"`
+	StartDate          int64  `json:"start_date"`
+	CurrentPeriodStart int64  `json:"current_period_start"`
+	CurrentPeriodEnd   int64  `json:"current_period_end"`
+	CancelAtPeriodEnd  bool   `json:"cancel_at_period_end"`
+	CancelAt           *int64 `json:"cancel_at,omitempty"`
+	TrialEnd           *int64 `json:"trial_end,omitempty"`
 }
 
 func SubscriptionHandler(e *core.RequestEvent) error {

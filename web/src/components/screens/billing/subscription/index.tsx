@@ -32,8 +32,9 @@ export const Subscription = () => {
     const stripeStatus = subscription?.status as TSubscriptionStatus | undefined;
     const status = (stripeStatus ?? user.subscription_status) as TSubscriptionStatus | undefined;
     const alreadyCanceled = stripeStatus === 'canceled' || status === 'canceled';
+    const scheduledCancel = !!subscription?.cancel_at || !!subscription?.cancel_at_period_end;
     const canCancel =
-        !alreadyCanceled && plan !== 'free' && (status === 'active' || status === 'trialing');
+        !alreadyCanceled && !scheduledCancel && plan !== 'free' && (status === 'active' || status === 'trialing');
 
     return (
         <Card>

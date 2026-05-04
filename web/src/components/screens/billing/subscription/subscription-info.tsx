@@ -19,7 +19,7 @@ export const SubscriptionInfo = ({ subscription }: { subscription: TSubscription
             <Row
                 label="Renews / ends"
                 value={
-                    subscription.cancel_at_period_end
+                    subscription.cancel_at_period_end || subscription.cancel_at
                         ? `Cancels ${formatLocaleDate(subscription.cancel_at ?? subscription.current_period_end)}`
                         : formatLocaleDate(subscription.current_period_end)
                 }
