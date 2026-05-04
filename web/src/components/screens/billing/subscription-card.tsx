@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { formatLocaleDate } from '@/lib/formats';
 
 const STATUS_LABEL: Record<TSubscriptionStatus, string> = {
     active: 'Active',
@@ -40,9 +41,6 @@ const PLAN_LABEL: Record<string, string> = {
     business: 'Business',
 };
 
-const fmtDate = (ts: number) =>
-    new Date(ts * 1000).toLocaleDateString(undefined, { dateStyle: 'medium' });
-
 type LoadingAction = 'manage' | 'cancel' | null;
 
 export const SubscriptionCard = ({ user, sub }: { user: TUser; sub?: TSubscription | null }) => {
@@ -58,9 +56,9 @@ export const SubscriptionCard = ({ user, sub }: { user: TUser; sub?: TSubscripti
         !alreadyCanceled && plan !== 'free' && (status === 'active' || status === 'trialing');
 
     const cancelDate = sub?.cancel_at
-        ? fmtDate(sub.cancel_at)
+        ? formatLocaleDate(sub.cancel_at)
         : sub?.current_period_end
-          ? fmtDate(sub.current_period_end)
+          ? formatLocaleDate(sub.current_period_end)
           : null;
 
     const handleManage = async () => {
