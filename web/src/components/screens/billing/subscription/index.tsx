@@ -49,33 +49,18 @@ export const Subscription = ({ user }: { user: TUser }) => {
                 <CardTitle>Subscription</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
-                <div className="flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-3">
-                        <PlanLavel user={user} />
-                        <StatusLabel user={user} subscription={sub} />
-                    </div>
-                    {plan !== 'free' && (
-                        <div className="flex items-center gap-2">
-                            <ManageButton />
-                            {canCancel && <CancelButton />}
+                {isLoading ? (
+                    <>
+                        <div className="flex items-center justify-between gap-4">
+                            <div className="flex items-center gap-3">
+                                <Skeleton className="h-7 w-16" />
+                                <Skeleton className="h-5 w-14 rounded-full" />
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Skeleton className="h-9 w-24" />
+                            </div>
                         </div>
-                    )}
-                </div>
-                {canceling && !alreadyCanceled && (
-                    <p className="text-sm text-amber-600 dark:text-amber-400">
-                        Your subscription is scheduled to cancel
-                        {cancelDate ? ` on ${cancelDate}` : ' at the end of the billing period'}.
-                        You'll keep access until then.
-                    </p>
-                )}
-                {alreadyCanceled && (
-                    <p className="text-sm text-muted-foreground">
-                        Your subscription has been canceled. Upgrade below to reactivate.
-                    </p>
-                )}
-                <div className="border-t pt-4">
-                    {isLoading ? (
-                        <>
+                        <div className="border-t pt-4">
                             {Array.from({ length: 4 }).map((_, i) => (
                                 <div
                                     key={i}
@@ -85,34 +70,64 @@ export const Subscription = ({ user }: { user: TUser }) => {
                                     <Skeleton className="h-4 w-36" />
                                 </div>
                             ))}
-                        </>
-                    ) : !sub ? (
-                        <p className="text-sm text-muted-foreground">No subscription found.</p>
-                    ) : (
-                        <>
-                            <Row
-                                label="Subscription ID"
-                                value={<span className="font-mono text-xs">{sub.id}</span>}
-                            />
-                            <Row label="Started" value={formatLocaleDate(sub.start_date)} />
-                            <Row
-                                label="Current period"
-                                value={`${formatLocaleDate(sub.current_period_start)} – ${formatLocaleDate(sub.current_period_end)}`}
-                            />
-                            <Row
-                                label="Renews / ends"
-                                value={
-                                    sub.cancel_at_period_end
-                                        ? `Cancels ${formatLocaleDate(sub.cancel_at ?? sub.current_period_end)}`
-                                        : formatLocaleDate(sub.current_period_end)
-                                }
-                            />
-                            {sub.trial_end && (
-                                <Row label="Trial ends" value={formatLocaleDate(sub.trial_end)} />
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        <div className="flex items-center justify-between gap-4">
+                            <div className="flex items-center gap-3">
+                                <PlanLavel user={user} />
+                                <StatusLabel user={user} subscription={sub} />
+                            </div>
+                            {plan !== 'free' && (
+                                <div className="flex items-center gap-2">
+                                    <ManageButton />
+                                    {canCancel && <CancelButton />}
+                                </div>
                             )}
-                        </>
-                    )}
-                </div>
+                        </div>
+                        {canceling && !alreadyCanceled && (
+                            <p className="text-sm text-amber-600 dark:text-amber-400">
+                                Your subscription is scheduled to cancel
+                                {cancelDate ? ` on ${cancelDate}` : ' at the end of the billing period'}.
+                                You'll keep access until then.
+                            </p>
+                        )}
+                        {alreadyCanceled && (
+                            <p className="text-sm text-muted-foreground">
+                                Your subscription has been canceled. Upgrade below to reactivate.
+                            </p>
+                        )}
+                        <div className="border-t pt-4">
+                            {!sub ? (
+                                <p className="text-sm text-muted-foreground">No subscription found.</p>
+                            ) : (
+                                <>
+                                    <Row
+                                        label="Subscription ID"
+                                        value={<span className="font-mono text-xs">{sub.id}</span>}
+                                    />
+                                    <Row label="Started" value={formatLocaleDate(sub.start_date)} />
+                                    <Row
+                                        label="Current period"
+                                        value={`${formatLocaleDate(sub.current_period_start)} – ${formatLocaleDate(sub.current_period_end)}`}
+                                    />
+                                    <Row
+                                        label="Renews / ends"
+                                        value={
+                                            sub.cancel_at_period_end
+                                                ? `Cancels ${formatLocaleDate(sub.cancel_at ?? sub.current_period_end)}`
+                                                : formatLocaleDate(sub.current_period_end)
+                                        }
+                                    />
+                                    {sub.trial_end && (
+                                        <Row label="Trial ends" value={formatLocaleDate(sub.trial_end)} />
+                                    )}
+                                </>
+                            )}
+                        </div>
+                    </>
+                )}
             </CardContent>
         </Card>
     );
