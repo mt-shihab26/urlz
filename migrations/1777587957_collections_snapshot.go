@@ -808,6 +808,21 @@ func init() {
 						"type": "text"
 					},
 					{
+						"autogeneratePattern": "",
+						"help": "",
+						"hidden": false,
+						"id": "text_subscription_cancel",
+						"max": 0,
+						"min": 0,
+						"name": "subscription_cancel_at",
+						"pattern": "",
+						"presentable": false,
+						"primaryKey": false,
+						"required": false,
+						"system": false,
+						"type": "text"
+					},
+					{
 						"hidden": false,
 						"id": "autodate2990389176",
 						"name": "created",

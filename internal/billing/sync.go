@@ -1,6 +1,8 @@
 package billing
 
 import (
+	"time"
+
 	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/stripe/stripe-go/v85"
@@ -45,9 +47,15 @@ func SyncHandler(e *core.RequestEvent) error {
 	subID := s.Subscription.ID
 	subStatus := string(s.Subscription.Status)
 
+	var cancelAt string
+	if s.Subscription.CancelAt > 0 {
+		cancelAt = time.Unix(s.Subscription.CancelAt, 0).UTC().Format(time.RFC3339)
+	}
+
 	user.Set("plan", plan)
 	user.Set("subscription_id", subID)
 	user.Set("subscription_status", subStatus)
+	user.Set("subscription_cancel_at", cancelAt)
 	if err := e.App.Save(user); err != nil {
 		return apis.NewBadRequestError("failed to update user", err)
 	}
@@ -80,11 +88,15 @@ func SyncPortalHandler(e *core.RequestEvent) error {
 	plan := "free"
 	subID := user.GetString("subscription_id") // preserve existing if none found
 	subStatus := "canceled"
+	var cancelAt string
 
 	if iter.Next() {
 		sub := iter.Subscription()
 		subID = sub.ID
 		subStatus = string(sub.Status)
+		if sub.CancelAt > 0 {
+			cancelAt = time.Unix(sub.CancelAt, 0).UTC().Format(time.RFC3339)
+		}
 		if sub.Status == stripe.SubscriptionStatusActive || sub.Status == stripe.SubscriptionStatusTrialing {
 			plan = sub.Metadata["plan"]
 			if plan == "" {
@@ -96,6 +108,7 @@ func SyncPortalHandler(e *core.RequestEvent) error {
 	user.Set("plan", plan)
 	user.Set("subscription_id", subID)
 	user.Set("subscription_status", subStatus)
+	user.Set("subscription_cancel_at", cancelAt)
 	if err := e.App.Save(user); err != nil {
 		return apis.NewBadRequestError("failed to update user", err)
 	}
