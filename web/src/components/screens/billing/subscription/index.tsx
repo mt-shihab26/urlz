@@ -1,7 +1,6 @@
-import type { TSubscriptionStatus } from '@/types/models';
-
 import { getSubscription } from '@/collections/billing';
 import { useUser } from '@/components/providers/auth-provider';
+import { getCanCancel, getIsFree } from '@/lib/canceling';
 import { queryKeys } from '@/lib/query-keys';
 import { toastError } from '@/lib/toast';
 import { useQuery } from '@tanstack/react-query';
@@ -18,8 +17,6 @@ import { SubscriptionInfo } from './subscription-info';
 export const Subscription = () => {
     const { user } = useUser();
 
-    const plan = user.plan || 'free';
-
     const { data: subscription, isLoading } = useQuery({
         queryKey: queryKeys.subscription,
         queryFn: getSubscription,
@@ -29,12 +26,7 @@ export const Subscription = () => {
         },
     });
 
-    const stripeStatus = subscription?.status as TSubscriptionStatus | undefined;
-    const status = (stripeStatus ?? user.subscription_status) as TSubscriptionStatus | undefined;
-    const alreadyCanceled = stripeStatus === 'canceled' || status === 'canceled';
-    const scheduledCancel = !!subscription?.cancel_at || !!subscription?.cancel_at_period_end;
-    const canCancel =
-        !alreadyCanceled && !scheduledCancel && plan !== 'free' && (status === 'active' || status === 'trialing');
+    const canCancel = getCanCancel(subscription, user);
 
     return (
         <Card>
@@ -53,7 +45,7 @@ export const Subscription = () => {
                                 <PlanLavel user={user} />
                                 <StatusLabel user={user} subscription={subscription} />
                             </div>
-                            {plan !== 'free' && (
+                            {!getIsFree(user) && (
                                 <div className="flex items-center gap-2">
                                     <ManageButton />
                                     {canCancel && <CancelButton />}
