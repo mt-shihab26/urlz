@@ -15,7 +15,7 @@ export type TSubscription = {
 
 export const getSubscription = async (): Promise<TSubscription> => {
     try {
-        return pb.send<TSubscription>('/api/billing/info', { method: 'GET' });
+        return pb.send<TSubscription>('/api/billing/subscription', { method: 'GET' });
     } catch (e: any) {
         throw new Error(e?.message || 'Failed fetching subscription');
     }

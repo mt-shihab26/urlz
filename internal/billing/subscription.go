@@ -20,7 +20,7 @@ type subscriptionInfo struct {
 	Invoices           []invoice `json:"invoices"`
 }
 
-func InfoHandler(e *core.RequestEvent) error {
+func SubscriptionHandler(e *core.RequestEvent) error {
 	user := e.Auth
 	if user == nil {
 		return apis.NewUnauthorizedError("unauthorized", nil)
