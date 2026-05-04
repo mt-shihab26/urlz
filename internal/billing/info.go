@@ -8,17 +8,16 @@ import (
 	stripesubscription "github.com/stripe/stripe-go/v85/subscription"
 )
 
-type invoiceInfo struct {
-	ID               string `json:"id"`
-	Number           string `json:"number"`
-	AmountPaid       int64  `json:"amount_paid"`
-	Currency         string `json:"currency"`
-	Status           string `json:"status"`
-	Created          int64  `json:"created"`
-	PeriodStart      int64  `json:"period_start"`
-	PeriodEnd        int64  `json:"period_end"`
-	HostedInvoiceURL string `json:"hosted_invoice_url"`
-	InvoicePDF       string `json:"invoice_pdf"`
+type subscriptionInfo struct {
+	ID                 string    `json:"id"`
+	Status             string    `json:"status"`
+	StartDate          int64     `json:"start_date"`
+	CurrentPeriodStart int64     `json:"current_period_start"`
+	CurrentPeriodEnd   int64     `json:"current_period_end"`
+	CancelAtPeriodEnd  bool      `json:"cancel_at_period_end"`
+	CancelAt           *int64    `json:"cancel_at,omitempty"`
+	TrialEnd           *int64    `json:"trial_end,omitempty"`
+	Invoices           []invoice `json:"invoices"`
 }
 
 func InfoHandler(e *core.RequestEvent) error {
@@ -31,7 +30,7 @@ func InfoHandler(e *core.RequestEvent) error {
 	customerID := user.GetString("stripe_customer_id")
 
 	if subID == "" || customerID == "" {
-		return e.JSON(200, map[string]any{"subscription": nil, "invoices": []invoiceInfo{}})
+		return e.JSON(200, map[string]any{"subscription": nil, "invoices": []invoice{}})
 	}
 
 	subParams := &stripe.SubscriptionParams{}
@@ -69,13 +68,13 @@ func InfoHandler(e *core.RequestEvent) error {
 	invoiceParams.Limit = stripe.Int64(12)
 	iter := stripeinvoice.List(invoiceParams)
 
-	var invoices []invoiceInfo
+	var invoices []invoice
 	for iter.Next() {
 		inv := iter.Invoice()
 		if inv.Status == stripe.InvoiceStatusDraft {
 			continue
 		}
-		invoices = append(invoices, invoiceInfo{
+		invoices = append(invoices, invoice{
 			ID:               inv.ID,
 			Number:           inv.Number,
 			AmountPaid:       inv.AmountPaid,
@@ -89,7 +88,7 @@ func InfoHandler(e *core.RequestEvent) error {
 		})
 	}
 	if invoices == nil {
-		invoices = []invoiceInfo{}
+		invoices = []invoice{}
 	}
 
 	return e.JSON(200, map[string]any{
