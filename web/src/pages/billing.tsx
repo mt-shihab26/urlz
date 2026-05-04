@@ -76,7 +76,6 @@ const Billing = () => {
         <DashboardLayout title="Billing">
             <Header title="Billing" description="Manage your subscription and plan" />
             <div className="flex flex-col gap-6 p-4 lg:p-6 max-w-4xl">
-                <Subscription user={user} />
                 <PlanCards
                     currentPlan={user.plan || 'free'}
                     onUpgrade={handleUpgrade}
@@ -84,6 +83,7 @@ const Billing = () => {
                     coupon={coupon}
                     onCouponChange={setCoupon}
                 />
+                <Subscription />
                 <Invoices />
             </div>
         </DashboardLayout>
