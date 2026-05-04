@@ -28,7 +28,7 @@ export const routes: TRoute[] = [
     // App (auth protected)
     {
         path: route.overviewIndex(),
-        component: lazy(() => import('@/pages/overview/index')),
+        component: lazy(() => import('@/pages/overview')),
         guard: 'auth',
     },
     {
@@ -43,22 +43,22 @@ export const routes: TRoute[] = [
     },
     {
         path: route.analyticsIndex(),
-        component: lazy(() => import('@/pages/analytics/index')),
+        component: lazy(() => import('@/pages/analytics')),
         guard: 'auth',
     },
     {
         path: route.clicksIndex(),
-        component: lazy(() => import('@/pages/clicks/index')),
+        component: lazy(() => import('@/pages/clicks')),
         guard: 'auth',
     },
     {
         path: route.settingsIndex(),
-        component: lazy(() => import('@/pages/settings/index')),
+        component: lazy(() => import('@/pages/settings')),
         guard: 'auth',
     },
     {
         path: route.billingIndex(),
-        component: lazy(() => import('@/pages/billing/index')),
+        component: lazy(() => import('@/pages/billing')),
         guard: 'auth',
     },
     // Auth (guest only)

@@ -17,8 +17,8 @@ import { Header } from '@/components/composite/site-header';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
 import { InvoicesTable } from '@/components/screens/billing/invoices-table';
 import { PlanCards } from '@/components/screens/billing/plan-card';
-import { SubscriptionDetailCard } from '@/components/screens/billing/subscription-detail-card';
 import { SubscriptionCard } from '@/components/screens/billing/subscription-card';
+import { SubscriptionDetailCard } from '@/components/screens/billing/subscription-detail-card';
 import { toast } from 'sonner';
 
 const Billing = () => {
@@ -33,9 +33,16 @@ const Billing = () => {
             const info = await getBillingInfo();
             setBillingInfo(info);
             // Stripe says canceled but PB still shows paid plan — auto sync
-            if (autoSync && user.plan !== 'free' && (!info.subscription || info.subscription.status === 'canceled')) {
+            if (
+                autoSync &&
+                user.plan !== 'free' &&
+                (!info.subscription || info.subscription.status === 'canceled')
+            ) {
                 await syncPortalReturn().catch(() => {});
-                await pb.collection('users').authRefresh().catch(() => {});
+                await pb
+                    .collection('users')
+                    .authRefresh()
+                    .catch(() => {});
             }
         } catch {}
     };
@@ -47,7 +54,12 @@ const Billing = () => {
         if (searchParams.get('success') === '1' && sessionId) {
             setSearchParams({}, { replace: true });
             syncCheckoutSession(sessionId)
-                .then(() => pb.collection('users').authRefresh().catch(() => {}))
+                .then(() =>
+                    pb
+                        .collection('users')
+                        .authRefresh()
+                        .catch(() => {}),
+                )
                 .then(() => {
                     toast.success('Subscription activated!');
                     fetchBillingInfo();
@@ -59,7 +71,12 @@ const Billing = () => {
         if (portalReturn === '1') {
             setSearchParams({}, { replace: true });
             syncPortalReturn()
-                .then(() => pb.collection('users').authRefresh().catch(() => {}))
+                .then(() =>
+                    pb
+                        .collection('users')
+                        .authRefresh()
+                        .catch(() => {}),
+                )
                 .then(() => {
                     toast.success('Subscription updated!');
                     fetchBillingInfo();
@@ -98,9 +115,7 @@ const Billing = () => {
                     coupon={coupon}
                     onCouponChange={setCoupon}
                 />
-                {billingInfo && (
-                    <InvoicesTable invoices={billingInfo.invoices} />
-                )}
+                {billingInfo && <InvoicesTable invoices={billingInfo.invoices} />}
             </div>
         </DashboardLayout>
     );
