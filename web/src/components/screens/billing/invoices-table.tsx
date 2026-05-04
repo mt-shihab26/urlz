@@ -32,7 +32,6 @@ export const InvoicesTable = () => {
 
     useEffect(() => {
         (async () => {
-            setLoading(true);
             try {
                 setInvoices(await getInvoices());
             } catch (e: any) {
