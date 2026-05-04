@@ -13,7 +13,7 @@ import { Loading } from './loading';
 import { Paginator } from './paginator';
 
 export const Invoices = () => {
-    const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 3 });
+    const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 5 });
 
     const { data, isLoading } = useQuery({
         queryKey: queryKeys.invoices,
