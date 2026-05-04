@@ -16,9 +16,10 @@ export type TUser = {
     email: string;
     avatar?: string;
     deleted?: string;
+    subscription_id?: string;
     plan?: TPlan;
     subscription_status?: TSubscriptionStatus;
-    subscription_id?: string;
+    subscription_cancel_at?: string;
 };
 
 export type TLinkStatus = 'active' | 'disabled';
