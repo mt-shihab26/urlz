@@ -116,7 +116,7 @@ const Billing = () => {
                     coupon={coupon}
                     onCouponChange={setCoupon}
                 />
-                {billingInfo && <InvoicesTable invoices={billingInfo.invoices} />}
+                <InvoicesTable />
             </div>
         </DashboardLayout>
     );
