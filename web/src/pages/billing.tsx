@@ -1,15 +1,16 @@
-import type { TBillingInfo } from '@/collections/billing';
-import type { TPlan } from '@/types/models';
-
 import {
     createCheckoutSession,
     getBillingInfo,
     syncCheckoutSession,
     syncPortalReturn,
 } from '@/collections/billing';
+
+import type { TBillingInfo } from '@/collections/billing';
+import type { TPlan } from '@/types/models';
+
 import { useUser } from '@/components/providers/auth-provider';
 import { pb } from '@/lib/pb';
-import { toastError } from '@/lib/toast';
+import { toastError, toastSuccess } from '@/lib/toast';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 
@@ -19,10 +20,10 @@ import { InvoicesTable } from '@/components/screens/billing/invoices-table';
 import { PlanCards } from '@/components/screens/billing/plan-card';
 import { SubscriptionCard } from '@/components/screens/billing/subscription-card';
 import { SubscriptionDetailCard } from '@/components/screens/billing/subscription-detail-card';
-import { toast } from 'sonner';
 
 const Billing = () => {
     const { user } = useUser();
+
     const [searchParams, setSearchParams] = useSearchParams();
     const [loading, setLoading] = useState<TPlan | null>(null);
     const [coupon, setCoupon] = useState('');
@@ -61,10 +62,10 @@ const Billing = () => {
                         .catch(() => {}),
                 )
                 .then(() => {
-                    toast.success('Subscription activated!');
+                    toastSuccess('Subscription activated!');
                     fetchBillingInfo();
                 })
-                .catch(() => toast.error('Failed to activate plan. Contact support.'));
+                .catch(() => toastError('Failed to activate plan. Contact support.'));
             return;
         }
 
@@ -78,10 +79,10 @@ const Billing = () => {
                         .catch(() => {}),
                 )
                 .then(() => {
-                    toast.success('Subscription updated!');
+                    toastSuccess('Subscription updated!');
                     fetchBillingInfo();
                 })
-                .catch(() => toast.error('Failed to sync subscription. Please refresh.'));
+                .catch(() => toastError('Failed to sync subscription. Please refresh.'));
         }
     }, []);
 
