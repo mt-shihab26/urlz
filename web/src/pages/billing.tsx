@@ -1,11 +1,9 @@
 import {
     createCheckoutSession,
-    getBillingInfo,
     syncCheckoutSession,
     syncPortalReturn,
 } from '@/collections/billing';
 
-import type { TBillingInfo } from '@/collections/billing';
 import type { TPlan } from '@/types/models';
 
 import { useUser } from '@/components/providers/auth-provider';
@@ -27,26 +25,6 @@ const Billing = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [loading, setLoading] = useState<TPlan | null>(null);
     const [coupon, setCoupon] = useState('');
-    const [billingInfo, setBillingInfo] = useState<TBillingInfo | null>(null);
-
-    const fetchBillingInfo = async (autoSync = false) => {
-        try {
-            const info = await getBillingInfo();
-            setBillingInfo(info);
-            // Stripe says canceled but PB still shows paid plan — auto sync
-            if (
-                autoSync &&
-                user.plan !== 'free' &&
-                (!info.subscription || info.subscription.status === 'canceled')
-            ) {
-                await syncPortalReturn().catch(() => {});
-                await pb
-                    .collection('users')
-                    .authRefresh()
-                    .catch(() => {});
-            }
-        } catch {}
-    };
 
     useEffect(() => {
         const sessionId = searchParams.get('session_id');
@@ -63,7 +41,6 @@ const Billing = () => {
                 )
                 .then(() => {
                     toastSuccess('Subscription activated!');
-                    fetchBillingInfo();
                 })
                 .catch(() => toastError('Failed to activate plan. Contact support.'));
             return;
@@ -80,15 +57,10 @@ const Billing = () => {
                 )
                 .then(() => {
                     toastSuccess('Subscription updated!');
-                    fetchBillingInfo();
                 })
                 .catch(() => toastError('Failed to sync subscription. Please refresh.'));
         }
     }, []);
-
-    useEffect(() => {
-        fetchBillingInfo(true);
-    }, [user.plan]);
 
     const handleUpgrade = async (plan: TPlan) => {
         setLoading(plan);
@@ -105,7 +77,7 @@ const Billing = () => {
         <DashboardLayout title="Billing">
             <Header title="Billing" description="Manage your subscription and plan" />
             <div className="flex flex-col gap-6 p-4 lg:p-6 max-w-4xl">
-                <SubscriptionCard user={user} sub={billingInfo?.subscription} />
+                <SubscriptionCard user={user} />
                 <SubscriptionDetail />
                 <PlanCards
                     currentPlan={user.plan || 'free'}
