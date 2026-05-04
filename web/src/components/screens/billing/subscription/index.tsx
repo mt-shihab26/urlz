@@ -2,27 +2,23 @@ import type { TSubscriptionStatus } from '@/types/models';
 
 import { getSubscription } from '@/collections/billing';
 import { useUser } from '@/components/providers/auth-provider';
-import { formatLocaleDate } from '@/lib/formats';
 import { queryKeys } from '@/lib/query-keys';
 import { toastError } from '@/lib/toast';
 import { useQuery } from '@tanstack/react-query';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
 import { CancelButton } from './cancel-button';
+import { CancelingInfo } from './canceling-info';
+import { Loading } from './loading';
 import { ManageButton } from './manage-button';
 import { PlanLavel } from './plan-label';
 import { StatusLabel } from './status-label';
-
-const Row = ({ label, value }: { label: string; value: React.ReactNode }) => (
-    <div className="flex justify-between py-1.5 text-sm border-b last:border-0">
-        <span className="text-muted-foreground">{label}</span>
-        <span className="font-medium">{value}</span>
-    </div>
-);
+import { SubscriptionInfo } from './subscription-info';
 
 export const Subscription = () => {
     const { user } = useUser();
+
+    const plan = user.plan || 'free';
 
     const { data: subscription, isLoading } = useQuery({
         queryKey: queryKeys.subscription,
@@ -33,18 +29,11 @@ export const Subscription = () => {
         },
     });
 
-    const plan = user.plan || 'free';
     const stripeStatus = subscription?.status as TSubscriptionStatus | undefined;
     const status = (stripeStatus ?? user.subscription_status) as TSubscriptionStatus | undefined;
     const alreadyCanceled = stripeStatus === 'canceled' || status === 'canceled';
-    const canceling = !!subscription?.cancel_at_period_end;
     const canCancel =
         !alreadyCanceled && plan !== 'free' && (status === 'active' || status === 'trialing');
-    const cancelDate = subscription?.cancel_at
-        ? formatLocaleDate(subscription.cancel_at)
-        : subscription?.current_period_end
-          ? formatLocaleDate(subscription.current_period_end)
-          : null;
 
     return (
         <Card>
@@ -53,28 +42,9 @@ export const Subscription = () => {
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
                 {isLoading ? (
-                    <>
-                        <div className="flex items-center justify-between gap-4">
-                            <div className="flex items-center gap-3">
-                                <Skeleton className="h-7 w-16" />
-                                <Skeleton className="h-5 w-14 rounded-full" />
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <Skeleton className="h-9 w-24" />
-                            </div>
-                        </div>
-                        <div className="border-t pt-4">
-                            {Array.from({ length: 4 }).map((_, i) => (
-                                <div
-                                    key={i}
-                                    className="flex justify-between py-1.5 border-b last:border-0"
-                                >
-                                    <Skeleton className="h-4 w-28" />
-                                    <Skeleton className="h-4 w-36" />
-                                </div>
-                            ))}
-                        </div>
-                    </>
+                    <Loading />
+                ) : !subscription ? (
+                    <p className="text-sm text-muted-foreground">No subscription found.</p>
                 ) : (
                     <>
                         <div className="flex items-center justify-between gap-4">
@@ -89,60 +59,8 @@ export const Subscription = () => {
                                 </div>
                             )}
                         </div>
-                        {canceling && !alreadyCanceled && (
-                            <p className="text-sm text-amber-600 dark:text-amber-400">
-                                Your subscription is scheduled to cancel
-                                {cancelDate
-                                    ? ` on ${cancelDate}`
-                                    : ' at the end of the billing period'}
-                                . You'll keep access until then.
-                            </p>
-                        )}
-                        {alreadyCanceled && (
-                            <p className="text-sm text-muted-foreground">
-                                Your subscription has been canceled. Upgrade below to reactivate.
-                            </p>
-                        )}
-                        <div className="border-t pt-4">
-                            {!subscription ? (
-                                <p className="text-sm text-muted-foreground">
-                                    No subscription found.
-                                </p>
-                            ) : (
-                                <>
-                                    <Row
-                                        label="Subscription ID"
-                                        value={
-                                            <span className="font-mono text-xs">
-                                                {subscription.id}
-                                            </span>
-                                        }
-                                    />
-                                    <Row
-                                        label="Started"
-                                        value={formatLocaleDate(subscription.start_date)}
-                                    />
-                                    <Row
-                                        label="Current period"
-                                        value={`${formatLocaleDate(subscription.current_period_start)} – ${formatLocaleDate(subscription.current_period_end)}`}
-                                    />
-                                    <Row
-                                        label="Renews / ends"
-                                        value={
-                                            subscription.cancel_at_period_end
-                                                ? `Cancels ${formatLocaleDate(subscription.cancel_at ?? subscription.current_period_end)}`
-                                                : formatLocaleDate(subscription.current_period_end)
-                                        }
-                                    />
-                                    {subscription.trial_end && (
-                                        <Row
-                                            label="Trial ends"
-                                            value={formatLocaleDate(subscription.trial_end)}
-                                        />
-                                    )}
-                                </>
-                            )}
-                        </div>
+                        <CancelingInfo subscription={subscription} />
+                        <SubscriptionInfo subscription={subscription} />
                     </>
                 )}
             </CardContent>

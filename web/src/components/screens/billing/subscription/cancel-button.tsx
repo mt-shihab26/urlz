@@ -30,7 +30,7 @@ export const CancelButton = ({ sub }: { sub?: TSubscription | null }) => {
             disabled={!!loading || canceling}
             title={canceling ? 'Subscription already scheduled for cancellation' : undefined}
         >
-            {loading ? 'Opening…' : 'Cancel plan'}
+            {loading ? 'Opening…' : 'Cancel'}
         </Button>
     );
 };
