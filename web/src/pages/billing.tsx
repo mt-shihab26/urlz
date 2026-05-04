@@ -16,8 +16,8 @@ import { Header } from '@/components/composite/site-header';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
 import { Invoices } from '@/components/screens/billing/invoices';
 import { PlanCards } from '@/components/screens/billing/plan-card';
-import { SubscriptionCard } from '@/components/screens/billing/subscription-card';
 import { SubscriptionDetail } from '@/components/screens/billing/subscription-detail';
+import { SubscriptionCard } from '@/components/screens/billing/subscription/subscription-card';
 
 const Billing = () => {
     const { user } = useUser();

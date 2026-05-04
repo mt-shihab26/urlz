@@ -2,6 +2,16 @@ import type { TPlan } from '@/types/models';
 
 import { pb } from '@/lib/pb';
 
+export const createManageUrl = async (): Promise<string> => {
+    const data = await pb.send<{ url: string }>('/api/billing/portal', { method: 'POST' });
+    return data.url;
+};
+
+export const createCancelUrl = async (): Promise<string> => {
+    const data = await pb.send<{ url: string }>('/api/billing/cancel', { method: 'POST' });
+    return data.url;
+};
+
 export type TSubscription = {
     id: string;
     status: string;
@@ -42,11 +52,6 @@ export const getInvoices = async (): Promise<TInvoice[]> => {
     }
 };
 
-export const createCancelUrl = async (): Promise<string> => {
-    const data = await pb.send<{ url: string }>('/api/billing/cancel', { method: 'POST' });
-    return data.url;
-};
-
 export const createCheckoutSession = async (plan: TPlan, coupon?: string): Promise<string> => {
     const data = await pb.send<{ url: string }>('/api/billing/checkout', {
         method: 'POST',
@@ -64,11 +69,4 @@ export const syncCheckoutSession = async (sessionId: string): Promise<void> => {
 
 export const syncPortalReturn = async (): Promise<void> => {
     await pb.send('/api/billing/sync-portal', { method: 'POST' });
-};
-
-export const createPortalSession = async (): Promise<string> => {
-    const data = await pb.send<{ url: string }>('/api/billing/portal', {
-        method: 'POST',
-    });
-    return data.url;
 };
