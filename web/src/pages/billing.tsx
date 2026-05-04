@@ -16,8 +16,7 @@ import { Header } from '@/components/composite/site-header';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
 import { Invoices } from '@/components/screens/billing/invoices';
 import { PlanCards } from '@/components/screens/billing/plan-card';
-import { SubscriptionDetail } from '@/components/screens/billing/subscription-detail';
-import { SubscriptionCard } from '@/components/screens/billing/subscription/subscription-card';
+import { Subscription } from '@/components/screens/billing/subscription';
 
 const Billing = () => {
     const { user } = useUser();
@@ -77,8 +76,7 @@ const Billing = () => {
         <DashboardLayout title="Billing">
             <Header title="Billing" description="Manage your subscription and plan" />
             <div className="flex flex-col gap-6 p-4 lg:p-6 max-w-4xl">
-                <SubscriptionCard user={user} />
-                <SubscriptionDetail />
+                <Subscription user={user} />
                 <PlanCards
                     currentPlan={user.plan || 'free'}
                     onUpgrade={handleUpgrade}
