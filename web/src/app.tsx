@@ -1,5 +1,6 @@
 import { routes } from '@/routes';
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Suspense } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
 
@@ -12,6 +13,8 @@ import { ThemeProvider } from '@/components/providers/theme-provider';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Toaster } from './components/ui/sonner';
 
+const queryClient = new QueryClient();
+
 const guardMap = {
     auth: AuthGuard,
     guest: GuestGuard,
@@ -21,34 +24,36 @@ const guardMap = {
 export const App = () => {
     return (
         <>
-            <ThemeProvider>
-                <AuthProvider>
-                    <TooltipProvider>
-                        <BrowserRouter>
-                            <Suspense fallback={<PageLoader />}>
-                                <Routes>
-                                    {routes.map((route) => {
-                                        const Guard = guardMap[route.guard];
-                                        const element =
-                                            'redirect' in route ? (
-                                                <Navigate to={route.redirect} replace />
-                                            ) : (
-                                                <route.component />
+            <QueryClientProvider client={queryClient}>
+                <ThemeProvider>
+                    <AuthProvider>
+                        <TooltipProvider>
+                            <BrowserRouter>
+                                <Suspense fallback={<PageLoader />}>
+                                    <Routes>
+                                        {routes.map((route) => {
+                                            const Guard = guardMap[route.guard];
+                                            const element =
+                                                'redirect' in route ? (
+                                                    <Navigate to={route.redirect} replace />
+                                                ) : (
+                                                    <route.component />
+                                                );
+                                            return (
+                                                <Route
+                                                    key={route.path}
+                                                    path={route.path}
+                                                    element={<Guard>{element}</Guard>}
+                                                />
                                             );
-                                        return (
-                                            <Route
-                                                key={route.path}
-                                                path={route.path}
-                                                element={<Guard>{element}</Guard>}
-                                            />
-                                        );
-                                    })}
-                                </Routes>
-                            </Suspense>
-                        </BrowserRouter>
-                    </TooltipProvider>
-                </AuthProvider>
-            </ThemeProvider>
+                                        })}
+                                    </Routes>
+                                </Suspense>
+                            </BrowserRouter>
+                        </TooltipProvider>
+                    </AuthProvider>
+                </ThemeProvider>
+            </QueryClientProvider>
             <Toaster />
         </>
     );

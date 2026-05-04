@@ -1,10 +1,10 @@
-import type { TInvoice } from '@/collections/billing';
 import type { PaginationState } from '@tanstack/react-table';
 
 import { getInvoices } from '@/collections/billing';
-import { toastError } from '@/lib/toast';
+import { queryKeys } from '@/lib/query-keys';
+import { useQuery } from '@tanstack/react-query';
 import { getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { columns } from './columns';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,24 +13,15 @@ import { Loading } from './loading';
 import { Paginator } from './paginator';
 
 export const Invoices = () => {
-    const [loading, setLoading] = useState<boolean>(true);
-    const [invoices, setInvoices] = useState<TInvoice[]>([]);
     const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 3 });
 
-    useEffect(() => {
-        (async () => {
-            try {
-                setInvoices(await getInvoices());
-            } catch (e: any) {
-                toastError(e);
-            } finally {
-                setLoading(false);
-            }
-        })();
-    }, []);
+    const { data, isLoading } = useQuery({
+        queryKey: queryKeys.invoices,
+        queryFn: getInvoices,
+    });
 
     const table = useReactTable({
-        data: invoices,
+        data: data || [],
         columns,
         state: { pagination },
         onPaginationChange: setPagination,
@@ -44,7 +35,7 @@ export const Invoices = () => {
                 <CardTitle>Invoices</CardTitle>
             </CardHeader>
             <CardContent>
-                {loading ? (
+                {isLoading ? (
                     <Loading />
                 ) : invoices.length === 0 ? (
                     <p className="text-sm text-muted-foreground">No invoices yet.</p>
