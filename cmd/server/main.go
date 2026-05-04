@@ -26,7 +26,8 @@ func main() {
 		se.Router.POST("/api/billing/sync", billing.SyncHandler)
 		se.Router.POST("/api/billing/sync-portal", billing.SyncPortalHandler)
 		se.Router.POST("/api/billing/portal", billing.PortalHandler)
-		se.Router.POST("/api/billing/cancel-flow", billing.CancelFlowHandler)
+		se.Router.POST("/api/billing/cancel", billing.CancelFlowHandler)
+		se.Router.POST("/api/billing/uncancel", billing.UncancelHandler)
 
 		se.Router.GET("/api/billing/subscription", billing.SubscriptionHandler)
 		se.Router.GET("/api/billing/invoices", billing.InvoicesHandler)

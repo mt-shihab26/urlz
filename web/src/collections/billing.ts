@@ -70,3 +70,7 @@ export const syncCheckoutSession = async (sessionId: string): Promise<void> => {
 export const syncPortalReturn = async (): Promise<void> => {
     await pb.send('/api/billing/sync-portal', { method: 'POST' });
 };
+
+export const uncancelSubscription = async (): Promise<void> => {
+    await pb.send('/api/billing/uncancel', { method: 'POST' });
+};

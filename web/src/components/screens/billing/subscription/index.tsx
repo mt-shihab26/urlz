@@ -1,6 +1,6 @@
 import { getSubscription } from '@/collections/billing';
 import { useUser } from '@/components/providers/auth-provider';
-import { getCanCancel, getIsFree } from '@/lib/canceling';
+import { getCanCancel, getIsFree, getScheduledToCancel } from '@/lib/canceling';
 import { queryKeys } from '@/lib/query-keys';
 import { toastError } from '@/lib/toast';
 import { useQuery } from '@tanstack/react-query';
@@ -8,6 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CancelButton } from './cancel-button';
 import { CancelingInfo } from './canceling-info';
+import { UncancelButton } from './uncancel-button';
 import { Loading } from './loading';
 import { ManageButton } from './manage-button';
 import { PlanLavel } from './plan-label';
@@ -27,6 +28,7 @@ export const Subscription = () => {
     });
 
     const canCancel = getCanCancel(subscription, user);
+    const scheduledCancel = subscription ? getScheduledToCancel(subscription) : false;
 
     return (
         <Card>
@@ -48,6 +50,7 @@ export const Subscription = () => {
                             {!getIsFree(user) && (
                                 <div className="flex items-center gap-2">
                                     <ManageButton />
+                                    {scheduledCancel && <UncancelButton />}
                                     {canCancel && <CancelButton />}
                                 </div>
                             )}
