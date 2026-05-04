@@ -26,7 +26,7 @@ const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive' | '
     uncollectible: 'destructive',
 };
 
-export const InvoicesTable = () => {
+export const Invoices = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [invoices, setInvoices] = useState<TInvoice[] | null>(null);
 

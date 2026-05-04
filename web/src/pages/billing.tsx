@@ -16,7 +16,7 @@ import { useSearchParams } from 'react-router';
 
 import { Header } from '@/components/composite/site-header';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
-import { InvoicesTable } from '@/components/screens/billing/invoices-table';
+import { Invoices } from '@/components/screens/billing/invoices';
 import { PlanCards } from '@/components/screens/billing/plan-card';
 import { SubscriptionCard } from '@/components/screens/billing/subscription-card';
 import { SubscriptionDetailCard } from '@/components/screens/billing/subscription-detail-card';
@@ -116,7 +116,7 @@ const Billing = () => {
                     coupon={coupon}
                     onCouponChange={setCoupon}
                 />
-                <InvoicesTable />
+                <Invoices />
             </div>
         </DashboardLayout>
     );
