@@ -1,22 +1,9 @@
-import { createUncancelUrl, syncUncancelReturn } from '@/collections/billing';
-import { refresh } from '@/collections/users';
-import { toastError, toastSuccess } from '@/lib/toast';
-import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router';
+import { createUncancelUrl } from '@/collections/billing';
+import { toastError } from '@/lib/toast';
+import { useState } from 'react';
 
 export const useHandleUncancel = () => {
     const [loading, setLoading] = useState<boolean>(false);
-    const [searchParams, setSearchParams] = useSearchParams();
-
-    useEffect(() => {
-        if (searchParams.get('uncancel') === '1') {
-            setSearchParams({}, { replace: true });
-            syncUncancelReturn()
-                .then(() => refresh())
-                .then(() => toastSuccess('Subscription reactivated.'))
-                .catch(() => toastError('Failed to reactivate subscription. Contact support.'));
-        }
-    }, []);
 
     const handleUncancel = async () => {
         setLoading(true);
