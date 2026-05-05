@@ -30,6 +30,10 @@ export const createUncancelUrl = async (): Promise<void> => {
     await pb.send('/api/billing/uncancel', { method: 'POST' });
 };
 
+export const syncUncancelReturn = async (): Promise<void> => {
+    await pb.send('/api/billing/sync-uncancel', { method: 'POST' });
+};
+
 export type TSubscription = {
     id: string;
     status: TSubscriptionStatus;

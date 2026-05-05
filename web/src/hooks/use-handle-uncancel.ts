@@ -1,4 +1,4 @@
-import { createUncancelUrl, syncCancelReturn } from '@/collections/billing';
+import { createUncancelUrl, syncUncancelReturn } from '@/collections/billing';
 import { refresh } from '@/collections/users';
 import { toastError, toastSuccess } from '@/lib/toast';
 import { useEffect, useState } from 'react';
@@ -11,10 +11,10 @@ export const useHandleUncancel = () => {
     useEffect(() => {
         if (searchParams.get('uncancel') === '1') {
             setSearchParams({}, { replace: true });
-            syncCancelReturn()
+            syncUncancelReturn()
                 .then(() => refresh())
-                .then(() => toastSuccess('Subscription cancelled.'))
-                .catch(() => toastError('Failed to sync cancellation. Contact support.'));
+                .then(() => toastSuccess('Subscription reactivated.'))
+                .catch(() => toastError('Failed to reactivate subscription. Contact support.'));
         }
     }, []);
 
