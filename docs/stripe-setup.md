@@ -43,36 +43,12 @@ Stripe Dashboard → **Developers** → **API keys**:
 
 ---
 
-## 4. Set up the webhook
-
-Stripe Dashboard → **Developers** → **Webhooks** → **Add endpoint**:
-
-| Field            | Value                                      |
-|------------------|--------------------------------------------|
-| Endpoint URL     | `https://yourdomain.com/api/webhooks/stripe` |
-| Events to listen | `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted` |
-
-After saving, click **Reveal** under **Signing secret** to get your `whsec_...` key.
-
-For **local development**, use the Stripe CLI:
-
-```bash
-# Install Stripe CLI (https://stripe.com/docs/stripe-cli)
-stripe login
-stripe listen --forward-to localhost:8090/api/webhooks/stripe
-```
-
-The CLI prints a webhook signing secret to use locally.
-
----
-
-## 5. Configure environment variables
+## 4. Configure environment variables
 
 Copy `.env.example` to `.env` and fill in your values:
 
 ```env
 STRIPE_SECRET_KEY=sk_test_...
-STRIPE_WEBHOOK_SECRET=whsec_...
 STRIPE_PRO_PRODUCT_ID=prod_...        # Product ID from Pro product
 STRIPE_BUSINESS_PRODUCT_ID=prod_...  # Product ID from Business product
 APP_URL=http://localhost:5173         # Change to your production URL
