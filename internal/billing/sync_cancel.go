@@ -25,16 +25,15 @@ func SyncCancelHandler(e *core.RequestEvent) error {
 	params.Limit = stripe.Int64(1)
 	iter := stripesubscription.List(params)
 	plan := "free"
-	subID := user.GetString("subscription_id")
-	subStatus := "canceled"
+	subscriptionID := user.GetString("subscription_id")
+	subscriptionStatus := "canceled"
 	var cancelAt string
 	if iter.Next() {
 		sub := iter.Subscription()
-		subID = sub.ID
-		subStatus = string(sub.Status)
+		subscriptionID = sub.ID
+		subscriptionStatus = string(sub.Status)
 		if sub.CancelAt > 0 {
 			cancelAt = time.Unix(sub.CancelAt, 0).UTC().Format(time.RFC3339)
-			subStatus = "canceled"
 		}
 		if sub.Status == stripe.SubscriptionStatusActive || sub.Status == stripe.SubscriptionStatusTrialing {
 			plan = sub.Metadata["plan"]
@@ -44,8 +43,8 @@ func SyncCancelHandler(e *core.RequestEvent) error {
 		}
 	}
 	user.Set("plan", plan)
-	user.Set("subscription_id", subID)
-	user.Set("subscription_status", subStatus)
+	user.Set("subscription_id", subscriptionID)
+	user.Set("subscription_status", subscriptionStatus)
 	user.Set("subscription_cancel_at", cancelAt)
 	if err := e.App.Save(user); err != nil {
 		return apis.NewBadRequestError("failed to update user", err)
