@@ -1,26 +1,9 @@
-import { uncancelSubscription } from '@/collections/billing';
-import { queryKeys } from '@/lib/query-keys';
-import { toastError } from '@/lib/toast';
-import { useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useHandleUncancel } from '@/hooks/use-handle-uncancel';
 
 import { Button } from '@/components/ui/button';
 
 export const UncancelButton = () => {
-    const [loading, setLoading] = useState<boolean>(false);
-    const queryClient = useQueryClient();
-
-    const handleUncancel = async () => {
-        setLoading(true);
-        try {
-            await uncancelSubscription();
-            await queryClient.invalidateQueries({ queryKey: queryKeys.subscription });
-        } catch (e: any) {
-            toastError(e?.message ?? 'Failed to reactivate subscription');
-        } finally {
-            setLoading(false);
-        }
-    };
+    const { loading, handleUncancel } = useHandleUncancel();
 
     return (
         <Button variant="outline" onClick={handleUncancel} disabled={!!loading}>

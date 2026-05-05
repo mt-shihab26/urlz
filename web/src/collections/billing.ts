@@ -26,6 +26,10 @@ export const syncCancelReturn = async (): Promise<void> => {
     await pb.send('/api/billing/sync-cancel', { method: 'POST' });
 };
 
+export const createUncancelUrl = async (): Promise<void> => {
+    await pb.send('/api/billing/uncancel', { method: 'POST' });
+};
+
 export type TSubscription = {
     id: string;
     status: TSubscriptionStatus;
@@ -64,8 +68,4 @@ export const getInvoices = async (): Promise<TInvoice[]> => {
     } catch (e: any) {
         throw new Error(e?.message || 'Failed fetching invoices');
     }
-};
-
-export const uncancelSubscription = async (): Promise<void> => {
-    await pb.send('/api/billing/uncancel', { method: 'POST' });
 };
