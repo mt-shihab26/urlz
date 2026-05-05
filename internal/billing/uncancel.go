@@ -18,19 +18,29 @@ func UncancelHandler(e *core.RequestEvent) error {
 	}
 	sub, err := stripesubscription.Get(subscriptionID, nil)
 	if err != nil {
-		return apis.NewBadRequestError("failed to fetch subscription", nil)
+		return apis.NewBadRequestError("failed to fetch subscription", err)
+	}
+	if sub.Status == stripe.SubscriptionStatusCanceled {
+		return apis.NewBadRequestError("subscription is already canceled", nil)
 	}
 	if !sub.CancelAtPeriodEnd && sub.CancelAt == 0 {
 		return apis.NewBadRequestError("subscription is not scheduled for cancellation", nil)
 	}
-	params := &stripe.SubscriptionParams{
-		CancelAtPeriodEnd: new(false),
-	}
+	var params *stripe.SubscriptionParams
 	if sub.CancelAt != 0 {
+		params = &stripe.SubscriptionParams{}
 		params.AddExtra("cancel_at", "")
+	} else {
+		params = &stripe.SubscriptionParams{
+			CancelAtPeriodEnd: new(false),
+		}
 	}
 	if _, err := stripesubscription.Update(subscriptionID, params); err != nil {
-		return apis.NewBadRequestError("failed to reactivate subscription: "+err.Error(), nil)
+		return apis.NewBadRequestError("failed to reactivate subscription", err)
+	}
+	user.Set("subscription_cancel_at", "")
+	if err := e.App.Save(user); err != nil {
+		return apis.NewBadRequestError("failed to update user", err)
 	}
 	return e.JSON(200, map[string]any{"ok": true})
 }
