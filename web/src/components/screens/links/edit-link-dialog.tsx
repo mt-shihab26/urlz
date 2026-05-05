@@ -1,7 +1,9 @@
 import type { TLink } from '@/types/models';
 
 import { updateLink } from '@/collections/links';
+import { useUser } from '@/components/providers/auth-provider';
 import { useForm } from '@/hooks/use-form';
+import { canUseFeature, getActivePlan } from '@/lib/plan';
 import { toastError } from '@/lib/toast';
 import { codePrefix } from '@/lib/utils';
 
@@ -22,6 +24,10 @@ export const EditLinkDialog = ({
     open: boolean;
     onOpenChange: (open: boolean) => void;
 }) => {
+    const { user } = useUser();
+
+    const canExpiry = canUseFeature(getActivePlan(user), 'expiry');
+
     const { data, setData, loading, setLoading, errors, setErrors } = useForm({
         url: link.url,
         code: link.code,
@@ -105,10 +111,11 @@ export const EditLinkDialog = ({
                     />
                     <DateField
                         id="expiry-date"
-                        label="Expiry Date"
+                        label={canExpiry ? 'Expiry Date' : 'Expiry Date (Pro)'}
                         value={data.expiry}
                         onChange={(e) => setData('expiry', e.target.value)}
                         error={errors.expiry}
+                        disabled={!canExpiry}
                     />
                     <div className="flex justify-end gap-2 pt-2">
                         <Button variant="outline" onClick={() => onOpenChange(false)}>

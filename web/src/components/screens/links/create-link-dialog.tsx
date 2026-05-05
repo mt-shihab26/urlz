@@ -1,8 +1,12 @@
 import { createLink } from '@/collections/links';
+import { useUser } from '@/components/providers/auth-provider';
 import { useForm } from '@/hooks/use-form';
 import { generateRandomSlug } from '@/lib/links';
+import { canUseFeature, getActivePlan } from '@/lib/plan';
 import { toastError } from '@/lib/toast';
 import { codePrefix } from '@/lib/utils';
+import { route } from '@/routes';
+import { useState } from 'react';
 
 import { DateField } from '@/components/composite/date-field';
 import { Form } from '@/components/composite/form';
@@ -11,8 +15,6 @@ import { TextField } from '@/components/composite/text-field';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import { route } from '@/routes';
-import { useState } from 'react';
 import { Link } from 'react-router';
 
 export const CreateLinkDialog = ({
@@ -22,12 +24,17 @@ export const CreateLinkDialog = ({
     open: boolean;
     onOpenChange: (open: boolean) => void;
 }) => {
+    const { user } = useUser();
+
+    const canExpiry = canUseFeature(getActivePlan(user), 'expiry');
+
     const { data, setData, loading, setLoading, reset, errors, setErrors } = useForm({
         url: '',
         code: '',
         title: '',
         expiry: '',
     });
+
     const [limitReached, setLimitReached] = useState(false);
 
     const handleSubmit = async () => {
@@ -131,10 +138,11 @@ export const CreateLinkDialog = ({
                     />
                     <DateField
                         id="expiry-date"
-                        label="Expiry Date"
+                        label={canExpiry ? 'Expiry Date' : 'Expiry Date (Pro)'}
                         value={data.expiry}
                         onChange={(e) => setData('expiry', e.target.value)}
                         error={errors.expiry}
+                        disabled={!canExpiry}
                     />
                     <div className="flex justify-end gap-2 pt-2">
                         <Button variant="outline" onClick={handleClose}>

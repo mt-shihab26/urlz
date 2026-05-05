@@ -1,6 +1,7 @@
 package hooks
 
 import (
+	"github.com/mt-shihab26/urlz/internal/billing"
 	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
 )
@@ -13,17 +14,17 @@ func RegisterLinkHooks(app core.App) {
 		if userID == "" {
 			return e.Next()
 		}
-
 		user, err := app.FindRecordById("users", userID)
 		if err != nil {
 			return e.Next()
 		}
-
-		plan := user.GetString("plan")
-		if plan == "pro" || plan == "business" {
+		plan := billing.GetActivePlan(user)
+		if e.Record.GetString("expires") != "" && plan == "free" {
+			return apis.NewBadRequestError("Link expiry dates require a Pro plan.", nil)
+		}
+		if plan != "free" {
 			return e.Next()
 		}
-
 		type countRow struct {
 			Total int `db:"total"`
 		}
@@ -35,14 +36,12 @@ func RegisterLinkHooks(app core.App) {
 		if err != nil {
 			return e.Next()
 		}
-
 		if row.Total >= freeLinkLimit {
 			return apis.NewBadRequestError(
 				"Free plan limit reached (5 links). Upgrade to Pro for unlimited links.",
 				nil,
 			)
 		}
-
 		return e.Next()
 	})
 }
