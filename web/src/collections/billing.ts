@@ -22,6 +22,10 @@ export const createCancelUrl = async (): Promise<string> => {
     return data.url;
 };
 
+export const syncPortalReturn = async (): Promise<void> => {
+    await pb.send('/api/billing/sync-portal', { method: 'POST' });
+};
+
 export const createManageUrl = async (): Promise<string> => {
     const data = await pb.send<{ url: string }>('/api/billing/portal', { method: 'POST' });
     return data.url;
@@ -65,10 +69,6 @@ export const getInvoices = async (): Promise<TInvoice[]> => {
     } catch (e: any) {
         throw new Error(e?.message || 'Failed fetching invoices');
     }
-};
-
-export const syncPortalReturn = async (): Promise<void> => {
-    await pb.send('/api/billing/sync-portal', { method: 'POST' });
 };
 
 export const uncancelSubscription = async (): Promise<void> => {

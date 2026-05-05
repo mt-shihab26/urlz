@@ -1,4 +1,4 @@
-import { createCancelUrl, successfullCheckout } from '@/collections/billing';
+import { createCancelUrl, syncPortalReturn } from '@/collections/billing';
 import { refresh } from '@/collections/users';
 import { toastError, toastSuccess } from '@/lib/toast';
 import { useEffect, useState } from 'react';
@@ -9,13 +9,13 @@ export const useHandleCancel = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
-        const sessionId = searchParams.get('session_id');
-        if (searchParams.get('success') !== '1' || !sessionId) return;
-        setSearchParams({}, { replace: true });
-        successfullCheckout(sessionId)
-            .then(() => refresh())
-            .then(() => toastSuccess('Subscription activated!'))
-            .catch(() => toastError('Failed to activate plan. Contact support.'));
+        if (searchParams.get('cancel') === '1') {
+            setSearchParams({}, { replace: true });
+            syncPortalReturn()
+                .then(() => refresh())
+                .then(() => toastSuccess('Subscription cancelled.'))
+                .catch(() => toastError('Failed to sync cancellation. Contact support.'));
+        }
     }, []);
 
     const handleCancel = async () => {
