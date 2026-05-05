@@ -10,6 +10,13 @@ export const createCheckoutUrl = async (plan: TPlan): Promise<string> => {
     return data.url;
 };
 
+export const successfullCheckout = async (sessionId: string): Promise<void> => {
+    await pb.send('/api/billing/success', {
+        method: 'POST',
+        body: JSON.stringify({ session_id: sessionId }),
+    });
+};
+
 export const createManageUrl = async (): Promise<string> => {
     const data = await pb.send<{ url: string }>('/api/billing/portal', { method: 'POST' });
     return data.url;
@@ -58,13 +65,6 @@ export const getInvoices = async (): Promise<TInvoice[]> => {
     } catch (e: any) {
         throw new Error(e?.message || 'Failed fetching invoices');
     }
-};
-
-export const syncCheckoutSession = async (sessionId: string): Promise<void> => {
-    await pb.send('/api/billing/sync', {
-        method: 'POST',
-        body: JSON.stringify({ session_id: sessionId }),
-    });
 };
 
 export const syncPortalReturn = async (): Promise<void> => {

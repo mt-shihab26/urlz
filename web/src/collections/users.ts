@@ -11,7 +11,7 @@ export const signIn = async (email: string, password: string) => {
     await pb.collection('users').authWithPassword(email, password);
 };
 
-const refresh = async () => {
+export const refresh = async () => {
     await pb.collection('users').authRefresh();
 };
 

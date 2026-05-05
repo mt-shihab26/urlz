@@ -1,7 +1,11 @@
 import type { TSubscription } from '@/collections/billing';
-import type { TPlan, TSubscriptionStatus, TUser } from '@/types/models';
+import type { TSubscriptionStatus, TUser } from '@/types/models';
 
 import { formatLocaleDate } from '@/lib/formats';
+
+export const getCurrentPlan = (user: TUser) => {
+    return user.plan || 'free';
+};
 
 export const getAlreadyCanceled = (subscription: TSubscription) => {
     return subscription.status === 'canceled';
