@@ -85,10 +85,6 @@ func CheckoutHandler(e *core.RequestEvent) error {
 			},
 		},
 	}
-	if len(discounts) > 0 {
-		params.Discounts = discounts
-	}
-
 	s, err := stripesession.New(params)
 	if err != nil {
 		return apis.NewBadRequestError("failed to create checkout session", err)
