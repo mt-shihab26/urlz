@@ -5,7 +5,8 @@
 	"outputDirectory": "web/dist",
 	"functions": {
 		"api/proxy.ts": {
-			"includeFiles": "dist/main"
+			"includeFiles": "dist/main",
+			"maxDuration": 30
 		}
 	},
 	"rewrites": [
