@@ -1,0 +1,12 @@
+{
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"vercel-install-go": "curl -L https://go.dev/dl/go1.26.2.linux-amd64.tar.gz | tar -C /tmp -xz",
+		"vercel-install": "bun run vercel-install-go && cd web && bun install",
+		"vercel-build": "cd web && bun run build && cd .. && /tmp/go/bin/go build -o dist/main ./cmd/server"
+	},
+	"devDependencies": {
+		"@vercel/node": "^5.7.15"
+	}
+}
