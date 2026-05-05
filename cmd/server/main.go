@@ -24,10 +24,10 @@ func main() {
 	a.OnServe().BindFunc(func(se *core.ServeEvent) error {
 		se.Router.POST("/api/billing/checkout", billing.CheckoutHandler)
 		se.Router.POST("/api/billing/success", billing.SuccessHandler)
+		se.Router.POST("/api/billing/cancel", billing.CancelHandler)
 
 		se.Router.POST("/api/billing/sync-portal", billing.SyncPortalHandler)
 		se.Router.POST("/api/billing/portal", billing.PortalHandler)
-		se.Router.POST("/api/billing/cancel", billing.CancelFlowHandler)
 		se.Router.POST("/api/billing/uncancel", billing.UncancelHandler)
 
 		se.Router.GET("/api/billing/subscription", billing.SubscriptionHandler)

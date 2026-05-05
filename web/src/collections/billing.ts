@@ -17,13 +17,13 @@ export const successfullCheckout = async (sessionId: string): Promise<void> => {
     });
 };
 
-export const createManageUrl = async (): Promise<string> => {
-    const data = await pb.send<{ url: string }>('/api/billing/portal', { method: 'POST' });
+export const createCancelUrl = async (): Promise<string> => {
+    const data = await pb.send<{ url: string }>('/api/billing/cancel', { method: 'POST' });
     return data.url;
 };
 
-export const createCancelUrl = async (): Promise<string> => {
-    const data = await pb.send<{ url: string }>('/api/billing/cancel', { method: 'POST' });
+export const createManageUrl = async (): Promise<string> => {
+    const data = await pb.send<{ url: string }>('/api/billing/portal', { method: 'POST' });
     return data.url;
 };
 
