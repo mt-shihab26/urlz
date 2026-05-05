@@ -26,11 +26,6 @@ export const syncCancelReturn = async (): Promise<void> => {
     await pb.send('/api/billing/sync-cancel', { method: 'POST' });
 };
 
-export const createManageUrl = async (): Promise<string> => {
-    const data = await pb.send<{ url: string }>('/api/billing/portal', { method: 'POST' });
-    return data.url;
-};
-
 export type TSubscription = {
     id: string;
     status: TSubscriptionStatus;
