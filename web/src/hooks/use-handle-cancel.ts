@@ -1,4 +1,4 @@
-import { createCancelUrl, syncPortalReturn } from '@/collections/billing';
+import { createCancelUrl, syncCancelReturn } from '@/collections/billing';
 import { refresh } from '@/collections/users';
 import { toastError, toastSuccess } from '@/lib/toast';
 import { useEffect, useState } from 'react';
@@ -11,7 +11,7 @@ export const useHandleCancel = () => {
     useEffect(() => {
         if (searchParams.get('cancel') === '1') {
             setSearchParams({}, { replace: true });
-            syncPortalReturn()
+            syncCancelReturn()
                 .then(() => refresh())
                 .then(() => toastSuccess('Subscription cancelled.'))
                 .catch(() => toastError('Failed to sync cancellation. Contact support.'));

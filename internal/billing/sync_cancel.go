@@ -9,33 +9,25 @@ import (
 	stripesubscription "github.com/stripe/stripe-go/v85/subscription"
 )
 
-// SyncPortalHandler refreshes subscription status after the user returns
-// from the Stripe billing portal (e.g. after canceling).
-func SyncPortalHandler(e *core.RequestEvent) error {
+func SyncCancelHandler(e *core.RequestEvent) error {
 	user := e.Auth
 	if user == nil {
 		return apis.NewUnauthorizedError("unauthorized", nil)
 	}
-
 	customerID := user.GetString("stripe_customer_id")
 	if customerID == "" {
 		return e.JSON(200, map[string]any{"ok": true})
 	}
-
-	// List all statuses so we can see canceled subs too
 	params := &stripe.SubscriptionListParams{
 		Customer: stripe.String(customerID),
 		Status:   stripe.String("all"),
 	}
 	params.Limit = stripe.Int64(1)
-
 	iter := stripesubscription.List(params)
-
 	plan := "free"
-	subID := user.GetString("subscription_id") // preserve existing if none found
+	subID := user.GetString("subscription_id")
 	subStatus := "canceled"
 	var cancelAt string
-
 	if iter.Next() {
 		sub := iter.Subscription()
 		subID = sub.ID
@@ -50,7 +42,6 @@ func SyncPortalHandler(e *core.RequestEvent) error {
 			}
 		}
 	}
-
 	user.Set("plan", plan)
 	user.Set("subscription_id", subID)
 	user.Set("subscription_status", subStatus)
@@ -58,6 +49,5 @@ func SyncPortalHandler(e *core.RequestEvent) error {
 	if err := e.App.Save(user); err != nil {
 		return apis.NewBadRequestError("failed to update user", err)
 	}
-
 	return e.JSON(200, map[string]any{"ok": true})
 }

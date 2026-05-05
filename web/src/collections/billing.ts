@@ -10,10 +10,10 @@ export const createCheckoutUrl = async (plan: TPlan): Promise<string> => {
     return data.url;
 };
 
-export const successfullCheckout = async (sessionId: string): Promise<void> => {
+export const successfullCheckout = async (session_id: string): Promise<void> => {
     await pb.send('/api/billing/success', {
         method: 'POST',
-        body: JSON.stringify({ session_id: sessionId }),
+        body: JSON.stringify({ session_id }),
     });
 };
 
@@ -22,8 +22,8 @@ export const createCancelUrl = async (): Promise<string> => {
     return data.url;
 };
 
-export const syncPortalReturn = async (): Promise<void> => {
-    await pb.send('/api/billing/sync-portal', { method: 'POST' });
+export const syncCancelReturn = async (): Promise<void> => {
+    await pb.send('/api/billing/sync-cancel', { method: 'POST' });
 };
 
 export const createManageUrl = async (): Promise<string> => {
