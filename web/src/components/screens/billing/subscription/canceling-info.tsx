@@ -1,10 +1,17 @@
 import type { TSubscription } from '@/collections/billing';
+import type { TUser } from '@/types/models';
 
 import { getAlreadyCanceled, getCancelDate, getScheduledToCancel } from '@/lib/billing';
 
-export const CancelingInfo = ({ subscription }: { subscription: TSubscription }) => {
+export const CancelingInfo = ({
+    subscription,
+    user,
+}: {
+    subscription: TSubscription;
+    user: TUser | null;
+}) => {
     const alreadyCanceled = getAlreadyCanceled(subscription);
-    const scheduledToCancel = getScheduledToCancel(subscription);
+    const scheduledToCancel = getScheduledToCancel(subscription, user);
     const cancelDate = getCancelDate(subscription);
 
     return (

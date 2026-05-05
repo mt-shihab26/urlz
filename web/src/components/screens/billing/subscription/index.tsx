@@ -26,8 +26,8 @@ export const Subscription = () => {
         },
     });
 
-    const scheduledCancel = getScheduledToCancel(subscription);
-    const canCancel = getCanCancel(user, subscription);
+    const scheduledCancel = getScheduledToCancel(subscription ?? null, user);
+    const canCancel = getCanCancel(user, subscription ?? null);
 
     return (
         <Card>
@@ -53,7 +53,7 @@ export const Subscription = () => {
                                 </div>
                             )}
                         </div>
-                        <CancelingInfo subscription={subscription} />
+                        <CancelingInfo subscription={subscription} user={user} />
                         <SubscriptionInfo subscription={subscription} />
                     </>
                 )}

@@ -40,7 +40,7 @@ const Overview = () => {
             <Header
                 title="Overview"
                 description="All your links at a glance"
-                actions={
+                action={
                     <Button
                         variant="outline"
                         size="sm"
