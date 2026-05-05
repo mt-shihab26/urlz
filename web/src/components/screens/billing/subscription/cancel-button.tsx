@@ -1,27 +1,14 @@
 import type { TSubscription } from '@/collections/billing';
 
-import { createCancelUrl } from '@/collections/billing';
-import { toastError } from '@/lib/toast';
-import { useState } from 'react';
+import { useHandleCancel } from '@/hooks/use-handle-cancel';
+import { getScheduledToCancel } from '@/lib/billing';
 
 import { Button } from '@/components/ui/button';
 
-export const CancelButton = ({ sub }: { sub?: TSubscription | null }) => {
-    const [loading, setLoading] = useState<boolean>(false);
+export const CancelButton = ({ subscription }: { subscription: TSubscription }) => {
+    const { loading, handleCancel } = useHandleCancel();
 
-    const canceling = !!sub?.cancel_at_period_end;
-
-    const handleCancel = async () => {
-        setLoading(true);
-        try {
-            const url = await createCancelUrl();
-            window.location.href = url;
-        } catch (e: any) {
-            toastError(e?.message ?? 'Failed to open cancellation');
-        } finally {
-            setLoading(false);
-        }
-    };
+    const canceling = getScheduledToCancel(subscription);
 
     return (
         <Button

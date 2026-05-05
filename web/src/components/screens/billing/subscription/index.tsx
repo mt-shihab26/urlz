@@ -51,7 +51,7 @@ export const Subscription = () => {
                                 <div className="flex items-center gap-2">
                                     <ManageButton />
                                     {scheduledCancel && <UncancelButton />}
-                                    {canCancel && <CancelButton />}
+                                    {canCancel && <CancelButton subscription={subscription} />}
                                 </div>
                             )}
                         </div>
