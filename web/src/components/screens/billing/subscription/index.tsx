@@ -9,7 +9,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CancelButton } from './cancel-button';
 import { CancelingInfo } from './canceling-info';
 import { Loading } from './loading';
-import { ManageButton } from './manage-button';
 import { PlanLavel } from './plan-label';
 import { StatusLabel } from './status-label';
 import { SubscriptionInfo } from './subscription-info';
@@ -49,7 +48,6 @@ export const Subscription = () => {
                             </div>
                             {!getIsFree(user) && (
                                 <div className="flex items-center gap-2">
-                                    <ManageButton />
                                     {scheduledCancel && <UncancelButton />}
                                     {canCancel && <CancelButton subscription={subscription} />}
                                 </div>
