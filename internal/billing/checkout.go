@@ -60,9 +60,8 @@ func CheckoutHandler(e *core.RequestEvent) error {
 	}
 	appURL := os.Getenv("APP_URL")
 	if appURL == "" {
-		appURL = "http://localhost:5173"
+		return apis.NewBadRequestError("APP_URL not configured", nil)
 	}
-
 	params := &stripe.CheckoutSessionParams{
 		Customer: stripe.String(customerID),
 		Mode:     stripe.String(string(stripe.CheckoutSessionModeSubscription)),
@@ -77,7 +76,7 @@ func CheckoutHandler(e *core.RequestEvent) error {
 			},
 		},
 		SuccessURL: stripe.String(appURL + "/dashboard/billing?success=1&session_id={CHECKOUT_SESSION_ID}"),
-		CancelURL:  stripe.String(appURL + "/dashboard/billing"),
+		CancelURL:  stripe.String(appURL + "/dashboard/billing?cancel=1"),
 		SubscriptionData: &stripe.CheckoutSessionSubscriptionDataParams{
 			Metadata: map[string]string{
 				"user_id": user.Id,
@@ -89,7 +88,6 @@ func CheckoutHandler(e *core.RequestEvent) error {
 	if err != nil {
 		return apis.NewBadRequestError("failed to create checkout session", err)
 	}
-
 	return e.JSON(200, map[string]any{"url": s.URL})
 }
 
