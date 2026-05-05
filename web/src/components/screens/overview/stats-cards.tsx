@@ -1,54 +1,41 @@
-import type { TClick, TLink } from '@/types/models';
-
-import { clicksToSeries } from '@/lib/clicks';
 import { formatNumber } from '@/lib/formats';
-import { isLinkActive } from '@/lib/links';
-import { useMemo } from 'react';
 
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { TrendingDownIcon, TrendingUpIcon } from 'lucide-react';
 
-export const StatsCards = ({ clicks, links }: { clicks: TClick[]; links: TLink[] }) => {
-    const { stats } = useMemo(() => {
-        const totalClicks = clicks.length;
-        const totalSeries = clicksToSeries(clicks);
+type Props = {
+    totalClicks: number;
+    activeLinks: number;
+    totalLinks: number;
+    uniqueVisitors: number;
+    avgDailyClicks: number;
+    clickDelta: number;
+};
 
-        const prev30 = totalSeries.slice(-60, -30).reduce((s, d) => s + d.clicks, 0);
-        const curr30 = totalSeries.slice(-30).reduce((s, d) => s + d.clicks, 0);
-        const delta = prev30 > 0 ? Math.round(((curr30 - prev30) / prev30) * 100) : 0;
-
-        const activeLinks = links.filter(isLinkActive).length;
-        const uniqueVisitors = new Set(clicks.map((c) => c.ip).filter(Boolean)).size;
-
-        const activeDays = totalSeries.filter((d) => d.clicks > 0).length;
-        const avgDaily = activeDays > 0 ? Math.round(totalClicks / activeDays) : 0;
-
-        return {
-            stats: [
-                {
-                    label: 'Total Clicks',
-                    value: formatNumber(totalClicks),
-                    delta,
-                    sub: 'vs prev 30d',
-                },
-                {
-                    label: 'Active Links',
-                    value: activeLinks,
-                    sub: `of ${links.length} total`,
-                },
-                {
-                    label: 'Unique Visitors',
-                    value: formatNumber(uniqueVisitors),
-                    sub: 'by IP',
-                },
-                {
-                    label: 'Avg Daily Clicks',
-                    value: formatNumber(avgDaily),
-                    sub: 'on active days',
-                },
-            ],
-        };
-    }, [clicks, links]);
+export const StatsCards = ({ totalClicks, activeLinks, totalLinks, uniqueVisitors, avgDailyClicks, clickDelta }: Props) => {
+    const stats = [
+        {
+            label: 'Total Clicks',
+            value: formatNumber(totalClicks),
+            delta: clickDelta,
+            sub: 'vs prev 30d',
+        },
+        {
+            label: 'Active Links',
+            value: activeLinks,
+            sub: `of ${totalLinks} total`,
+        },
+        {
+            label: 'Unique Visitors',
+            value: formatNumber(uniqueVisitors),
+            sub: 'by IP',
+        },
+        {
+            label: 'Avg Daily Clicks',
+            value: formatNumber(avgDailyClicks),
+            sub: 'on active days',
+        },
+    ];
 
     return (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">

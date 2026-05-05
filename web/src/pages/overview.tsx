@@ -1,9 +1,8 @@
-import type { TClick, TLink } from '@/types/models';
+import type { TOverviewData } from '@/services/overview';
 
-import { subscribeClicks, unsubscribeClicks } from '@/collections/clicks';
-import { subscribeLinks, unsubscribeLinks } from '@/collections/links';
 import { toastError } from '@/lib/toast';
-import { useEffect, useState } from 'react';
+import { getOverviewData } from '@/services/overview';
+import { useCallback, useEffect, useState } from 'react';
 
 import { Header } from '@/components/composite/site-header';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
@@ -11,42 +10,63 @@ import { ClickBreakdown } from '@/components/screens/overview/click-breakdown';
 import { Loading } from '@/components/screens/overview/loading';
 import { StatsCards } from '@/components/screens/overview/stats-cards';
 import { TopLinks } from '@/components/screens/overview/top-links';
+import { Button } from '@/components/ui/button';
+import { RefreshCwIcon } from 'lucide-react';
 
 const Overview = () => {
-    const [linksLoading, setLinksLoading] = useState(true);
-    const [clicksLoading, setClicksLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
+    const [data, setData] = useState<TOverviewData | null>(null);
+    const [refreshing, setRefreshing] = useState(false);
 
-    const [links, setLinks] = useState<TLink[]>([]);
-    const [clicks, setClicks] = useState<TClick[]>([]);
+    const load = useCallback(async (isRefresh = false) => {
+        if (isRefresh) setRefreshing(true);
+        else setLoading(true);
+        try {
+            setData(await getOverviewData());
+        } catch (e: any) {
+            toastError(e.message);
+        } finally {
+            if (isRefresh) setRefreshing(false);
+            else setLoading(false);
+        }
+    }, []);
 
     useEffect(() => {
-        subscribeLinks('All', {
-            onData: setLinks,
-            onError: toastError,
-            onLoading: setLinksLoading,
-        });
-        subscribeClicks('All', {
-            onData: setClicks,
-            onError: toastError,
-            onLoading: setClicksLoading,
-        });
-        return () => {
-            unsubscribeLinks({ onError: toastError });
-            unsubscribeClicks({ onError: toastError });
-        };
-    }, []);
+        load();
+    }, [load]);
 
     return (
         <DashboardLayout title="Overview">
-            <Header title="Overview" description="All your links at a glance" />
+            <Header
+                title="Overview"
+                description="All your links at a glance"
+                actions={
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => load(true)}
+                        disabled={refreshing || loading}
+                    >
+                        <RefreshCwIcon className={refreshing ? 'animate-spin' : ''} />
+                        Refresh
+                    </Button>
+                }
+            />
             <div className="flex flex-col gap-6 p-4 lg:p-6">
-                {linksLoading || clicksLoading ? (
+                {loading || !data ? (
                     <Loading />
                 ) : (
                     <>
-                        <StatsCards clicks={clicks} links={links} />
-                        <ClickBreakdown clicks={clicks} />
-                        <TopLinks links={links} clicks={clicks} />
+                        <StatsCards
+                            totalClicks={data.totalClicks}
+                            activeLinks={data.activeLinks}
+                            totalLinks={data.totalLinks}
+                            uniqueVisitors={data.uniqueVisitors}
+                            avgDailyClicks={data.avgDailyClicks}
+                            clickDelta={data.clickDelta}
+                        />
+                        <ClickBreakdown breakdown={data.breakdown} />
+                        <TopLinks topLinks={data.topLinks} />
                     </>
                 )}
             </div>
