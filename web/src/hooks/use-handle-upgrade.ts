@@ -7,8 +7,8 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 
 export const useHandleUpgrade = () => {
-    const [searchParams, setSearchParams] = useSearchParams();
     const [loading, setLoading] = useState<TPlan | null>(null);
+    const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
         const sessionId = searchParams.get('session_id');
