@@ -23,6 +23,7 @@ func main() {
 
 	a.OnServe().BindFunc(func(se *core.ServeEvent) error {
 		se.Router.POST("/api/billing/checkout", billing.CheckoutHandler)
+
 		se.Router.POST("/api/billing/sync", billing.SyncHandler)
 		se.Router.POST("/api/billing/sync-portal", billing.SyncPortalHandler)
 		se.Router.POST("/api/billing/portal", billing.PortalHandler)

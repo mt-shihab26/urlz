@@ -1,8 +1,4 @@
-import {
-    createCheckoutSession,
-    syncCheckoutSession,
-    syncPortalReturn,
-} from '@/collections/billing';
+import { createCheckoutUrl, syncCheckoutSession, syncPortalReturn } from '@/collections/billing';
 
 import type { TPlan } from '@/types/models';
 
@@ -63,10 +59,11 @@ export const Plans = () => {
     const handleUpgrade = async (plan: TPlan) => {
         setLoading(plan);
         try {
-            const url = await createCheckoutSession(plan);
+            const url = await createCheckoutUrl(plan);
             window.location.href = url;
         } catch (e: any) {
             toastError(e?.message ?? 'Failed to start checkout');
+        } finally {
             setLoading(null);
         }
     };

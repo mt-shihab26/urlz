@@ -2,6 +2,14 @@ import type { TPlan, TSubscriptionStatus } from '@/types/models';
 
 import { pb } from '@/lib/pb';
 
+export const createCheckoutUrl = async (plan: TPlan): Promise<string> => {
+    const data = await pb.send<{ url: string }>('/api/billing/checkout', {
+        method: 'POST',
+        body: JSON.stringify({ plan }),
+    });
+    return data.url;
+};
+
 export const createManageUrl = async (): Promise<string> => {
     const data = await pb.send<{ url: string }>('/api/billing/portal', { method: 'POST' });
     return data.url;
@@ -50,14 +58,6 @@ export const getInvoices = async (): Promise<TInvoice[]> => {
     } catch (e: any) {
         throw new Error(e?.message || 'Failed fetching invoices');
     }
-};
-
-export const createCheckoutSession = async (plan: TPlan, coupon?: string): Promise<string> => {
-    const data = await pb.send<{ url: string }>('/api/billing/checkout', {
-        method: 'POST',
-        body: JSON.stringify({ plan, coupon: coupon || undefined }),
-    });
-    return data.url;
 };
 
 export const syncCheckoutSession = async (sessionId: string): Promise<void> => {

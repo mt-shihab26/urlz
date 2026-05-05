@@ -32,7 +32,7 @@ func SyncHandler(e *core.RequestEvent) error {
 		return apis.NewBadRequestError("failed to fetch session: "+err.Error(), nil)
 	}
 
-	if s.Metadata["pb_user_id"] != user.Id {
+	if s.Metadata["user_id"] != user.Id {
 		return apis.NewForbiddenError("session does not belong to this user", nil)
 	}
 
