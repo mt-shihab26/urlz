@@ -25,7 +25,7 @@ func SyncCancelHandler(e *core.RequestEvent) error {
 	params.Limit = stripe.Int64(1)
 	iter := stripesubscription.List(params)
 	plan := "free"
-	subscriptionID := user.GetString("subscription_id")
+	subscriptionID := ""
 	subscriptionStatus := "canceled"
 	var cancelAt string
 	if iter.Next() {

@@ -39,6 +39,7 @@ func SuccessHandler(e *core.RequestEvent) error {
 	user.Set("plan", plan)
 	user.Set("subscription_id", subID)
 	user.Set("subscription_status", subStatus)
+	user.Set("subscription_cancel_at", "")
 	if err := e.App.Save(user); err != nil {
 		return apis.NewBadRequestError("failed to update user", err)
 	}

@@ -76,7 +76,7 @@ func CheckoutHandler(e *core.RequestEvent) error {
 			},
 		},
 		SuccessURL: stripe.String(appURL + "/dashboard/billing?success=1&session_id={CHECKOUT_SESSION_ID}"),
-		CancelURL:  stripe.String(appURL + "/dashboard/billing?cancel=1"),
+		CancelURL:  stripe.String(appURL + "/dashboard/billing"),
 		SubscriptionData: &stripe.CheckoutSessionSubscriptionDataParams{
 			Metadata: map[string]string{
 				"user_id": user.Id,
