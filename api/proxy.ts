@@ -43,7 +43,7 @@ async function init() {
 	try {
 		goProcess = spawn(
 			BINARY_PATH,
-			["--dir=/tmp/pb_data", "serve", `--http=0.0.0.0:${PORT}`],
+			["--dir=/tmp/.data", "serve", `--http=0.0.0.0:${PORT}`],
 			{
 				env: { ...process.env },
 				stdio: "pipe",
