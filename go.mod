@@ -7,6 +7,13 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/pocketbase/dbx v1.12.0
 	github.com/pocketbase/pocketbase v0.37.3
+	github.com/tursodatabase/libsql-client-go v0.0.0-20251219100830-236aa1ff8acc
+)
+
+require (
+	github.com/antlr4-go/antlr/v4 v4.13.0 // indirect
+	github.com/coder/websocket v1.8.12 // indirect
+	golang.org/x/exp v0.0.0-20240325151524-a685a6edb6d8 // indirect
 )
 
 require (
@@ -28,7 +35,6 @@ require (
 	github.com/spf13/cast v1.10.0 // indirect
 	github.com/spf13/cobra v1.10.2 // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
-	github.com/stretchr/testify v1.7.0 // indirect
 	github.com/stripe/stripe-go/v85 v85.1.0
 	golang.org/x/crypto v0.50.0 // indirect
 	golang.org/x/image v0.39.0 // indirect
