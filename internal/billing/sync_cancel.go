@@ -34,6 +34,7 @@ func SyncCancelHandler(e *core.RequestEvent) error {
 		subStatus = string(sub.Status)
 		if sub.CancelAt > 0 {
 			cancelAt = time.Unix(sub.CancelAt, 0).UTC().Format(time.RFC3339)
+			subStatus = "canceled"
 		}
 		if sub.Status == stripe.SubscriptionStatusActive || sub.Status == stripe.SubscriptionStatusTrialing {
 			plan = sub.Metadata["plan"]
