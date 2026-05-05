@@ -26,8 +26,8 @@ export const Subscription = () => {
         },
     });
 
-    const canCancel = getCanCancel(subscription, user);
-    const scheduledCancel = subscription ? getScheduledToCancel(subscription) : false;
+    const scheduledCancel = getScheduledToCancel(subscription);
+    const canCancel = getCanCancel(user, subscription);
 
     return (
         <Card>
@@ -49,7 +49,7 @@ export const Subscription = () => {
                             {!getIsFree(user) && (
                                 <div className="flex items-center gap-2">
                                     {scheduledCancel && <UncancelButton />}
-                                    {canCancel && <CancelButton subscription={subscription} />}
+                                    {canCancel && <CancelButton />}
                                 </div>
                             )}
                         </div>

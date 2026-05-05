@@ -11,7 +11,8 @@ export const getAlreadyCanceled = (subscription: TSubscription) => {
     return subscription.status === 'canceled';
 };
 
-export const getScheduledToCancel = (subscription: TSubscription) => {
+export const getScheduledToCancel = (subscription: TSubscription | null | undefined): boolean => {
+    if (!subscription) return false;
     return !!subscription.cancel_at || !!subscription.cancel_at_period_end;
 };
 
@@ -20,8 +21,8 @@ export const getIsFree = (user: TUser): boolean => {
 };
 
 export const getCanCancel = (
-    subscription: TSubscription | undefined | null,
     user: TUser,
+    subscription: TSubscription | undefined | null,
 ): boolean => {
     if (getIsFree(user)) return false;
     const stripeStatus = subscription?.status as TSubscriptionStatus | undefined;
