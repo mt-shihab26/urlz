@@ -73,10 +73,10 @@ export const Plans = () => {
 
     return (
         <div className="grid gap-4 sm:grid-cols-3">
-            {PLANS.map((p) => (
+            {PLANS.map((plan) => (
                 <PlanCard
-                    key={p.name}
-                    plan={p}
+                    key={plan.name}
+                    plan={plan}
                     currentPlan={currentPlan}
                     onUpgrade={handleUpgrade}
                     loading={loading}
