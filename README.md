@@ -17,6 +17,7 @@ A self-hosted URL shortener with an analytics dashboard — tracks geography, br
 - **Clicks** — paginated full click history
 
 ### Link Management
+
 - Create shortened links with auto-generated or custom codes
 - Edit, enable/disable, and delete links
 - Set link expiration dates
@@ -24,18 +25,21 @@ A self-hosted URL shortener with an analytics dashboard — tracks geography, br
 - Per-link sparkline showing recent click trend
 
 ### Click Tracking
+
 Every redirect captures:
+
 - Country, city, region, timezone
 - Browser, OS, device type
 - Language, referrer, IP, user agent
 
 ### Billing & Subscriptions
+
 Stripe-powered subscription billing with three tiers:
 
-| Plan | Price | Highlights |
-|---|---|---|
-| Free | $0 | 5 short links, basic analytics, custom slugs |
-| Pro | $9/mo | Unlimited links, full analytics, expiry dates, priority support |
+| Plan     | Price  | Highlights                                                                 |
+| -------- | ------ | -------------------------------------------------------------------------- |
+| Free     | $0     | 5 short links, basic analytics, custom slugs                               |
+| Pro      | $9/mo  | Unlimited links, full analytics, expiry dates, priority support            |
 | Business | $29/mo | Everything in Pro + team members, API access, custom domains (coming soon) |
 
 - Stripe Checkout for plan upgrades
@@ -43,6 +47,7 @@ Stripe-powered subscription billing with three tiers:
 - Invoice history
 
 ### Auth & Settings
+
 - Sign up / sign in / forgot password / reset password
 - Google OAuth
 - Profile management (name, email, avatar, password)
@@ -53,19 +58,20 @@ Stripe-powered subscription billing with three tiers:
 
 ## Tech Stack
 
-| Layer | Tech |
-|---|---|
-| Backend | Go + [PocketBase](https://pocketbase.io) |
+| Layer    | Tech                                                    |
+| -------- | ------------------------------------------------------- |
+| Backend  | Go + [PocketBase](https://pocketbase.io)                |
 | Database | SQLite (dev) / [Turso](https://turso.tech) (production) |
-| Frontend | React 19, TypeScript, Vite |
-| Styling | Tailwind CSS 4, shadcn/ui |
-| Billing | Stripe |
+| Frontend | React 19, TypeScript, Vite                              |
+| Styling  | Tailwind CSS 4, shadcn/ui                               |
+| Billing  | Stripe                                                  |
 
 ---
 
 ## Getting Started
 
 ### Prerequisites
+
 - Go 1.22+
 - Bun 1.3+
 - Node 25.6+
@@ -80,15 +86,15 @@ Installs frontend dependencies and copies `.env.example` → `.env`.
 
 ### Environment Variables
 
-| Variable | Description |
-|---|---|
-| `APP_URL` | Public URL of the app (used for Stripe redirect URLs) |
-| `TURSO_URL` | Turso database URL (production) |
-| `TURSO_AUTH_TOKEN` | Turso auth token (production) |
-| `STRIPE_SECRET_KEY` | Stripe secret key |
-| `STRIPE_WEBHOOK_SECRET` | Stripe webhook signing secret |
-| `STRIPE_PRO_PRODUCT_ID` | Stripe product ID for the Pro plan |
-| `STRIPE_BUSINESS_PRODUCT_ID` | Stripe product ID for the Business plan |
+| Variable                     | Description                                           |
+| ---------------------------- | ----------------------------------------------------- |
+| `APP_URL`                    | Public URL of the app (used for Stripe redirect URLs) |
+| `TURSO_URL`                  | Turso database URL (production)                       |
+| `TURSO_AUTH_TOKEN`           | Turso auth token (production)                         |
+| `STRIPE_SECRET_KEY`          | Stripe secret key                                     |
+| `STRIPE_WEBHOOK_SECRET`      | Stripe webhook signing secret                         |
+| `STRIPE_PRO_PRODUCT_ID`      | Stripe product ID for the Pro plan                    |
+| `STRIPE_BUSINESS_PRODUCT_ID` | Stripe product ID for the Business plan               |
 
 ### Development
 
