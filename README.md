@@ -92,7 +92,6 @@ Installs frontend dependencies and copies `.env.example` → `.env`.
 | `TURSO_URL`                  | Turso database URL (production)                       |
 | `TURSO_AUTH_TOKEN`           | Turso auth token (production)                         |
 | `STRIPE_SECRET_KEY`          | Stripe secret key                                     |
-| `STRIPE_WEBHOOK_SECRET`      | Stripe webhook signing secret                         |
 | `STRIPE_PRO_PRODUCT_ID`      | Stripe product ID for the Pro plan                    |
 | `STRIPE_BUSINESS_PRODUCT_ID` | Stripe product ID for the Business plan               |
 
