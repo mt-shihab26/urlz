@@ -37,6 +37,11 @@ const navMain = [
         icon: <LayoutDashboardIcon />,
     },
     {
+        title: 'Analytics',
+        url: route.analyticsIndex(),
+        icon: <ChartBarIcon />,
+    },
+    {
         title: 'Links',
         url: route.linksIndex(),
         icon: <LinkIcon />,
@@ -47,20 +52,14 @@ const navMain = [
         icon: <MousePointerClickIcon />,
     },
     {
-        title: 'Analytics',
-        url: route.analyticsIndex(),
-        icon: <ChartBarIcon />,
+        title: 'Billing',
+        url: route.billingIndex(),
+        icon: <CreditCardIcon />,
     },
-
     {
         title: 'Settings',
         url: route.settingsIndex(),
         icon: <SettingsIcon />,
-    },
-    {
-        title: 'Billing',
-        url: route.billingIndex(),
-        icon: <CreditCardIcon />,
     },
 ];
 
