@@ -55,7 +55,8 @@ Stripe-powered subscription billing with three tiers:
 
 | Layer | Tech |
 |---|---|
-| Backend | Go + [PocketBase](https://pocketbase.io) (embedded SQLite) |
+| Backend | Go + [PocketBase](https://pocketbase.io) |
+| Database | SQLite (dev) / [Turso](https://turso.tech) (production) |
 | Frontend | React 19, TypeScript, Vite |
 | Styling | Tailwind CSS 4, shadcn/ui |
 | Billing | Stripe |
@@ -82,6 +83,8 @@ Installs frontend dependencies and copies `.env.example` → `.env`.
 | Variable | Description |
 |---|---|
 | `APP_URL` | Public URL of the app (used for Stripe redirect URLs) |
+| `TURSO_URL` | Turso database URL (production) |
+| `TURSO_AUTH_TOKEN` | Turso auth token (production) |
 | `STRIPE_SECRET_KEY` | Stripe secret key |
 | `STRIPE_WEBHOOK_SECRET` | Stripe webhook signing secret |
 | `STRIPE_PRO_PRODUCT_ID` | Stripe product ID for the Pro plan |
