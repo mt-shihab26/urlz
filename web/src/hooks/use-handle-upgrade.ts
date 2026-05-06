@@ -21,6 +21,7 @@ export const useHandleUpgrade = () => {
         successfullCheckout(sessionId)
             .then(() => refresh())
             .then(() => queryClient.invalidateQueries({ queryKey: queryKeys.subscription }))
+            .then(() => queryClient.invalidateQueries({ queryKey: queryKeys.invoices }))
             .then(() => toastSuccess('Subscription activated!'))
             .catch(() => toastError('Failed to activate plan. Contact support.'));
     }, []);
