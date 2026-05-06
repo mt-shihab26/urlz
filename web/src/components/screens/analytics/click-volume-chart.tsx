@@ -1,15 +1,12 @@
-import type { TClick } from '@/types/models';
+import type { TVolumeDay } from '@/services/analytics';
 
-import { clicksToSeries } from '@/lib/clicks';
 import { formatChartDate } from '@/lib/formats';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 
-export const ClickVolumeChart = ({ clicks }: { clicks: TClick[] }) => {
-    const series = clicksToSeries(clicks);
-
+export const ClickVolumeChart = ({ volume }: { volume: TVolumeDay[] }) => {
     return (
         <Card>
             <CardHeader>
@@ -22,7 +19,7 @@ export const ClickVolumeChart = ({ clicks }: { clicks: TClick[] }) => {
                     }}
                     className="h-50 w-full"
                 >
-                    <AreaChart data={series}>
+                    <AreaChart data={volume}>
                         <defs>
                             <linearGradient id="fillClicksAn" x1="0" y1="0" x2="0" y2="1">
                                 <stop

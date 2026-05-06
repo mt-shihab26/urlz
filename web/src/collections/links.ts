@@ -11,7 +11,7 @@ const LINKS = 'links';
  *
  * @throws {Error} When fetching links fails.
  */
-const getLinks = async (range: TRange = 'All'): Promise<TLink[]> => {
+export const getLinks = async (range: TRange = 'All'): Promise<TLink[]> => {
     try {
         const startDate = getRangeStartDate(range);
 

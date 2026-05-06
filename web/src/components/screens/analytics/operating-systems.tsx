@@ -1,6 +1,4 @@
-import type { TClick } from '@/types/models';
-
-import { useMemo } from 'react';
+import type { TBreakdownEntry } from '@/services/analytics';
 
 import { PctListCard } from '@/components/screens/analytics/pct-list-card';
 
@@ -13,20 +11,11 @@ const COLORS: Record<string, string> = {
     Other: '#888888',
 };
 
-export const OperatingSystems = ({ clicks }: { clicks: TClick[] }) => {
-    const data = useMemo(() => {
-        const totals = new Map<string, number>();
-        clicks.forEach(({ os }) => totals.set(os, (totals.get(os) ?? 0) + 1));
-        const total = Array.from(totals.values()).reduce((a, b) => a + b, 0);
-        if (total === 0) return [];
-        return Array.from(totals.entries())
-            .map(([name, count]) => ({
-                name,
-                pct: Math.round((count / total) * 1000) / 10,
-                color: COLORS[name] ?? COLORS['Other'],
-            }))
-            .sort((a, b) => b.pct - a.pct);
-    }, [clicks]);
-
+export const OperatingSystems = ({ items }: { items: TBreakdownEntry[] }) => {
+    const data = items.map(({ label, pct }) => ({
+        name: label,
+        pct,
+        color: COLORS[label] ?? COLORS['Other'],
+    }));
     return <PctListCard title="Operating Systems" data={data} />;
 };

@@ -1,3 +1,11 @@
+import type { TTopLink } from '@/services/analytics';
+
+import { formatCode, formatNumber } from '@/lib/formats';
+import { route } from '@/routes';
+import { useNavigate } from 'react-router';
+
+import { Sparkline } from '@/components/composite/sparkline';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Table,
     TableBody,
@@ -7,29 +15,8 @@ import {
     TableRow,
 } from '@/components/ui/table';
 
-import type { TClick, TLink } from '@/types/models';
-
-import { formatCode, formatNumber } from '@/lib/formats';
-import { route } from '@/routes';
-import { useMemo } from 'react';
-import { useNavigate } from 'react-router';
-
-import { LinkSparkline } from '@/components/screens/links/index/link-sparkline';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-
-export const TopPerforming = ({ links, clicks }: { links: TLink[]; clicks: TClick[] }) => {
+export const TopPerforming = ({ topLinks }: { topLinks: TTopLink[] }) => {
     const navigate = useNavigate();
-
-    const ranked = useMemo(() => {
-        return [...links]
-            .map((link) => {
-                const linkClicks = clicks.filter((c) => c.link === link.id);
-                const periodClicks = linkClicks.length;
-                return { link, periodClicks, linkClicks };
-            })
-            .sort((a, b) => b.periodClicks - a.periodClicks)
-            .slice(0, 10);
-    }, [links, clicks]);
 
     return (
         <Card>
@@ -47,7 +34,7 @@ export const TopPerforming = ({ links, clicks }: { links: TLink[]; clicks: TClic
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {ranked.length === 0 ? (
+                        {topLinks.length === 0 ? (
                             <TableRow>
                                 <TableCell
                                     colSpan={4}
@@ -57,7 +44,7 @@ export const TopPerforming = ({ links, clicks }: { links: TLink[]; clicks: TClic
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            ranked.map(({ link, periodClicks, linkClicks }, i) => (
+                            topLinks.map((link, i) => (
                                 <TableRow
                                     key={link.id}
                                     className="cursor-pointer"
@@ -73,10 +60,10 @@ export const TopPerforming = ({ links, clicks }: { links: TLink[]; clicks: TClic
                                         </div>
                                     </TableCell>
                                     <TableCell className="text-right font-mono font-bold">
-                                        {formatNumber(periodClicks)}
+                                        {formatNumber(link.total_clicks)}
                                     </TableCell>
                                     <TableCell className="text-right">
-                                        <LinkSparkline clicks={linkClicks} />
+                                        <Sparkline data={link.sparkline} width={64} height={22} />
                                     </TableCell>
                                 </TableRow>
                             ))

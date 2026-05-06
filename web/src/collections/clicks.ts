@@ -11,7 +11,7 @@ const CLICKS = 'clicks';
  *
  * @throws {Error} When fetching clicks fails.
  */
-const getClicks = async (range: TRange = 'All'): Promise<TClick[]> => {
+export const getClicks = async (range: TRange = 'All'): Promise<TClick[]> => {
     try {
         const startDate = getRangeStartDate(range);
 

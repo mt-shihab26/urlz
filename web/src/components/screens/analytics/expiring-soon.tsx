@@ -1,3 +1,10 @@
+import type { TExpiringLink } from '@/services/analytics';
+
+import { formatCode, formatDate } from '@/lib/formats';
+import { route } from '@/routes';
+import { useNavigate } from 'react-router';
+
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Table,
     TableBody,
@@ -7,24 +14,8 @@ import {
     TableRow,
 } from '@/components/ui/table';
 
-import type { TLink } from '@/types/models';
-
-import { formatCode, formatDate } from '@/lib/formats';
-import { isLinkExpiringSoon } from '@/lib/links';
-import { route } from '@/routes';
-import { useMemo } from 'react';
-import { useNavigate } from 'react-router';
-
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-
-export const ExpiringSoon = ({ links }: { links: TLink[] }) => {
+export const ExpiringSoon = ({ links }: { links: TExpiringLink[] }) => {
     const navigate = useNavigate();
-
-    const expiring = useMemo(() => {
-        return links
-            .filter((l) => isLinkExpiringSoon(l, 30))
-            .sort((a, b) => new Date(a.expires).getTime() - new Date(b.expires).getTime());
-    }, [links]);
 
     return (
         <Card>
@@ -41,7 +32,7 @@ export const ExpiringSoon = ({ links }: { links: TLink[] }) => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {expiring.length === 0 ? (
+                        {links.length === 0 ? (
                             <TableRow>
                                 <TableCell
                                     colSpan={3}
@@ -51,7 +42,7 @@ export const ExpiringSoon = ({ links }: { links: TLink[] }) => {
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            expiring.map((link, i) => (
+                            links.map((link, i) => (
                                 <TableRow
                                     key={link.id}
                                     className="cursor-pointer"

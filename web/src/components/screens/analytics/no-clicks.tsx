@@ -1,3 +1,10 @@
+import type { TNoClickLink } from '@/services/analytics';
+
+import { formatCode, formatDate } from '@/lib/formats';
+import { route } from '@/routes';
+import { useNavigate } from 'react-router';
+
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Table,
     TableBody,
@@ -7,25 +14,8 @@ import {
     TableRow,
 } from '@/components/ui/table';
 
-import type { TClick, TLink } from '@/types/models';
-
-import { formatCode, formatDate } from '@/lib/formats';
-import { isLinkActive } from '@/lib/links';
-import { route } from '@/routes';
-import { useMemo } from 'react';
-import { useNavigate } from 'react-router';
-
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-
-export const NoClicks = ({ links, clicks }: { links: TLink[]; clicks: TClick[] }) => {
+export const NoClicks = ({ links }: { links: TNoClickLink[] }) => {
     const navigate = useNavigate();
-
-    const dead = useMemo(() => {
-        const clickedIds = new Set(clicks.map((c) => c.link));
-        return links
-            .filter((l) => isLinkActive(l) && !clickedIds.has(l.id))
-            .sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime());
-    }, [links, clicks]);
 
     return (
         <Card>
@@ -41,7 +31,7 @@ export const NoClicks = ({ links, clicks }: { links: TLink[]; clicks: TClick[] }
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {dead.length === 0 ? (
+                        {links.length === 0 ? (
                             <TableRow>
                                 <TableCell
                                     colSpan={2}
@@ -51,7 +41,7 @@ export const NoClicks = ({ links, clicks }: { links: TLink[]; clicks: TClick[] }
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            dead.map((link) => (
+                            links.map((link) => (
                                 <TableRow
                                     key={link.id}
                                     className="cursor-pointer"

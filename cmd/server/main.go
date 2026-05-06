@@ -7,6 +7,7 @@ import (
 	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
 
+	"github.com/mt-shihab26/urlz/internal/analytics"
 	"github.com/mt-shihab26/urlz/internal/app"
 	"github.com/mt-shihab26/urlz/internal/billing"
 	"github.com/mt-shihab26/urlz/internal/hooks"
@@ -33,6 +34,7 @@ func main() {
 		se.Router.GET("/api/billing/invoices", billing.InvoicesHandler)
 
 		se.Router.GET("/api/overview", overview.Handler)
+		se.Router.GET("/api/analytics", analytics.Handler)
 
 		se.Router.GET("/{code}", redirect.Handler)
 		sub, err := fs.Sub(web.DistFS, "dist")

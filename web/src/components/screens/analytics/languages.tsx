@@ -1,27 +1,14 @@
-import type { TClick } from '@/types/models';
-
-import { useMemo } from 'react';
+import type { TBreakdownEntry } from '@/services/analytics';
 
 import { PctListCard } from '@/components/screens/analytics/pct-list-card';
 
-export const Languages = ({ clicks }: { clicks: TClick[] }) => {
-    const data = useMemo(() => {
-        const totals = new Map<string, number>();
-        clicks.forEach(({ language }) => {
-            if (!language) return;
-            totals.set(language, (totals.get(language) ?? 0) + 1);
-        });
-        const total = Array.from(totals.values()).reduce((a, b) => a + b, 0);
-        if (total === 0) return [];
-        const palette = ['#6366F1', '#22C55E', '#F59E0B', '#EF4444', '#8B5CF6', '#06B6D4'];
-        return Array.from(totals.entries())
-            .map(([name, count], i) => ({
-                name,
-                pct: Math.round((count / total) * 1000) / 10,
-                color: palette[i % palette.length],
-            }))
-            .sort((a, b) => b.pct - a.pct);
-    }, [clicks]);
+const PALETTE = ['#6366F1', '#22C55E', '#F59E0B', '#EF4444', '#8B5CF6', '#06B6D4'];
 
+export const Languages = ({ items }: { items: TBreakdownEntry[] }) => {
+    const data = items.map(({ label, pct }, i) => ({
+        name: label,
+        pct,
+        color: PALETTE[i % PALETTE.length],
+    }));
     return <PctListCard title="Languages" data={data} />;
 };
