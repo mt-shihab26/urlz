@@ -5,7 +5,7 @@ import { twMerge } from 'tailwind-merge';
 import { env } from './env';
 
 export const codePrefix = () => {
-    return env.DEV ? 'http://127.0.0.1:8090' : 'https://urlz.developershihab.com';
+    return env.DEV ? 'http://localhost:8090' : 'https://urlz.developershihab.com';
 };
 
 export const cn = (...inputs: ClassValue[]) => {
