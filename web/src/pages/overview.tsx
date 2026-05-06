@@ -1,8 +1,9 @@
-import type { TOverviewData } from '@/services/overview';
+import type { TResponse } from '@/services/overview';
 
 import { toastError } from '@/lib/toast';
+import { queryKeys } from '@/lib/query-keys';
 import { getOverviewData } from '@/services/overview';
-import { useCallback, useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 import { Header } from '@/components/composite/site-header';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
@@ -14,26 +15,11 @@ import { Button } from '@/components/ui/button';
 import { RefreshCwIcon } from 'lucide-react';
 
 const Overview = () => {
-    const [loading, setLoading] = useState(true);
-    const [data, setData] = useState<TOverviewData | null>(null);
-    const [refreshing, setRefreshing] = useState(false);
-
-    const load = useCallback(async (isRefresh = false) => {
-        if (isRefresh) setRefreshing(true);
-        else setLoading(true);
-        try {
-            setData(await getOverviewData());
-        } catch (e: any) {
-            toastError(e.message);
-        } finally {
-            if (isRefresh) setRefreshing(false);
-            else setLoading(false);
-        }
-    }, []);
-
-    useEffect(() => {
-        load();
-    }, [load]);
+    const { data, isLoading, isFetching, refetch } = useQuery<TResponse>({
+        queryKey: queryKeys.overview,
+        queryFn: getOverviewData,
+        throwOnError: (e) => toastError(e),
+    });
 
     return (
         <DashboardLayout title="Overview">
@@ -44,29 +30,29 @@ const Overview = () => {
                     <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => load(true)}
-                        disabled={refreshing || loading}
+                        onClick={() => refetch()}
+                        disabled={isFetching || isLoading}
                     >
-                        <RefreshCwIcon className={refreshing ? 'animate-spin' : ''} />
+                        <RefreshCwIcon className={isFetching ? 'animate-spin' : ''} />
                         Refresh
                     </Button>
                 }
             />
             <div className="flex flex-col gap-6 p-4 lg:p-6">
-                {loading || !data ? (
+                {isLoading || !data ? (
                     <Loading />
                 ) : (
                     <>
                         <StatsCards
-                            totalClicks={data.totalClicks}
-                            activeLinks={data.activeLinks}
-                            totalLinks={data.totalLinks}
-                            uniqueVisitors={data.uniqueVisitors}
-                            avgDailyClicks={data.avgDailyClicks}
-                            clickDelta={data.clickDelta}
+                            totalClicks={data.total_clicks}
+                            activeLinks={data.active_links}
+                            totalLinks={data.total_links}
+                            uniqueVisitors={data.unique_visitors}
+                            avgDailyClicks={data.avg_daily_clicks}
+                            clickDelta={data.click_delta}
                         />
                         <ClickBreakdown breakdown={data.breakdown} />
-                        <TopLinks topLinks={data.topLinks} />
+                        <TopLinks topLinks={data.top_links} />
                     </>
                 )}
             </div>

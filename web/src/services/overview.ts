@@ -1,10 +1,10 @@
-import type { TBreakdownItem } from '@/components/screens/overview/breakdown-list';
+import type { TBreakdownItem } from '@/types/utils';
 
 import { pb } from '@/lib/pb';
 
 export type TClickDay = { date: string; clicks: number };
 
-export type TOverviewTopLink = {
+export type TTopLink = {
     id: string;
     code: string;
     url: string;
@@ -13,11 +13,11 @@ export type TOverviewTopLink = {
     created: string;
     updated: string;
     expires: string;
-    totalClicks: number;
+    total_clicks: number;
     sparkline: TClickDay[];
 };
 
-export type TOverviewBreakdown = {
+export type TBreakdownData = {
     countries: TBreakdownItem[];
     devices: TBreakdownItem[];
     referrers: TBreakdownItem[];
@@ -26,20 +26,20 @@ export type TOverviewBreakdown = {
     languages: TBreakdownItem[];
 };
 
-export type TOverviewData = {
-    totalClicks: number;
-    activeLinks: number;
-    totalLinks: number;
-    uniqueVisitors: number;
-    avgDailyClicks: number;
-    clickDelta: number;
-    breakdown: TOverviewBreakdown;
-    topLinks: TOverviewTopLink[];
+export type TResponse = {
+    total_clicks: number;
+    active_links: number;
+    total_links: number;
+    unique_visitors: number;
+    avg_daily_clicks: number;
+    click_delta: number;
+    breakdown: TBreakdownData;
+    top_links: TTopLink[];
 };
 
-export const getOverviewData = async (): Promise<TOverviewData> => {
+export const getOverviewData = async (): Promise<TResponse> => {
     try {
-        return await pb.send<TOverviewData>('/api/overview', { method: 'GET' });
+        return await pb.send<TResponse>('/api/overview', { method: 'GET' });
     } catch (e: any) {
         throw new Error(e?.message || 'Failed to load overview data');
     }

@@ -1,5 +1,3 @@
-import type { TOverviewTopLink } from '@/services/overview';
-
 import {
     Table,
     TableBody,
@@ -9,6 +7,8 @@ import {
     TableRow,
 } from '@/components/ui/table';
 
+import type { TTopLink } from '@/services/overview';
+
 import { formatCode, formatNumber } from '@/lib/formats';
 import { route } from '@/routes';
 import { useNavigate } from 'react-router';
@@ -17,7 +17,7 @@ import { Sparkline } from '@/components/composite/sparkline';
 import { StatusBadge } from '@/components/composite/status-badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-export const TopLinks = ({ topLinks }: { topLinks: TOverviewTopLink[] }) => {
+export const TopLinks = ({ topLinks }: { topLinks: TTopLink[] }) => {
     const navigate = useNavigate();
 
     return (
@@ -68,7 +68,7 @@ export const TopLinks = ({ topLinks }: { topLinks: TOverviewTopLink[] }) => {
                                         </div>
                                     </TableCell>
                                     <TableCell className="text-right font-mono font-bold">
-                                        {formatNumber(link.totalClicks)}
+                                        {formatNumber(link.total_clicks)}
                                     </TableCell>
                                     <TableCell className="text-right flex justify-end">
                                         <Sparkline data={link.sparkline} width={64} height={22} />

@@ -1,9 +1,9 @@
-import type { TOverviewBreakdown } from '@/services/overview';
+import type { TBreakdownData } from '@/services/overview';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BreakdownList } from './breakdown-list';
 
-export const ClickBreakdown = ({ breakdown }: { breakdown: TOverviewBreakdown }) => {
+export const ClickBreakdown = ({ breakdown }: { breakdown: TBreakdownData }) => {
     const cards = [
         { title: 'Top Countries', items: breakdown.countries },
         { title: 'Top Devices', items: breakdown.devices },
