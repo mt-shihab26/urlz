@@ -1,6 +1,8 @@
 package overview
 
 import (
+	"sync"
+
 	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
 )
@@ -21,15 +23,27 @@ func Handler(e *core.RequestEvent) error {
 	if user == nil {
 		return apis.NewUnauthorizedError("unauthorized", nil)
 	}
-	userID := user.Id
+	uid := user.Id
 	db := e.App.DB()
-	totalClicks := fetchTotalClicks(db, userID)
-	totalLinks, activeLinks := fetchLinkStats(db, userID)
-	uniqueVisitors := fetchUniqueVisitors(db, userID)
-	avgDailyClicks, clickDelta := fetchClickSeries(db, userID, totalClicks)
-	breakdown := fetchBreakdown(db, userID)
-	topLinks := fetchTopLinks(db, userID)
-	data := response{
+
+	var (
+		totalClicks, avgDailyClicks, clickDelta int
+		totalLinks, activeLinks                 int
+		uniqueVisitors                          int
+		breakdown                               breakdownData
+		topLinks                                []topLink
+		wg                                      sync.WaitGroup
+	)
+
+	wg.Add(5)
+	go func() { defer wg.Done(); totalClicks, avgDailyClicks, clickDelta = fetchClickStats(db, uid) }()
+	go func() { defer wg.Done(); totalLinks, activeLinks = fetchLinkStats(db, uid) }()
+	go func() { defer wg.Done(); uniqueVisitors = fetchUniqueVisitors(db, uid) }()
+	go func() { defer wg.Done(); breakdown = fetchBreakdown(db, uid) }()
+	go func() { defer wg.Done(); topLinks = fetchTopLinks(db, uid) }()
+	wg.Wait()
+
+	return e.JSON(200, response{
 		TotalClicks:    totalClicks,
 		ActiveLinks:    activeLinks,
 		TotalLinks:     totalLinks,
@@ -38,6 +52,5 @@ func Handler(e *core.RequestEvent) error {
 		ClickDelta:     clickDelta,
 		Breakdown:      breakdown,
 		TopLinks:       topLinks,
-	}
-	return e.JSON(200, data)
+	})
 }

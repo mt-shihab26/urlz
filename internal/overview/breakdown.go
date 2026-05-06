@@ -2,6 +2,7 @@ package overview
 
 import (
 	"fmt"
+	"sync"
 
 	"github.com/pocketbase/dbx"
 )
@@ -40,12 +41,18 @@ func fetchBreakdown(db dbx.Builder, uid string) breakdownData {
 		}
 		return items
 	}
-	return breakdownData{
-		Countries: topN("country_name"),
-		Devices:   topN("device"),
-		Referrers: topN("referrer"),
-		Browsers:  topN("browser"),
-		OS:        topN("os"),
-		Languages: topN("language"),
-	}
+
+	var (
+		bd breakdownData
+		wg sync.WaitGroup
+	)
+	wg.Add(6)
+	go func() { defer wg.Done(); bd.Countries = topN("country_name") }()
+	go func() { defer wg.Done(); bd.Devices = topN("device") }()
+	go func() { defer wg.Done(); bd.Referrers = topN("referrer") }()
+	go func() { defer wg.Done(); bd.Browsers = topN("browser") }()
+	go func() { defer wg.Done(); bd.OS = topN("os") }()
+	go func() { defer wg.Done(); bd.Languages = topN("language") }()
+	wg.Wait()
+	return bd
 }
