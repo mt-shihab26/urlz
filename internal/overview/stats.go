@@ -59,7 +59,6 @@ func fetchClickSeries(db dbx.Builder, uid string, totalClicks int) (avgDailyClic
 		Bind(dbx.Params{"u": uid}).All(&series); err != nil {
 		return
 	}
-
 	n := len(series)
 	var prev30, curr30 int
 	for i, s := range series {
@@ -73,7 +72,6 @@ func fetchClickSeries(db dbx.Builder, uid string, totalClicks int) (avgDailyClic
 	if prev30 > 0 {
 		clickDelta = int(math.Round(float64(curr30-prev30) / float64(prev30) * 100))
 	}
-
 	activeDays := 0
 	for _, s := range series {
 		if s.Clicks > 0 {

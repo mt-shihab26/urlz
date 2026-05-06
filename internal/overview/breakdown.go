@@ -6,6 +6,20 @@ import (
 	"github.com/pocketbase/dbx"
 )
 
+type breakdownItem struct {
+	Label string `json:"label"`
+	Count int    `json:"count"`
+}
+
+type breakdownData struct {
+	Countries []breakdownItem `json:"countries"`
+	Devices   []breakdownItem `json:"devices"`
+	Referrers []breakdownItem `json:"referrers"`
+	Browsers  []breakdownItem `json:"browsers"`
+	OS        []breakdownItem `json:"os"`
+	Languages []breakdownItem `json:"languages"`
+}
+
 func fetchBreakdown(db dbx.Builder, uid string) breakdownData {
 	topN := func(field string) []breakdownItem {
 		type row struct {
@@ -26,7 +40,6 @@ func fetchBreakdown(db dbx.Builder, uid string) breakdownData {
 		}
 		return items
 	}
-
 	return breakdownData{
 		Countries: topN("country_name"),
 		Devices:   topN("device"),
