@@ -23,9 +23,8 @@ func Handler(e *core.RequestEvent) error {
 	if user == nil {
 		return apis.NewUnauthorizedError("unauthorized", nil)
 	}
-	uid := user.Id
+	userID := user.Id
 	db := e.App.DB()
-
 	var (
 		totalClicks, avgDailyClicks, clickDelta int
 		totalLinks, activeLinks                 int
@@ -34,15 +33,22 @@ func Handler(e *core.RequestEvent) error {
 		topLinks                                []topLink
 		wg                                      sync.WaitGroup
 	)
-
-	wg.Add(5)
-	go func() { defer wg.Done(); totalClicks, avgDailyClicks, clickDelta = fetchClickStats(db, uid) }()
-	go func() { defer wg.Done(); totalLinks, activeLinks = fetchLinkStats(db, uid) }()
-	go func() { defer wg.Done(); uniqueVisitors = fetchUniqueVisitors(db, uid) }()
-	go func() { defer wg.Done(); breakdown = fetchBreakdown(db, uid) }()
-	go func() { defer wg.Done(); topLinks = fetchTopLinks(db, uid) }()
+	wg.Go(func() {
+		totalClicks, avgDailyClicks, clickDelta = fetchClickStats(db, userID)
+	})
+	wg.Go(func() {
+		totalLinks, activeLinks = fetchLinkStats(db, userID)
+	})
+	wg.Go(func() {
+		uniqueVisitors = fetchUniqueVisitors(db, userID)
+	})
+	wg.Go(func() {
+		breakdown = fetchBreakdown(db, userID)
+	})
+	wg.Go(func() {
+		topLinks = fetchTopLinks(db, userID)
+	})
 	wg.Wait()
-
 	return e.JSON(200, response{
 		TotalClicks:    totalClicks,
 		ActiveLinks:    activeLinks,
