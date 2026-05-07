@@ -1,9 +1,6 @@
 package overview
 
 import (
-	"fmt"
-	"sync"
-
 	"github.com/pocketbase/dbx"
 )
 
@@ -22,37 +19,57 @@ type breakdownData struct {
 }
 
 func fetchBreakdown(db dbx.Builder, uid string) breakdownData {
-	topN := func(field string) []breakdownItem {
-		type row struct {
-			Label string `db:"label"`
-			Count int    `db:"count"`
-		}
-		var rows []row
-		q := fmt.Sprintf(
-			"SELECT %s as label, COUNT(*) as count FROM clicks WHERE user = {:u} AND %s != '' GROUP BY %s ORDER BY count DESC LIMIT 5",
-			field, field, field,
-		)
-		if err := db.NewQuery(q).Bind(dbx.Params{"u": uid}).All(&rows); err != nil {
-			return []breakdownItem{}
-		}
-		items := make([]breakdownItem, len(rows))
-		for i, r := range rows {
-			items[i] = breakdownItem{Label: r.Label, Count: r.Count}
-		}
-		return items
+	type row struct {
+		Field string `db:"field"`
+		Label string `db:"label"`
+		Count int    `db:"count"`
 	}
+	var rows []row
+	db.NewQuery(`
+		WITH
+		  countries AS (SELECT country_name AS label, COUNT(*) AS count FROM clicks WHERE user = {:u} AND country_name != '' GROUP BY country_name ORDER BY count DESC LIMIT 5),
+		  devices   AS (SELECT device,               COUNT(*) AS count FROM clicks WHERE user = {:u} AND device        != '' GROUP BY device        ORDER BY count DESC LIMIT 5),
+		  referrers AS (SELECT referrer,             COUNT(*) AS count FROM clicks WHERE user = {:u} AND referrer      != '' GROUP BY referrer      ORDER BY count DESC LIMIT 5),
+		  browsers  AS (SELECT browser,              COUNT(*) AS count FROM clicks WHERE user = {:u} AND browser       != '' GROUP BY browser       ORDER BY count DESC LIMIT 5),
+		  os        AS (SELECT os,                   COUNT(*) AS count FROM clicks WHERE user = {:u} AND os            != '' GROUP BY os            ORDER BY count DESC LIMIT 5),
+		  languages AS (SELECT language,             COUNT(*) AS count FROM clicks WHERE user = {:u} AND language      != '' GROUP BY language      ORDER BY count DESC LIMIT 5)
+		SELECT 'country'  AS field, label, count FROM countries
+		UNION ALL
+		SELECT 'device',            label, count FROM devices
+		UNION ALL
+		SELECT 'referrer',          label, count FROM referrers
+		UNION ALL
+		SELECT 'browser',           label, count FROM browsers
+		UNION ALL
+		SELECT 'os',                label, count FROM os
+		UNION ALL
+		SELECT 'language',          label, count FROM languages
+	`).Bind(dbx.Params{"u": uid}).All(&rows)
 
-	var (
-		bd breakdownData
-		wg sync.WaitGroup
-	)
-	wg.Add(6)
-	go func() { defer wg.Done(); bd.Countries = topN("country_name") }()
-	go func() { defer wg.Done(); bd.Devices = topN("device") }()
-	go func() { defer wg.Done(); bd.Referrers = topN("referrer") }()
-	go func() { defer wg.Done(); bd.Browsers = topN("browser") }()
-	go func() { defer wg.Done(); bd.OS = topN("os") }()
-	go func() { defer wg.Done(); bd.Languages = topN("language") }()
-	wg.Wait()
+	bd := breakdownData{
+		Countries: []breakdownItem{},
+		Devices:   []breakdownItem{},
+		Referrers: []breakdownItem{},
+		Browsers:  []breakdownItem{},
+		OS:        []breakdownItem{},
+		Languages: []breakdownItem{},
+	}
+	for _, r := range rows {
+		item := breakdownItem{Label: r.Label, Count: r.Count}
+		switch r.Field {
+		case "country":
+			bd.Countries = append(bd.Countries, item)
+		case "device":
+			bd.Devices = append(bd.Devices, item)
+		case "referrer":
+			bd.Referrers = append(bd.Referrers, item)
+		case "browser":
+			bd.Browsers = append(bd.Browsers, item)
+		case "os":
+			bd.OS = append(bd.OS, item)
+		case "language":
+			bd.Languages = append(bd.Languages, item)
+		}
+	}
 	return bd
 }
