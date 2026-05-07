@@ -50,9 +50,12 @@ func fetchTopLinks(db dbx.Builder, uid string) []topLink {
 	`).Bind(dbx.Params{"u": uid}).All(&topRows); err != nil || len(topRows) == 0 {
 		return []topLink{}
 	}
-	ids := make([]string, len(topRows))
+	params := dbx.Params{"u": uid}
+	placeholders := make([]string, len(topRows))
 	for i, r := range topRows {
-		ids[i] = "'" + strings.ReplaceAll(r.ID, "'", "''") + "'"
+		key := fmt.Sprintf("id%d", i)
+		placeholders[i] = "{:" + key + "}"
+		params[key] = r.ID
 	}
 	type sparkRow struct {
 		Link   string `db:"link"`
@@ -62,8 +65,8 @@ func fetchTopLinks(db dbx.Builder, uid string) []topLink {
 	var sparkRows []sparkRow
 	db.NewQuery(fmt.Sprintf(
 		"SELECT link, date, COUNT(*) as clicks FROM clicks WHERE link IN (%s) GROUP BY link, date ORDER BY link, date",
-		strings.Join(ids, ","),
-	)).All(&sparkRows)
+		strings.Join(placeholders, ","),
+	)).Bind(params).All(&sparkRows)
 	sparkMap := make(map[string][]clickDay)
 	for _, sr := range sparkRows {
 		sparkMap[sr.Link] = append(sparkMap[sr.Link], clickDay{Date: sr.Date, Clicks: sr.Clicks})
