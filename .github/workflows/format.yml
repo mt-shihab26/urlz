@@ -34,7 +34,6 @@ jobs:
         uses: golangci/golangci-lint-action@v7
         with:
           version: v2.12
-          args: --exclude-dirs=web
 
       - name: Run JavaScript Lint
         run: bun run --cwd web lint
