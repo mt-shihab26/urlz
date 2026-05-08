@@ -8,6 +8,8 @@ import { route } from '@/routes';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
+import { clicksToBreakdown } from '@/lib/clicks';
+
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
 import { Browsers } from '@/components/screens/analytics/browsers';
 import { Countries } from '@/components/screens/analytics/countries';
@@ -70,12 +72,12 @@ const LinkDetail = () => {
                         <DetailStats range={range} link={link} clicks={clicks} />
                         <ClicksChart range={range} clicks={clicks} />
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <Countries clicks={clicks} />
-                            <Devices clicks={clicks} />
-                            <Referrers clicks={clicks} />
-                            <Browsers clicks={clicks} />
-                            <OperatingSystems clicks={clicks} />
-                            <Languages clicks={clicks} />
+                            <Countries items={clicksToBreakdown(clicks, 'country_name')} />
+                            <Devices items={clicksToBreakdown(clicks, 'device')} />
+                            <Referrers items={clicksToBreakdown(clicks, 'referrer')} />
+                            <Browsers items={clicksToBreakdown(clicks, 'browser')} />
+                            <OperatingSystems items={clicksToBreakdown(clicks, 'os')} />
+                            <Languages items={clicksToBreakdown(clicks, 'language')} />
                         </div>
                         <ClicksTable clicks={clicks} range={range} />
                     </div>
