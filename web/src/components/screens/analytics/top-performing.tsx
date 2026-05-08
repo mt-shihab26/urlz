@@ -14,6 +14,7 @@ import { route } from '@/routes';
 import { useNavigate } from 'react-router';
 
 import { Sparkline } from '@/components/composite/sparkline';
+import { StatusBadge } from '@/components/composite/status-badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export const TopPerforming = ({ topLinks }: { topLinks: TTopLink[] }) => {
@@ -28,10 +29,10 @@ export const TopPerforming = ({ topLinks }: { topLinks: TTopLink[] }) => {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>#</TableHead>
                             <TableHead>Link</TableHead>
                             <TableHead className="text-right">Period Clicks</TableHead>
                             <TableHead className="text-right">Trend</TableHead>
+                            <TableHead className="text-right">Status</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -48,23 +49,32 @@ export const TopPerforming = ({ topLinks }: { topLinks: TTopLink[] }) => {
                             topLinks.map((link, i) => (
                                 <TableRow
                                     key={link.id}
-                                    className="cursor-pointer"
+                                    className="group cursor-pointer"
                                     onClick={() => navigate(route.linksShow(link.id))}
                                 >
-                                    <TableCell className="font-mono text-xs text-muted-foreground w-8">
-                                        {i + 1}
-                                    </TableCell>
                                     <TableCell>
-                                        <div className="font-medium">{link.title}</div>
-                                        <div className="font-mono text-xs text-muted-foreground">
-                                            {formatCode(link.code)}
+                                        <div className="flex items-center gap-3">
+                                            <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-primary/10 text-xs font-bold text-primary">
+                                                {i + 1}
+                                            </span>
+                                            <div>
+                                                <div className="font-medium">{link.title}</div>
+                                                <div className="flex items-center gap-1">
+                                                    <span className="font-mono text-xs text-primary">
+                                                        {formatCode(link.code)}
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </TableCell>
                                     <TableCell className="text-right font-mono font-bold">
                                         {formatNumber(link.total_clicks)}
                                     </TableCell>
-                                    <TableCell className="flex justify-end text-right">
+                                    <TableCell className="text-right flex justify-end">
                                         <Sparkline data={link.sparkline} width={64} height={22} />
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        <StatusBadge status={link.status} />
                                     </TableCell>
                                 </TableRow>
                             ))
