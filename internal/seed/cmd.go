@@ -32,7 +32,7 @@ func Run(app *pocketbase.PocketBase) {
 	if err := app.Bootstrap(); err != nil {
 		log.Fatalf("bootstrap: %v", err)
 	}
-	defer app.ResetBootstrapState()
+	defer func() { _ = app.ResetBootstrapState() }()
 	user, err := seedUsers(app, *email, *password)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "seed users: %v\n", err)
