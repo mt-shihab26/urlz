@@ -1,11 +1,3 @@
-import type { TTopLink } from '@/services/analytics';
-
-import { formatCode, formatNumber } from '@/lib/formats';
-import { route } from '@/routes';
-import { useNavigate } from 'react-router';
-
-import { Sparkline } from '@/components/composite/sparkline';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Table,
     TableBody,
@@ -14,6 +6,15 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+
+import type { TTopLink } from '@/services/analytics';
+
+import { formatCode, formatNumber } from '@/lib/formats';
+import { route } from '@/routes';
+import { useNavigate } from 'react-router';
+
+import { Sparkline } from '@/components/composite/sparkline';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export const TopPerforming = ({ topLinks }: { topLinks: TTopLink[] }) => {
     const navigate = useNavigate();
@@ -62,7 +63,7 @@ export const TopPerforming = ({ topLinks }: { topLinks: TTopLink[] }) => {
                                     <TableCell className="text-right font-mono font-bold">
                                         {formatNumber(link.total_clicks)}
                                     </TableCell>
-                                    <TableCell className="text-right">
+                                    <TableCell className="flex justify-end text-right">
                                         <Sparkline data={link.sparkline} width={64} height={22} />
                                     </TableCell>
                                 </TableRow>
