@@ -4,6 +4,11 @@
 	"buildCommand": "bun vercel-build",
 	"outputDirectory": "web/dist",
 	"regions": ["bom1"],
+	"git": {
+		"deploymentEnabled": {
+			"main": true
+		}
+	},
 	"functions": {
 		"api/proxy.ts": {
 			"includeFiles": "dist/main",
