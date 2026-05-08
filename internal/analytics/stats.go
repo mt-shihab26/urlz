@@ -55,7 +55,9 @@ func fetchVolume(db dbx.Builder, uid, since string) []volumeDay {
 }
 
 func fetchUniqueVisitors(db dbx.Builder, uid, since string) int {
-	type row struct{ Count int `db:"count"` }
+	type row struct {
+		Count int `db:"count"`
+	}
 	var r row
 	q := "SELECT COUNT(DISTINCT ip) as count FROM clicks WHERE user = {:u} AND ip != ''"
 	params := dbx.Params{"u": uid}
@@ -94,12 +96,10 @@ func buildStats(volume []volumeDay, uv int, lc linkCounts) statsData {
 			activeDays++
 		}
 	}
-
 	avgDailyClicks := 0
 	if activeDays > 0 {
 		avgDailyClicks = int(math.Round(float64(totalClicks) / float64(activeDays)))
 	}
-
 	clickDelta := 0
 	if n := len(volume); n > 1 {
 		mid := n / 2
@@ -115,12 +115,10 @@ func buildStats(volume []volumeDay, uv int, lc linkCounts) statsData {
 			clickDelta = int(math.Round(float64(second-first) / float64(first) * 100))
 		}
 	}
-
 	avgClicksPerLink := 0
 	if lc.Total > 0 {
 		avgClicksPerLink = int(math.Round(float64(totalClicks) / float64(lc.Total)))
 	}
-
 	return statsData{
 		TotalClicks:      totalClicks,
 		TotalLinks:       lc.Total,

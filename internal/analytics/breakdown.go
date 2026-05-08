@@ -38,15 +38,13 @@ func fetchBreakdown(db dbx.Builder, uid, since string) breakdownData {
 		sinceClause = " AND date >= {:since}"
 		params["since"] = since
 	}
-
 	parts := make([]string, len(breakdownFields))
 	for i, f := range breakdownFields {
 		parts[i] = fmt.Sprintf(
-			"SELECT * FROM (SELECT '%s' AS field, %s AS label, ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (), 1) AS pct FROM clicks WHERE user={:u} AND %s!=''" + sinceClause + " GROUP BY %s ORDER BY COUNT(*) DESC LIMIT 6)",
+			"SELECT * FROM (SELECT '%s' AS field, %s AS label, ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (), 1) AS pct FROM clicks WHERE user={:u} AND %s!=''"+sinceClause+" GROUP BY %s ORDER BY COUNT(*) DESC LIMIT 6)",
 			f[0], f[1], f[2], f[2],
 		)
 	}
-
 	type row struct {
 		Field string  `db:"field"`
 		Label string  `db:"label"`
@@ -54,7 +52,6 @@ func fetchBreakdown(db dbx.Builder, uid, since string) breakdownData {
 	}
 	var rows []row
 	db.NewQuery(strings.Join(parts, " UNION ALL ")).Bind(params).All(&rows)
-
 	bd := breakdownData{
 		Countries: []breakdownEntry{},
 		Devices:   []breakdownEntry{},

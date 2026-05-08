@@ -31,14 +31,12 @@ func fetchTopLinks(db dbx.Builder, uid, since string) []topLink {
 		Status      string `db:"status"`
 		TotalClicks int    `db:"total_clicks"`
 	}
-
 	params := dbx.Params{"u": uid}
 	joinCond := "c.link = l.id"
 	if since != "" {
 		joinCond += " AND c.date >= {:since}"
 		params["since"] = since
 	}
-
 	var rows []topRow
 	if err := db.NewQuery(fmt.Sprintf(`
 		SELECT l.id, l.code, l.url, l.title, l.status, COUNT(c.id) as total_clicks
@@ -48,7 +46,6 @@ func fetchTopLinks(db dbx.Builder, uid, since string) []topLink {
 	`, joinCond)).Bind(params).All(&rows); err != nil || len(rows) == 0 {
 		return []topLink{}
 	}
-
 	sparkParams := dbx.Params{}
 	placeholders := make([]string, len(rows))
 	for i, r := range rows {
@@ -62,7 +59,6 @@ func fetchTopLinks(db dbx.Builder, uid, since string) []topLink {
 		sparkParams["since"] = since
 	}
 	sparkQ += " GROUP BY link, date ORDER BY link, date"
-
 	type sparkRow struct {
 		Link   string `db:"link"`
 		Date   string `db:"date"`
@@ -70,12 +66,10 @@ func fetchTopLinks(db dbx.Builder, uid, since string) []topLink {
 	}
 	var sparkRows []sparkRow
 	db.NewQuery(sparkQ).Bind(sparkParams).All(&sparkRows)
-
 	sparkMap := make(map[string][]clickDay)
 	for _, sr := range sparkRows {
 		sparkMap[sr.Link] = append(sparkMap[sr.Link], clickDay{Date: sr.Date, Clicks: sr.Clicks})
 	}
-
 	result := make([]topLink, len(rows))
 	for i, r := range rows {
 		s := sparkMap[r.ID]
