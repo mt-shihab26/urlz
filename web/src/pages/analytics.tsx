@@ -35,8 +35,8 @@ const Analytics = () => {
     const [range, setRange] = useState<TRange>('30d');
 
     const { data, isLoading, isFetching, refetch } = useQuery<TAnalyticsResponse>({
-        queryKey: queryKeys.analytics(range),
-        queryFn: () => getAnalyticsData(range),
+        queryKey: queryKeys.analytics(range, hasFullAnalytics),
+        queryFn: () => getAnalyticsData(range, hasFullAnalytics),
         throwOnError: (e) => toastError(e),
     });
 

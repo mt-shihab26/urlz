@@ -53,9 +53,14 @@ export type TAnalyticsResponse = {
     top_links: TTopLink[];
 };
 
-export const getAnalyticsData = async (range: TRange): Promise<TAnalyticsResponse> => {
+export const getAnalyticsData = async (
+    range: TRange,
+    full: boolean,
+): Promise<TAnalyticsResponse> => {
     try {
-        return await pb.send<TAnalyticsResponse>(`/api/analytics?range=${range}`, {
+        const params = new URLSearchParams({ range });
+        if (full) params.set('full', '1');
+        return await pb.send<TAnalyticsResponse>(`/api/analytics?${params}`, {
             method: 'GET',
         });
     } catch (e: any) {
