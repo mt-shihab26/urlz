@@ -65,7 +65,9 @@ func fetchTopLinks(db dbx.Builder, uid, since string) []topLink {
 		Clicks int    `db:"clicks"`
 	}
 	var sparkRows []sparkRow
-	db.NewQuery(sparkQ).Bind(sparkParams).All(&sparkRows)
+	if err := db.NewQuery(sparkQ).Bind(sparkParams).All(&sparkRows); err != nil {
+		sparkRows = nil
+	}
 	sparkMap := make(map[string][]clickDay)
 	for _, sr := range sparkRows {
 		sparkMap[sr.Link] = append(sparkMap[sr.Link], clickDay{Date: sr.Date, Clicks: sr.Clicks})

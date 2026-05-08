@@ -12,7 +12,14 @@ type Props = {
     clickDelta: number;
 };
 
-export const StatsCards = ({ totalClicks, activeLinks, totalLinks, uniqueVisitors, avgDailyClicks, clickDelta }: Props) => {
+export const StatsCards = ({
+    totalClicks,
+    activeLinks,
+    totalLinks,
+    uniqueVisitors,
+    avgDailyClicks,
+    clickDelta,
+}: Props) => {
     const stats = [
         {
             label: 'Total Clicks',

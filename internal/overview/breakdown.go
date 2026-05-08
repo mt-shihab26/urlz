@@ -44,8 +44,6 @@ func fetchBreakdown(db dbx.Builder, uid string) breakdownData {
 		Count int    `db:"count"`
 	}
 	var rows []row
-	db.NewQuery(strings.Join(parts, " UNION ALL ")).
-		Bind(dbx.Params{"u": uid}).All(&rows)
 	bd := breakdownData{
 		Countries: []breakdownItem{},
 		Devices:   []breakdownItem{},
@@ -53,6 +51,10 @@ func fetchBreakdown(db dbx.Builder, uid string) breakdownData {
 		Browsers:  []breakdownItem{},
 		OS:        []breakdownItem{},
 		Languages: []breakdownItem{},
+	}
+	if err := db.NewQuery(strings.Join(parts, " UNION ALL ")).
+		Bind(dbx.Params{"u": uid}).All(&rows); err != nil {
+		return bd
 	}
 	for _, r := range rows {
 		item := breakdownItem{Label: r.Label, Count: r.Count}

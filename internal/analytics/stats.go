@@ -49,7 +49,7 @@ func fetchVolume(db dbx.Builder, uid, since string) []volumeDay {
 	}
 	result := make([]volumeDay, len(rows))
 	for i, r := range rows {
-		result[i] = volumeDay{Date: r.Date, Clicks: r.Clicks}
+		result[i] = volumeDay(r)
 	}
 	return result
 }
@@ -65,7 +65,9 @@ func fetchUniqueVisitors(db dbx.Builder, uid, since string) int {
 		q += " AND date >= {:since}"
 		params["since"] = since
 	}
-	db.NewQuery(q).Bind(params).One(&r)
+	if err := db.NewQuery(q).Bind(params).One(&r); err != nil {
+		return 0
+	}
 	return r.Count
 }
 
@@ -81,7 +83,9 @@ func fetchLinkCounts(db dbx.Builder, uid, since string) linkCounts {
 		q += " AND created >= {:since}"
 		params["since"] = since
 	}
-	db.NewQuery(q).Bind(params).One(&lc)
+	if err := db.NewQuery(q).Bind(params).One(&lc); err != nil {
+		return lc
+	}
 	return lc
 }
 

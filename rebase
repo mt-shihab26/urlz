@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -e
+
+CURRENT_BRANCH=$(git branch --show-current)
+
+echo "fetching latest changes..."
+git fetch origin
+
+echo "rebasing dev onto main..."
+git checkout dev
+git rebase origin/main
+git push origin dev --force-with-lease
+
+echo "switching back to $CURRENT_BRANCH..."
+git checkout "$CURRENT_BRANCH"
+
+echo "rebase complete."

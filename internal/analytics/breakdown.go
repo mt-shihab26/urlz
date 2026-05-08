@@ -51,7 +51,6 @@ func fetchBreakdown(db dbx.Builder, uid, since string) breakdownData {
 		Pct   float64 `db:"pct"`
 	}
 	var rows []row
-	db.NewQuery(strings.Join(parts, " UNION ALL ")).Bind(params).All(&rows)
 	bd := breakdownData{
 		Countries: []breakdownEntry{},
 		Devices:   []breakdownEntry{},
@@ -59,6 +58,9 @@ func fetchBreakdown(db dbx.Builder, uid, since string) breakdownData {
 		Browsers:  []breakdownEntry{},
 		OS:        []breakdownEntry{},
 		Languages: []breakdownEntry{},
+	}
+	if err := db.NewQuery(strings.Join(parts, " UNION ALL ")).Bind(params).All(&rows); err != nil {
+		return bd
 	}
 	for _, r := range rows {
 		entry := breakdownEntry{Label: r.Label, Pct: r.Pct}

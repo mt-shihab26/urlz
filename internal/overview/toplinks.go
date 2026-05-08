@@ -63,10 +63,12 @@ func fetchTopLinks(db dbx.Builder, uid string) []topLink {
 		Clicks int    `db:"clicks"`
 	}
 	var sparkRows []sparkRow
-	db.NewQuery(fmt.Sprintf(
+	if err := db.NewQuery(fmt.Sprintf(
 		"SELECT link, date, COUNT(*) as clicks FROM clicks WHERE link IN (%s) GROUP BY link, date ORDER BY link, date",
 		strings.Join(placeholders, ","),
-	)).Bind(params).All(&sparkRows)
+	)).Bind(params).All(&sparkRows); err != nil {
+		sparkRows = nil
+	}
 	sparkMap := make(map[string][]clickDay)
 	for _, sr := range sparkRows {
 		sparkMap[sr.Link] = append(sparkMap[sr.Link], clickDay{Date: sr.Date, Clicks: sr.Clicks})
