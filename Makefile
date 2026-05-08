@@ -1,4 +1,4 @@
-.PHONY: build dev migrate-snapshot migrate-up setup seed superuser
+.PHONY: build dev migrate-snapshot migrate-up setup seed superuser lint
 
 EMAIL    ?= dev@example.com
 PASSWORD ?= password1234
@@ -38,6 +38,12 @@ setup:
 	@cd web && bun install
 	@echo ""
 	@echo "Setup complete. Edit .env and web/.env, then run: make dev"
+
+lint:
+	@if ! command -v golangci-lint > /dev/null; then \
+		go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest; \
+	fi
+	golangci-lint run
 
 # Live reload
 dev:
