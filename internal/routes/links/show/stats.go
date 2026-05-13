@@ -7,24 +7,19 @@ import (
 )
 
 type statsData struct {
-	TotalClicks     int `json:"total_clicks"`
-	PeriodClicks    int `json:"period_clicks"`
-	UniqueCountries int `json:"unique_countries"`
+	TotalClicks     int `db:"total_clicks"     json:"total_clicks"`
+	PeriodClicks    int `db:"period_clicks"    json:"period_clicks"`
+	UniqueCountries int `db:"unique_countries" json:"unique_countries"`
 }
 
 func fetchStats(db dbx.Builder, linkID, since string) statsData {
-	type row struct {
-		TotalClicks     int `db:"total_clicks"`
-		PeriodClicks    int `db:"period_clicks"`
-		UniqueCountries int `db:"unique_countries"`
-	}
 	params := dbx.Params{"id": linkID}
 	sinceExpr := "1"
 	if since != "" {
 		sinceExpr = "date >= {:since}"
 		params["since"] = since
 	}
-	var r row
+	var r statsData
 	_ = db.NewQuery(fmt.Sprintf(`
 		SELECT
 			COUNT(*) as total_clicks,
@@ -32,9 +27,5 @@ func fetchStats(db dbx.Builder, linkID, since string) statsData {
 			COUNT(DISTINCT CASE WHEN country_code != '' THEN country_code END) as unique_countries
 		FROM clicks WHERE link = {:id}
 	`, sinceExpr)).Bind(params).One(&r)
-	return statsData{
-		TotalClicks:     r.TotalClicks,
-		PeriodClicks:    r.PeriodClicks,
-		UniqueCountries: r.UniqueCountries,
-	}
+	return r
 }
