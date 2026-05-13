@@ -12,7 +12,8 @@ import (
 	"github.com/mt-shihab26/urlz/internal/hooks"
 	"github.com/mt-shihab26/urlz/internal/redirect"
 	"github.com/mt-shihab26/urlz/internal/routes/analytics"
-	"github.com/mt-shihab26/urlz/internal/routes/links"
+	linksindex "github.com/mt-shihab26/urlz/internal/routes/links/index"
+	linksshow "github.com/mt-shihab26/urlz/internal/routes/links/show"
 	"github.com/mt-shihab26/urlz/internal/routes/overview"
 	"github.com/mt-shihab26/urlz/web"
 )
@@ -36,7 +37,8 @@ func main() {
 
 		se.Router.GET("/api/overview", overview.Handler)
 		se.Router.GET("/api/analytics", analytics.Handler)
-		se.Router.GET("/api/links", links.Handler)
+		se.Router.GET("/api/links", linksindex.Handler)
+		se.Router.GET("/api/links/{id}", linksshow.Handler)
 
 		se.Router.GET("/{code}", redirect.Handler)
 		sub, err := fs.Sub(web.DistFS, "dist")

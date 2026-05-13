@@ -1,29 +1,12 @@
-import type { TRange } from '@/lib/ranges';
-import type { TClick } from '@/types/models';
+import type { TVolumeDay } from '@/services/analytics';
 
-import { clicksToSeries } from '@/lib/clicks';
 import { formatChartDate } from '@/lib/formats';
-import { cutoffDate } from '@/lib/utils';
-import { useMemo } from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 
-export const ClicksChart = ({ range, clicks }: { range: TRange; clicks: TClick[] }) => {
-    const series = useMemo(() => {
-        const cutoff =
-            range === '7d'
-                ? cutoffDate(7)
-                : range === '90d'
-                  ? cutoffDate(90)
-                  : range === '30d'
-                    ? cutoffDate(30)
-                    : null;
-        const filtered = cutoff ? clicks.filter((c) => c.date >= cutoff) : clicks;
-        return clicksToSeries(filtered);
-    }, [range, clicks]);
-
+export const ClicksChart = ({ volume }: { volume: TVolumeDay[] }) => {
     return (
         <Card>
             <CardHeader>
@@ -36,7 +19,7 @@ export const ClicksChart = ({ range, clicks }: { range: TRange; clicks: TClick[]
                     }}
                     className="h-45 w-full"
                 >
-                    <AreaChart data={series}>
+                    <AreaChart data={volume}>
                         <defs>
                             <linearGradient id="fillClicksDt" x1="0" y1="0" x2="0" y2="1">
                                 <stop

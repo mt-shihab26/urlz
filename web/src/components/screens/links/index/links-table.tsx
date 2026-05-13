@@ -13,7 +13,7 @@ import { LinkRow } from '@/components/screens/links/index/link-row';
 
 export const LinksTable = ({ links }: { links: TLinkItem[] }) => {
     return (
-        <div className="overflow-hidden border">
+        <div className="overflow-x-auto border">
             <Table>
                 <TableHeader>
                     <TableRow>

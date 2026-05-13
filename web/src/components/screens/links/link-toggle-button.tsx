@@ -14,6 +14,7 @@ export const LinkToggleButton = ({ link }: { link: TLink }) => {
         try {
             await toggleLinkStatus(link.id, link.status);
             queryClient.invalidateQueries({ queryKey: queryKeys.links });
+            queryClient.invalidateQueries({ queryKey: queryKeys.linkShow(link.id) });
         } catch (e) {
             toastError(e instanceof Error ? e.message : 'Failed to toggle link status');
         }
