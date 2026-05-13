@@ -25,10 +25,9 @@ func RegisterLinkHooks(app core.App) {
 		if plan != "free" {
 			return e.Next()
 		}
-		type countRow struct {
+		var row struct {
 			Total int `db:"total"`
 		}
-		var row countRow
 		err = app.DB().
 			NewQuery("SELECT count(*) as total FROM links WHERE user = {:user}").
 			Bind(map[string]any{"user": userID}).
