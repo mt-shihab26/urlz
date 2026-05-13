@@ -9,11 +9,11 @@ export type TLinkItem = TLink & {
     sparkline: TClickDay[];
 };
 
-export type TLinksResponse = { links: TLinkItem[] };
+export type TResponse = { links: TLinkItem[] };
 
-export const getLinksData = async (): Promise<TLinksResponse> => {
+export const getLinksData = async (): Promise<TResponse> => {
     try {
-        return await pb.send<TLinksResponse>('/api/links', { method: 'GET' });
+        return await pb.send<TResponse>('/api/links', { method: 'GET' });
     } catch (e: any) {
         throw new Error(e?.message || 'Failed to load links data');
     }

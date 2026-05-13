@@ -1,8 +1,8 @@
-import type { TLinksResponse } from '@/services/links';
+import type { TResponse } from '@/services/links';
 import type { TFilter } from '@/types/utils';
 
-import { queryKeys } from '@/lib/query-keys';
 import { filterLinks } from '@/lib/links';
+import { queryKeys } from '@/lib/query-keys';
 import { toastError } from '@/lib/toast';
 import { getLinksData } from '@/services/links';
 import { useQuery } from '@tanstack/react-query';
@@ -21,7 +21,7 @@ const Links = () => {
     const [filter, setFilter] = useState<TFilter>('all');
     const [search, setSearch] = useState('');
 
-    const { data, isLoading, isFetching, refetch } = useQuery<TLinksResponse>({
+    const { data, isLoading, isFetching, refetch } = useQuery<TResponse>({
         queryKey: queryKeys.links,
         queryFn: getLinksData,
         throwOnError: (e) => toastError(e),
@@ -36,7 +36,11 @@ const Links = () => {
                 description="Manage and monitor all your shortened links"
                 action={
                     <div className="flex items-center gap-2">
-                        <RefreshButton onClick={refetch} isFetching={isFetching} isLoading={isLoading} />
+                        <RefreshButton
+                            onClick={refetch}
+                            isFetching={isFetching}
+                            isLoading={isLoading}
+                        />
                         <CreateLinkButton />
                     </div>
                 }

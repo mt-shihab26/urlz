@@ -1,9 +1,9 @@
 import type { TRange } from '@/lib/ranges';
-import type { TShowResponse } from '@/services/link-show';
+import type { TResponse } from '@/services/links/show';
 
 import { queryKeys } from '@/lib/query-keys';
 import { toastError } from '@/lib/toast';
-import { getLinkShowData } from '@/services/link-show';
+import { getLinkShowData } from '@/services/links/show';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
@@ -29,7 +29,7 @@ const LinkDetail = () => {
     const { id } = useParams<{ id: string }>();
     const [range, setRange] = useState<TRange>('30d');
 
-    const { data, isLoading, isFetching, refetch } = useQuery<TShowResponse>({
+    const { data, isLoading, isFetching, refetch } = useQuery<TResponse>({
         queryKey: queryKeys.linkShow(id!, range),
         queryFn: () => getLinkShowData(id!, range),
         enabled: !!id,
@@ -56,7 +56,11 @@ const LinkDetail = () => {
                         onBack={() => navigate(route.linksIndex())}
                     />
                     <div className="flex items-center justify-end px-4 pt-3 lg:px-6">
-                        <RefreshButton onClick={refetch} isFetching={isFetching} isLoading={isLoading} />
+                        <RefreshButton
+                            onClick={refetch}
+                            isFetching={isFetching}
+                            isLoading={isLoading}
+                        />
                     </div>
                     <div className="flex flex-col gap-6 p-4 lg:p-6">
                         <DetailStats stats={data.stats} created={data.link.created} />

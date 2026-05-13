@@ -1,16 +1,10 @@
-import type { TShowStats } from '@/services/link-show';
+import type { TStats } from '@/services/links/show';
 
 import { formatDate, formatNumber } from '@/lib/formats';
 
 import { Card, CardHeader } from '@/components/ui/card';
 
-export const DetailStats = ({
-    stats,
-    created,
-}: {
-    stats: TShowStats;
-    created: string;
-}) => {
+export const DetailStats = ({ stats, created }: { stats: TStats; created: string }) => {
     const items = [
         { label: 'Period Clicks', value: formatNumber(stats.period_clicks) },
         { label: 'Total Clicks', value: formatNumber(stats.total_clicks) },

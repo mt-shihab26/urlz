@@ -1,4 +1,4 @@
-import type { TClickRecord } from '@/services/link-show';
+import type { TClickRecord } from '@/services/links/show';
 
 import {
     Table,

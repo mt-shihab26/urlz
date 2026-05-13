@@ -3,7 +3,7 @@ import type { TLink } from '@/types/models';
 
 import { pb } from '@/lib/pb';
 
-export type TShowStats = {
+export type TStats = {
     total_clicks: number;
     period_clicks: number;
     unique_countries: number;
@@ -19,18 +19,18 @@ export type TClickRecord = {
     device: string;
 };
 
-export type TShowResponse = {
+export type TResponse = {
     link: TLink;
-    stats: TShowStats;
+    stats: TStats;
     volume: TVolumeDay[];
     breakdown: TBreakdownData;
     clicks: TClickRecord[];
 };
 
-export const getLinkShowData = async (id: string, range: string): Promise<TShowResponse> => {
+export const getLinkShowData = async (id: string, range: string): Promise<TResponse> => {
     try {
         const params = new URLSearchParams({ range });
-        return await pb.send<TShowResponse>(`/api/links/${id}?${params}`, { method: 'GET' });
+        return await pb.send<TResponse>(`/api/links/${id}?${params}`, { method: 'GET' });
     } catch (e: any) {
         throw new Error(e?.message || 'Failed to load link data');
     }

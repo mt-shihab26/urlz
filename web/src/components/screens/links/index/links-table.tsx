@@ -39,9 +39,7 @@ export const LinksTable = ({ links }: { links: TLinkItem[] }) => {
                             </TableCell>
                         </TableRow>
                     ) : (
-                        links.map((link, i) => (
-                            <LinkRow key={link.id} link={link} index={i} />
-                        ))
+                        links.map((link, i) => <LinkRow key={link.id} link={link} index={i} />)
                     )}
                 </TableBody>
             </Table>
