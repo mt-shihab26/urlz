@@ -30,7 +30,7 @@ const LinkDetail = () => {
     const [range, setRange] = useState<TRange>('30d');
 
     const { data, isLoading, isFetching, refetch } = useQuery<TResponse>({
-        queryKey: queryKeys.linkShow(id!, range),
+        queryKey: queryKeys.links.show(id!, range),
         queryFn: () => getLinkShowData(id!, range),
         enabled: !!id,
         throwOnError: (e) => toastError(e),

@@ -49,8 +49,8 @@ export const EditLinkDialog = ({
                 code: data.code,
                 expires: data.expiry || undefined,
             });
-            queryClient.invalidateQueries({ queryKey: queryKeys.links });
-            queryClient.invalidateQueries({ queryKey: queryKeys.linkShow(link.id) });
+            queryClient.invalidateQueries({ queryKey: queryKeys.links.index });
+            queryClient.invalidateQueries({ queryKey: queryKeys.links.show(link.id) });
             onOpenChange(false);
         } catch (e: any) {
             const fieldErrors = e?.response?.data;

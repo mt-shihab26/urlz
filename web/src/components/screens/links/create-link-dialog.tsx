@@ -51,7 +51,7 @@ export const CreateLinkDialog = ({
                 code: data.code || generateRandomSlug(),
                 expires: data.expiry || undefined,
             });
-            queryClient.invalidateQueries({ queryKey: queryKeys.links });
+            queryClient.invalidateQueries({ queryKey: queryKeys.links.index });
             handleClose();
         } catch (e: any) {
             const msg: string = e?.message ?? '';

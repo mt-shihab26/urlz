@@ -25,8 +25,8 @@ export const LinkDeleteButton = ({ link }: { link: TLink }) => {
     const handleDelete = async () => {
         try {
             await deleteLink(link.id);
-            queryClient.invalidateQueries({ queryKey: queryKeys.links });
-            queryClient.invalidateQueries({ queryKey: queryKeys.linkShow(link.id) });
+            queryClient.invalidateQueries({ queryKey: queryKeys.links.index });
+            queryClient.invalidateQueries({ queryKey: queryKeys.links.show(link.id) });
         } catch (e) {
             toastError(e instanceof Error ? e.message : 'Failed to delete link');
         }

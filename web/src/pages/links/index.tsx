@@ -22,7 +22,7 @@ const Links = () => {
     const [search, setSearch] = useState('');
 
     const { data, isLoading, isFetching, refetch } = useQuery<TResponse>({
-        queryKey: queryKeys.links,
+        queryKey: queryKeys.links.index,
         queryFn: getLinksData,
         throwOnError: (e) => toastError(e),
     });
