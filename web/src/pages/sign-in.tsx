@@ -27,8 +27,8 @@ const SignIn = () => {
     const navigate = useNavigate();
 
     const { data, setData, errors, setErrors, loading, setLoading } = useForm({
-        email: '',
-        password: '',
+        email: 'dev@example.com',
+        password: 'password1234',
         remember: false,
     });
 
