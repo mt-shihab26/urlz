@@ -7,13 +7,13 @@ import (
 	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
 
-	"github.com/mt-shihab26/urlz/internal/analytics"
 	"github.com/mt-shihab26/urlz/internal/app"
 	"github.com/mt-shihab26/urlz/internal/billing"
 	"github.com/mt-shihab26/urlz/internal/hooks"
-	"github.com/mt-shihab26/urlz/internal/links"
-	"github.com/mt-shihab26/urlz/internal/overview"
 	"github.com/mt-shihab26/urlz/internal/redirect"
+	"github.com/mt-shihab26/urlz/internal/routes/analytics"
+	"github.com/mt-shihab26/urlz/internal/routes/links"
+	"github.com/mt-shihab26/urlz/internal/routes/overview"
 	"github.com/mt-shihab26/urlz/web"
 )
 
