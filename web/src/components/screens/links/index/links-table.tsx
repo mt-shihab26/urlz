@@ -1,3 +1,5 @@
+import type { TLinkItem } from '@/services/links';
+
 import {
     Table,
     TableBody,
@@ -7,11 +9,9 @@ import {
     TableRow,
 } from '@/components/ui/table';
 
-import type { TClick, TLink } from '@/types/models';
-
 import { LinkRow } from '@/components/screens/links/index/link-row';
 
-export const LinksTable = ({ links, clicks }: { links: TLink[]; clicks: TClick[] }) => {
+export const LinksTable = ({ links }: { links: TLinkItem[] }) => {
     return (
         <div className="overflow-hidden border">
             <Table>
@@ -40,7 +40,7 @@ export const LinksTable = ({ links, clicks }: { links: TLink[]; clicks: TClick[]
                         </TableRow>
                     ) : (
                         links.map((link, i) => (
-                            <LinkRow key={link.id} link={link} index={i} clicks={clicks} />
+                            <LinkRow key={link.id} link={link} index={i} />
                         ))
                     )}
                 </TableBody>

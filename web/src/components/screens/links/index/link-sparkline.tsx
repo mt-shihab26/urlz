@@ -1,11 +1,7 @@
-import type { TClick } from '@/types/models';
-
-import { clicksToSeries } from '@/lib/clicks';
-import { useMemo } from 'react';
+import type { TClickDay } from '@/services/links';
 
 import { Sparkline } from '@/components/composite/sparkline';
 
-export const LinkSparkline = ({ clicks }: { clicks: TClick[] }) => {
-    const series = useMemo(() => clicksToSeries(clicks).slice(-14), [clicks]);
-    return <Sparkline data={series} width={64} height={22} />;
+export const LinkSparkline = ({ sparkline }: { sparkline: TClickDay[] }) => {
+    return <Sparkline data={sparkline} width={64} height={22} />;
 };

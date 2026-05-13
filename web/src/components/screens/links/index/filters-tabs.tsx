@@ -1,4 +1,4 @@
-import type { TLink } from '@/types/models';
+import type { TLinkItem } from '@/services/links';
 import type { TFilter } from '@/types/utils';
 
 import { isLinkActive, isLinkDisabled, isLinkExpired } from '@/lib/links';
@@ -17,7 +17,7 @@ export const FiltersTabs = ({
     filter,
     onFilter,
 }: {
-    links: TLink[];
+    links: TLinkItem[];
     filter: TFilter;
     onFilter: (filter: TFilter) => void;
 }) => {

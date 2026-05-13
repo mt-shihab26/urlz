@@ -1,15 +1,19 @@
 import type { TLink } from '@/types/models';
 
 import { toggleLinkStatus } from '@/collections/links';
+import { queryKeys } from '@/lib/query-keys';
 import { toastError } from '@/lib/toast';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { Button } from '@/components/ui/button';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 
 export const LinkToggleButton = ({ link }: { link: TLink }) => {
+    const queryClient = useQueryClient();
     const handleToggle = async () => {
         try {
             await toggleLinkStatus(link.id, link.status);
+            queryClient.invalidateQueries({ queryKey: queryKeys.links });
         } catch (e) {
             toastError(e instanceof Error ? e.message : 'Failed to toggle link status');
         }

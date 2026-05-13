@@ -13,15 +13,19 @@ import {
 import type { TLink } from '@/types/models';
 
 import { deleteLink } from '@/collections/links';
+import { queryKeys } from '@/lib/query-keys';
 import { toastError } from '@/lib/toast';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { Button } from '@/components/ui/button';
 import { Trash2Icon } from 'lucide-react';
 
 export const LinkDeleteButton = ({ link }: { link: TLink }) => {
+    const queryClient = useQueryClient();
     const handleDelete = async () => {
         try {
             await deleteLink(link.id);
+            queryClient.invalidateQueries({ queryKey: queryKeys.links });
         } catch (e) {
             toastError(e instanceof Error ? e.message : 'Failed to delete link');
         }
