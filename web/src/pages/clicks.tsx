@@ -1,5 +1,5 @@
 import type { TRange } from '@/lib/ranges';
-import type { TClickItem, TClicksResponse } from '@/services/clicks';
+import type { TClickItem, TResponse } from '@/services/clicks';
 
 import { queryKeys } from '@/lib/query-keys';
 import { toastError } from '@/lib/toast';
@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { RangeTabs } from '@/components/composite/range-tabs';
 import { Header } from '@/components/composite/site-header';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
-import { ClicksTable, PER_PAGE } from '@/components/screens/clicks/clicks-table';
+import { ClicksTable } from '@/components/screens/clicks/clicks-table';
 import { DetailDrawer } from '@/components/screens/clicks/detail-drawer';
 
 const Clicks = () => {
@@ -18,7 +18,7 @@ const Clicks = () => {
     const [page, setPage] = useState(1);
     const [selectedClick, setSelectedClick] = useState<TClickItem | null>(null);
 
-    const { data, isLoading } = useQuery<TClicksResponse>({
+    const { data, isLoading } = useQuery<TResponse>({
         queryKey: queryKeys.clicks(page, range),
         queryFn: () => getClicksData(page, range),
         throwOnError: (e) => toastError(e),

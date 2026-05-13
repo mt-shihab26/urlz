@@ -1,4 +1,4 @@
-import type { TClickItem, TClicksResponse } from '@/services/clicks';
+import type { TClickItem, TResponse } from '@/services/clicks';
 
 import {
     Table,
@@ -25,7 +25,7 @@ export const ClicksTable = ({
     onPage,
     onClickRow,
 }: {
-    result: TClicksResponse | null;
+    result: TResponse | null;
     loading: boolean;
     page: number;
     onPage: (p: number) => void;
@@ -59,7 +59,10 @@ export const ClicksTable = ({
                         ))
                     ) : !result || result.items.length === 0 ? (
                         <TableRow>
-                            <TableCell colSpan={8} className="h-24 text-center text-muted-foreground">
+                            <TableCell
+                                colSpan={8}
+                                className="h-24 text-center text-muted-foreground"
+                            >
                                 No clicks found
                             </TableCell>
                         </TableRow>
@@ -78,13 +81,17 @@ export const ClicksTable = ({
                                 </TableCell>
                                 <TableCell>
                                     <div className="font-medium">{click.link_title || '—'}</div>
-                                    <div className="font-mono text-xs text-primary">{click.link_code}</div>
+                                    <div className="font-mono text-xs text-primary">
+                                        {click.link_code}
+                                    </div>
                                 </TableCell>
                                 <TableCell>{label(click.country_name)}</TableCell>
                                 <TableCell className="capitalize">{label(click.device)}</TableCell>
                                 <TableCell>{label(click.browser)}</TableCell>
                                 <TableCell>{label(click.os)}</TableCell>
-                                <TableCell className="max-w-40 truncate">{label(click.referrer)}</TableCell>
+                                <TableCell className="max-w-40 truncate">
+                                    {label(click.referrer)}
+                                </TableCell>
                             </TableRow>
                         ))
                     )}

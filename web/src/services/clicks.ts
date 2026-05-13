@@ -23,16 +23,16 @@ export type TClickItem = {
     user_agent: string;
 };
 
-export type TClicksResponse = {
+export type TResponse = {
     items: TClickItem[];
     total_items: number;
     total_pages: number;
 };
 
-export const getClicksData = async (page: number, range: TRange): Promise<TClicksResponse> => {
+export const getClicksData = async (page: number, range: TRange): Promise<TResponse> => {
     try {
         const params = new URLSearchParams({ page: String(page), range });
-        return await pb.send<TClicksResponse>(`/api/clicks?${params}`, { method: 'GET' });
+        return await pb.send<TResponse>(`/api/clicks?${params}`, { method: 'GET' });
     } catch (e: any) {
         throw new Error(e?.message || 'Failed to load clicks data');
     }
