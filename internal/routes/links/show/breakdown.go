@@ -40,7 +40,7 @@ func fetchBreakdown(db dbx.Builder, linkID, since string) breakdownData {
 	parts := make([]string, len(breakdownFields))
 	for i, f := range breakdownFields {
 		parts[i] = fmt.Sprintf(
-			"SELECT * FROM (SELECT '%s' AS field, %s AS label, ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (), 1) AS pct FROM clicks WHERE link={:id} AND %s!=''" +sinceClause+" GROUP BY %s ORDER BY COUNT(*) DESC LIMIT 6)",
+			"SELECT * FROM (SELECT '%s' AS field, %s AS label, ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (), 1) AS pct FROM clicks WHERE link={:id} AND %s!=''"+sinceClause+" GROUP BY %s ORDER BY COUNT(*) DESC LIMIT 6)",
 			f[0], f[1], f[2], f[2],
 		)
 	}
