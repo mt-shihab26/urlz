@@ -1,7 +1,7 @@
 package hooks
 
 import (
-	"github.com/mt-shihab26/urlz/internal/billing"
+	"github.com/mt-shihab26/urlz/internal/routes/billing"
 	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
 )

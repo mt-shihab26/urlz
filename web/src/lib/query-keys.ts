@@ -6,5 +6,6 @@ export const queryKeys = {
     links: ['links'] as const,
     overview: ['overview'] as const,
     analytics: (range: TRange, full: boolean) => ['analytics', range, full] as const,
+    clicks: (page: number, range: TRange) => ['clicks', page, range] as const,
     linkShow: (id: string, range?: TRange) => ['link', id, range || '30d'] as const,
 };

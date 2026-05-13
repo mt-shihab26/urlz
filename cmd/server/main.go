@@ -12,6 +12,7 @@ import (
 	"github.com/mt-shihab26/urlz/internal/redirect"
 	"github.com/mt-shihab26/urlz/internal/routes/analytics"
 	"github.com/mt-shihab26/urlz/internal/routes/billing"
+	"github.com/mt-shihab26/urlz/internal/routes/clicks"
 	"github.com/mt-shihab26/urlz/internal/routes/links/index"
 	"github.com/mt-shihab26/urlz/internal/routes/links/show"
 	"github.com/mt-shihab26/urlz/internal/routes/overview"
@@ -39,6 +40,7 @@ func main() {
 		se.Router.GET("/api/analytics", analytics.Handler)
 		se.Router.GET("/api/links", index.Handler)
 		se.Router.GET("/api/links/{id}", show.Handler)
+		se.Router.GET("/api/clicks", clicks.Handler)
 
 		se.Router.GET("/{code}", redirect.Handler)
 		sub, err := fs.Sub(web.DistFS, "dist")

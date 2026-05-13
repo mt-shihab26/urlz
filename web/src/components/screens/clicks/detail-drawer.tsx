@@ -7,7 +7,7 @@ import {
     DrawerTitle,
 } from '@/components/ui/drawer';
 
-import type { TClick, TLink } from '@/types/models';
+import type { TClickItem } from '@/services/clicks';
 
 import { formatDate } from '@/lib/formats';
 
@@ -28,12 +28,10 @@ const Field = ({ label, value }: { label: string; value: string }) => {
 
 export const DetailDrawer = ({
     click,
-    link,
     open,
     onClose,
 }: {
-    click: TClick | null;
-    link: TLink | undefined;
+    click: TClickItem | null;
     open: boolean;
     onClose: () => void;
 }) => {
@@ -54,18 +52,18 @@ export const DetailDrawer = ({
 
                 {click && (
                     <div className="flex flex-col gap-4 px-4 pb-6">
-                        {link && (
+                        {click.link_title && (
                             <>
                                 <div className="flex flex-col gap-0.5">
                                     <span className="text-xs text-muted-foreground uppercase tracking-wider">
                                         Link
                                     </span>
-                                    <span className="text-sm font-medium">{link.title}</span>
+                                    <span className="text-sm font-medium">{click.link_title}</span>
                                     <span className="text-xs font-mono text-primary">
-                                        {link.code}
+                                        {click.link_code}
                                     </span>
                                     <span className="text-xs text-muted-foreground break-all">
-                                        {link.url}
+                                        {click.link_url}
                                     </span>
                                 </div>
                                 <Separator />

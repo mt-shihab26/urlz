@@ -1,3 +1,5 @@
+import type { TClickItem, TClicksResponse } from '@/services/clicks';
+
 import {
     Table,
     TableBody,
@@ -7,9 +9,6 @@ import {
     TableRow,
 } from '@/components/ui/table';
 
-import type { TClicksPage } from '@/collections/clicks';
-import type { TClick, TLink } from '@/types/models';
-
 import { formatChartDate } from '@/lib/formats';
 
 import { Paginator } from '@/components/composite/paginator';
@@ -17,25 +16,21 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 export const PER_PAGE = 20;
 
-const getClickLabel = (value: string) => value?.trim() || '—';
+const label = (value: string) => value?.trim() || '—';
 
 export const ClicksTable = ({
     result,
-    links,
     loading,
     page,
     onPage,
     onClickRow,
 }: {
-    result: TClicksPage | null;
-    links: TLink[];
+    result: TClicksResponse | null;
     loading: boolean;
     page: number;
     onPage: (p: number) => void;
-    onClickRow: (click: TClick) => void;
+    onClickRow: (click: TClickItem) => void;
 }) => {
-    const linkMap = new Map(links.map((l) => [l.id, l]));
-
     return (
         <div className="flex flex-col gap-4">
             <Table>
@@ -64,10 +59,7 @@ export const ClicksTable = ({
                         ))
                     ) : !result || result.items.length === 0 ? (
                         <TableRow>
-                            <TableCell
-                                colSpan={8}
-                                className="h-24 text-center text-muted-foreground"
-                            >
+                            <TableCell colSpan={8} className="h-24 text-center text-muted-foreground">
                                 No clicks found
                             </TableCell>
                         </TableRow>
@@ -85,34 +77,26 @@ export const ClicksTable = ({
                                     {formatChartDate(click.date)}
                                 </TableCell>
                                 <TableCell>
-                                    <div className="font-medium">
-                                        {linkMap.get(click.link)?.title ?? '—'}
-                                    </div>
-                                    <div className="font-mono text-xs text-primary">
-                                        {linkMap.get(click.link)?.code ?? click.link}
-                                    </div>
+                                    <div className="font-medium">{click.link_title || '—'}</div>
+                                    <div className="font-mono text-xs text-primary">{click.link_code}</div>
                                 </TableCell>
-                                <TableCell>{getClickLabel(click.country_name)}</TableCell>
-                                <TableCell className="capitalize">
-                                    {getClickLabel(click.device)}
-                                </TableCell>
-                                <TableCell>{getClickLabel(click.browser)}</TableCell>
-                                <TableCell>{getClickLabel(click.os)}</TableCell>
-                                <TableCell className="max-w-40 truncate">
-                                    {getClickLabel(click.referrer)}
-                                </TableCell>
+                                <TableCell>{label(click.country_name)}</TableCell>
+                                <TableCell className="capitalize">{label(click.device)}</TableCell>
+                                <TableCell>{label(click.browser)}</TableCell>
+                                <TableCell>{label(click.os)}</TableCell>
+                                <TableCell className="max-w-40 truncate">{label(click.referrer)}</TableCell>
                             </TableRow>
                         ))
                     )}
                 </TableBody>
             </Table>
-            {result && result.totalItems > PER_PAGE && (
-                <div className="flex flex-col mt-2 gap-3 px-2 sm:flex-row sm:items-center sm:justify-between">
+            {result && result.total_items > PER_PAGE && (
+                <div className="mt-2 flex flex-col gap-3 px-2 sm:flex-row sm:items-center sm:justify-between">
                     <p className="shrink-0 text-sm text-muted-foreground">
                         Showing {(page - 1) * PER_PAGE + 1}–
-                        {Math.min(page * PER_PAGE, result.totalItems)} of {result.totalItems}
+                        {Math.min(page * PER_PAGE, result.total_items)} of {result.total_items}
                     </p>
-                    <Paginator currentPage={page} totalPages={result.totalPages} onPage={onPage} />
+                    <Paginator currentPage={page} totalPages={result.total_pages} onPage={onPage} />
                 </div>
             )}
         </div>
