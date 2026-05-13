@@ -4,8 +4,10 @@ import { updateLink } from '@/collections/links';
 import { useUser } from '@/components/providers/auth-provider';
 import { useForm } from '@/hooks/use-form';
 import { canUseFeature, getActivePlan } from '@/lib/plan';
+import { queryKeys } from '@/lib/query-keys';
 import { toastError } from '@/lib/toast';
 import { codePrefix } from '@/lib/utils';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { DateField } from '@/components/composite/date-field';
 import { Form } from '@/components/composite/form';
@@ -28,6 +30,8 @@ export const EditLinkDialog = ({
 
     const canExpiry = canUseFeature(getActivePlan(user), 'expiry');
 
+    const queryClient = useQueryClient();
+
     const { data, setData, loading, setLoading, errors, setErrors } = useForm({
         url: link.url,
         code: link.code,
@@ -45,6 +49,8 @@ export const EditLinkDialog = ({
                 code: data.code,
                 expires: data.expiry || undefined,
             });
+            queryClient.invalidateQueries({ queryKey: queryKeys.links.index });
+            queryClient.invalidateQueries({ queryKey: queryKeys.links.show(link.id) });
             onOpenChange(false);
         } catch (e: any) {
             const fieldErrors = e?.response?.data;

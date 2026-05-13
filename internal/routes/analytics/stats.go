@@ -20,8 +20,8 @@ type statsData struct {
 }
 
 type volumeDay struct {
-	Date   string `json:"date"`
-	Clicks int    `json:"clicks"`
+	Date   string `db:"date"   json:"date"`
+	Clicks int    `db:"clicks" json:"clicks"`
 }
 
 type linkCounts struct {
@@ -32,11 +32,6 @@ type linkCounts struct {
 }
 
 func fetchVolume(db dbx.Builder, uid, since string) []volumeDay {
-	type row struct {
-		Date   string `db:"date"`
-		Clicks int    `db:"clicks"`
-	}
-	var rows []row
 	q := "SELECT date, COUNT(*) as clicks FROM clicks WHERE user = {:u}"
 	params := dbx.Params{"u": uid}
 	if since != "" {
@@ -44,14 +39,11 @@ func fetchVolume(db dbx.Builder, uid, since string) []volumeDay {
 		params["since"] = since
 	}
 	q += " GROUP BY date ORDER BY date"
+	var rows []volumeDay
 	if err := db.NewQuery(q).Bind(params).All(&rows); err != nil || len(rows) == 0 {
 		return []volumeDay{}
 	}
-	result := make([]volumeDay, len(rows))
-	for i, r := range rows {
-		result[i] = volumeDay(r)
-	}
-	return result
+	return rows
 }
 
 func fetchUniqueVisitors(db dbx.Builder, uid, since string) int {

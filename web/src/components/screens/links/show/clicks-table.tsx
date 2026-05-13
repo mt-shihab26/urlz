@@ -1,3 +1,5 @@
+import type { TClickRecord } from '@/services/links/show';
+
 import {
     Table,
     TableBody,
@@ -7,11 +9,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 
-import type { TRange } from '@/lib/ranges';
-import type { TClick } from '@/types/models';
-
 import { formatChartDate } from '@/lib/formats';
-import { getRangeStartDate } from '@/lib/ranges';
 import { useEffect, useMemo, useState } from 'react';
 
 import { Paginator } from '@/components/composite/paginator';
@@ -19,29 +17,22 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const PAGE_SIZE = 10;
 
-const getClickLabel = (value: string) => {
-    return value.trim() || 'Direct';
-};
+const label = (value: string) => value.trim() || 'Direct';
 
-export const ClicksTable = ({ clicks, range }: { clicks: TClick[]; range: TRange }) => {
+export const ClicksTable = ({ clicks }: { clicks: TClickRecord[] }) => {
     const [page, setPage] = useState(1);
 
-    const filteredClicks = useMemo(() => {
-        const cutoff = getRangeStartDate(range as TRange);
-        return cutoff ? clicks.filter((click) => click.date >= cutoff) : clicks;
-    }, [clicks, range]);
-
-    const pageCount = Math.max(1, Math.ceil(filteredClicks.length / PAGE_SIZE));
+    const pageCount = Math.max(1, Math.ceil(clicks.length / PAGE_SIZE));
     const currentPage = Math.min(page, pageCount);
 
-    const paginatedClicks = useMemo(() => {
+    const paginated = useMemo(() => {
         const start = (currentPage - 1) * PAGE_SIZE;
-        return filteredClicks.slice(start, start + PAGE_SIZE);
-    }, [currentPage, filteredClicks]);
+        return clicks.slice(start, start + PAGE_SIZE);
+    }, [currentPage, clicks]);
 
     useEffect(() => {
         setPage(1);
-    }, [range, clicks.length]);
+    }, [clicks.length]);
 
     return (
         <Card>
@@ -61,7 +52,7 @@ export const ClicksTable = ({ clicks, range }: { clicks: TClick[]; range: TRange
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {paginatedClicks.length === 0 ? (
+                        {paginated.length === 0 ? (
                             <TableRow>
                                 <TableCell
                                     colSpan={6}
@@ -71,7 +62,7 @@ export const ClicksTable = ({ clicks, range }: { clicks: TClick[]; range: TRange
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            paginatedClicks.map((click, index) => (
+                            paginated.map((click, index) => (
                                 <TableRow key={click.id}>
                                     <TableCell className="text-center font-mono text-xs text-muted-foreground">
                                         {(currentPage - 1) * PAGE_SIZE + index + 1}
@@ -79,23 +70,22 @@ export const ClicksTable = ({ clicks, range }: { clicks: TClick[]; range: TRange
                                     <TableCell className="font-mono text-xs text-muted-foreground">
                                         {formatChartDate(click.date)}
                                     </TableCell>
-                                    <TableCell>{getClickLabel(click.country_name)}</TableCell>
+                                    <TableCell>{label(click.country_name)}</TableCell>
                                     <TableCell className="max-w-48 truncate">
-                                        {getClickLabel(click.referrer)}
+                                        {label(click.referrer)}
                                     </TableCell>
-                                    <TableCell>{getClickLabel(click.browser)}</TableCell>
-                                    <TableCell>{getClickLabel(click.os)}</TableCell>
+                                    <TableCell>{label(click.browser)}</TableCell>
+                                    <TableCell>{label(click.os)}</TableCell>
                                 </TableRow>
                             ))
                         )}
                     </TableBody>
                 </Table>
-                {filteredClicks.length > PAGE_SIZE && (
-                    <div className="flex flex-col mt-2 gap-3 px-3 sm:flex-row sm:items-center sm:justify-between">
+                {clicks.length > PAGE_SIZE && (
+                    <div className="mt-2 flex flex-col gap-3 px-3 sm:flex-row sm:items-center sm:justify-between">
                         <p className="shrink-0 text-sm text-muted-foreground">
                             Showing {(currentPage - 1) * PAGE_SIZE + 1}–
-                            {Math.min(currentPage * PAGE_SIZE, filteredClicks.length)} of{' '}
-                            {filteredClicks.length}
+                            {Math.min(currentPage * PAGE_SIZE, clicks.length)} of {clicks.length}
                         </p>
                         <Paginator
                             currentPage={currentPage}

@@ -1,75 +1,50 @@
 import type { TRange } from '@/lib/ranges';
-import type { TClick, TLink } from '@/types/models';
+import type { TClickItem, TResponse } from '@/services/clicks';
 
-import { subscribeClicksPage, unsubscribeClicksPage, type TClicksPage } from '@/collections/clicks';
-import { subscribeLinks, unsubscribeLinks } from '@/collections/links';
+import { queryKeys } from '@/lib/query-keys';
 import { toastError } from '@/lib/toast';
-import { useEffect, useState } from 'react';
+import { getClicksData } from '@/services/clicks';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 
 import { RangeTabs } from '@/components/composite/range-tabs';
 import { Header } from '@/components/composite/site-header';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
-import { ClicksTable, PER_PAGE } from '@/components/screens/clicks/clicks-table';
+import { ClicksTable } from '@/components/screens/clicks/clicks-table';
 import { DetailDrawer } from '@/components/screens/clicks/detail-drawer';
 
 const Clicks = () => {
-    const [clicksLoading, setclicksLoading] = useState(true);
-    const [linksLoading, setLinksLoading] = useState(true);
-
     const [range, setRange] = useState<TRange>('30d');
     const [page, setPage] = useState(1);
+    const [selectedClick, setSelectedClick] = useState<TClickItem | null>(null);
 
-    const [result, setResult] = useState<TClicksPage | null>(null);
+    const { data, isLoading } = useQuery<TResponse>({
+        queryKey: queryKeys.clicks(page, range),
+        queryFn: () => getClicksData(page, range),
+        throwOnError: (e) => toastError(e),
+    });
 
-    const [links, setLinks] = useState<TLink[]>([]);
-
-    const [selectedClick, setSelectedClick] = useState<TClick | null>(null);
-
-    useEffect(() => {
-        subscribeLinks('All', {
-            onData: setLinks,
-            onError: toastError,
-            onLoading: setLinksLoading,
-        });
-        return () => {
-            unsubscribeLinks({ onError: toastError });
-        };
-    }, []);
-
-    useEffect(() => {
+    const handleRangeChange = (r: TRange) => {
+        setRange(r);
         setPage(1);
-    }, [range]);
-
-    useEffect(() => {
-        subscribeClicksPage(page, PER_PAGE, range, {
-            onData: setResult,
-            onError: toastError,
-            onLoading: setclicksLoading,
-        });
-        return () => {
-            unsubscribeClicksPage({ onError: toastError });
-        };
-    }, [page, range]);
+    };
 
     const handlePage = (p: number) => {
         setPage(p);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    const linkMap = new Map(links.map((l) => [l.id, l]));
-
     return (
         <DashboardLayout title="Clicks">
             <Header
                 title="Clicks"
                 description="Full paginated click history"
-                action={<RangeTabs range={range} onRange={setRange} />}
+                action={<RangeTabs range={range} onRange={handleRangeChange} />}
             />
             <div className="p-4 lg:p-6">
                 <ClicksTable
-                    result={result}
-                    links={links}
-                    loading={clicksLoading || linksLoading}
+                    result={data ?? null}
+                    loading={isLoading}
                     page={page}
                     onPage={handlePage}
                     onClickRow={setSelectedClick}
@@ -77,7 +52,6 @@ const Clicks = () => {
             </div>
             <DetailDrawer
                 click={selectedClick}
-                link={selectedClick ? linkMap.get(selectedClick.link) : undefined}
                 open={selectedClick !== null}
                 onClose={() => setSelectedClick(null)}
             />

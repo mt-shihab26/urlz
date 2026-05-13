@@ -1,7 +1,7 @@
 package hooks
 
 import (
-	"github.com/mt-shihab26/urlz/internal/billing"
+	"github.com/mt-shihab26/urlz/internal/routes/billing"
 	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
 )
@@ -25,10 +25,9 @@ func RegisterLinkHooks(app core.App) {
 		if plan != "free" {
 			return e.Next()
 		}
-		type countRow struct {
+		var row struct {
 			Total int `db:"total"`
 		}
-		var row countRow
 		err = app.DB().
 			NewQuery("SELECT count(*) as total FROM links WHERE user = {:user}").
 			Bind(map[string]any{"user": userID}).

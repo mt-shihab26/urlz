@@ -20,15 +20,15 @@ export const isLinkDisabled = (link: TLink) => {
     return link.status === 'disabled';
 };
 
-export const filterLinks = ({
+export const filterLinks = <T extends TLink>({
     links,
     search,
     filter,
 }: {
-    links: TLink[];
+    links: T[];
     search: string;
     filter: TFilter;
-}) => {
+}): T[] => {
     return links.filter((l) => {
         const matchSearch =
             !search ||

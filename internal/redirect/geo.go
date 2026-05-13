@@ -10,11 +10,11 @@ import (
 var geoClient = &http.Client{Timeout: 3 * time.Second}
 
 type geoInfo struct {
-	Country     string
-	CountryCode string
-	City        string
-	Region      string
-	Timezone    string
+	Country     string `json:"country"`
+	CountryCode string `json:"countryCode"`
+	City        string `json:"city"`
+	Region      string `json:"regionName"`
+	Timezone    string `json:"timezone"`
 }
 
 func lookupGeo(ip string) (geoInfo, error) {
@@ -29,21 +29,9 @@ func lookupGeo(ip string) (geoInfo, error) {
 	if resp.StatusCode != http.StatusOK {
 		return geoInfo{}, fmt.Errorf("ip-api.com returned status %d", resp.StatusCode)
 	}
-	var result struct {
-		Country     string `json:"country"`
-		CountryCode string `json:"countryCode"`
-		City        string `json:"city"`
-		RegionName  string `json:"regionName"`
-		Timezone    string `json:"timezone"`
-	}
+	var result geoInfo
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		return geoInfo{}, err
 	}
-	return geoInfo{
-		Country:     result.Country,
-		CountryCode: result.CountryCode,
-		City:        result.City,
-		Region:      result.RegionName,
-		Timezone:    result.Timezone,
-	}, nil
+	return result, nil
 }
