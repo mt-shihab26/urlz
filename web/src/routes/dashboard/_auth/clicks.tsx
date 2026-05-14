@@ -10,11 +10,11 @@ import { useState } from 'react';
 
 import { RangeTabs } from '#/components/composite/range-tabs';
 import { Header } from '#/components/composite/site-header';
-import { DashboardLayout } from '#/components/layouts/dashboard-layout';
 import { ClicksTable } from '#/components/screens/clicks/clicks-table';
 import { DetailDrawer } from '#/components/screens/clicks/detail-drawer';
 
 export const Route = createFileRoute('/dashboard/_auth/clicks')({
+    head: () => ({ meta: [{ title: 'Clicks — urlz' }] }),
     component: Clicks,
 });
 
@@ -40,7 +40,7 @@ function Clicks() {
     };
 
     return (
-        <DashboardLayout title="Clicks">
+        <>
             <Header
                 title="Clicks"
                 description="Full paginated click history"
@@ -60,6 +60,6 @@ function Clicks() {
                 open={selectedClick !== null}
                 onClose={() => setSelectedClick(null)}
             />
-        </DashboardLayout>
+        </>
     );
 }

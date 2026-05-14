@@ -8,13 +8,13 @@ import { createFileRoute } from '@tanstack/react-router';
 
 import { RefreshButton } from '#/components/composite/refresh-button';
 import { Header } from '#/components/composite/site-header';
-import { DashboardLayout } from '#/components/layouts/dashboard-layout';
 import { ClickBreakdown } from '#/components/screens/overview/click-breakdown';
 import { Loading } from '#/components/screens/overview/loading';
 import { StatsCards } from '#/components/screens/overview/stats-cards';
 import { TopLinks } from '#/components/screens/overview/top-links';
 
 export const Route = createFileRoute('/dashboard/_auth/overview')({
+    head: () => ({ meta: [{ title: 'Overview — urlz' }] }),
     component: Overview,
 });
 
@@ -26,7 +26,7 @@ function Overview() {
     });
 
     return (
-        <DashboardLayout title="Overview">
+        <>
             <Header
                 title="Overview"
                 description="All your links at a glance"
@@ -56,6 +56,6 @@ function Overview() {
                     </>
                 )}
             </div>
-        </DashboardLayout>
+        </>
     );
 }

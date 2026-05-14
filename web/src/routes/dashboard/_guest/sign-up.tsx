@@ -21,9 +21,9 @@ import { PasswordField } from '#/components/composite/password-field';
 import { PasswordStrength } from '#/components/composite/password-strength';
 import { SubmitButton } from '#/components/composite/submit-button';
 import { TextField } from '#/components/composite/text-field';
-import { AuthLayout } from '#/components/layouts/auth-layout';
 
 export const Route = createFileRoute('/dashboard/_guest/sign-up')({
+    head: () => ({ meta: [{ title: 'Sign Up — urlz' }] }),
     component: SignUp,
 });
 
@@ -60,8 +60,7 @@ function SignUp() {
     };
 
     return (
-        <AuthLayout>
-            <Card>
+        <Card>
                 <CardHeader className="text-center">
                     <CardTitle className="text-xl">Create your account</CardTitle>
                     <CardDescription>Start shortening links for free</CardDescription>
@@ -131,6 +130,5 @@ function SignUp() {
                     />
                 </CardFooter>
             </Card>
-        </AuthLayout>
     );
 }

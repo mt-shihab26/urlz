@@ -1,18 +1,18 @@
 import { createFileRoute } from '@tanstack/react-router';
 
 import { Header } from '#/components/composite/site-header';
-import { DashboardLayout } from '#/components/layouts/dashboard-layout';
 import { DangerZoneCard } from '#/components/screens/settings/danger-zone-card';
 import { ProfileCard } from '#/components/screens/settings/profile-card';
 import { ThemeCard } from '#/components/screens/settings/theme-card';
 
 export const Route = createFileRoute('/dashboard/_auth/settings')({
+    head: () => ({ meta: [{ title: 'Settings — urlz' }] }),
     component: Settings,
 });
 
 function Settings() {
     return (
-        <DashboardLayout title="Settings">
+        <>
             <Header
                 title="Settings"
                 description="Manage your account, API access, and preferences"
@@ -22,6 +22,6 @@ function Settings() {
                 <ProfileCard />
                 <DangerZoneCard />
             </div>
-        </DashboardLayout>
+        </>
     );
 }

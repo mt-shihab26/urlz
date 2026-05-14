@@ -19,10 +19,10 @@ import { LinkPrompt } from '#/components/composite/link-prompt';
 import { OrDivider } from '#/components/composite/or-divider';
 import { PasswordField } from '#/components/composite/password-field';
 import { SubmitButton } from '#/components/composite/submit-button';
-import { AuthLayout } from '#/components/layouts/auth-layout';
 import { Link } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/dashboard/_guest/sign-in')({
+    head: () => ({ meta: [{ title: 'Sign In — urlz' }] }),
     component: SignIn,
 });
 
@@ -55,8 +55,7 @@ function SignIn() {
     };
 
     return (
-        <AuthLayout>
-            <Card>
+        <Card>
                 <CardHeader className="text-center">
                     <CardTitle className="text-xl">Welcome back</CardTitle>
                     <CardDescription>Sign in to your urlz account</CardDescription>
@@ -111,6 +110,5 @@ function SignIn() {
                     />
                 </CardFooter>
             </Card>
-        </AuthLayout>
     );
 }

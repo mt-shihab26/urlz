@@ -14,12 +14,12 @@ import { useState } from 'react';
 import { Form } from '#/components/composite/form';
 import { PasswordField } from '#/components/composite/password-field';
 import { SubmitButton } from '#/components/composite/submit-button';
-import { AuthLayout } from '#/components/layouts/auth-layout';
 import { Button } from '#/components/ui/button';
 import { Link } from '@tanstack/react-router';
 import { ArrowLeftIcon, CheckIcon } from 'lucide-react';
 
 export const Route = createFileRoute('/dashboard/_guest/reset-password')({
+    head: () => ({ meta: [{ title: 'Reset Password — urlz' }] }),
     component: ResetPassword,
 });
 
@@ -53,30 +53,27 @@ function ResetPassword() {
 
     if (done) {
         return (
-            <AuthLayout>
-                <Card>
-                    <CardHeader className="text-center">
-                        <div className="mx-auto mb-2 flex size-12 items-center justify-center rounded-full bg-green-500/10">
-                            <CheckIcon className="size-6 text-green-600 dark:text-green-400" />
-                        </div>
-                        <CardTitle className="text-xl">Password updated</CardTitle>
-                        <CardDescription>
-                            Your password has been reset successfully.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <Button className="w-full">
-                            <Link to="/dashboard/sign-in">Sign in with new password</Link>
-                        </Button>
-                    </CardContent>
-                </Card>
-            </AuthLayout>
+            <Card>
+                <CardHeader className="text-center">
+                    <div className="mx-auto mb-2 flex size-12 items-center justify-center rounded-full bg-green-500/10">
+                        <CheckIcon className="size-6 text-green-600 dark:text-green-400" />
+                    </div>
+                    <CardTitle className="text-xl">Password updated</CardTitle>
+                    <CardDescription>
+                        Your password has been reset successfully.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Button className="w-full">
+                        <Link to="/dashboard/sign-in">Sign in with new password</Link>
+                    </Button>
+                </CardContent>
+            </Card>
         );
     }
 
     return (
-        <AuthLayout>
-            <Card>
+        <Card>
                 <CardHeader className="text-center">
                     <CardTitle className="text-xl">Set new password</CardTitle>
                     <CardDescription>Must be at least 8 characters</CardDescription>
@@ -134,6 +131,5 @@ function ResetPassword() {
                     </Link>
                 </CardFooter>
             </Card>
-        </AuthLayout>
     );
 }

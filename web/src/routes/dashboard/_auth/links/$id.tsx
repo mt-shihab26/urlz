@@ -9,7 +9,6 @@ import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
 import { useState } from 'react';
 
 import { RefreshButton } from '#/components/composite/refresh-button';
-import { DashboardLayout } from '#/components/layouts/dashboard-layout';
 import { Browsers } from '#/components/screens/analytics/browsers';
 import { Countries } from '#/components/screens/analytics/countries';
 import { Devices } from '#/components/screens/analytics/devices';
@@ -24,6 +23,7 @@ import { Loading } from '#/components/screens/links/show/loading';
 import { Button } from '#/components/ui/button';
 
 export const Route = createFileRoute('/dashboard/_auth/links/$id')({
+    head: () => ({ meta: [{ title: 'Link — urlz' }] }),
     component: LinkDetail,
 });
 
@@ -40,7 +40,7 @@ function LinkDetail() {
     });
 
     return (
-        <DashboardLayout title={isLoading ? 'Link' : (data?.link.title ?? 'Link Not Found')}>
+        <>
             {isLoading ? (
                 <Loading />
             ) : !data ? (
@@ -80,6 +80,6 @@ function LinkDetail() {
                     </div>
                 </>
             )}
-        </DashboardLayout>
+        </>
     );
 }

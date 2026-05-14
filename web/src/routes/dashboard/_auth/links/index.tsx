@@ -11,7 +11,6 @@ import { useState } from 'react';
 
 import { RefreshButton } from '#/components/composite/refresh-button';
 import { Header } from '#/components/composite/site-header';
-import { DashboardLayout } from '#/components/layouts/dashboard-layout';
 import { CreateLinkButton } from '#/components/screens/links/create-link-button';
 import { FiltersTabs } from '#/components/screens/links/index/filters-tabs';
 import { LinksTable } from '#/components/screens/links/index/links-table';
@@ -19,6 +18,7 @@ import { Loading } from '#/components/screens/links/index/loading';
 import { SearchBox } from '#/components/screens/links/index/search-box';
 
 export const Route = createFileRoute('/dashboard/_auth/links/')({
+    head: () => ({ meta: [{ title: 'Links — urlz' }] }),
     component: Links,
 });
 
@@ -35,7 +35,7 @@ function Links() {
     const links = data?.links ?? [];
 
     return (
-        <DashboardLayout title="Links">
+        <>
             <Header
                 title="Links"
                 description="Manage and monitor all your shortened links"
@@ -63,6 +63,6 @@ function Links() {
                     </>
                 )}
             </div>
-        </DashboardLayout>
+        </>
     );
 }

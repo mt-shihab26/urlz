@@ -13,7 +13,6 @@ import { useState } from 'react';
 import { RangeTabs } from '#/components/composite/range-tabs';
 import { RefreshButton } from '#/components/composite/refresh-button';
 import { Header } from '#/components/composite/site-header';
-import { DashboardLayout } from '#/components/layouts/dashboard-layout';
 import { Browsers } from '#/components/screens/analytics/browsers';
 import { ClickVolumeChart } from '#/components/screens/analytics/click-volume-chart';
 import { Countries } from '#/components/screens/analytics/countries';
@@ -29,6 +28,7 @@ import { TopPerforming } from '#/components/screens/analytics/top-performing';
 import { Link } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/dashboard/_auth/analytics')({
+    head: () => ({ meta: [{ title: 'Analytics — urlz' }] }),
     component: Analytics,
 });
 
@@ -45,7 +45,7 @@ function Analytics() {
     });
 
     return (
-        <DashboardLayout title="Analytics">
+        <>
             <Header
                 title="Analytics"
                 description="Aggregated traffic across all links"
@@ -103,6 +103,6 @@ function Analytics() {
                     </>
                 )}
             </div>
-        </DashboardLayout>
+        </>
     );
 }
