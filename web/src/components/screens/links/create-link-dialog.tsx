@@ -4,7 +4,6 @@ import { useForm } from '#/hooks/use-form';
 import { generateRandomSlug } from '#/lib/links';
 import { canUseFeature, getActivePlan } from '#/lib/plan';
 import { queryKeys } from '#/lib/query-keys';
-import { route } from '#/lib/route';
 import { toastError } from '#/lib/toast';
 import { codePrefix } from '#/lib/utils';
 import { useQueryClient } from '@tanstack/react-query';
@@ -92,7 +91,7 @@ export const CreateLinkDialog = ({
                     <div className="rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
                         Free plan limit reached (5 links).{' '}
                         <Link
-                            to={route.billingIndex()}
+                            to="/dashboard/billing"
                             className="font-medium underline underline-offset-2"
                             onClick={handleClose}
                         >

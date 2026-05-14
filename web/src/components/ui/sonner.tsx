@@ -1,4 +1,3 @@
-'use client';
 
 import { useTheme } from '#/components/providers/theme-provider';
 import {

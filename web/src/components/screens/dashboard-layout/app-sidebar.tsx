@@ -20,6 +20,7 @@ import {
 
 import logo from '#/assets/logo.svg';
 
+import type { TNavItem } from '#/types/utils';
 import type { ComponentProps } from 'react';
 
 import { useUser } from '#/components/providers/auth-provider';
@@ -29,35 +30,35 @@ import { Link } from '@tanstack/react-router';
 import { NavMain } from './nav-main';
 import { NavUser } from './nav-user';
 
-const navMain = [
+const navMain: TNavItem[] = [
     {
         title: 'Overview',
-        url: route.overviewIndex(),
+        url: '/dashboard/overview',
         icon: <LayoutDashboardIcon />,
     },
     {
         title: 'Analytics',
-        url: route.analyticsIndex(),
+        url: '/dashboard/analytics',
         icon: <ChartBarIcon />,
     },
     {
         title: 'Links',
-        url: route.linksIndex(),
+        url: '/dashboard/links',
         icon: <LinkIcon />,
     },
     {
         title: 'Clicks',
-        url: route.clicksIndex(),
+        url: '/dashboard/clicks',
         icon: <MousePointerClickIcon />,
     },
     {
         title: 'Billing',
-        url: route.billingIndex(),
+        url: '/dashboard/billing',
         icon: <CreditCardIcon />,
     },
     {
         title: 'Settings',
-        url: route.settingsIndex(),
+        url: '/dashboard/settings',
         icon: <SettingsIcon />,
     },
 ];
@@ -73,7 +74,7 @@ export const AppSidebar = (props: ComponentProps<typeof Sidebar>) => {
                     <SidebarMenuItem>
                         <SidebarMenuButton
                             className="data-[slot=sidebar-menu-button]:p-1.5!"
-                            render={<Link to={route.overviewIndex()} />}
+                            render={<Link to="/dashboard/overview" />}
                         >
                             <img src={logo} alt="urlz" className="size-5! shrink-0" />
                             <span className="text-base font-semibold">urlz</span>
