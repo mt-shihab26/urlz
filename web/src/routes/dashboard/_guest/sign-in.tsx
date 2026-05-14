@@ -56,59 +56,59 @@ function SignIn() {
 
     return (
         <Card>
-                <CardHeader className="text-center">
-                    <CardTitle className="text-xl">Welcome back</CardTitle>
-                    <CardDescription>Sign in to your urlz account</CardDescription>
-                </CardHeader>
-                <CardContent className="flex flex-col gap-4">
-                    <GoogleOAuthButton />
-                    <OrDivider />
-                    <Form onSubmit={handleSubmit}>
-                        <EmailField
-                            id="email"
-                            label="Email"
-                            placeholder="you@example.com"
-                            value={data.email}
-                            onChange={(e) => setData('email', e.target.value)}
-                            error={errors.email}
-                            required
-                            autoComplete="email"
-                        />
-                        <PasswordField
-                            id="password"
-                            label="Password"
-                            placeholder="••••••••"
-                            value={data.password}
-                            onChange={(e) => setData('password', e.target.value)}
-                            error={errors.password}
-                            required
-                            autoComplete="current-password"
-                            labelExtra={
-                                <Link
-                                    to="/dashboard/forgot-password"
-                                    className="text-xs text-muted-foreground hover:text-foreground"
-                                >
-                                    Forgot password?
-                                </Link>
-                            }
-                        />
-                        <CheckboxField
-                            id="remember"
-                            checked={data.remember}
-                            onCheckedChange={(v) => setData('remember', v)}
-                        >
-                            Remember me for 30 days
-                        </CheckboxField>
-                        <SubmitButton loading={loading} label="Sign in" />
-                    </Form>
-                </CardContent>
-                <CardFooter>
-                    <LinkPrompt
-                        text="Don't have an account?"
-                        linkText="Sign up"
-                        linkTo="/dashboard/sign-up"
+            <CardHeader className="text-center">
+                <CardTitle className="text-xl">Welcome back</CardTitle>
+                <CardDescription>Sign in to your urlz account</CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-4">
+                <GoogleOAuthButton />
+                <OrDivider />
+                <Form onSubmit={handleSubmit}>
+                    <EmailField
+                        id="email"
+                        label="Email"
+                        placeholder="you@example.com"
+                        value={data.email}
+                        onChange={(e) => setData('email', e.target.value)}
+                        error={errors.email}
+                        required
+                        autoComplete="email"
                     />
-                </CardFooter>
-            </Card>
+                    <PasswordField
+                        id="password"
+                        label="Password"
+                        placeholder="••••••••"
+                        value={data.password}
+                        onChange={(e) => setData('password', e.target.value)}
+                        error={errors.password}
+                        required
+                        autoComplete="current-password"
+                        labelExtra={
+                            <Link
+                                to="/dashboard/forgot-password"
+                                className="text-xs text-muted-foreground hover:text-foreground"
+                            >
+                                Forgot password?
+                            </Link>
+                        }
+                    />
+                    <CheckboxField
+                        id="remember"
+                        checked={data.remember}
+                        onCheckedChange={(v) => setData('remember', v)}
+                    >
+                        Remember me for 30 days
+                    </CheckboxField>
+                    <SubmitButton loading={loading} label="Sign in" />
+                </Form>
+            </CardContent>
+            <CardFooter>
+                <LinkPrompt
+                    text="Don't have an account?"
+                    linkText="Sign up"
+                    linkTo="/dashboard/sign-up"
+                />
+            </CardFooter>
+        </Card>
     );
 }

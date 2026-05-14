@@ -46,7 +46,12 @@ export const ExpiringSoon = ({ links }: { links: TExpiringLink[] }) => {
                                 <TableRow
                                     key={link.id}
                                     className="cursor-pointer"
-                                    onClick={() => navigate({ to: '/dashboard/links/$id', params: { id: link.id } })}
+                                    onClick={() =>
+                                        navigate({
+                                            to: '/dashboard/links/$id',
+                                            params: { id: link.id },
+                                        })
+                                    }
                                 >
                                     <TableCell className="text-center font-mono text-xs text-muted-foreground">
                                         {i + 1}

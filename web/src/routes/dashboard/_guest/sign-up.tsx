@@ -61,74 +61,74 @@ function SignUp() {
 
     return (
         <Card>
-                <CardHeader className="text-center">
-                    <CardTitle className="text-xl">Create your account</CardTitle>
-                    <CardDescription>Start shortening links for free</CardDescription>
-                </CardHeader>
-                <CardContent className="flex flex-col gap-4">
-                    <GoogleOAuthButton />
-                    <OrDivider />
-                    <Form onSubmit={handleSubmit}>
-                        <TextField
-                            id="name"
-                            label="Full name"
-                            placeholder="Jamie Chen"
-                            value={data.name}
-                            onChange={(e) => setData('name', e.target.value)}
-                            error={errors.name}
-                            required
-                            autoComplete="name"
-                        />
-                        <EmailField
-                            id="email"
-                            label="Email"
-                            placeholder="you@example.com"
-                            value={data.email}
-                            onChange={(e) => setData('email', e.target.value)}
-                            error={errors.email}
-                            required
-                            autoComplete="email"
-                        />
-                        <PasswordField
-                            id="password"
-                            label="Password"
-                            placeholder="At least 8 characters"
-                            value={data.password}
-                            onChange={(e) => setData('password', e.target.value)}
-                            error={errors.password}
-                            required
-                            autoComplete="new-password"
-                        >
-                            <PasswordStrength password={data.password} />
-                        </PasswordField>
-                        <CheckboxField
-                            id="terms"
-                            checked={data.agreed}
-                            onCheckedChange={(v) => setData('agreed', v)}
-                        >
-                            <span>I agree to the</span>
-                            <span className="font-medium text-foreground hover:underline cursor-pointer">
-                                Terms of Service
-                            </span>
-                            <span>and</span>
-                            <span className="font-medium text-foreground hover:underline cursor-pointer">
-                                Privacy Policy
-                            </span>
-                        </CheckboxField>
-                        <SubmitButton
-                            loading={loading}
-                            disabled={!data.agreed}
-                            label="Create account"
-                        />
-                    </Form>
-                </CardContent>
-                <CardFooter>
-                    <LinkPrompt
-                        text="Already have an account?"
-                        linkText="Sign in"
-                        linkTo="/dashboard/sign-in"
+            <CardHeader className="text-center">
+                <CardTitle className="text-xl">Create your account</CardTitle>
+                <CardDescription>Start shortening links for free</CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-4">
+                <GoogleOAuthButton />
+                <OrDivider />
+                <Form onSubmit={handleSubmit}>
+                    <TextField
+                        id="name"
+                        label="Full name"
+                        placeholder="Jamie Chen"
+                        value={data.name}
+                        onChange={(e) => setData('name', e.target.value)}
+                        error={errors.name}
+                        required
+                        autoComplete="name"
                     />
-                </CardFooter>
-            </Card>
+                    <EmailField
+                        id="email"
+                        label="Email"
+                        placeholder="you@example.com"
+                        value={data.email}
+                        onChange={(e) => setData('email', e.target.value)}
+                        error={errors.email}
+                        required
+                        autoComplete="email"
+                    />
+                    <PasswordField
+                        id="password"
+                        label="Password"
+                        placeholder="At least 8 characters"
+                        value={data.password}
+                        onChange={(e) => setData('password', e.target.value)}
+                        error={errors.password}
+                        required
+                        autoComplete="new-password"
+                    >
+                        <PasswordStrength password={data.password} />
+                    </PasswordField>
+                    <CheckboxField
+                        id="terms"
+                        checked={data.agreed}
+                        onCheckedChange={(v) => setData('agreed', v)}
+                    >
+                        <span>I agree to the</span>
+                        <span className="font-medium text-foreground hover:underline cursor-pointer">
+                            Terms of Service
+                        </span>
+                        <span>and</span>
+                        <span className="font-medium text-foreground hover:underline cursor-pointer">
+                            Privacy Policy
+                        </span>
+                    </CheckboxField>
+                    <SubmitButton
+                        loading={loading}
+                        disabled={!data.agreed}
+                        label="Create account"
+                    />
+                </Form>
+            </CardContent>
+            <CardFooter>
+                <LinkPrompt
+                    text="Already have an account?"
+                    linkText="Sign in"
+                    linkTo="/dashboard/sign-in"
+                />
+            </CardFooter>
+        </Card>
     );
 }

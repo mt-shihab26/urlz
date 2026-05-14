@@ -75,36 +75,34 @@ function ForgotPassword() {
 
     return (
         <Card>
-                <CardHeader className="text-center">
-                    <CardTitle className="text-xl">Forgot your password?</CardTitle>
-                    <CardDescription>
-                        Enter your email and we'll send you a reset link
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <Form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                        <EmailField
-                            id="email"
-                            label="Email"
-                            placeholder="you@example.com"
-                            value={data.email}
-                            onChange={(e) => setData('email', e.target.value)}
-                            error={errors.email}
-                            required
-                            autoComplete="email"
-                        />
-                        <SubmitButton loading={loading} label="Send reset link" />
-                    </Form>
-                </CardContent>
-                <CardFooter className="justify-center">
-                    <Link
-                        to="/dashboard/sign-in"
-                        className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
-                    >
-                        <ArrowLeftIcon className="size-3.5" />
-                        Back to sign in
-                    </Link>
-                </CardFooter>
-            </Card>
+            <CardHeader className="text-center">
+                <CardTitle className="text-xl">Forgot your password?</CardTitle>
+                <CardDescription>Enter your email and we'll send you a reset link</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                    <EmailField
+                        id="email"
+                        label="Email"
+                        placeholder="you@example.com"
+                        value={data.email}
+                        onChange={(e) => setData('email', e.target.value)}
+                        error={errors.email}
+                        required
+                        autoComplete="email"
+                    />
+                    <SubmitButton loading={loading} label="Send reset link" />
+                </Form>
+            </CardContent>
+            <CardFooter className="justify-center">
+                <Link
+                    to="/dashboard/sign-in"
+                    className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+                >
+                    <ArrowLeftIcon className="size-3.5" />
+                    Back to sign in
+                </Link>
+            </CardFooter>
+        </Card>
     );
 }

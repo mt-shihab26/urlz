@@ -59,9 +59,7 @@ function ResetPassword() {
                         <CheckIcon className="size-6 text-green-600 dark:text-green-400" />
                     </div>
                     <CardTitle className="text-xl">Password updated</CardTitle>
-                    <CardDescription>
-                        Your password has been reset successfully.
-                    </CardDescription>
+                    <CardDescription>Your password has been reset successfully.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Button className="w-full">
@@ -74,62 +72,62 @@ function ResetPassword() {
 
     return (
         <Card>
-                <CardHeader className="text-center">
-                    <CardTitle className="text-xl">Set new password</CardTitle>
-                    <CardDescription>Must be at least 8 characters</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <Form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                        <PasswordField
-                            id="password"
-                            label="New password"
-                            placeholder="••••••••"
-                            value={data.password}
-                            onChange={(e) => setData('password', e.target.value)}
-                            error={errors.password}
-                            required
-                            autoComplete="new-password"
-                        >
-                            {passwordStrength && (
-                                <div className="flex items-center gap-2">
-                                    <div className="h-1 flex-1 overflow-hidden rounded-full bg-muted">
-                                        <div
-                                            className={`h-full rounded-full transition-all ${passwordStrength.color}`}
-                                            style={{ width: passwordStrength.width }}
-                                        />
-                                    </div>
-                                    <span className="text-xs text-muted-foreground">
-                                        {passwordStrength.label}
-                                    </span>
-                                </div>
-                            )}
-                        </PasswordField>
-                        <PasswordField
-                            id="confirm"
-                            label="Confirm new password"
-                            placeholder="••••••••"
-                            value={data.confirm}
-                            onChange={(e) => setData('confirm', e.target.value)}
-                            error={mismatch ? "Passwords don't match" : errors.confirm}
-                            required
-                            autoComplete="new-password"
-                        />
-                        <SubmitButton
-                            loading={loading}
-                            disabled={mismatch || data.password.length < 8}
-                            label="Reset password"
-                        />
-                    </Form>
-                </CardContent>
-                <CardFooter className="justify-center">
-                    <Link
-                        to="/dashboard/sign-in"
-                        className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+            <CardHeader className="text-center">
+                <CardTitle className="text-xl">Set new password</CardTitle>
+                <CardDescription>Must be at least 8 characters</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                    <PasswordField
+                        id="password"
+                        label="New password"
+                        placeholder="••••••••"
+                        value={data.password}
+                        onChange={(e) => setData('password', e.target.value)}
+                        error={errors.password}
+                        required
+                        autoComplete="new-password"
                     >
-                        <ArrowLeftIcon className="size-3.5" />
-                        Back to sign in
-                    </Link>
-                </CardFooter>
-            </Card>
+                        {passwordStrength && (
+                            <div className="flex items-center gap-2">
+                                <div className="h-1 flex-1 overflow-hidden rounded-full bg-muted">
+                                    <div
+                                        className={`h-full rounded-full transition-all ${passwordStrength.color}`}
+                                        style={{ width: passwordStrength.width }}
+                                    />
+                                </div>
+                                <span className="text-xs text-muted-foreground">
+                                    {passwordStrength.label}
+                                </span>
+                            </div>
+                        )}
+                    </PasswordField>
+                    <PasswordField
+                        id="confirm"
+                        label="Confirm new password"
+                        placeholder="••••••••"
+                        value={data.confirm}
+                        onChange={(e) => setData('confirm', e.target.value)}
+                        error={mismatch ? "Passwords don't match" : errors.confirm}
+                        required
+                        autoComplete="new-password"
+                    />
+                    <SubmitButton
+                        loading={loading}
+                        disabled={mismatch || data.password.length < 8}
+                        label="Reset password"
+                    />
+                </Form>
+            </CardContent>
+            <CardFooter className="justify-center">
+                <Link
+                    to="/dashboard/sign-in"
+                    className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+                >
+                    <ArrowLeftIcon className="size-3.5" />
+                    Back to sign in
+                </Link>
+            </CardFooter>
+        </Card>
     );
 }
