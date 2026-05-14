@@ -1,6 +1,7 @@
-import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
-
 import { getAuth } from '#/collections/users';
+import { createFileRoute, redirect } from '@tanstack/react-router';
+
+import { Outlet } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/dashboard/_auth')({
     beforeLoad: () => {

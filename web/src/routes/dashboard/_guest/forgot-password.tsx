@@ -9,16 +9,21 @@ import {
 
 import { useForm } from '#/hooks/use-form';
 import { route } from '#/lib/route';
-import { createFileRoute, Link } from '@tanstack/react-router';
-import { ArrowLeftIcon, MailIcon } from 'lucide-react';
+import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 
 import { EmailField } from '#/components/composite/email-field';
 import { Form } from '#/components/composite/form';
 import { SubmitButton } from '#/components/composite/submit-button';
 import { AuthLayout } from '#/components/layouts/auth-layout';
+import { Link } from '@tanstack/react-router';
+import { ArrowLeftIcon, MailIcon } from 'lucide-react';
 
-const ForgotPassword = () => {
+export const Route = createFileRoute('/dashboard/_guest/forgot-password')({
+    component: ForgotPassword,
+});
+
+function ForgotPassword() {
     const [sent, setSent] = useState(false);
 
     const { data, setData, errors, loading, setLoading } = useForm({ email: '' });
@@ -107,8 +112,4 @@ const ForgotPassword = () => {
             </Card>
         </AuthLayout>
     );
-};
-
-export const Route = createFileRoute('/dashboard/_guest/forgot-password')({
-    component: ForgotPassword,
-});
+}

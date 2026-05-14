@@ -9,17 +9,22 @@ import {
 
 import { useForm } from '#/hooks/use-form';
 import { route } from '#/lib/route';
-import { createFileRoute, Link } from '@tanstack/react-router';
-import { ArrowLeftIcon, CheckIcon } from 'lucide-react';
+import { createFileRoute } from '@tanstack/react-router';
+import { useState } from 'react';
 
 import { Form } from '#/components/composite/form';
 import { PasswordField } from '#/components/composite/password-field';
 import { SubmitButton } from '#/components/composite/submit-button';
 import { AuthLayout } from '#/components/layouts/auth-layout';
 import { Button } from '#/components/ui/button';
-import { useState } from 'react';
+import { Link } from '@tanstack/react-router';
+import { ArrowLeftIcon, CheckIcon } from 'lucide-react';
 
-const ResetPassword = () => {
+export const Route = createFileRoute('/dashboard/_guest/reset-password')({
+    component: ResetPassword,
+});
+
+function ResetPassword() {
     const [done, setDone] = useState(false);
 
     const { data, setData, errors, loading, setLoading } = useForm({
@@ -132,8 +137,4 @@ const ResetPassword = () => {
             </Card>
         </AuthLayout>
     );
-};
-
-export const Route = createFileRoute('/dashboard/_guest/reset-password')({
-    component: ResetPassword,
-});
+}
