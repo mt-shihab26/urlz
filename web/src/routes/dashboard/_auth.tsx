@@ -1,4 +1,5 @@
 import { getAuth } from '#/collections/users';
+import { useAuth } from '#/components/providers/auth-provider';
 import { createFileRoute, redirect } from '@tanstack/react-router';
 
 import { AppSidebar } from '#/components/screens/dashboard-layout/app-sidebar';
@@ -9,7 +10,14 @@ export const Route = createFileRoute('/dashboard/_auth')({
     beforeLoad: () => {
         if (!getAuth()) throw redirect({ to: '/dashboard/sign-in' });
     },
-    component: () => (
+    component: AuthLayout,
+});
+
+function AuthLayout() {
+    const { user } = useAuth();
+    if (!user) return null;
+
+    return (
         <SidebarProvider
             style={
                 {
@@ -23,5 +31,5 @@ export const Route = createFileRoute('/dashboard/_auth')({
                 <Outlet />
             </SidebarInset>
         </SidebarProvider>
-    ),
-});
+    );
+}
