@@ -8,7 +8,6 @@ import {
 } from '#/components/ui/card';
 
 import { useForm } from '#/hooks/use-form';
-import { route } from '#/lib/route';
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 
@@ -64,7 +63,7 @@ function ForgotPassword() {
                     </CardContent>
                     <CardFooter className="justify-center">
                         <Link
-                            to={route.signIn()}
+                            to="/dashboard/sign-in"
                             className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
                         >
                             <ArrowLeftIcon className="size-3.5" />
@@ -102,7 +101,7 @@ function ForgotPassword() {
                 </CardContent>
                 <CardFooter className="justify-center">
                     <Link
-                        to={route.signIn()}
+                        to="/dashboard/sign-in"
                         className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
                     >
                         <ArrowLeftIcon className="size-3.5" />

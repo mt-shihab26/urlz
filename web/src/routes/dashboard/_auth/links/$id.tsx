@@ -2,7 +2,6 @@ import type { TRange } from '#/lib/ranges';
 import type { TResponse } from '#/services/links/show';
 
 import { queryKeys } from '#/lib/query-keys';
-import { route } from '#/lib/route';
 import { toastError } from '#/lib/toast';
 import { getLinkShowData } from '#/services/links/show';
 import { useQuery } from '@tanstack/react-query';
@@ -47,7 +46,7 @@ function LinkDetail() {
             ) : !data ? (
                 <div className="flex flex-col items-center justify-center gap-4 p-12 text-center">
                     <p className="text-muted-foreground">Link not found.</p>
-                    <Button variant="outline" onClick={() => navigate({ to: route.linksIndex() })}>
+                    <Button variant="outline" onClick={() => navigate({ to: '/dashboard/links' })}>
                         Back to Links
                     </Button>
                 </div>
@@ -57,7 +56,7 @@ function LinkDetail() {
                         link={data.link}
                         range={range}
                         onRangeChange={setRange}
-                        onBack={() => navigate({ to: route.linksIndex() })}
+                        onBack={() => navigate({ to: '/dashboard/links' })}
                     />
                     <div className="flex items-center justify-end px-4 pt-3 lg:px-6">
                         <RefreshButton

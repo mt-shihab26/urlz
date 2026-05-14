@@ -9,7 +9,6 @@ import {
 
 import { signUp } from '#/collections/users';
 import { useForm } from '#/hooks/use-form';
-import { route } from '#/lib/route';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 
 import { CheckboxField } from '#/components/composite/checkbox-field';
@@ -43,7 +42,7 @@ function SignUp() {
         setLoading(true);
         try {
             await signUp(data.name, data.email, data.password);
-            navigate({ to: route.overviewIndex() });
+            navigate({ to: '/dashboard/overview' });
         } catch (e: any) {
             const resData = e?.response?.data;
             if (resData?.email?.message) {
@@ -128,7 +127,7 @@ function SignUp() {
                     <LinkPrompt
                         text="Already have an account?"
                         linkText="Sign in"
-                        linkTo={route.signIn()}
+                        linkTo="/dashboard/sign-in"
                     />
                 </CardFooter>
             </Card>

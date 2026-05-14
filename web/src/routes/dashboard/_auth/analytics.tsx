@@ -4,7 +4,6 @@ import type { TAnalyticsResponse } from '#/services/analytics';
 import { useUser } from '#/components/providers/auth-provider';
 import { canUseFeature, getActivePlan } from '#/lib/plan';
 import { queryKeys } from '#/lib/query-keys';
-import { route } from '#/lib/route';
 import { toastError } from '#/lib/toast';
 import { getAnalyticsData } from '#/services/analytics';
 import { useQuery } from '@tanstack/react-query';
@@ -94,7 +93,7 @@ function Analytics() {
                                     Pro and above.
                                 </p>
                                 <Link
-                                    to={route.billingIndex()}
+                                    to="/dashboard/billing"
                                     className="mt-4 inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
                                 >
                                     Upgrade to Pro

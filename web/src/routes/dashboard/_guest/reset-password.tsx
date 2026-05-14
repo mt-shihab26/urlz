@@ -8,7 +8,6 @@ import {
 } from '#/components/ui/card';
 
 import { useForm } from '#/hooks/use-form';
-import { route } from '#/lib/route';
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 
@@ -67,7 +66,7 @@ function ResetPassword() {
                     </CardHeader>
                     <CardContent>
                         <Button className="w-full">
-                            <Link to={route.signIn()}>Sign in with new password</Link>
+                            <Link to="/dashboard/sign-in">Sign in with new password</Link>
                         </Button>
                     </CardContent>
                 </Card>
@@ -127,7 +126,7 @@ function ResetPassword() {
                 </CardContent>
                 <CardFooter className="justify-center">
                     <Link
-                        to={route.signIn()}
+                        to="/dashboard/sign-in"
                         className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
                     >
                         <ArrowLeftIcon className="size-3.5" />

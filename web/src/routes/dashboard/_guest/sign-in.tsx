@@ -9,7 +9,6 @@ import {
 
 import { signIn } from '#/collections/users';
 import { useForm } from '#/hooks/use-form';
-import { route } from '#/lib/route';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 
 import { CheckboxField } from '#/components/composite/checkbox-field';
@@ -40,7 +39,7 @@ function SignIn() {
         setLoading(true);
         try {
             await signIn(data.email, data.password);
-            navigate({ to: route.overviewIndex() });
+            navigate({ to: '/dashboard/overview' });
         } catch (e: any) {
             const resData = e?.response?.data;
             if (resData?.email?.message) {
@@ -87,7 +86,7 @@ function SignIn() {
                             autoComplete="current-password"
                             labelExtra={
                                 <Link
-                                    to={route.forgotPassword()}
+                                    to="/dashboard/forgot-password"
                                     className="text-xs text-muted-foreground hover:text-foreground"
                                 >
                                     Forgot password?
@@ -108,7 +107,7 @@ function SignIn() {
                     <LinkPrompt
                         text="Don't have an account?"
                         linkText="Sign up"
-                        linkTo={route.signUp()}
+                        linkTo="/dashboard/sign-up"
                     />
                 </CardFooter>
             </Card>
