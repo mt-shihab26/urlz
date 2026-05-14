@@ -9,11 +9,12 @@ import { nitro } from 'nitro/vite';
 
 const config = defineConfig({
     resolve: { tsconfigPaths: true },
+    server: { port: 5173 },
     plugins: [
         devtools(),
-        nitro({ rollupConfig: { external: [/^@sentry\//] } }),
+        nitro(),
         tailwindcss(),
-        tanstackStart(),
+        tanstackStart({ router: { generatedRouteTree: 'tree.gen.ts' } }),
         viteReact(),
     ],
 });
