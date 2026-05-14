@@ -1,10 +1,3 @@
-import type { TExpiringLink } from '#/services/analytics';
-
-import { formatCode, formatDate } from '#/lib/formats';
-import { route } from '#/lib/route';
-import { useNavigate } from '@tanstack/react-router';
-
-import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card';
 import {
     Table,
     TableBody,
@@ -13,6 +6,13 @@ import {
     TableHeader,
     TableRow,
 } from '#/components/ui/table';
+
+import type { TExpiringLink } from '#/services/analytics';
+
+import { formatCode, formatDate } from '#/lib/formats';
+import { useNavigate } from '@tanstack/react-router';
+
+import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card';
 
 export const ExpiringSoon = ({ links }: { links: TExpiringLink[] }) => {
     const navigate = useNavigate();
@@ -46,7 +46,7 @@ export const ExpiringSoon = ({ links }: { links: TExpiringLink[] }) => {
                                 <TableRow
                                     key={link.id}
                                     className="cursor-pointer"
-                                    onClick={() => navigate({ to: route.linksShow(link.id) })}
+                                    onClick={() => navigate({ to: '/dashboard/links/$id', params: { id: link.id } })}
                                 >
                                     <TableCell className="text-center font-mono text-xs text-muted-foreground">
                                         {i + 1}

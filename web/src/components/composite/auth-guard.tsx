@@ -1,14 +1,12 @@
 import type { ReactNode } from 'react';
 
-import { redirect } from '@tanstack/react-router';
-
 import { useAuth } from '#/components/providers/auth-provider';
-import { route } from '#/lib/route';
+import { redirect } from '@tanstack/react-router';
 
 export const AuthGuard = ({ children }: { children: ReactNode }) => {
     const { user } = useAuth();
 
-    if (!user) throw redirect({ to: route.signIn() });
+    if (!user) throw redirect({ to: '/dashboard/sign-in' });
 
     return <>{children}</>;
 };

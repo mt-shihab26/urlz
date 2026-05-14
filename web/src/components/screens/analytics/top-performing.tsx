@@ -10,7 +10,6 @@ import {
 import type { TTopLink } from '#/services/analytics';
 
 import { formatCode, formatNumber } from '#/lib/formats';
-import { route } from '#/lib/route';
 import { useNavigate } from '@tanstack/react-router';
 
 import { Sparkline } from '#/components/composite/sparkline';
@@ -50,7 +49,12 @@ export const TopPerforming = ({ topLinks }: { topLinks: TTopLink[] }) => {
                                 <TableRow
                                     key={link.id}
                                     className="group cursor-pointer"
-                                    onClick={() => navigate({ to: route.linksShow(link.id) })}
+                                    onClick={() =>
+                                        navigate({
+                                            to: '/dashboard/links/$id',
+                                            params: { id: link.id },
+                                        })
+                                    }
                                 >
                                     <TableCell>
                                         <div className="flex items-center gap-3">
