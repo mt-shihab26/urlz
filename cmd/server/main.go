@@ -3,6 +3,8 @@ package main
 import (
 	"io/fs"
 	"log"
+	"net/http"
+	"strings"
 
 	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
@@ -42,11 +44,19 @@ func main() {
 		se.Router.GET("/api/links/{id}", show.Handler)
 		se.Router.GET("/api/clicks", clicks.Handler)
 
-		se.Router.GET("/{code}", redirect.Handler)
 		sub, err := fs.Sub(web.DistFS, "dist/client")
 		if err != nil {
 			return err
 		}
+		fileServer := http.FileServer(http.FS(sub))
+		se.Router.GET("/{code}", func(e *core.RequestEvent) error {
+			code := e.Request.PathValue("code")
+			if strings.Contains(code, ".") {
+				fileServer.ServeHTTP(e.Response, e.Request)
+				return nil
+			}
+			return redirect.Handler(e)
+		})
 		se.Router.GET("/{path...}", apis.Static(sub, true))
 		return se.Next()
 	})
