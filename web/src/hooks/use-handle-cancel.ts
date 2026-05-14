@@ -1,20 +1,18 @@
-import { createCancelUrl, syncCancelReturn } from '@/collections/billing';
-import { refresh } from '@/collections/users';
-import { queryKeys } from '@/lib/query-keys';
-import { toastError, toastSuccess } from '@/lib/toast';
+import { createCancelUrl, syncCancelReturn } from '#/collections/billing';
+import { refresh } from '#/collections/users';
+import { queryKeys } from '#/lib/query-keys';
+import { toastError, toastSuccess } from '#/lib/toast';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router';
 
 export const useHandleCancel = () => {
     const queryClient = useQueryClient();
-
     const [loading, setLoading] = useState<boolean>(false);
-    const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
+        const searchParams = new URLSearchParams(window.location.search);
         if (searchParams.get('cancel') === '1') {
-            setSearchParams({}, { replace: true });
+            window.history.replaceState({}, '', window.location.pathname);
             syncCancelReturn()
                 .then(() => refresh())
                 .then(() => queryClient.invalidateQueries({ queryKey: queryKeys.subscription }))
@@ -35,8 +33,5 @@ export const useHandleCancel = () => {
         }
     };
 
-    return {
-        loading,
-        handleCancel,
-    };
+    return { loading, handleCancel };
 };

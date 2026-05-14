@@ -1,7 +1,7 @@
-import type { TBreakdownData, TVolumeDay } from '@/services/analytics';
-import type { TLink } from '@/types/models';
+import type { TBreakdownData, TVolumeDay } from '#/services/analytics';
+import type { TLink } from '#/types/models';
 
-import { pb } from '@/lib/pb';
+import { pb } from '#/lib/pb';
 
 export type TStats = {
     total_clicks: number;

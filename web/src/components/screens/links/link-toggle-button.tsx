@@ -1,11 +1,11 @@
-import type { TLink } from '@/types/models';
+import type { TLink } from '#/types/models';
 
-import { toggleLinkStatus } from '@/collections/links';
-import { queryKeys } from '@/lib/query-keys';
-import { toastError } from '@/lib/toast';
+import { toggleLinkStatus } from '#/collections/links';
+import { queryKeys } from '#/lib/query-keys';
+import { toastError } from '#/lib/toast';
 import { useQueryClient } from '@tanstack/react-query';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '#/components/ui/button';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 
 export const LinkToggleButton = ({ link }: { link: TLink }) => {

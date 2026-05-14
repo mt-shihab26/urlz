@@ -1,5 +1,5 @@
-import { GoogleIcon } from '@/components/icons/google-icon';
-import { Button } from '@/components/ui/button';
+import { GoogleIcon } from '#/components/icons/google-icon';
+import { Button } from '#/components/ui/button';
 
 export const GoogleOAuthButton = () => {
     return (

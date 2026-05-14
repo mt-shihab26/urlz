@@ -1,10 +1,10 @@
-import type { TInvoice } from '@/collections/billing';
+import type { TInvoice } from '#/collections/billing';
 import type { ColumnDef } from '@tanstack/react-table';
 
-import { buttonVariants } from '@/components/ui/button';
-import { formatAmount, formatLocaleDate } from '@/lib/formats';
+import { buttonVariants } from '#/components/ui/button';
+import { formatAmount, formatLocaleDate } from '#/lib/formats';
 
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '#/components/ui/badge';
 
 const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
     paid: 'default',

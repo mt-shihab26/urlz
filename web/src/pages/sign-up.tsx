@@ -5,24 +5,24 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from '@/components/ui/card';
+} from '#/components/ui/card';
 
-import { signUp } from '@/collections/users';
-import { useForm } from '@/hooks/use-form';
-import { route } from '@/routes';
-import { useNavigate } from 'react-router';
+import { signUp } from '#/collections/users';
+import { useForm } from '#/hooks/use-form';
+import { route } from '#/routes';
+import { useNavigate } from '@tanstack/react-router';
 
-import { CheckboxField } from '@/components/composite/checkbox-field';
-import { EmailField } from '@/components/composite/email-field';
-import { Form } from '@/components/composite/form';
-import { GoogleOAuthButton } from '@/components/composite/google-oauth-button';
-import { LinkPrompt } from '@/components/composite/link-prompt';
-import { OrDivider } from '@/components/composite/or-divider';
-import { PasswordField } from '@/components/composite/password-field';
-import { PasswordStrength } from '@/components/composite/password-strength';
-import { SubmitButton } from '@/components/composite/submit-button';
-import { TextField } from '@/components/composite/text-field';
-import { AuthLayout } from '@/components/layouts/auth-layout';
+import { CheckboxField } from '#/components/composite/checkbox-field';
+import { EmailField } from '#/components/composite/email-field';
+import { Form } from '#/components/composite/form';
+import { GoogleOAuthButton } from '#/components/composite/google-oauth-button';
+import { LinkPrompt } from '#/components/composite/link-prompt';
+import { OrDivider } from '#/components/composite/or-divider';
+import { PasswordField } from '#/components/composite/password-field';
+import { PasswordStrength } from '#/components/composite/password-strength';
+import { SubmitButton } from '#/components/composite/submit-button';
+import { TextField } from '#/components/composite/text-field';
+import { AuthLayout } from '#/components/layouts/auth-layout';
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -39,7 +39,7 @@ const SignUp = () => {
         setLoading(true);
         try {
             await signUp(data.name, data.email, data.password);
-            navigate(route.overviewIndex());
+            navigate({ to: route.overviewIndex() });
         } catch (e: any) {
             const resData = e?.response?.data;
             if (resData?.email?.message) {

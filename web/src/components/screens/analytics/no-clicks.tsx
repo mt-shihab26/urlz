@@ -1,10 +1,10 @@
-import type { TNoClickLink } from '@/services/analytics';
+import type { TNoClickLink } from '#/services/analytics';
 
-import { formatCode, formatDate } from '@/lib/formats';
-import { route } from '@/routes';
-import { useNavigate } from 'react-router';
+import { formatCode, formatDate } from '#/lib/formats';
+import { route } from '#/routes';
+import { useNavigate } from '@tanstack/react-router';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card';
 import {
     Table,
     TableBody,
@@ -12,7 +12,7 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from '@/components/ui/table';
+} from '#/components/ui/table';
 
 export const NoClicks = ({ links }: { links: TNoClickLink[] }) => {
     const navigate = useNavigate();
@@ -45,7 +45,7 @@ export const NoClicks = ({ links }: { links: TNoClickLink[] }) => {
                                 <TableRow
                                     key={link.id}
                                     className="cursor-pointer"
-                                    onClick={() => navigate(route.linksShow(link.id))}
+                                    onClick={() => navigate({ to: route.linksShow(link.id) })}
                                 >
                                     <TableCell>
                                         <div className="font-medium">{link.title}</div>

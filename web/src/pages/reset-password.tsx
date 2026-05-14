@@ -1,5 +1,5 @@
-import { AuthLayout } from '@/components/layouts/auth-layout';
-import { Button } from '@/components/ui/button';
+import { AuthLayout } from '#/components/layouts/auth-layout';
+import { Button } from '#/components/ui/button';
 import {
     Card,
     CardContent,
@@ -7,14 +7,14 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { cn } from '@/lib/utils';
-import { route } from '@/routes';
+} from '#/components/ui/card';
+import { Input } from '#/components/ui/input';
+import { Label } from '#/components/ui/label';
+import { cn } from '#/lib/utils';
+import { route } from '#/routes';
 import { ArrowLeftIcon, CheckIcon } from 'lucide-react';
 import * as React from 'react';
-import { Link } from 'react-router';
+import { Link } from '@tanstack/react-router';
 
 function ResetPassword() {
     const [password, setPassword] = React.useState('');

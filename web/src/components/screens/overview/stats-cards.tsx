@@ -1,6 +1,6 @@
-import { formatNumber } from '@/lib/formats';
+import { formatNumber } from '#/lib/formats';
 
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '#/components/ui/card';
 import { TrendingDownIcon, TrendingUpIcon } from 'lucide-react';
 
 type Props = {

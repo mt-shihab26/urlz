@@ -6,16 +6,16 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from '#/components/ui/dropdown-menu';
 
-import type { TUser } from '@/types/models';
+import type { TUser } from '#/types/models';
 
-import { getAvatarUrl, signOut } from '@/collections/users';
-import { useSidebar } from '@/components/ui/sidebar';
-import { cn, getInitial } from '@/lib/utils';
+import { getAvatarUrl, signOut } from '#/collections/users';
+import { useSidebar } from '#/components/ui/sidebar';
+import { cn, getInitial } from '#/lib/utils';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
+import { Avatar, AvatarFallback, AvatarImage } from '#/components/ui/avatar';
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '#/components/ui/sidebar';
 import { EllipsisVerticalIcon, LogOutIcon } from 'lucide-react';
 
 const PLAN_LABEL: Record<string, string> = { free: 'Free', pro: 'Pro', business: 'Business' };

@@ -1,9 +1,9 @@
-import type { TLinkItem } from '@/services/links';
-import type { TFilter } from '@/types/utils';
+import type { TLinkItem } from '#/services/links';
+import type { TFilter } from '#/types/utils';
 
-import { isLinkActive, isLinkDisabled, isLinkExpired } from '@/lib/links';
+import { isLinkActive, isLinkDisabled, isLinkExpired } from '#/lib/links';
 
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { ToggleGroup, ToggleGroupItem } from '#/components/ui/toggle-group';
 
 const filterEntries: { key: TFilter; label: string }[] = [
     { key: 'all', label: 'All' },

@@ -1,5 +1,5 @@
-import type { TLink } from '@/types/models';
-import type { TFilter } from '@/types/utils';
+import type { TLink } from '#/types/models';
+import type { TFilter } from '#/types/utils';
 
 export const isLinkExpiringSoon = (link: TLink, withinDays = 30) => {
     if (!link.expires) return false;

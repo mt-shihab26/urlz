@@ -1,6 +1,6 @@
-import type { TPlan, TSubscriptionStatus } from '@/types/models';
+import type { TPlan, TSubscriptionStatus } from '#/types/models';
 
-import { pb } from '@/lib/pb';
+import { pb } from '#/lib/pb';
 
 export const createCheckoutUrl = async (plan: TPlan): Promise<string> => {
     const data = await pb.send<{ url: string }>('/api/billing/checkout', {

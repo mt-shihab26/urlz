@@ -1,8 +1,8 @@
-import { useTheme } from '@/components/providers/theme-provider';
-import { cn } from '@/lib/utils';
+import { useTheme } from '#/components/providers/theme-provider';
+import { cn } from '#/lib/utils';
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '#/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
 import { MonitorIcon, MoonIcon, SunIcon } from 'lucide-react';
 
 const themes = [

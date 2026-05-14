@@ -1,9 +1,9 @@
-import type { TVolumeDay } from '@/services/analytics';
+import type { TVolumeDay } from '#/services/analytics';
 
-import { formatChartDate } from '@/lib/formats';
+import { formatChartDate } from '#/lib/formats';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '#/components/ui/chart';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 
 export const ClicksChart = ({ volume }: { volume: TVolumeDay[] }) => {

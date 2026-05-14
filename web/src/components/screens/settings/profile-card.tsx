@@ -1,13 +1,13 @@
-import { updateProfile } from '@/collections/users';
-import { useUser } from '@/components/providers/auth-provider';
-import { useForm } from '@/hooks/use-form';
+import { updateProfile } from '#/collections/users';
+import { useUser } from '#/components/providers/auth-provider';
+import { useForm } from '#/hooks/use-form';
 
-import { EmailField } from '@/components/composite/email-field';
-import { Form } from '@/components/composite/form';
-import { SubmitButton } from '@/components/composite/submit-button';
-import { TextField } from '@/components/composite/text-field';
-import { AvatarUpload } from '@/components/screens/settings/avatar-upload';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { EmailField } from '#/components/composite/email-field';
+import { Form } from '#/components/composite/form';
+import { SubmitButton } from '#/components/composite/submit-button';
+import { TextField } from '#/components/composite/text-field';
+import { AvatarUpload } from '#/components/screens/settings/avatar-upload';
+import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card';
 
 export const ProfileCard = () => {
     const { user } = useUser();

@@ -2,8 +2,8 @@ import type { ReactNode } from 'react';
 
 import { useEffect } from 'react';
 
-import { AppSidebar } from '@/components/screens/dashboard-layout/app-sidebar';
-import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { AppSidebar } from '#/components/screens/dashboard-layout/app-sidebar';
+import { SidebarInset, SidebarProvider } from '#/components/ui/sidebar';
 
 export const DashboardLayout = ({ title, children }: { title: string; children: ReactNode }) => {
     useEffect(() => {

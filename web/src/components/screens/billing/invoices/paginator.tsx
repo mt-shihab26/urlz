@@ -1,7 +1,7 @@
-import type { TInvoice } from '@/collections/billing';
+import type { TInvoice } from '#/collections/billing';
 import type { Table as TTable } from '@tanstack/react-table';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '#/components/ui/button';
 
 export const Paginator = ({ table }: { table: TTable<TInvoice> }) => {
     return (

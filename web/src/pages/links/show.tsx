@@ -1,32 +1,32 @@
-import type { TRange } from '@/lib/ranges';
-import type { TResponse } from '@/services/links/show';
+import type { TRange } from '#/lib/ranges';
+import type { TResponse } from '#/services/links/show';
 
-import { queryKeys } from '@/lib/query-keys';
-import { toastError } from '@/lib/toast';
-import { getLinkShowData } from '@/services/links/show';
+import { queryKeys } from '#/lib/query-keys';
+import { toastError } from '#/lib/toast';
+import { getLinkShowData } from '#/services/links/show';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate, useParams } from '@tanstack/react-router';
 
-import { RefreshButton } from '@/components/composite/refresh-button';
-import { DashboardLayout } from '@/components/layouts/dashboard-layout';
-import { Browsers } from '@/components/screens/analytics/browsers';
-import { Countries } from '@/components/screens/analytics/countries';
-import { Devices } from '@/components/screens/analytics/devices';
-import { Languages } from '@/components/screens/analytics/languages';
-import { OperatingSystems } from '@/components/screens/analytics/operating-systems';
-import { Referrers } from '@/components/screens/analytics/referrers';
-import { ClicksChart } from '@/components/screens/links/show/clicks-chart';
-import { ClicksTable } from '@/components/screens/links/show/clicks-table';
-import { DetailHeader } from '@/components/screens/links/show/detail-header';
-import { DetailStats } from '@/components/screens/links/show/detail-stats';
-import { Loading } from '@/components/screens/links/show/loading';
-import { Button } from '@/components/ui/button';
-import { route } from '@/routes';
+import { RefreshButton } from '#/components/composite/refresh-button';
+import { DashboardLayout } from '#/components/layouts/dashboard-layout';
+import { Browsers } from '#/components/screens/analytics/browsers';
+import { Countries } from '#/components/screens/analytics/countries';
+import { Devices } from '#/components/screens/analytics/devices';
+import { Languages } from '#/components/screens/analytics/languages';
+import { OperatingSystems } from '#/components/screens/analytics/operating-systems';
+import { Referrers } from '#/components/screens/analytics/referrers';
+import { ClicksChart } from '#/components/screens/links/show/clicks-chart';
+import { ClicksTable } from '#/components/screens/links/show/clicks-table';
+import { DetailHeader } from '#/components/screens/links/show/detail-header';
+import { DetailStats } from '#/components/screens/links/show/detail-stats';
+import { Loading } from '#/components/screens/links/show/loading';
+import { Button } from '#/components/ui/button';
+import { route } from '#/routes';
 
 const LinkDetail = () => {
     const navigate = useNavigate();
-    const { id } = useParams<{ id: string }>();
+    const { id } = useParams({ strict: false });
     const [range, setRange] = useState<TRange>('30d');
 
     const { data, isLoading, isFetching, refetch } = useQuery<TResponse>({
@@ -43,7 +43,7 @@ const LinkDetail = () => {
             ) : !data ? (
                 <div className="flex flex-col items-center justify-center gap-4 p-12 text-center">
                     <p className="text-muted-foreground">Link not found.</p>
-                    <Button variant="outline" onClick={() => navigate(route.linksIndex())}>
+                    <Button variant="outline" onClick={() => navigate({ to: route.linksIndex() })}>
                         Back to Links
                     </Button>
                 </div>
@@ -53,7 +53,7 @@ const LinkDetail = () => {
                         link={data.link}
                         range={range}
                         onRangeChange={setRange}
-                        onBack={() => navigate(route.linksIndex())}
+                        onBack={() => navigate({ to: route.linksIndex() })}
                     />
                     <div className="flex items-center justify-end px-4 pt-3 lg:px-6">
                         <RefreshButton

@@ -1,8 +1,8 @@
-import type { TStats } from '@/services/links/show';
+import type { TStats } from '#/services/links/show';
 
-import { formatDate, formatNumber } from '@/lib/formats';
+import { formatDate, formatNumber } from '#/lib/formats';
 
-import { Card, CardHeader } from '@/components/ui/card';
+import { Card, CardHeader } from '#/components/ui/card';
 
 export const DetailStats = ({ stats, created }: { stats: TStats; created: string }) => {
     const items = [

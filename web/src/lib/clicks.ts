@@ -1,5 +1,5 @@
-import type { TBreakdownEntry } from '@/services/analytics';
-import type { TClick } from '@/types/models';
+import type { TBreakdownEntry } from '#/services/analytics';
+import type { TClick } from '#/types/models';
 
 export const clicksToBreakdown = (clicks: TClick[], key: keyof TClick): TBreakdownEntry[] => {
     const counts = new Map<string, number>();

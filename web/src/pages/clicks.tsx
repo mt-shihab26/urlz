@@ -1,17 +1,17 @@
-import type { TRange } from '@/lib/ranges';
-import type { TClickItem, TResponse } from '@/services/clicks';
+import type { TRange } from '#/lib/ranges';
+import type { TClickItem, TResponse } from '#/services/clicks';
 
-import { queryKeys } from '@/lib/query-keys';
-import { toastError } from '@/lib/toast';
-import { getClicksData } from '@/services/clicks';
+import { queryKeys } from '#/lib/query-keys';
+import { toastError } from '#/lib/toast';
+import { getClicksData } from '#/services/clicks';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
-import { RangeTabs } from '@/components/composite/range-tabs';
-import { Header } from '@/components/composite/site-header';
-import { DashboardLayout } from '@/components/layouts/dashboard-layout';
-import { ClicksTable } from '@/components/screens/clicks/clicks-table';
-import { DetailDrawer } from '@/components/screens/clicks/detail-drawer';
+import { RangeTabs } from '#/components/composite/range-tabs';
+import { Header } from '#/components/composite/site-header';
+import { DashboardLayout } from '#/components/layouts/dashboard-layout';
+import { ClicksTable } from '#/components/screens/clicks/clicks-table';
+import { DetailDrawer } from '#/components/screens/clicks/detail-drawer';
 
 const Clicks = () => {
     const [range, setRange] = useState<TRange>('30d');

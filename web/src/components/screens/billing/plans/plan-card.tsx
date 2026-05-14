@@ -1,10 +1,10 @@
-import type { TPlan } from '@/types/models';
+import type { TPlan } from '#/types/models';
 import type { TPlanDef } from './list';
 
-import { cn } from '@/lib/utils';
+import { cn } from '#/lib/utils';
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '#/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '#/components/ui/card';
 import { CheckIcon } from 'lucide-react';
 
 export const PlanCard = ({

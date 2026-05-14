@@ -1,4 +1,4 @@
-import logo from '@/assets/logo.svg';
+import logo from '#/assets/logo.svg';
 
 import {
     ChartBarIcon,
@@ -18,15 +18,15 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
-} from '@/components/ui/sidebar';
+} from '#/components/ui/sidebar';
 
 import type { ComponentProps } from 'react';
 
-import { useUser } from '@/components/providers/auth-provider';
-import { useSidebar } from '@/components/ui/sidebar';
-import { route } from '@/routes';
+import { useUser } from '#/components/providers/auth-provider';
+import { useSidebar } from '#/components/ui/sidebar';
+import { route } from '#/routes';
 
-import { Link } from 'react-router';
+import { Link } from '@tanstack/react-router';
 import { NavMain } from './nav-main';
 import { NavUser } from './nav-user';
 

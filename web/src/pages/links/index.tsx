@@ -1,21 +1,21 @@
-import type { TResponse } from '@/services/links';
-import type { TFilter } from '@/types/utils';
+import type { TResponse } from '#/services/links';
+import type { TFilter } from '#/types/utils';
 
-import { filterLinks } from '@/lib/links';
-import { queryKeys } from '@/lib/query-keys';
-import { toastError } from '@/lib/toast';
-import { getLinksData } from '@/services/links';
+import { filterLinks } from '#/lib/links';
+import { queryKeys } from '#/lib/query-keys';
+import { toastError } from '#/lib/toast';
+import { getLinksData } from '#/services/links';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
-import { RefreshButton } from '@/components/composite/refresh-button';
-import { Header } from '@/components/composite/site-header';
-import { DashboardLayout } from '@/components/layouts/dashboard-layout';
-import { CreateLinkButton } from '@/components/screens/links/create-link-button';
-import { FiltersTabs } from '@/components/screens/links/index/filters-tabs';
-import { LinksTable } from '@/components/screens/links/index/links-table';
-import { Loading } from '@/components/screens/links/index/loading';
-import { SearchBox } from '@/components/screens/links/index/search-box';
+import { RefreshButton } from '#/components/composite/refresh-button';
+import { Header } from '#/components/composite/site-header';
+import { DashboardLayout } from '#/components/layouts/dashboard-layout';
+import { CreateLinkButton } from '#/components/screens/links/create-link-button';
+import { FiltersTabs } from '#/components/screens/links/index/filters-tabs';
+import { LinksTable } from '#/components/screens/links/index/links-table';
+import { Loading } from '#/components/screens/links/index/loading';
+import { SearchBox } from '#/components/screens/links/index/search-box';
 
 const Links = () => {
     const [filter, setFilter] = useState<TFilter>('all');

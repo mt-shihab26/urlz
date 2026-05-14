@@ -5,23 +5,23 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from '@/components/ui/card';
+} from '#/components/ui/card';
 
-import { signIn } from '@/collections/users';
-import { useForm } from '@/hooks/use-form';
-import { route } from '@/routes';
-import { useNavigate } from 'react-router';
+import { signIn } from '#/collections/users';
+import { useForm } from '#/hooks/use-form';
+import { route } from '#/routes';
+import { useNavigate } from '@tanstack/react-router';
 
-import { CheckboxField } from '@/components/composite/checkbox-field';
-import { EmailField } from '@/components/composite/email-field';
-import { Form } from '@/components/composite/form';
-import { GoogleOAuthButton } from '@/components/composite/google-oauth-button';
-import { LinkPrompt } from '@/components/composite/link-prompt';
-import { OrDivider } from '@/components/composite/or-divider';
-import { PasswordField } from '@/components/composite/password-field';
-import { SubmitButton } from '@/components/composite/submit-button';
-import { AuthLayout } from '@/components/layouts/auth-layout';
-import { Link } from 'react-router';
+import { CheckboxField } from '#/components/composite/checkbox-field';
+import { EmailField } from '#/components/composite/email-field';
+import { Form } from '#/components/composite/form';
+import { GoogleOAuthButton } from '#/components/composite/google-oauth-button';
+import { LinkPrompt } from '#/components/composite/link-prompt';
+import { OrDivider } from '#/components/composite/or-divider';
+import { PasswordField } from '#/components/composite/password-field';
+import { SubmitButton } from '#/components/composite/submit-button';
+import { AuthLayout } from '#/components/layouts/auth-layout';
+import { Link } from '@tanstack/react-router';
 
 const SignIn = () => {
     const navigate = useNavigate();
@@ -36,7 +36,7 @@ const SignIn = () => {
         setLoading(true);
         try {
             await signIn(data.email, data.password);
-            navigate(route.overviewIndex());
+            navigate({ to: route.overviewIndex() });
         } catch (e: any) {
             const resData = e?.response?.data;
             if (resData?.email?.message) {

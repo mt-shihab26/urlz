@@ -1,7 +1,7 @@
-import { useDebounceCallback } from '@/hooks/use-debounce-callback';
+import { useDebounceCallback } from '#/hooks/use-debounce-callback';
 import { useEffect, useState } from 'react';
 
-import { Input } from '@/components/ui/input';
+import { Input } from '#/components/ui/input';
 
 export const SearchBox = ({
     search,

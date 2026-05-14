@@ -1,8 +1,8 @@
-import { Header } from '@/components/composite/site-header';
-import { DashboardLayout } from '@/components/layouts/dashboard-layout';
-import { Invoices } from '@/components/screens/billing/invoices';
-import { Plans } from '@/components/screens/billing/plans';
-import { Subscription } from '@/components/screens/billing/subscription';
+import { Header } from '#/components/composite/site-header';
+import { DashboardLayout } from '#/components/layouts/dashboard-layout';
+import { Invoices } from '#/components/screens/billing/invoices';
+import { Plans } from '#/components/screens/billing/plans';
+import { Subscription } from '#/components/screens/billing/subscription';
 
 const Billing = () => {
     return (

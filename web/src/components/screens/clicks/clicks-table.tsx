@@ -1,4 +1,4 @@
-import type { TClickItem, TResponse } from '@/services/clicks';
+import type { TClickItem, TResponse } from '#/services/clicks';
 
 import {
     Table,
@@ -7,12 +7,12 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from '@/components/ui/table';
+} from '#/components/ui/table';
 
-import { formatChartDate } from '@/lib/formats';
+import { formatChartDate } from '#/lib/formats';
 
-import { Paginator } from '@/components/composite/paginator';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Paginator } from '#/components/composite/paginator';
+import { Skeleton } from '#/components/ui/skeleton';
 
 export const PER_PAGE = 20;
 

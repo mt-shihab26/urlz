@@ -1,8 +1,8 @@
-import type { TLink, TLinkStatus } from '@/types/models';
+import type { TLink, TLinkStatus } from '#/types/models';
 
-import { pb } from '@/lib/pb';
-import type { TRange } from '@/lib/ranges';
-import { getRangeStartDate } from '@/lib/ranges';
+import { pb } from '#/lib/pb';
+import type { TRange } from '#/lib/ranges';
+import { getRangeStartDate } from '#/lib/ranges';
 
 const LINKS = 'links';
 

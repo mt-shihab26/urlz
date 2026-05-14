@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card';
 
 type PctItem = { name: string; pct: number; color: string };
 

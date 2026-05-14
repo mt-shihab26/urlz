@@ -1,14 +1,14 @@
-import { CreateLinkDialog } from '@/components/screens/links/create-link-dialog';
+import { CreateLinkDialog } from '#/components/screens/links/create-link-dialog';
 import {
     SidebarGroup,
     SidebarGroupContent,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
-} from '@/components/ui/sidebar';
+} from '#/components/ui/sidebar';
 import { PlusIcon } from 'lucide-react';
 import * as React from 'react';
-import { Link, useLocation } from 'react-router';
+import { Link, useLocation } from '@tanstack/react-router';
 
 export function NavMain({
     items,

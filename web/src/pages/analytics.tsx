@@ -1,32 +1,32 @@
-import type { TRange } from '@/lib/ranges';
-import type { TAnalyticsResponse } from '@/services/analytics';
+import type { TRange } from '#/lib/ranges';
+import type { TAnalyticsResponse } from '#/services/analytics';
 
-import { useUser } from '@/components/providers/auth-provider';
-import { canUseFeature, getActivePlan } from '@/lib/plan';
-import { queryKeys } from '@/lib/query-keys';
-import { toastError } from '@/lib/toast';
-import { route } from '@/routes';
-import { getAnalyticsData } from '@/services/analytics';
+import { useUser } from '#/components/providers/auth-provider';
+import { canUseFeature, getActivePlan } from '#/lib/plan';
+import { queryKeys } from '#/lib/query-keys';
+import { toastError } from '#/lib/toast';
+import { route } from '#/routes';
+import { getAnalyticsData } from '#/services/analytics';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
-import { RangeTabs } from '@/components/composite/range-tabs';
-import { RefreshButton } from '@/components/composite/refresh-button';
-import { Header } from '@/components/composite/site-header';
-import { DashboardLayout } from '@/components/layouts/dashboard-layout';
-import { Browsers } from '@/components/screens/analytics/browsers';
-import { ClickVolumeChart } from '@/components/screens/analytics/click-volume-chart';
-import { Countries } from '@/components/screens/analytics/countries';
-import { Devices } from '@/components/screens/analytics/devices';
-import { ExpiringSoon } from '@/components/screens/analytics/expiring-soon';
-import { Languages } from '@/components/screens/analytics/languages';
-import { Loading } from '@/components/screens/analytics/loading';
-import { NoClicks } from '@/components/screens/analytics/no-clicks';
-import { OperatingSystems } from '@/components/screens/analytics/operating-systems';
-import { Referrers } from '@/components/screens/analytics/referrers';
-import { StatsCards } from '@/components/screens/analytics/stats-cards';
-import { TopPerforming } from '@/components/screens/analytics/top-performing';
-import { Link } from 'react-router';
+import { RangeTabs } from '#/components/composite/range-tabs';
+import { RefreshButton } from '#/components/composite/refresh-button';
+import { Header } from '#/components/composite/site-header';
+import { DashboardLayout } from '#/components/layouts/dashboard-layout';
+import { Browsers } from '#/components/screens/analytics/browsers';
+import { ClickVolumeChart } from '#/components/screens/analytics/click-volume-chart';
+import { Countries } from '#/components/screens/analytics/countries';
+import { Devices } from '#/components/screens/analytics/devices';
+import { ExpiringSoon } from '#/components/screens/analytics/expiring-soon';
+import { Languages } from '#/components/screens/analytics/languages';
+import { Loading } from '#/components/screens/analytics/loading';
+import { NoClicks } from '#/components/screens/analytics/no-clicks';
+import { OperatingSystems } from '#/components/screens/analytics/operating-systems';
+import { Referrers } from '#/components/screens/analytics/referrers';
+import { StatsCards } from '#/components/screens/analytics/stats-cards';
+import { TopPerforming } from '#/components/screens/analytics/top-performing';
+import { Link } from '@tanstack/react-router';
 
 const Analytics = () => {
     const { user } = useUser();

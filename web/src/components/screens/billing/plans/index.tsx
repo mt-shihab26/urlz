@@ -1,6 +1,6 @@
-import { useUser } from '@/components/providers/auth-provider';
-import { useHandleUpgrade } from '@/hooks/use-handle-upgrade';
-import { getCurrentPlan } from '@/lib/billing';
+import { useUser } from '#/components/providers/auth-provider';
+import { useHandleUpgrade } from '#/hooks/use-handle-upgrade';
+import { getCurrentPlan } from '#/lib/billing';
 
 import { PlanCard } from './plan-card';
 

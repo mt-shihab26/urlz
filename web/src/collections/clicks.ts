@@ -1,8 +1,8 @@
-import type { TRange } from '@/lib/ranges';
-import type { TClick } from '@/types/models';
+import type { TRange } from '#/lib/ranges';
+import type { TClick } from '#/types/models';
 
-import { pb } from '@/lib/pb';
-import { getRangeStartDate } from '@/lib/ranges';
+import { pb } from '#/lib/pb';
+import { getRangeStartDate } from '#/lib/ranges';
 
 const CLICKS = 'clicks';
 

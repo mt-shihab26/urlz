@@ -1,6 +1,6 @@
-import type { TLink } from '@/types/models';
+import type { TLink } from '#/types/models';
 
-import { pb } from '@/lib/pb';
+import { pb } from '#/lib/pb';
 
 export type TClickDay = { date: string; clicks: number };
 

@@ -1,23 +1,23 @@
-import { createLink } from '@/collections/links';
-import { useUser } from '@/components/providers/auth-provider';
-import { useForm } from '@/hooks/use-form';
-import { generateRandomSlug } from '@/lib/links';
-import { canUseFeature, getActivePlan } from '@/lib/plan';
-import { queryKeys } from '@/lib/query-keys';
-import { toastError } from '@/lib/toast';
-import { codePrefix } from '@/lib/utils';
-import { route } from '@/routes';
+import { createLink } from '#/collections/links';
+import { useUser } from '#/components/providers/auth-provider';
+import { useForm } from '#/hooks/use-form';
+import { generateRandomSlug } from '#/lib/links';
+import { canUseFeature, getActivePlan } from '#/lib/plan';
+import { queryKeys } from '#/lib/query-keys';
+import { toastError } from '#/lib/toast';
+import { codePrefix } from '#/lib/utils';
+import { route } from '#/routes';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
-import { DateField } from '@/components/composite/date-field';
-import { Form } from '@/components/composite/form';
-import { SubmitButton } from '@/components/composite/submit-button';
-import { TextField } from '@/components/composite/text-field';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Link } from 'react-router';
+import { DateField } from '#/components/composite/date-field';
+import { Form } from '#/components/composite/form';
+import { SubmitButton } from '#/components/composite/submit-button';
+import { TextField } from '#/components/composite/text-field';
+import { Button } from '#/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '#/components/ui/dialog';
+import { Label } from '#/components/ui/label';
+import { Link } from '@tanstack/react-router';
 
 export const CreateLinkDialog = ({
     open,

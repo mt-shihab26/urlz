@@ -1,17 +1,17 @@
-import type { TResponse } from '@/services/overview';
+import type { TResponse } from '#/services/overview';
 
-import { queryKeys } from '@/lib/query-keys';
-import { toastError } from '@/lib/toast';
-import { getOverviewData } from '@/services/overview';
+import { queryKeys } from '#/lib/query-keys';
+import { toastError } from '#/lib/toast';
+import { getOverviewData } from '#/services/overview';
 import { useQuery } from '@tanstack/react-query';
 
-import { RefreshButton } from '@/components/composite/refresh-button';
-import { Header } from '@/components/composite/site-header';
-import { DashboardLayout } from '@/components/layouts/dashboard-layout';
-import { ClickBreakdown } from '@/components/screens/overview/click-breakdown';
-import { Loading } from '@/components/screens/overview/loading';
-import { StatsCards } from '@/components/screens/overview/stats-cards';
-import { TopLinks } from '@/components/screens/overview/top-links';
+import { RefreshButton } from '#/components/composite/refresh-button';
+import { Header } from '#/components/composite/site-header';
+import { DashboardLayout } from '#/components/layouts/dashboard-layout';
+import { ClickBreakdown } from '#/components/screens/overview/click-breakdown';
+import { Loading } from '#/components/screens/overview/loading';
+import { StatsCards } from '#/components/screens/overview/stats-cards';
+import { TopLinks } from '#/components/screens/overview/top-links';
 
 const Overview = () => {
     const { data, isLoading, isFetching, refetch } = useQuery<TResponse>({

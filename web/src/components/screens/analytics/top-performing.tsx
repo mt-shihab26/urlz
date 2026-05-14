@@ -5,17 +5,17 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from '@/components/ui/table';
+} from '#/components/ui/table';
 
-import type { TTopLink } from '@/services/analytics';
+import type { TTopLink } from '#/services/analytics';
 
-import { formatCode, formatNumber } from '@/lib/formats';
-import { route } from '@/routes';
-import { useNavigate } from 'react-router';
+import { formatCode, formatNumber } from '#/lib/formats';
+import { route } from '#/routes';
+import { useNavigate } from '@tanstack/react-router';
 
-import { Sparkline } from '@/components/composite/sparkline';
-import { StatusBadge } from '@/components/composite/status-badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Sparkline } from '#/components/composite/sparkline';
+import { StatusBadge } from '#/components/composite/status-badge';
+import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card';
 
 export const TopPerforming = ({ topLinks }: { topLinks: TTopLink[] }) => {
     const navigate = useNavigate();
@@ -50,7 +50,7 @@ export const TopPerforming = ({ topLinks }: { topLinks: TTopLink[] }) => {
                                 <TableRow
                                     key={link.id}
                                     className="group cursor-pointer"
-                                    onClick={() => navigate(route.linksShow(link.id))}
+                                    onClick={() => navigate({ to: route.linksShow(link.id) })}
                                 >
                                     <TableCell>
                                         <div className="flex items-center gap-3">

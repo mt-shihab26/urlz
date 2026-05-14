@@ -5,9 +5,9 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from '@/components/ui/table';
+} from '#/components/ui/table';
 
-import type { TInvoice } from '@/collections/billing';
+import type { TInvoice } from '#/collections/billing';
 import type { Table as TTable } from '@tanstack/react-table';
 
 import { flexRender } from '@tanstack/react-table';

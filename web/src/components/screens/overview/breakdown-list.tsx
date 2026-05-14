@@ -1,6 +1,6 @@
-import type { TBreakdownItem } from '@/types/utils';
+import type { TBreakdownItem } from '#/types/utils';
 
-import { formatNumber } from '@/lib/formats';
+import { formatNumber } from '#/lib/formats';
 
 export const BreakdownList = ({ items, empty }: { items: TBreakdownItem[]; empty: string }) => {
     const max = items[0]?.count ?? 1;

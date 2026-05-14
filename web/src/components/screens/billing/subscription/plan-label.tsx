@@ -1,4 +1,4 @@
-import type { TUser } from '@/types/models';
+import type { TUser } from '#/types/models';
 
 const PLAN_LABEL: Record<string, string> = {
     free: 'Free',
