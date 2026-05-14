@@ -9,7 +9,7 @@ import {
 
 import { signIn } from '#/collections/users';
 import { useForm } from '#/hooks/use-form';
-import { route } from '#/routes';
+import { route } from '#/lib/route';
 import { useNavigate } from '@tanstack/react-router';
 
 import { CheckboxField } from '#/components/composite/checkbox-field';

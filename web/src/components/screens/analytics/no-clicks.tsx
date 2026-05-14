@@ -1,7 +1,7 @@
 import type { TNoClickLink } from '#/services/analytics';
 
 import { formatCode, formatDate } from '#/lib/formats';
-import { route } from '#/routes';
+import { route } from '#/lib/route';
 import { useNavigate } from '@tanstack/react-router';
 
 import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card';

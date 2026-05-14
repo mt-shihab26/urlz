@@ -5,7 +5,7 @@ import { useUser } from '#/components/providers/auth-provider';
 import { canUseFeature, getActivePlan } from '#/lib/plan';
 import { queryKeys } from '#/lib/query-keys';
 import { toastError } from '#/lib/toast';
-import { route } from '#/routes';
+import { route } from '#/lib/route';
 import { getAnalyticsData } from '#/services/analytics';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';

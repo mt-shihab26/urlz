@@ -1,7 +1,7 @@
 import logo from '#/assets/logo.svg';
-import { route } from '#/routes';
-import type { ReactNode } from 'react';
+import { route } from '#/lib/route';
 import { Link } from '@tanstack/react-router';
+import type { ReactNode } from 'react';
 
 export const AuthLayout = ({ children }: { children: ReactNode }) => {
     return (

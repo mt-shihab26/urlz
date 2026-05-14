@@ -10,10 +10,10 @@ import {
 } from '#/components/ui/card';
 import { Input } from '#/components/ui/input';
 import { Label } from '#/components/ui/label';
-import { route } from '#/routes';
+import { route } from '#/lib/route';
+import { Link } from '@tanstack/react-router';
 import { ArrowLeftIcon, MailIcon } from 'lucide-react';
 import * as React from 'react';
-import { Link } from '@tanstack/react-router';
 
 function ForgotPassword() {
     const [email, setEmail] = React.useState('');

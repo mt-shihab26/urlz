@@ -10,7 +10,7 @@ import {
 import type { TTopLink } from '#/services/overview';
 
 import { formatCode, formatNumber } from '#/lib/formats';
-import { route } from '#/routes';
+import { route } from '#/lib/route';
 import { useNavigate } from '@tanstack/react-router';
 
 import { Sparkline } from '#/components/composite/sparkline';

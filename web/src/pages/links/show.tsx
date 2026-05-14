@@ -5,8 +5,8 @@ import { queryKeys } from '#/lib/query-keys';
 import { toastError } from '#/lib/toast';
 import { getLinkShowData } from '#/services/links/show';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
 import { useNavigate, useParams } from '@tanstack/react-router';
+import { useState } from 'react';
 
 import { RefreshButton } from '#/components/composite/refresh-button';
 import { DashboardLayout } from '#/components/layouts/dashboard-layout';
@@ -22,7 +22,7 @@ import { DetailHeader } from '#/components/screens/links/show/detail-header';
 import { DetailStats } from '#/components/screens/links/show/detail-stats';
 import { Loading } from '#/components/screens/links/show/loading';
 import { Button } from '#/components/ui/button';
-import { route } from '#/routes';
+import { route } from '#/lib/route';
 
 const LinkDetail = () => {
     const navigate = useNavigate();

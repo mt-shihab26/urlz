@@ -1,5 +1,5 @@
 import { Button } from '#/components/ui/button';
-import { route } from '#/routes';
+import { route } from '#/lib/route';
 import { Link } from '@tanstack/react-router';
 
 const NotFound = () => {

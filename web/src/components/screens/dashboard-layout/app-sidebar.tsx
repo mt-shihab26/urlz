@@ -24,7 +24,7 @@ import type { ComponentProps } from 'react';
 
 import { useUser } from '#/components/providers/auth-provider';
 import { useSidebar } from '#/components/ui/sidebar';
-import { route } from '#/routes';
+import { route } from '#/lib/route';
 
 import { Link } from '@tanstack/react-router';
 import { NavMain } from './nav-main';

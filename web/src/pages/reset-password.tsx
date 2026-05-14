@@ -11,10 +11,10 @@ import {
 import { Input } from '#/components/ui/input';
 import { Label } from '#/components/ui/label';
 import { cn } from '#/lib/utils';
-import { route } from '#/routes';
+import { route } from '#/lib/route';
+import { Link } from '@tanstack/react-router';
 import { ArrowLeftIcon, CheckIcon } from 'lucide-react';
 import * as React from 'react';
-import { Link } from '@tanstack/react-router';
 
 function ResetPassword() {
     const [password, setPassword] = React.useState('');
