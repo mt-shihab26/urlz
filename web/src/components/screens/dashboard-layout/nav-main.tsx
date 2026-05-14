@@ -6,9 +6,9 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '#/components/ui/sidebar';
+import { Link, useLocation } from '@tanstack/react-router';
 import { PlusIcon } from 'lucide-react';
 import * as React from 'react';
-import { Link, useLocation } from '@tanstack/react-router';
 
 export function NavMain({
     items,

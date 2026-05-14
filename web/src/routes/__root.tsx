@@ -1,7 +1,7 @@
 import { TanStackDevtools } from '@tanstack/react-devtools';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createRootRoute, HeadContent, Outlet, Scripts } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { AuthProvider } from '#/components/providers/auth-provider';
 import { ThemeProvider } from '#/components/providers/theme-provider';
