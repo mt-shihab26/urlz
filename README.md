@@ -73,6 +73,7 @@ Stripe-powered subscription billing with three tiers:
 ### Prerequisites
 
 - Go 1.26+
+- Node.js 22+
 - Bun 1.3+
 
 ### Setup
