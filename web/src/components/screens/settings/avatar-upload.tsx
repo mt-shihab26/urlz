@@ -1,11 +1,11 @@
-import type { TUser } from '@/types/models';
+import type { TUser } from '#/types/models';
 
-import { getAvatarUrl, updateAvatar } from '@/collections/users';
-import { useForm } from '@/hooks/use-form';
-import { getInitial } from '@/lib/utils';
+import { getAvatarUrl, updateAvatar } from '#/collections/users';
+import { useForm } from '#/hooks/use-form';
+import { getInitial } from '#/lib/utils';
 import { useRef, useState } from 'react';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '#/components/ui/avatar';
 import { CameraIcon } from 'lucide-react';
 
 export const AvatarUpload = ({ user }: { user: TUser }) => {

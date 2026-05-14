@@ -1,7 +1,7 @@
-import type { TSubscription } from '@/collections/billing';
+import type { TSubscription } from '#/collections/billing';
 import type { ReactNode } from 'react';
 
-import { formatLocaleDate } from '@/lib/formats';
+import { formatLocaleDate } from '#/lib/formats';
 
 export const Row = ({ label, value }: { label: string; value: ReactNode }) => (
     <div className="flex justify-between py-1.5 text-sm border-b last:border-0">

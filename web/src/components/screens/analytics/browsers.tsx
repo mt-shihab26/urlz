@@ -1,6 +1,6 @@
-import type { TBreakdownEntry } from '@/services/analytics';
+import type { TBreakdownEntry } from '#/services/analytics';
 
-import { PctListCard } from '@/components/screens/analytics/pct-list-card';
+import { PctListCard } from '#/components/screens/analytics/pct-list-card';
 
 const COLORS: Record<string, string> = {
     Chrome: '#4285F4',

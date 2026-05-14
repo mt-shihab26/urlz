@@ -1,8 +1,8 @@
-import type { TLink } from '@/types/models';
+import type { TLink } from '#/types/models';
 
 import { useState } from 'react';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '#/components/ui/button';
 import { PencilIcon } from 'lucide-react';
 import { EditLinkDialog } from './edit-link-dialog';
 

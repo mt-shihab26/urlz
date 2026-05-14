@@ -1,4 +1,4 @@
-import type { TRange } from '@/lib/ranges';
+import type { TRange } from '#/lib/ranges';
 
 export const queryKeys = {
     invoices: ['invoices'] as const,

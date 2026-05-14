@@ -1,6 +1,6 @@
-import type { TBreakdownData } from '@/services/overview';
+import type { TBreakdownData } from '#/services/overview';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card';
 import { BreakdownList } from './breakdown-list';
 
 export const ClickBreakdown = ({ breakdown }: { breakdown: TBreakdownData }) => {

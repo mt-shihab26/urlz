@@ -1,6 +1,6 @@
-import type { TBreakdownItem } from '@/types/utils';
+import type { TBreakdownItem } from '#/types/utils';
 
-import { pb } from '@/lib/pb';
+import { pb } from '#/lib/pb';
 
 export type TClickDay = { date: string; clicks: number };
 

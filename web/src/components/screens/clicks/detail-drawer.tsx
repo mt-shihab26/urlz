@@ -5,14 +5,14 @@ import {
     DrawerDescription,
     DrawerHeader,
     DrawerTitle,
-} from '@/components/ui/drawer';
+} from '#/components/ui/drawer';
 
-import type { TClickItem } from '@/services/clicks';
+import type { TClickItem } from '#/services/clicks';
 
-import { formatDate } from '@/lib/formats';
+import { formatDate } from '#/lib/formats';
 
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
+import { Button } from '#/components/ui/button';
+import { Separator } from '#/components/ui/separator';
 import { X } from 'lucide-react';
 
 const Field = ({ label, value }: { label: string; value: string }) => {

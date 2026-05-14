@@ -1,6 +1,6 @@
-import type { TRange } from '@/lib/ranges';
+import type { TRange } from '#/lib/ranges';
 
-import { pb } from '@/lib/pb';
+import { pb } from '#/lib/pb';
 
 export type TClickItem = {
     id: string;

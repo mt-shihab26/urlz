@@ -1,4 +1,4 @@
-import type { TPlan } from '@/types/models';
+import type { TPlan } from '#/types/models';
 
 export type TPlanDef = {
     plan: TPlan;

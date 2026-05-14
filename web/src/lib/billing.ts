@@ -1,7 +1,7 @@
-import type { TSubscription } from '@/collections/billing';
-import type { TSubscriptionStatus, TUser } from '@/types/models';
+import type { TSubscription } from '#/collections/billing';
+import type { TSubscriptionStatus, TUser } from '#/types/models';
 
-import { formatLocaleDate } from '@/lib/formats';
+import { formatLocaleDate } from '#/lib/formats';
 
 export const getCurrentPlan = (user: TUser) => {
     return user.plan || 'free';

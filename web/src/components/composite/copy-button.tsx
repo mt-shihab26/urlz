@@ -1,5 +1,5 @@
-import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
-import { cn } from '@/lib/utils';
+import { useCopyToClipboard } from '#/hooks/use-copy-to-clipboard';
+import { cn } from '#/lib/utils';
 
 import { CheckIcon, CopyIcon } from 'lucide-react';
 

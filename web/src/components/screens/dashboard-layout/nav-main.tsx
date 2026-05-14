@@ -1,26 +1,24 @@
-import { CreateLinkDialog } from '@/components/screens/links/create-link-dialog';
 import {
     SidebarGroup,
     SidebarGroupContent,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
-} from '@/components/ui/sidebar';
-import { PlusIcon } from 'lucide-react';
-import * as React from 'react';
-import { Link, useLocation } from 'react-router';
+} from '#/components/ui/sidebar';
 
-export function NavMain({
-    items,
-}: {
-    items: {
-        title: string;
-        url: string;
-        icon?: React.ReactNode;
-    }[];
-}) {
+import type { TNavItem } from '#/types/utils';
+
+import { useLocation } from '@tanstack/react-router';
+import { useState } from 'react';
+
+import { CreateLinkDialog } from '#/components/screens/links/create-link-dialog';
+import { Link } from '@tanstack/react-router';
+import { PlusIcon } from 'lucide-react';
+
+export const NavMain = ({ items }: { items: TNavItem[] }) => {
     const location = useLocation();
-    const [createOpen, setCreateOpen] = React.useState(false);
+
+    const [createOpen, setCreateOpen] = useState(false);
 
     return (
         <>
@@ -42,7 +40,7 @@ export function NavMain({
                     </SidebarMenu>
                     <SidebarMenu>
                         {items.map((item) => {
-                            const isActive = location.pathname.startsWith(item.url);
+                            const isActive = !!item.url && location.pathname.startsWith(item.url);
                             return (
                                 <SidebarMenuItem key={item.title}>
                                     <SidebarMenuButton
@@ -62,4 +60,4 @@ export function NavMain({
             <CreateLinkDialog open={createOpen} onOpenChange={setCreateOpen} />
         </>
     );
-}
+};

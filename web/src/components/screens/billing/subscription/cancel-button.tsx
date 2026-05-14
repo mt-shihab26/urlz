@@ -1,6 +1,6 @@
-import { useHandleCancel } from '@/hooks/use-handle-cancel';
+import { useHandleCancel } from '#/hooks/use-handle-cancel';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '#/components/ui/button';
 
 export const CancelButton = () => {
     const { loading, handleCancel } = useHandleCancel();

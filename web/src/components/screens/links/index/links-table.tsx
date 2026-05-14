@@ -1,4 +1,4 @@
-import type { TLinkItem } from '@/services/links';
+import type { TLinkItem } from '#/services/links';
 
 import {
     Table,
@@ -7,9 +7,9 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from '@/components/ui/table';
+} from '#/components/ui/table';
 
-import { LinkRow } from '@/components/screens/links/index/link-row';
+import { LinkRow } from '#/components/screens/links/index/link-row';
 
 export const LinksTable = ({ links }: { links: TLinkItem[] }) => {
     return (

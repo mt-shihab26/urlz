@@ -1,7 +1,7 @@
 import { useState, type ComponentProps, type ReactNode } from 'react';
 
-import { FormField } from '@/components/composite/form-field';
-import { Input } from '@/components/ui/input';
+import { FormField } from '#/components/composite/form-field';
+import { Input } from '#/components/ui/input';
 import { Eye, EyeOff } from 'lucide-react';
 
 export const PasswordField = ({

@@ -1,16 +1,15 @@
-import type { TLinkItem } from '@/services/links';
+import type { TLinkItem } from '#/services/links';
 
-import { formatCode, formatDate, formatNumber } from '@/lib/formats';
-import { route } from '@/routes';
-import { useNavigate } from 'react-router';
+import { formatCode, formatDate, formatNumber } from '#/lib/formats';
+import { useNavigate } from '@tanstack/react-router';
 
-import { CopyButton } from '@/components/composite/copy-button';
-import { LinkStatusBadge } from '@/components/composite/link-status-badge';
-import { LinkDeleteButton } from '@/components/screens/links/link-delete-button';
-import { LinkEditButton } from '@/components/screens/links/link-edit-button';
-import { LinkOpenButton } from '@/components/screens/links/link-open-button';
-import { LinkToggleButton } from '@/components/screens/links/link-toggle-button';
-import { TableCell, TableRow } from '@/components/ui/table';
+import { CopyButton } from '#/components/composite/copy-button';
+import { LinkStatusBadge } from '#/components/composite/link-status-badge';
+import { LinkDeleteButton } from '#/components/screens/links/link-delete-button';
+import { LinkEditButton } from '#/components/screens/links/link-edit-button';
+import { LinkOpenButton } from '#/components/screens/links/link-open-button';
+import { LinkToggleButton } from '#/components/screens/links/link-toggle-button';
+import { TableCell, TableRow } from '#/components/ui/table';
 import { LinkSparkline } from './link-sparkline';
 
 export const LinkRow = ({ link, index }: { link: TLinkItem; index: number }) => {
@@ -22,7 +21,12 @@ export const LinkRow = ({ link, index }: { link: TLinkItem; index: number }) => 
                 {index + 1}
             </TableCell>
             <TableCell className="max-w-55">
-                <div className="cursor-pointer" onClick={() => navigate(route.linksShow(link.id))}>
+                <div
+                    className="cursor-pointer"
+                    onClick={() =>
+                        navigate({ to: '/dashboard/links/$id', params: { id: link.id } })
+                    }
+                >
                     <div className="truncate font-medium">{link.title}</div>
                     <div className="truncate font-mono text-xs text-muted-foreground">
                         {link.url}

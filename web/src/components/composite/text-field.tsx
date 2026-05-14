@@ -1,7 +1,7 @@
 import type { ComponentProps } from 'react';
 
-import { FormField } from '@/components/composite/form-field';
-import { Input } from '@/components/ui/input';
+import { FormField } from '#/components/composite/form-field';
+import { Input } from '#/components/ui/input';
 
 export const TextField = ({
     id,

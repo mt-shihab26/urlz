@@ -1,7 +1,7 @@
-import type { TSubscription } from '@/collections/billing';
-import type { TSubscriptionStatus, TUser } from '@/types/models';
+import type { TSubscription } from '#/collections/billing';
+import type { TSubscriptionStatus, TUser } from '#/types/models';
 
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '#/components/ui/badge';
 
 const STATUS_LABEL: Record<TSubscriptionStatus, string> = {
     active: 'Active',

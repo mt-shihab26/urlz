@@ -1,6 +1,6 @@
-import type { TLinkStatus } from '@/types/models';
+import type { TLinkStatus } from '#/types/models';
 
-import { cn } from '@/lib/utils';
+import { cn } from '#/lib/utils';
 
 export type TDisplayStatus = TLinkStatus | 'expired';
 

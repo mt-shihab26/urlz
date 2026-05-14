@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
-import { FieldError } from '@/components/ui/field';
-import { Label } from '@/components/ui/label';
+import { FieldError } from '#/components/ui/field';
+import { Label } from '#/components/ui/label';
 
 export const FormField = ({
     id,

@@ -1,6 +1,6 @@
-import type { TLink } from '@/types/models';
+import type { TLink } from '#/types/models';
 
-import { isLinkExpired } from '@/lib/links';
+import { isLinkExpired } from '#/lib/links';
 
 import { StatusBadge } from './status-badge';
 

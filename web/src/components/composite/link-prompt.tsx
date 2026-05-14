@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { Link, type LinkProps } from '@tanstack/react-router';
 
 export const LinkPrompt = ({
     text,
@@ -7,7 +7,7 @@ export const LinkPrompt = ({
 }: {
     text: string;
     linkText: string;
-    linkTo: string;
+    linkTo: LinkProps['to'];
 }) => {
     return (
         <div className="justify-center text-sm text-muted-foreground">

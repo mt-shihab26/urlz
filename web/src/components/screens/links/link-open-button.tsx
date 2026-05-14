@@ -1,6 +1,6 @@
-import type { TLink } from '@/types/models';
+import type { TLink } from '#/types/models';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '#/components/ui/button';
 import { ExternalLinkIcon } from 'lucide-react';
 
 export const LinkOpenButton = ({ link }: { link: TLink }) => {

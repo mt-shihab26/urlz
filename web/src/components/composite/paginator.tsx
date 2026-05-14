@@ -6,7 +6,7 @@ import {
     PaginationLink,
     PaginationNext,
     PaginationPrevious,
-} from '@/components/ui/pagination';
+} from '#/components/ui/pagination';
 
 const buildPageWindow = (current: number, total: number): (number | '...')[] => {
     if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);

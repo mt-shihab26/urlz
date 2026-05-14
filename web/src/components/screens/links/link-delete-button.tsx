@@ -8,16 +8,16 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+} from '#/components/ui/alert-dialog';
 
-import type { TLink } from '@/types/models';
+import type { TLink } from '#/types/models';
 
-import { deleteLink } from '@/collections/links';
-import { queryKeys } from '@/lib/query-keys';
-import { toastError } from '@/lib/toast';
+import { deleteLink } from '#/collections/links';
+import { queryKeys } from '#/lib/query-keys';
+import { toastError } from '#/lib/toast';
 import { useQueryClient } from '@tanstack/react-query';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '#/components/ui/button';
 import { Trash2Icon } from 'lucide-react';
 
 export const LinkDeleteButton = ({ link }: { link: TLink }) => {

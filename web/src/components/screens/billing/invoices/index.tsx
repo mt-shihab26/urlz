@@ -1,14 +1,14 @@
 import type { PaginationState } from '@tanstack/react-table';
 
-import { getInvoices } from '@/collections/billing';
-import { queryKeys } from '@/lib/query-keys';
-import { toastError } from '@/lib/toast';
+import { getInvoices } from '#/collections/billing';
+import { queryKeys } from '#/lib/query-keys';
+import { toastError } from '#/lib/toast';
 import { useQuery } from '@tanstack/react-query';
 import { getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
 import { useState } from 'react';
 import { columns } from './columns';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card';
 import { List } from './list';
 import { Loading } from './loading';
 import { Paginator } from './paginator';

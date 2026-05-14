@@ -1,15 +1,15 @@
-import type { TRange } from '@/lib/ranges';
-import type { TLink } from '@/types/models';
+import type { TRange } from '#/lib/ranges';
+import type { TLink } from '#/types/models';
 
-import { formatCode, formatDate } from '@/lib/formats';
+import { formatCode, formatDate } from '#/lib/formats';
 
-import { CopyButton } from '@/components/composite/copy-button';
-import { LinkStatusBadge } from '@/components/composite/link-status-badge';
-import { RangeTabs } from '@/components/composite/range-tabs';
-import { LinkDeleteButton } from '@/components/screens/links/link-delete-button';
-import { LinkEditButton } from '@/components/screens/links/link-edit-button';
-import { LinkOpenButton } from '@/components/screens/links/link-open-button';
-import { LinkToggleButton } from '@/components/screens/links/link-toggle-button';
+import { CopyButton } from '#/components/composite/copy-button';
+import { LinkStatusBadge } from '#/components/composite/link-status-badge';
+import { RangeTabs } from '#/components/composite/range-tabs';
+import { LinkDeleteButton } from '#/components/screens/links/link-delete-button';
+import { LinkEditButton } from '#/components/screens/links/link-edit-button';
+import { LinkOpenButton } from '#/components/screens/links/link-open-button';
+import { LinkToggleButton } from '#/components/screens/links/link-toggle-button';
 import { ChevronLeftIcon } from 'lucide-react';
 
 export const DetailHeader = ({

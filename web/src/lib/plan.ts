@@ -1,4 +1,4 @@
-import type { TPlan, TSubscriptionStatus, TUser } from '@/types/models';
+import type { TPlan, TSubscriptionStatus, TUser } from '#/types/models';
 
 const ACTIVE_STATUSES: TSubscriptionStatus[] = ['active', 'trialing'];
 

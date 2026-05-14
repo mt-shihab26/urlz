@@ -1,8 +1,8 @@
-import type { TStats } from '@/services/analytics';
+import type { TStats } from '#/services/analytics';
 
-import { formatNumber } from '@/lib/formats';
+import { formatNumber } from '#/lib/formats';
 
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '#/components/ui/card';
 import { TrendingDownIcon, TrendingUpIcon } from 'lucide-react';
 
 export const StatsCards = ({ stats }: { stats: TStats }) => {

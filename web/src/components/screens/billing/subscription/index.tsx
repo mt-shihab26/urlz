@@ -1,11 +1,11 @@
-import { getSubscription } from '@/collections/billing';
-import { useUser } from '@/components/providers/auth-provider';
-import { getCanCancel, getIsFree, getScheduledToCancel } from '@/lib/billing';
-import { queryKeys } from '@/lib/query-keys';
-import { toastError } from '@/lib/toast';
+import { getSubscription } from '#/collections/billing';
+import { useUser } from '#/components/providers/auth-provider';
+import { getCanCancel, getIsFree, getScheduledToCancel } from '#/lib/billing';
+import { queryKeys } from '#/lib/query-keys';
+import { toastError } from '#/lib/toast';
 import { useQuery } from '@tanstack/react-query';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card';
 import { CancelButton } from './cancel-button';
 import { CancelingInfo } from './canceling-info';
 import { Loading } from './loading';

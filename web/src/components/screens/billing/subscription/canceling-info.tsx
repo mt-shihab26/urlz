@@ -1,7 +1,7 @@
-import type { TSubscription } from '@/collections/billing';
-import type { TUser } from '@/types/models';
+import type { TSubscription } from '#/collections/billing';
+import type { TUser } from '#/types/models';
 
-import { getAlreadyCanceled, getCancelDate, getScheduledToCancel } from '@/lib/billing';
+import { getAlreadyCanceled, getCancelDate, getScheduledToCancel } from '#/lib/billing';
 
 export const CancelingInfo = ({
     subscription,

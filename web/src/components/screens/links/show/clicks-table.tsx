@@ -1,4 +1,4 @@
-import type { TClickRecord } from '@/services/links/show';
+import type { TClickRecord } from '#/services/links/show';
 
 import {
     Table,
@@ -7,13 +7,13 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from '@/components/ui/table';
+} from '#/components/ui/table';
 
-import { formatChartDate } from '@/lib/formats';
+import { formatChartDate } from '#/lib/formats';
 import { useEffect, useMemo, useState } from 'react';
 
-import { Paginator } from '@/components/composite/paginator';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Paginator } from '#/components/composite/paginator';
+import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card';
 
 const PAGE_SIZE = 10;
 

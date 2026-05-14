@@ -2,8 +2,8 @@ import type { ComponentProps } from 'react';
 
 import { format, isValid, parseISO } from 'date-fns';
 
-import { FormField } from '@/components/composite/form-field';
-import { Input } from '@/components/ui/input';
+import { FormField } from '#/components/composite/form-field';
+import { Input } from '#/components/ui/input';
 
 const normalizeDateValue = (value: ComponentProps<'input'>['value']) => {
     if (typeof value !== 'string') return value;

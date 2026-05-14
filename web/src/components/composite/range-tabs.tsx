@@ -1,8 +1,8 @@
-import type { TRange } from '@/lib/ranges';
+import type { TRange } from '#/lib/ranges';
 
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { ToggleGroup, ToggleGroupItem } from '#/components/ui/toggle-group';
 
-import { RANGES } from '@/lib/ranges';
+import { RANGES } from '#/lib/ranges';
 
 export const RangeTabs = ({
     range,

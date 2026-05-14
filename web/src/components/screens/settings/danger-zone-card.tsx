@@ -8,16 +8,16 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+} from '#/components/ui/alert-dialog';
 
-import { deleteAccount } from '@/collections/users';
-import { useUser } from '@/components/providers/auth-provider';
-import { useForm } from '@/hooks/use-form';
+import { deleteAccount } from '#/collections/users';
+import { useUser } from '#/components/providers/auth-provider';
+import { useForm } from '#/hooks/use-form';
 
-import { EmailField } from '@/components/composite/email-field';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Spinner } from '@/components/ui/spinner';
+import { EmailField } from '#/components/composite/email-field';
+import { Button } from '#/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card';
+import { Spinner } from '#/components/ui/spinner';
 
 export const DangerZoneCard = () => {
     const { user } = useUser();

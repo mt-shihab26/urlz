@@ -43,7 +43,7 @@ func main() {
 		se.Router.GET("/api/clicks", clicks.Handler)
 
 		se.Router.GET("/{code}", redirect.Handler)
-		sub, err := fs.Sub(web.DistFS, "dist")
+		sub, err := fs.Sub(web.DistFS, "dist/client")
 		if err != nil {
 			return err
 		}

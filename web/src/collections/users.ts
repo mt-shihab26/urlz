@@ -1,6 +1,6 @@
-import type { TUser } from '@/types/models';
+import type { TUser } from '#/types/models';
 
-import { pb } from '@/lib/pb';
+import { pb } from '#/lib/pb';
 
 export const signUp = async (name: string, email: string, password: string) => {
     await pb.collection('users').create({ name, email, password, passwordConfirm: password });
