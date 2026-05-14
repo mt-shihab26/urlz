@@ -2,7 +2,6 @@ import { defineConfig } from 'vite';
 
 import { devtools as tanstackDevtools } from '@tanstack/devtools-vite';
 import { tanstackStart } from '@tanstack/react-start/plugin/vite';
-import { nitro } from 'nitro/vite';
 
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
@@ -19,10 +18,12 @@ export default defineConfig({
             router: {
                 generatedRouteTree: 'tree.gen.ts',
             },
+            spa: {
+                enabled: true,
+            },
         }),
         react(),
         tailwindcss(),
         tanstackDevtools(),
-        nitro(),
     ],
 });
