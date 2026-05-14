@@ -21,7 +21,7 @@ export default defineConfig({
             spa: {
                 enabled: true,
                 prerender: {
-                    enabled: false,
+                    outputPath: '/index.html',
                 },
             },
         }),

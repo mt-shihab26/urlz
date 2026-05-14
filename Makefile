@@ -45,6 +45,10 @@ lint:
 	fi
 	golangci-lint run
 
+build:
+	@cd web && bun run build
+	go build -o urlz ./cmd/server/main.go
+
 # Live reload
 dev:
 	@if ! command -v air > /dev/null; then \
