@@ -62,8 +62,11 @@ Stripe-powered subscription billing with three tiers:
 | -------- | ------------------------------------------------------- |
 | Backend  | Go + [PocketBase](https://pocketbase.io)                |
 | Database | SQLite (dev) / [Turso](https://turso.tech) (production) |
-| Frontend | React 19, TypeScript, Vite                              |
+| Frontend | TypeScript, React + TanStack Start (SPA)                |
+| Routing  | TanStack Router (file-based)                            |
+| Data     | TanStack Query, TanStack Table                          |
 | Styling  | Tailwind CSS 4, shadcn/ui                               |
+| Charts   | Recharts                                                |
 | Billing  | Stripe                                                  |
 
 ---
@@ -72,9 +75,8 @@ Stripe-powered subscription billing with three tiers:
 
 ### Prerequisites
 
-- Go 1.22+
+- Go 1.26+
 - Bun 1.3+
-- Node 25.6+
 
 ### Setup
 
@@ -89,7 +91,7 @@ Installs frontend dependencies and copies `.env.example` → `.env`.
 | Variable                     | Description                                           |
 | ---------------------------- | ----------------------------------------------------- |
 | `APP_URL`                    | Public URL of the app (used for Stripe redirect URLs) |
-| `TURSO_URL`                  | Turso database URL (production)                       |
+| `TURSO_DATABASE_URL`         | Turso database URL (production)                       |
 | `TURSO_AUTH_TOKEN`           | Turso auth token (production)                         |
 | `STRIPE_SECRET_KEY`          | Stripe secret key                                     |
 | `STRIPE_PRO_PRODUCT_ID`      | Stripe product ID for the Pro plan                    |
@@ -101,11 +103,19 @@ Installs frontend dependencies and copies `.env.example` → `.env`.
 make dev
 ```
 
-Starts Go backend with hot reload (air) and Vite dev server concurrently.
+Builds the frontend once, then starts Go backend with hot reload (air) and Vite dev server concurrently.
 
 - Backend: `http://localhost:8090`
 - Frontend: `http://localhost:5173`
 - PocketBase admin: `http://localhost:8090/_/`
+
+### Build
+
+```bash
+make build
+```
+
+Builds the frontend and compiles the Go binary (`urlz`) with the frontend embedded.
 
 ### Seed Data
 
@@ -134,19 +144,28 @@ urlz/
 │   └── seed/                # Seed CLI binary
 ├── internal/
 │   ├── app/                 # PocketBase app factory
-│   ├── billing/             # Stripe checkout, subscriptions, webhooks
+│   ├── hooks/               # PocketBase record hooks (links, users)
 │   ├── redirect/            # Short-code redirect handler + click tracking
+│   ├── routes/              # Custom API route handlers (analytics, billing, clicks, links, overview)
 │   └── seed/                # Seed logic (users, links, clicks)
 ├── migrations/              # PocketBase schema migrations
+├── docs/                    # Additional documentation (e.g. Stripe setup)
 └── web/                     # React frontend (embedded into server binary)
     └── src/
-        ├── pages/           # Route-level page components
+        ├── routes/          # File-based routes (TanStack Router)
+        │   └── dashboard/
+        │       ├── _auth/   # Authenticated layout + protected pages
+        │       └── _guest/  # Unauthenticated pages (sign-in, sign-up, etc.)
         ├── components/
         │   ├── screens/     # Feature components per page
         │   ├── composite/   # Shared compound components
+        │   ├── providers/   # React context providers (auth, theme)
+        │   ├── icons/       # Custom icon components
         │   └── ui/          # Base UI primitives (shadcn)
-        ├── collections/     # PocketBase data layer
+        ├── collections/     # PocketBase data layer (users, links, billing)
+        ├── services/        # TanStack Query service hooks
         ├── hooks/           # Custom React hooks
+        ├── types/           # TypeScript model and utility types
         └── lib/             # Utilities, formatters
 ```
 
