@@ -17,7 +17,7 @@ export const refresh = async () => {
 
 export const signOut = () => {
     pb.authStore.clear();
-    window.location.reload();
+    window.location.href = '/';
 };
 
 export const getAuth = (): TUser | null => {
