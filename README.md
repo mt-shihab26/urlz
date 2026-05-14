@@ -60,10 +60,10 @@ Stripe-powered subscription billing with three tiers:
 
 | Layer    | Tech                                                    |
 | -------- | ------------------------------------------------------- |
-| Backend  | Go + [PocketBase](https://pocketbase.io)                |
 | Database | SQLite (dev) / [Turso](https://turso.tech) (production) |
+| Backend  | Go + [PocketBase](https://pocketbase.io)                |
 | Frontend | TypeScript, React + TanStack Start (SPA)                |
-| Styling  | Tailwind CSS 4, shadcn/ui                               |
+| Styling  | Tailwind CSS, shadcn/ui                               |
 | Billing  | Stripe                                                  |
 
 ---
