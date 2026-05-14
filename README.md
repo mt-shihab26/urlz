@@ -63,10 +63,7 @@ Stripe-powered subscription billing with three tiers:
 | Backend  | Go + [PocketBase](https://pocketbase.io)                |
 | Database | SQLite (dev) / [Turso](https://turso.tech) (production) |
 | Frontend | TypeScript, React + TanStack Start (SPA)                |
-| Routing  | TanStack Router (file-based)                            |
-| Data     | TanStack Query, TanStack Table                          |
 | Styling  | Tailwind CSS 4, shadcn/ui                               |
-| Charts   | Recharts                                                |
 | Billing  | Stripe                                                  |
 
 ---
