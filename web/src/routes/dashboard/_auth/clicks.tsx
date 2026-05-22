@@ -1,11 +1,10 @@
 import type { TRange } from '#/lib/ranges';
-import type { TClickItem, TResponse } from '#/services/clicks';
+import type { TClickItem } from '#/services/clicks';
 
-import { queryKeys } from '#/lib/query-keys';
+import { RANGES } from '#/lib/ranges';
 import { toastError } from '#/lib/toast';
 import { getClicksData } from '#/services/clicks';
-import { useQuery } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 
 import { RangeTabs } from '#/components/composite/range-tabs';
@@ -15,27 +14,34 @@ import { DetailDrawer } from '#/components/screens/clicks/detail-drawer';
 
 export const Route = createFileRoute('/dashboard/_auth/clicks')({
     head: () => ({ meta: [{ title: 'Clicks — urlz' }] }),
+    validateSearch: (search) => ({
+        range: (RANGES.includes(search.range as TRange) ? search.range : '30d') as TRange,
+        page: Number(search.page ?? 1),
+    }),
+    loaderDeps: ({ search }) => ({ range: search.range, page: search.page }),
+    loader: async ({ deps }) => {
+        try {
+            return await getClicksData(deps.page, deps.range);
+        } catch (e) {
+            toastError(e);
+            return null;
+        }
+    },
     component: Clicks,
 });
 
-function Clicks() {
-    const [range, setRange] = useState<TRange>('30d');
-    const [page, setPage] = useState(1);
+const Clicks = () => {
+    const { range, page } = Route.useSearch();
+    const data = Route.useLoaderData();
+    const navigate = useNavigate();
     const [selectedClick, setSelectedClick] = useState<TClickItem | null>(null);
 
-    const { data, isLoading } = useQuery<TResponse>({
-        queryKey: queryKeys.clicks(page, range),
-        queryFn: () => getClicksData(page, range),
-        throwOnError: (e) => toastError(e),
-    });
-
     const handleRangeChange = (r: TRange) => {
-        setRange(r);
-        setPage(1);
+        navigate({ search: { range: r, page: 1 } });
     };
 
     const handlePage = (p: number) => {
-        setPage(p);
+        navigate({ search: (prev) => ({ ...prev, page: p }) });
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
@@ -49,7 +55,7 @@ function Clicks() {
             <div className="p-4 lg:p-6">
                 <ClicksTable
                     result={data ?? null}
-                    loading={isLoading}
+                    loading={false}
                     page={page}
                     onPage={handlePage}
                     onClickRow={setSelectedClick}
@@ -62,4 +68,4 @@ function Clicks() {
             />
         </>
     );
-}
+};

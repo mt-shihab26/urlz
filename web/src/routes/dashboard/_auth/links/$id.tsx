@@ -1,12 +1,9 @@
 import type { TRange } from '#/lib/ranges';
-import type { TResponse } from '#/services/links/show';
 
-import { queryKeys } from '#/lib/query-keys';
+import { RANGES } from '#/lib/ranges';
 import { toastError } from '#/lib/toast';
 import { getLinkShowData } from '#/services/links/show';
-import { useQuery } from '@tanstack/react-query';
-import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router';
-import { useState } from 'react';
+import { createFileRoute, useNavigate, useRouter, useRouterState } from '@tanstack/react-router';
 
 import { RefreshButton } from '#/components/composite/refresh-button';
 import { Browsers } from '#/components/screens/analytics/browsers';
@@ -24,26 +21,36 @@ import { Button } from '#/components/ui/button';
 
 export const Route = createFileRoute('/dashboard/_auth/links/$id')({
     head: () => ({ meta: [{ title: 'Link — urlz' }] }),
+    validateSearch: (search) => ({
+        range: (RANGES.includes(search.range as TRange) ? search.range : '30d') as TRange,
+    }),
+    loaderDeps: ({ search }) => ({ range: search.range }),
+    loader: async ({ params, deps }) => {
+        try {
+            return await getLinkShowData(params.id, deps.range);
+        } catch (e) {
+            toastError(e);
+            return null;
+        }
+    },
+    pendingComponent: Loading,
     component: LinkDetail,
 });
 
-function LinkDetail() {
+const LinkDetail = () => {
     const navigate = useNavigate();
-    const { id } = useParams({ strict: false });
-    const [range, setRange] = useState<TRange>('30d');
+    const { id } = Route.useParams();
+    const { range } = Route.useSearch();
+    const data = Route.useLoaderData();
+    const router = useRouter();
+    const isRefreshing = useRouterState({ select: (s) => s.isLoading });
 
-    const { data, isLoading, isFetching, refetch } = useQuery<TResponse>({
-        queryKey: queryKeys.links.show(id!, range),
-        queryFn: () => getLinkShowData(id!, range),
-        enabled: !!id,
-        throwOnError: (e) => toastError(e),
-    });
+    const setRange = (r: TRange) =>
+        navigate({ to: '/dashboard/links/$id', params: { id }, search: { range: r } });
 
     return (
         <>
-            {isLoading ? (
-                <Loading />
-            ) : !data ? (
+            {!data ? (
                 <div className="flex flex-col items-center justify-center gap-4 p-12 text-center">
                     <p className="text-muted-foreground">Link not found.</p>
                     <Button variant="outline" onClick={() => navigate({ to: '/dashboard/links' })}>
@@ -60,9 +67,8 @@ function LinkDetail() {
                     />
                     <div className="flex items-center justify-end px-4 pt-3 lg:px-6">
                         <RefreshButton
-                            onClick={refetch}
-                            isFetching={isFetching}
-                            isLoading={isLoading}
+                            onClick={() => router.invalidate()}
+                            isLoading={isRefreshing}
                         />
                     </div>
                     <div className="flex flex-col gap-6 p-4 lg:p-6">
@@ -82,4 +88,4 @@ function LinkDetail() {
             )}
         </>
     );
-}
+};

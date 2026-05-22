@@ -8,35 +8,30 @@ import { Button } from '#/components/ui/button';
 import { Toaster } from '#/components/ui/sonner';
 import { TooltipProvider } from '#/components/ui/tooltip';
 import { TanStackDevtools } from '@tanstack/react-devtools';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Link, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 
-const queryClient = new QueryClient();
-
 export const Route = createRootRoute({
     component: () => (
-        <QueryClientProvider client={queryClient}>
-            <ThemeProvider>
-                <AuthProvider>
-                    <TooltipProvider>
-                        <Outlet />
-                        <Toaster />
-                        <TanStackDevtools
-                            config={{
-                                position: 'bottom-right',
-                            }}
-                            plugins={[
-                                {
-                                    name: 'TanStack Router',
-                                    render: <TanStackRouterDevtoolsPanel />,
-                                },
-                            ]}
-                        />
-                    </TooltipProvider>
-                </AuthProvider>
-            </ThemeProvider>
-        </QueryClientProvider>
+        <ThemeProvider>
+            <AuthProvider>
+                <TooltipProvider>
+                    <Outlet />
+                    <Toaster />
+                    <TanStackDevtools
+                        config={{
+                            position: 'bottom-right',
+                        }}
+                        plugins={[
+                            {
+                                name: 'TanStack Router',
+                                render: <TanStackRouterDevtoolsPanel />,
+                            },
+                        ]}
+                    />
+                </TooltipProvider>
+            </AuthProvider>
+        </ThemeProvider>
     ),
     notFoundComponent: () => (
         <div className="flex min-h-svh flex-col items-center justify-center gap-6 text-center">

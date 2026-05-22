@@ -3,10 +3,9 @@ import { useUser } from '#/components/providers/auth-provider';
 import { useForm } from '#/hooks/use-form';
 import { generateRandomSlug } from '#/lib/links';
 import { canUseFeature, getActivePlan } from '#/lib/plan';
-import { queryKeys } from '#/lib/query-keys';
 import { toastError } from '#/lib/toast';
 import { codePrefix } from '#/lib/utils';
-import { useQueryClient } from '@tanstack/react-query';
+import { useRouter } from '@tanstack/react-router';
 import { useState } from 'react';
 
 import { DateField } from '#/components/composite/date-field';
@@ -36,7 +35,7 @@ export const CreateLinkDialog = ({
         expiry: '',
     });
 
-    const queryClient = useQueryClient();
+    const router = useRouter();
     const [limitReached, setLimitReached] = useState(false);
 
     const handleSubmit = async () => {
@@ -50,7 +49,7 @@ export const CreateLinkDialog = ({
                 code: data.code || generateRandomSlug(),
                 expires: data.expiry || undefined,
             });
-            queryClient.invalidateQueries({ queryKey: queryKeys.links.index });
+            router.invalidate();
             handleClose();
         } catch (e: any) {
             const msg: string = e?.message ?? '';

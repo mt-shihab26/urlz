@@ -1,3 +1,7 @@
+import type { TInvoice, TSubscription } from '#/collections/billing';
+
+import { getInvoices, getSubscription } from '#/collections/billing';
+import { toastError } from '#/lib/toast';
 import { createFileRoute } from '@tanstack/react-router';
 
 import { Header } from '#/components/composite/site-header';
@@ -7,18 +11,35 @@ import { Subscription } from '#/components/screens/billing/subscription';
 
 export const Route = createFileRoute('/dashboard/_auth/billing')({
     head: () => ({ meta: [{ title: 'Billing — urlz' }] }),
+    loader: async () => {
+        const [subscriptionResult, invoicesResult] = await Promise.allSettled([
+            getSubscription(),
+            getInvoices(),
+        ]);
+        const subscription: TSubscription | null =
+            subscriptionResult.status === 'fulfilled' ? subscriptionResult.value : null;
+        const invoices: TInvoice[] =
+            invoicesResult.status === 'fulfilled' ? invoicesResult.value : [];
+
+        if (subscriptionResult.status === 'rejected') toastError(subscriptionResult.reason);
+        if (invoicesResult.status === 'rejected') toastError(invoicesResult.reason);
+
+        return { subscription, invoices };
+    },
     component: Billing,
 });
 
-function Billing() {
+const Billing = () => {
+    const { subscription, invoices } = Route.useLoaderData();
+
     return (
         <>
             <Header title="Billing" description="Manage your subscription and plan" />
             <div className="flex flex-col gap-6 p-4 lg:p-6 max-w-4xl">
                 <Plans />
-                <Subscription />
-                <Invoices />
+                <Subscription subscription={subscription} />
+                <Invoices invoices={invoices} />
             </div>
         </>
     );
-}
+};

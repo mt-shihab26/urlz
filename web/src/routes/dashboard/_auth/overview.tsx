@@ -1,9 +1,4 @@
-import type { TResponse } from '#/services/overview';
-
-import { queryKeys } from '#/lib/query-keys';
-import { toastError } from '#/lib/toast';
 import { getOverviewData } from '#/services/overview';
-import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 
 import { RefreshButton } from '#/components/composite/refresh-button';
@@ -15,31 +10,30 @@ import { TopLinks } from '#/components/screens/overview/top-links';
 
 export const Route = createFileRoute('/dashboard/_auth/overview')({
     head: () => ({ meta: [{ title: 'Overview — urlz' }] }),
+    loader: () => getOverviewData(),
+    pendingComponent: () => (
+        <>
+            <Header title="Overview" description="All your links at a glance" />
+            <div className="flex flex-col gap-6 p-4 lg:p-6">
+                <Loading />
+            </div>
+        </>
+    ),
     component: Overview,
 });
 
 function Overview() {
-    const { data, isLoading, isFetching, refetch } = useQuery<TResponse>({
-        queryKey: queryKeys.overview,
-        queryFn: getOverviewData,
-        throwOnError: (e) => toastError(e),
-    });
+    const data = Route.useLoaderData();
 
     return (
         <>
             <Header
                 title="Overview"
                 description="All your links at a glance"
-                action={
-                    <RefreshButton
-                        onClick={refetch}
-                        isFetching={isFetching}
-                        isLoading={isLoading}
-                    />
-                }
+                action={<RefreshButton />}
             />
             <div className="flex flex-col gap-6 p-4 lg:p-6">
-                {isLoading || !data ? (
+                {!data ? (
                     <Loading />
                 ) : (
                     <>

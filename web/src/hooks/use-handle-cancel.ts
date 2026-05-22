@@ -1,12 +1,11 @@
 import { createCancelUrl, syncCancelReturn } from '#/collections/billing';
 import { refresh } from '#/collections/users';
-import { queryKeys } from '#/lib/query-keys';
 import { toastError, toastSuccess } from '#/lib/toast';
-import { useQueryClient } from '@tanstack/react-query';
+import { useRouter } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 
 export const useHandleCancel = () => {
-    const queryClient = useQueryClient();
+    const router = useRouter();
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
@@ -15,7 +14,7 @@ export const useHandleCancel = () => {
             window.history.replaceState({}, '', window.location.pathname);
             syncCancelReturn()
                 .then(() => refresh())
-                .then(() => queryClient.invalidateQueries({ queryKey: queryKeys.subscription }))
+                .then(() => router.invalidate())
                 .then(() => toastSuccess('Subscription cancelled.'))
                 .catch(() => toastError('Failed to sync cancellation. Contact support.'));
         }

@@ -1,14 +1,18 @@
 import type { TRange } from '#/lib/ranges';
-import type { TAnalyticsResponse } from '#/services/analytics';
 
+import { getAuth } from '#/collections/users';
 import { useUser } from '#/components/providers/auth-provider';
 import { canUseFeature, getActivePlan } from '#/lib/plan';
-import { queryKeys } from '#/lib/query-keys';
+import { RANGES } from '#/lib/ranges';
 import { toastError } from '#/lib/toast';
 import { getAnalyticsData } from '#/services/analytics';
-import { useQuery } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
-import { useState } from 'react';
+import {
+    createFileRoute,
+    Link,
+    useNavigate,
+    useRouter,
+    useRouterState,
+} from '@tanstack/react-router';
 
 import { RangeTabs } from '#/components/composite/range-tabs';
 import { RefreshButton } from '#/components/composite/refresh-button';
@@ -25,24 +29,44 @@ import { OperatingSystems } from '#/components/screens/analytics/operating-syste
 import { Referrers } from '#/components/screens/analytics/referrers';
 import { StatsCards } from '#/components/screens/analytics/stats-cards';
 import { TopPerforming } from '#/components/screens/analytics/top-performing';
-import { Link } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/dashboard/_auth/analytics')({
     head: () => ({ meta: [{ title: 'Analytics — urlz' }] }),
+    validateSearch: (search) => ({
+        range: (RANGES.includes(search.range as TRange) ? search.range : '30d') as TRange,
+    }),
+    loaderDeps: ({ search }) => ({ range: search.range }),
+    loader: async ({ deps }) => {
+        const user = getAuth();
+        const hasFullAnalytics = canUseFeature(getActivePlan(user), 'analytics');
+        try {
+            return await getAnalyticsData(deps.range, hasFullAnalytics);
+        } catch (e) {
+            toastError(e);
+            return null;
+        }
+    },
+    pendingComponent: () => (
+        <>
+            <Header title="Analytics" description="Aggregated traffic across all links" />
+            <div className="flex flex-col gap-6 p-4 lg:p-6">
+                <Loading />
+            </div>
+        </>
+    ),
     component: Analytics,
 });
 
-function Analytics() {
+const Analytics = () => {
     const { user } = useUser();
     const hasFullAnalytics = canUseFeature(getActivePlan(user), 'analytics');
+    const { range } = Route.useSearch();
+    const data = Route.useLoaderData();
+    const navigate = useNavigate();
+    const router = useRouter();
+    const isRefreshing = useRouterState({ select: (s) => s.isLoading });
 
-    const [range, setRange] = useState<TRange>('30d');
-
-    const { data, isLoading, isFetching, refetch } = useQuery<TAnalyticsResponse>({
-        queryKey: queryKeys.analytics(range, hasFullAnalytics),
-        queryFn: () => getAnalyticsData(range, hasFullAnalytics),
-        throwOnError: (e) => toastError(e),
-    });
+    const setRange = (r: TRange) => navigate({ search: { range: r } });
 
     return (
         <>
@@ -53,15 +77,14 @@ function Analytics() {
                     <div className="flex items-center gap-2">
                         <RangeTabs range={range} onRange={setRange} />
                         <RefreshButton
-                            onClick={refetch}
-                            isFetching={isFetching}
-                            isLoading={isLoading}
+                            onClick={() => router.invalidate()}
+                            isLoading={isRefreshing}
                         />
                     </div>
                 }
             />
             <div className="flex flex-col gap-6 p-4 lg:p-6">
-                {isLoading || !data ? (
+                {!data ? (
                     <Loading />
                 ) : (
                     <>
@@ -105,4 +128,4 @@ function Analytics() {
             </div>
         </>
     );
-}
+};

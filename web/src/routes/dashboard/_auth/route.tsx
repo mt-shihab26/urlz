@@ -10,11 +10,12 @@ export const Route = createFileRoute('/dashboard/_auth')({
     beforeLoad: () => {
         if (!getAuth()) throw redirect({ to: '/dashboard/sign-in' });
     },
-    component: AuthLayout,
+    component: RouteComponent,
 });
 
-function AuthLayout() {
+function RouteComponent() {
     const { user } = useAuth();
+
     if (!user) return null;
 
     return (

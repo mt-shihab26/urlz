@@ -1,13 +1,11 @@
 import { createUncancelUrl } from '#/collections/billing';
 import { refresh } from '#/collections/users';
-import { queryKeys } from '#/lib/query-keys';
 import { toastError, toastSuccess } from '#/lib/toast';
-import { useQueryClient } from '@tanstack/react-query';
+import { useRouter } from '@tanstack/react-router';
 import { useState } from 'react';
 
 export const useHandleUncancel = () => {
-    const queryClient = useQueryClient();
-
+    const router = useRouter();
     const [loading, setLoading] = useState<boolean>(false);
 
     const handleUncancel = async () => {
@@ -15,7 +13,7 @@ export const useHandleUncancel = () => {
         try {
             await createUncancelUrl();
             await refresh();
-            await queryClient.invalidateQueries({ queryKey: queryKeys.subscription });
+            await router.invalidate();
             toastSuccess('Subscription reactivated.');
         } catch (e: any) {
             toastError(e?.message ?? 'Failed to reactivate subscription');

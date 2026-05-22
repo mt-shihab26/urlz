@@ -10,8 +10,8 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DashboardGuestRouteImport } from './routes/dashboard/_guest'
-import { Route as DashboardAuthRouteImport } from './routes/dashboard/_auth'
+import { Route as DashboardGuestRouteRouteImport } from './routes/dashboard/_guest/route'
+import { Route as DashboardAuthRouteRouteImport } from './routes/dashboard/_auth/route'
 import { Route as DashboardGuestSignUpRouteImport } from './routes/dashboard/_guest/sign-up'
 import { Route as DashboardGuestSignInRouteImport } from './routes/dashboard/_guest/sign-in'
 import { Route as DashboardGuestResetPasswordRouteImport } from './routes/dashboard/_guest/reset-password'
@@ -29,12 +29,12 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardGuestRoute = DashboardGuestRouteImport.update({
+const DashboardGuestRouteRoute = DashboardGuestRouteRouteImport.update({
   id: '/dashboard/_guest',
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardAuthRoute = DashboardAuthRouteImport.update({
+const DashboardAuthRouteRoute = DashboardAuthRouteRouteImport.update({
   id: '/dashboard/_auth',
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
@@ -42,64 +42,64 @@ const DashboardAuthRoute = DashboardAuthRouteImport.update({
 const DashboardGuestSignUpRoute = DashboardGuestSignUpRouteImport.update({
   id: '/sign-up',
   path: '/sign-up',
-  getParentRoute: () => DashboardGuestRoute,
+  getParentRoute: () => DashboardGuestRouteRoute,
 } as any)
 const DashboardGuestSignInRoute = DashboardGuestSignInRouteImport.update({
   id: '/sign-in',
   path: '/sign-in',
-  getParentRoute: () => DashboardGuestRoute,
+  getParentRoute: () => DashboardGuestRouteRoute,
 } as any)
 const DashboardGuestResetPasswordRoute =
   DashboardGuestResetPasswordRouteImport.update({
     id: '/reset-password',
     path: '/reset-password',
-    getParentRoute: () => DashboardGuestRoute,
+    getParentRoute: () => DashboardGuestRouteRoute,
   } as any)
 const DashboardGuestForgotPasswordRoute =
   DashboardGuestForgotPasswordRouteImport.update({
     id: '/forgot-password',
     path: '/forgot-password',
-    getParentRoute: () => DashboardGuestRoute,
+    getParentRoute: () => DashboardGuestRouteRoute,
   } as any)
 const DashboardAuthSettingsRoute = DashboardAuthSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
-  getParentRoute: () => DashboardAuthRoute,
+  getParentRoute: () => DashboardAuthRouteRoute,
 } as any)
 const DashboardAuthOverviewRoute = DashboardAuthOverviewRouteImport.update({
   id: '/overview',
   path: '/overview',
-  getParentRoute: () => DashboardAuthRoute,
+  getParentRoute: () => DashboardAuthRouteRoute,
 } as any)
 const DashboardAuthClicksRoute = DashboardAuthClicksRouteImport.update({
   id: '/clicks',
   path: '/clicks',
-  getParentRoute: () => DashboardAuthRoute,
+  getParentRoute: () => DashboardAuthRouteRoute,
 } as any)
 const DashboardAuthBillingRoute = DashboardAuthBillingRouteImport.update({
   id: '/billing',
   path: '/billing',
-  getParentRoute: () => DashboardAuthRoute,
+  getParentRoute: () => DashboardAuthRouteRoute,
 } as any)
 const DashboardAuthAnalyticsRoute = DashboardAuthAnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
-  getParentRoute: () => DashboardAuthRoute,
+  getParentRoute: () => DashboardAuthRouteRoute,
 } as any)
 const DashboardAuthLinksIndexRoute = DashboardAuthLinksIndexRouteImport.update({
   id: '/links/',
   path: '/links/',
-  getParentRoute: () => DashboardAuthRoute,
+  getParentRoute: () => DashboardAuthRouteRoute,
 } as any)
 const DashboardAuthLinksIdRoute = DashboardAuthLinksIdRouteImport.update({
   id: '/links/$id',
   path: '/links/$id',
-  getParentRoute: () => DashboardAuthRoute,
+  getParentRoute: () => DashboardAuthRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardGuestRouteWithChildren
+  '/dashboard': typeof DashboardGuestRouteRouteWithChildren
   '/dashboard/analytics': typeof DashboardAuthAnalyticsRoute
   '/dashboard/billing': typeof DashboardAuthBillingRoute
   '/dashboard/clicks': typeof DashboardAuthClicksRoute
@@ -114,7 +114,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardGuestRouteWithChildren
+  '/dashboard': typeof DashboardGuestRouteRouteWithChildren
   '/dashboard/analytics': typeof DashboardAuthAnalyticsRoute
   '/dashboard/billing': typeof DashboardAuthBillingRoute
   '/dashboard/clicks': typeof DashboardAuthClicksRoute
@@ -130,8 +130,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/dashboard/_auth': typeof DashboardAuthRouteWithChildren
-  '/dashboard/_guest': typeof DashboardGuestRouteWithChildren
+  '/dashboard/_auth': typeof DashboardAuthRouteRouteWithChildren
+  '/dashboard/_guest': typeof DashboardGuestRouteRouteWithChildren
   '/dashboard/_auth/analytics': typeof DashboardAuthAnalyticsRoute
   '/dashboard/_auth/billing': typeof DashboardAuthBillingRoute
   '/dashboard/_auth/clicks': typeof DashboardAuthClicksRoute
@@ -195,8 +195,8 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DashboardAuthRoute: typeof DashboardAuthRouteWithChildren
-  DashboardGuestRoute: typeof DashboardGuestRouteWithChildren
+  DashboardAuthRouteRoute: typeof DashboardAuthRouteRouteWithChildren
+  DashboardGuestRouteRoute: typeof DashboardGuestRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -212,14 +212,14 @@ declare module '@tanstack/react-router' {
       id: '/dashboard/_guest'
       path: '/dashboard'
       fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardGuestRouteImport
+      preLoaderRoute: typeof DashboardGuestRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/_auth': {
       id: '/dashboard/_auth'
       path: '/dashboard'
       fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardAuthRouteImport
+      preLoaderRoute: typeof DashboardAuthRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/_guest/sign-up': {
@@ -227,82 +227,82 @@ declare module '@tanstack/react-router' {
       path: '/sign-up'
       fullPath: '/dashboard/sign-up'
       preLoaderRoute: typeof DashboardGuestSignUpRouteImport
-      parentRoute: typeof DashboardGuestRoute
+      parentRoute: typeof DashboardGuestRouteRoute
     }
     '/dashboard/_guest/sign-in': {
       id: '/dashboard/_guest/sign-in'
       path: '/sign-in'
       fullPath: '/dashboard/sign-in'
       preLoaderRoute: typeof DashboardGuestSignInRouteImport
-      parentRoute: typeof DashboardGuestRoute
+      parentRoute: typeof DashboardGuestRouteRoute
     }
     '/dashboard/_guest/reset-password': {
       id: '/dashboard/_guest/reset-password'
       path: '/reset-password'
       fullPath: '/dashboard/reset-password'
       preLoaderRoute: typeof DashboardGuestResetPasswordRouteImport
-      parentRoute: typeof DashboardGuestRoute
+      parentRoute: typeof DashboardGuestRouteRoute
     }
     '/dashboard/_guest/forgot-password': {
       id: '/dashboard/_guest/forgot-password'
       path: '/forgot-password'
       fullPath: '/dashboard/forgot-password'
       preLoaderRoute: typeof DashboardGuestForgotPasswordRouteImport
-      parentRoute: typeof DashboardGuestRoute
+      parentRoute: typeof DashboardGuestRouteRoute
     }
     '/dashboard/_auth/settings': {
       id: '/dashboard/_auth/settings'
       path: '/settings'
       fullPath: '/dashboard/settings'
       preLoaderRoute: typeof DashboardAuthSettingsRouteImport
-      parentRoute: typeof DashboardAuthRoute
+      parentRoute: typeof DashboardAuthRouteRoute
     }
     '/dashboard/_auth/overview': {
       id: '/dashboard/_auth/overview'
       path: '/overview'
       fullPath: '/dashboard/overview'
       preLoaderRoute: typeof DashboardAuthOverviewRouteImport
-      parentRoute: typeof DashboardAuthRoute
+      parentRoute: typeof DashboardAuthRouteRoute
     }
     '/dashboard/_auth/clicks': {
       id: '/dashboard/_auth/clicks'
       path: '/clicks'
       fullPath: '/dashboard/clicks'
       preLoaderRoute: typeof DashboardAuthClicksRouteImport
-      parentRoute: typeof DashboardAuthRoute
+      parentRoute: typeof DashboardAuthRouteRoute
     }
     '/dashboard/_auth/billing': {
       id: '/dashboard/_auth/billing'
       path: '/billing'
       fullPath: '/dashboard/billing'
       preLoaderRoute: typeof DashboardAuthBillingRouteImport
-      parentRoute: typeof DashboardAuthRoute
+      parentRoute: typeof DashboardAuthRouteRoute
     }
     '/dashboard/_auth/analytics': {
       id: '/dashboard/_auth/analytics'
       path: '/analytics'
       fullPath: '/dashboard/analytics'
       preLoaderRoute: typeof DashboardAuthAnalyticsRouteImport
-      parentRoute: typeof DashboardAuthRoute
+      parentRoute: typeof DashboardAuthRouteRoute
     }
     '/dashboard/_auth/links/': {
       id: '/dashboard/_auth/links/'
       path: '/links'
       fullPath: '/dashboard/links/'
       preLoaderRoute: typeof DashboardAuthLinksIndexRouteImport
-      parentRoute: typeof DashboardAuthRoute
+      parentRoute: typeof DashboardAuthRouteRoute
     }
     '/dashboard/_auth/links/$id': {
       id: '/dashboard/_auth/links/$id'
       path: '/links/$id'
       fullPath: '/dashboard/links/$id'
       preLoaderRoute: typeof DashboardAuthLinksIdRouteImport
-      parentRoute: typeof DashboardAuthRoute
+      parentRoute: typeof DashboardAuthRouteRoute
     }
   }
 }
 
-interface DashboardAuthRouteChildren {
+interface DashboardAuthRouteRouteChildren {
   DashboardAuthAnalyticsRoute: typeof DashboardAuthAnalyticsRoute
   DashboardAuthBillingRoute: typeof DashboardAuthBillingRoute
   DashboardAuthClicksRoute: typeof DashboardAuthClicksRoute
@@ -312,7 +312,7 @@ interface DashboardAuthRouteChildren {
   DashboardAuthLinksIndexRoute: typeof DashboardAuthLinksIndexRoute
 }
 
-const DashboardAuthRouteChildren: DashboardAuthRouteChildren = {
+const DashboardAuthRouteRouteChildren: DashboardAuthRouteRouteChildren = {
   DashboardAuthAnalyticsRoute: DashboardAuthAnalyticsRoute,
   DashboardAuthBillingRoute: DashboardAuthBillingRoute,
   DashboardAuthClicksRoute: DashboardAuthClicksRoute,
@@ -322,32 +322,30 @@ const DashboardAuthRouteChildren: DashboardAuthRouteChildren = {
   DashboardAuthLinksIndexRoute: DashboardAuthLinksIndexRoute,
 }
 
-const DashboardAuthRouteWithChildren = DashboardAuthRoute._addFileChildren(
-  DashboardAuthRouteChildren,
-)
+const DashboardAuthRouteRouteWithChildren =
+  DashboardAuthRouteRoute._addFileChildren(DashboardAuthRouteRouteChildren)
 
-interface DashboardGuestRouteChildren {
+interface DashboardGuestRouteRouteChildren {
   DashboardGuestForgotPasswordRoute: typeof DashboardGuestForgotPasswordRoute
   DashboardGuestResetPasswordRoute: typeof DashboardGuestResetPasswordRoute
   DashboardGuestSignInRoute: typeof DashboardGuestSignInRoute
   DashboardGuestSignUpRoute: typeof DashboardGuestSignUpRoute
 }
 
-const DashboardGuestRouteChildren: DashboardGuestRouteChildren = {
+const DashboardGuestRouteRouteChildren: DashboardGuestRouteRouteChildren = {
   DashboardGuestForgotPasswordRoute: DashboardGuestForgotPasswordRoute,
   DashboardGuestResetPasswordRoute: DashboardGuestResetPasswordRoute,
   DashboardGuestSignInRoute: DashboardGuestSignInRoute,
   DashboardGuestSignUpRoute: DashboardGuestSignUpRoute,
 }
 
-const DashboardGuestRouteWithChildren = DashboardGuestRoute._addFileChildren(
-  DashboardGuestRouteChildren,
-)
+const DashboardGuestRouteRouteWithChildren =
+  DashboardGuestRouteRoute._addFileChildren(DashboardGuestRouteRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DashboardAuthRoute: DashboardAuthRouteWithChildren,
-  DashboardGuestRoute: DashboardGuestRouteWithChildren,
+  DashboardAuthRouteRoute: DashboardAuthRouteRouteWithChildren,
+  DashboardGuestRouteRoute: DashboardGuestRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

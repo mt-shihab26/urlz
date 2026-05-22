@@ -7,6 +7,7 @@ export const getRouter = () => {
         scrollRestoration: true,
         defaultPreload: 'intent',
         defaultPreloadStaleTime: 0,
+        defaultStaleTime: Infinity,
     });
 };
 

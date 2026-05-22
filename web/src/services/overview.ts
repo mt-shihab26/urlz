@@ -1,6 +1,7 @@
 import type { TBreakdownItem } from '#/types/utils';
 
 import { pb } from '#/lib/pb';
+import { toastError } from '#/lib/toast';
 
 export type TClickDay = { date: string; clicks: number };
 
@@ -37,10 +38,11 @@ export type TResponse = {
     top_links: TTopLink[];
 };
 
-export const getOverviewData = async (): Promise<TResponse> => {
+export const getOverviewData = async (): Promise<TResponse | null> => {
     try {
         return await pb.send<TResponse>('/api/overview', { method: 'GET' });
     } catch (e: any) {
-        throw new Error(e?.message || 'Failed to load overview data');
+        toastError(e?.message || 'Failed to load overview data');
+        return null;
     }
 };
