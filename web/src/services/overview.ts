@@ -38,11 +38,16 @@ export type TResponse = {
     top_links: TTopLink[];
 };
 
-export const getOverviewData = async (): Promise<TResponse | null> => {
+export const getOverviewData = async (): Promise<TResponse> => {
+    const err = new Error('Failed to load overview data');
+    toastError(err);
+    throw err;
+
     try {
         return await pb.send<TResponse>('/api/overview', { method: 'GET' });
     } catch (e: any) {
-        toastError(e?.message || 'Failed to load overview data');
-        return null;
+        const err = new Error(e?.message || 'Failed to load overview data');
+        toastError(err);
+        throw err;
     }
 };
