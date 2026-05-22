@@ -8,11 +8,13 @@ import { Button } from '#/components/ui/button';
 import { Toaster } from '#/components/ui/sonner';
 import { TooltipProvider } from '#/components/ui/tooltip';
 import { TanStackDevtools } from '@tanstack/react-devtools';
-import { Link, Outlet } from '@tanstack/react-router';
+import { HeadContent, Link, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 
 export const Route = createRootRoute({
     component: () => (
+        <>
+        <HeadContent />
         <ThemeProvider>
             <AuthProvider>
                 <TooltipProvider>
@@ -32,6 +34,7 @@ export const Route = createRootRoute({
                 </TooltipProvider>
             </AuthProvider>
         </ThemeProvider>
+        </>
     ),
     notFoundComponent: () => (
         <div className="flex min-h-svh flex-col items-center justify-center gap-6 text-center">

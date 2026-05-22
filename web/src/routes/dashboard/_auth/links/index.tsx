@@ -64,14 +64,13 @@ function Layout({
 
 function RouteComponent() {
     const data = Route.useLoaderData();
-    const { filter = 'all', search = '' } = Route.useSearch();
+    const { filter = 'all', search } = Route.useSearch();
     const navigate = Route.useNavigate();
 
-    const setSearch = (s: string) =>
-        navigate({ search: (prev) => ({ ...prev, search: s || undefined }) });
+    const setSearch = (search: string) =>
+        navigate({ search: (prev) => ({ ...prev, search: search }) });
 
-    const setFilter = (f: TFilter) =>
-        navigate({ search: (prev) => ({ ...prev, filter: f === 'all' ? undefined : f }) });
+    const setFilter = (filter: TFilter) => navigate({ search: (prev) => ({ ...prev, filter }) });
 
     const links = data.links ?? [];
 
