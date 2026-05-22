@@ -1,6 +1,7 @@
 import {
     ChartBarIcon,
     CreditCardIcon,
+    GithubIcon,
     LayoutDashboardIcon,
     LinkIcon,
     MousePointerClickIcon,
@@ -86,8 +87,38 @@ export const AppSidebar = (props: ComponentProps<typeof Sidebar>) => {
                 <NavMain items={navMain} />
             </SidebarContent>
             <SidebarFooter className="gap-2">
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton
+                            render={
+                                <a
+                                    href="https://github.com/mt-shihab26/urlz"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                />
+                            }
+                        >
+                            <GithubIcon className="size-5" />
+                            <span className="group-data-[collapsible=icon]:hidden">GitHub</span>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </SidebarMenu>
                 <NavUser user={user} />
                 <SidebarMenu>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton
+                            render={
+                                <a
+                                    href="https://github.com/mt-shihab26/urlz"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                />
+                            }
+                        >
+                            <GithubIcon className="size-5" />
+                            <span className="group-data-[collapsible=icon]:hidden">GitHub</span>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
                     <SidebarMenuItem>
                         <SidebarMenuButton
                             size="lg"
