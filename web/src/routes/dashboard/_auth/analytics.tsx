@@ -30,10 +30,9 @@ export const Route = createFileRoute('/dashboard/_auth/analytics')({
     loaderDeps: ({ search }) => ({ range: search.range }),
     loader: async ({ deps }) => {
         const hasFullAnalytics = canUseFeature(getActivePlan(getAuth()), 'analytics');
-        const data = await getAnalyticsData(deps.range, hasFullAnalytics);
         return {
             hasFullAnalytics,
-            data,
+            data: await getAnalyticsData(deps.range, hasFullAnalytics),
         };
     },
     pendingComponent: () => (

@@ -5,7 +5,10 @@ import { RefreshCwIcon } from 'lucide-react';
 
 export const RefreshButton = () => {
     const router = useRouter();
-    const isRefreshing = useRouterState({ select: (s) => s.isLoading });
+
+    const isRefreshing = useRouterState({
+        select: (s) => s.matches.some((m) => m.isFetching),
+    });
 
     return (
         <Button
