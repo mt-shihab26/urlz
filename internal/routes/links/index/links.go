@@ -1,6 +1,10 @@
 package index
 
-import "github.com/pocketbase/dbx"
+import (
+	"fmt"
+
+	"github.com/pocketbase/dbx"
+)
 
 type linkItem struct {
 	ID          string     `json:"id"`
@@ -28,13 +32,29 @@ type linkRow struct {
 	Expires string `db:"expires"`
 }
 
-func fetchLinkRows(db dbx.Builder, uid string) []linkRow {
+func fetchLinkRows(db dbx.Builder, uid, filter, search string) []linkRow {
+	where := "user = {:u}"
+	params := dbx.Params{"u": uid}
+
+	switch filter {
+	case "active", "disabled":
+		where += " AND status = {:status}"
+		params["status"] = filter
+	case "expired":
+		where += " AND expires != '' AND expires < datetime('now')"
+	}
+
+	if search != "" {
+		where += " AND (url LIKE {:search} OR title LIKE {:search} OR code LIKE {:search})"
+		params["search"] = fmt.Sprintf("%%%s%%", search)
+	}
+
 	var rows []linkRow
-	_ = db.NewQuery(`
+	_ = db.NewQuery(fmt.Sprintf(`
 		SELECT id, code, url, title, status, user, created, updated, expires
 		FROM links
-		WHERE user = {:u}
+		WHERE %s
 		ORDER BY created DESC
-	`).Bind(dbx.Params{"u": uid}).All(&rows)
+	`, where)).Bind(params).All(&rows)
 	return rows
 }

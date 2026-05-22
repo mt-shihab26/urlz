@@ -19,11 +19,13 @@ func Handler(e *core.RequestEvent) error {
 	}
 	uid := user.Id
 	db := e.App.DB()
-	return e.JSON(200, response{Links: buildLinks(db, uid)})
+	filter := e.Request.URL.Query().Get("filter")
+	search := e.Request.URL.Query().Get("search")
+	return e.JSON(200, response{Links: buildLinks(db, uid, filter, search)})
 }
 
-func buildLinks(db dbx.Builder, uid string) []linkItem {
-	rows := fetchLinkRows(db, uid)
+func buildLinks(db dbx.Builder, uid, filter, search string) []linkItem {
+	rows := fetchLinkRows(db, uid, filter, search)
 	if len(rows) == 0 {
 		return []linkItem{}
 	}
