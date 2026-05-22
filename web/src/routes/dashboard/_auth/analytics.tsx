@@ -37,7 +37,7 @@ export const Route = createFileRoute('/dashboard/_auth/analytics')({
         };
     },
     pendingComponent: () => (
-        <Layout>
+        <Layout refreshDisable>
             <Loading />
         </Layout>
     ),
