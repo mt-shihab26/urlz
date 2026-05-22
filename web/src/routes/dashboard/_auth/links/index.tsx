@@ -14,11 +14,16 @@ import { Loading } from '#/components/screens/links/index/loading';
 import { SearchBox } from '#/components/screens/links/index/search-box';
 
 const FILTERS: TFilter[] = ['all', 'active', 'disabled', 'expired'];
+const DEFAULT_FILTER: TFilter = 'all';
+const DEFAULT_SEARCH = '';
 
 export const Route = createFileRoute('/dashboard/_auth/links/')({
     head: () => ({ meta: [{ title: 'Links — urlz' }] }),
     validateSearch: (search): { filter?: TFilter; search?: string } => ({
-        filter: FILTERS.includes(search.filter as TFilter) ? (search.filter as TFilter) : undefined,
+        filter:
+            FILTERS.includes(search.filter as TFilter) && search.filter !== DEFAULT_FILTER
+                ? (search.filter as TFilter)
+                : undefined,
         search: (search.search as string) || undefined,
     }),
     loaderDeps: ({ search }) => ({ filter: search.filter, search: search.search }),
@@ -64,13 +69,14 @@ function Layout({
 
 function RouteComponent() {
     const data = Route.useLoaderData();
-    const { filter = 'all', search } = Route.useSearch();
+    const { filter = DEFAULT_FILTER, search = DEFAULT_SEARCH } = Route.useSearch();
     const navigate = Route.useNavigate();
 
-    const setSearch = (search: string) =>
-        navigate({ search: (prev) => ({ ...prev, search: search }) });
+    const setSearch = (s: string) =>
+        navigate({ search: (prev) => ({ ...prev, search: s || undefined }) });
 
-    const setFilter = (filter: TFilter) => navigate({ search: (prev) => ({ ...prev, filter }) });
+    const setFilter = (f: TFilter) =>
+        navigate({ search: (prev) => ({ ...prev, filter: f === DEFAULT_FILTER ? undefined : f }) });
 
     const links = data.links ?? [];
 
