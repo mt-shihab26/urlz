@@ -62,7 +62,8 @@ function RouteComponent() {
 
     const [filter, setFilter] = useState<TFilter>('all');
     const [search, setSearch] = useState('');
-    const links = data?.links ?? [];
+
+    const links = data.links ?? [];
 
     return (
         <Layout>
