@@ -9,6 +9,9 @@ const RANGE_DAYS: Record<TRange, number | null> = {
     All: null,
 };
 
+export const validateRange = (value: unknown): TRange =>
+    RANGES.includes(value as TRange) ? (value as TRange) : '30d';
+
 export const getRangeStartDate = (range: TRange) => {
     const days = RANGE_DAYS[range];
     if (days === null) return null;

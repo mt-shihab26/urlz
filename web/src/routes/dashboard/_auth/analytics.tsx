@@ -1,8 +1,8 @@
-import type { TRange } from '#/lib/ranges';
 import type { ReactNode } from 'react';
 
 import { getAuth } from '#/collections/users';
 import { canUseFeature, getActivePlan } from '#/lib/plan';
+import { validateRange } from '#/lib/ranges';
 import { getAnalyticsData } from '#/services/analytics';
 import { createFileRoute } from '@tanstack/react-router';
 
@@ -24,13 +24,9 @@ import { StatsCards } from '#/components/screens/analytics/stats-cards';
 import { TopPerforming } from '#/components/screens/analytics/top-performing';
 import { Link } from '@tanstack/react-router';
 
-import { RANGES } from '#/lib/ranges';
-
 export const Route = createFileRoute('/dashboard/_auth/analytics')({
     head: () => ({ meta: [{ title: 'Analytics — urlz' }] }),
-    validateSearch: (s) => ({
-        range: (RANGES.includes(s.range as TRange) ? s.range : '30d') as TRange,
-    }),
+    validateSearch: (search) => ({ range: validateRange(search.range) }),
     loaderDeps: ({ search }) => ({ range: search.range }),
     loader: async ({ deps }) => {
         const hasFullAnalytics = canUseFeature(getActivePlan(getAuth()), 'analytics');

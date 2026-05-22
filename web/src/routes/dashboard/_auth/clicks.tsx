@@ -1,7 +1,7 @@
 import type { TRange } from '#/lib/ranges';
 import type { TClickItem } from '#/services/clicks';
 
-import { RANGES } from '#/lib/ranges';
+import { validateRange } from '#/lib/ranges';
 import { toastError } from '#/lib/toast';
 import { getClicksData } from '#/services/clicks';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
@@ -15,7 +15,7 @@ import { DetailDrawer } from '#/components/screens/clicks/detail-drawer';
 export const Route = createFileRoute('/dashboard/_auth/clicks')({
     head: () => ({ meta: [{ title: 'Clicks — urlz' }] }),
     validateSearch: (search) => ({
-        range: (RANGES.includes(search.range as TRange) ? search.range : '30d') as TRange,
+        range: validateRange(search.range),
         page: Number(search.page ?? 1),
     }),
     loaderDeps: ({ search }) => ({ range: search.range, page: search.page }),

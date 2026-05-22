@@ -1,6 +1,6 @@
 import type { TRange } from '#/lib/ranges';
 
-import { RANGES } from '#/lib/ranges';
+import { validateRange } from '#/lib/ranges';
 import { toastError } from '#/lib/toast';
 import { getLinkShowData } from '#/services/links/show';
 import { createFileRoute, useNavigate, useRouter, useRouterState } from '@tanstack/react-router';
@@ -21,9 +21,7 @@ import { Button } from '#/components/ui/button';
 
 export const Route = createFileRoute('/dashboard/_auth/links/$id')({
     head: () => ({ meta: [{ title: 'Link — urlz' }] }),
-    validateSearch: (search) => ({
-        range: (RANGES.includes(search.range as TRange) ? search.range : '30d') as TRange,
-    }),
+    validateSearch: (search) => ({ range: validateRange(search.range) }),
     loaderDeps: ({ search }) => ({ range: search.range }),
     loader: async ({ params, deps }) => {
         try {
