@@ -13,8 +13,16 @@ export type TLinkItem = TLink & {
     sparkline: TClickDay[];
 };
 
+export type TLinkCounts = {
+    all: number;
+    active: number;
+    disabled: number;
+    expired: number;
+};
+
 export type TResponse = {
     links: TLinkItem[];
+    counts: TLinkCounts;
 };
 
 export const getLinksData = async (filter?: TFilter, search?: string): Promise<TResponse> => {

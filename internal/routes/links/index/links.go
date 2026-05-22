@@ -32,16 +32,41 @@ type linkRow struct {
 	Expires string `db:"expires"`
 }
 
+type linkCounts struct {
+	All      int `json:"all" db:"all"`
+	Active   int `json:"active" db:"active"`
+	Disabled int `json:"disabled" db:"disabled"`
+	Expired  int `json:"expired" db:"expired"`
+}
+
+func fetchLinkCounts(db dbx.Builder, uid string) linkCounts {
+	var counts linkCounts
+	_ = db.NewQuery(`
+		SELECT
+			COUNT(*) AS "all",
+			COUNT(CASE WHEN status = 'active'   AND (expires IS NULL OR expires = '' OR datetime(expires) > datetime('now')) THEN 1 END) AS active,
+			COUNT(CASE WHEN status = 'disabled' AND (expires IS NULL OR expires = '' OR datetime(expires) > datetime('now')) THEN 1 END) AS disabled,
+			COUNT(CASE WHEN expires IS NOT NULL AND expires != '' AND datetime(expires) < datetime('now') THEN 1 END) AS expired
+		FROM links
+		WHERE user = {:u}
+	`).Bind(dbx.Params{"u": uid}).One(&counts)
+	return counts
+}
+
 func fetchLinkRows(db dbx.Builder, uid, filter, search string) []linkRow {
 	where := "user = {:u}"
 	params := dbx.Params{"u": uid}
 
+	notExpired := "(expires IS NULL OR expires = '' OR datetime(expires) > datetime('now'))"
+	isExpired := "(expires IS NOT NULL AND expires != '' AND datetime(expires) < datetime('now'))"
+
 	switch filter {
-	case "active", "disabled":
-		where += " AND status = {:status}"
-		params["status"] = filter
+	case "active":
+		where += " AND status = 'active' AND " + notExpired
+	case "disabled":
+		where += " AND status = 'disabled' AND " + notExpired
 	case "expired":
-		where += " AND expires != '' AND expires < datetime('now')"
+		where += " AND " + isExpired
 	}
 
 	if search != "" {

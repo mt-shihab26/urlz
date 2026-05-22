@@ -9,7 +9,8 @@ import (
 )
 
 type response struct {
-	Links []linkItem `json:"links"`
+	Links  []linkItem `json:"links"`
+	Counts linkCounts `json:"counts"`
 }
 
 func Handler(e *core.RequestEvent) error {
@@ -21,7 +22,17 @@ func Handler(e *core.RequestEvent) error {
 	db := e.App.DB()
 	filter := e.Request.URL.Query().Get("filter")
 	search := e.Request.URL.Query().Get("search")
-	return e.JSON(200, response{Links: buildLinks(db, uid, filter, search)})
+
+	var (
+		links  []linkItem
+		counts linkCounts
+		wg     sync.WaitGroup
+	)
+	wg.Go(func() { links = buildLinks(db, uid, filter, search) })
+	wg.Go(func() { counts = fetchLinkCounts(db, uid) })
+	wg.Wait()
+
+	return e.JSON(200, response{Links: links, Counts: counts})
 }
 
 func buildLinks(db dbx.Builder, uid, filter, search string) []linkItem {

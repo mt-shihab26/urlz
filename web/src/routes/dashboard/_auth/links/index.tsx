@@ -84,7 +84,7 @@ function RouteComponent() {
         <Layout>
             <div className="flex flex-wrap items-center gap-3">
                 <SearchBox search={search} onSearch={setSearch} />
-                <FiltersTabs links={links} filter={filter} onFilter={setFilter} />
+                <FiltersTabs counts={data.counts} filter={filter} onFilter={setFilter} />
             </div>
             <LinksTable links={links} />
         </Layout>
