@@ -1,7 +1,6 @@
 import type { TFilter } from '#/types/utils';
 import type { ReactNode } from 'react';
 
-import { filterLinks } from '#/lib/links';
 import { getLinksData } from '#/services/links';
 import { createFileRoute } from '@tanstack/react-router';
 
@@ -18,11 +17,12 @@ const FILTERS: TFilter[] = ['all', 'active', 'disabled', 'expired'];
 
 export const Route = createFileRoute('/dashboard/_auth/links/')({
     head: () => ({ meta: [{ title: 'Links — urlz' }] }),
-    validateSearch: (search) => ({
-        filter: (FILTERS.includes(search.filter as TFilter) ? search.filter : 'all') as TFilter,
-        search: String(search.search ?? ''),
+    validateSearch: (search): { filter?: TFilter; search?: string } => ({
+        filter: FILTERS.includes(search.filter as TFilter) ? (search.filter as TFilter) : undefined,
+        search: (search.search as string) || undefined,
     }),
-    loader: () => getLinksData(),
+    loaderDeps: ({ search }) => ({ filter: search.filter, search: search.search }),
+    loader: ({ deps }) => getLinksData(deps.filter, deps.search),
     pendingComponent: () => (
         <Layout refreshDisable>
             <Loading />
@@ -64,27 +64,24 @@ function Layout({
 
 function RouteComponent() {
     const data = Route.useLoaderData();
-    const search = Route.useSearch();
+    const { filter = 'all', search = '' } = Route.useSearch();
     const navigate = Route.useNavigate();
+
+    const setSearch = (s: string) =>
+        navigate({ search: (prev) => ({ ...prev, search: s || undefined }) });
+
+    const setFilter = (f: TFilter) =>
+        navigate({ search: (prev) => ({ ...prev, filter: f === 'all' ? undefined : f }) });
 
     const links = data.links ?? [];
 
     return (
         <Layout>
             <div className="flex flex-wrap items-center gap-3">
-                <SearchBox
-                    search={search.search}
-                    onSearch={(search) => navigate({ search: (prev) => ({ ...prev, search }) })}
-                />
-                <FiltersTabs
-                    links={links}
-                    filter={search.filter}
-                    onFilter={(filter) => navigate({ search: (prev) => ({ ...prev, filter }) })}
-                />
+                <SearchBox search={search} onSearch={setSearch} />
+                <FiltersTabs links={links} filter={filter} onFilter={setFilter} />
             </div>
-            <LinksTable
-                links={filterLinks({ links, search: search.search, filter: search.filter })}
-            />
+            <LinksTable links={links} />
         </Layout>
     );
 }
