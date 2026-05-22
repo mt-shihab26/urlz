@@ -87,8 +87,8 @@ export const AppSidebar = (props: ComponentProps<typeof Sidebar>) => {
                 <NavMain items={navMain} />
             </SidebarContent>
             <SidebarFooter className="gap-2">
-                <NavUser user={user} />
                 <NavGithub />
+                <NavUser user={user} />
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton
