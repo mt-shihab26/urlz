@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 
 import { getLinksData } from '#/services/links';
 import { createFileRoute } from '@tanstack/react-router';
+import { z } from 'zod';
 
 import { RefreshButton } from '#/components/composite/refresh-button';
 import { RouteError } from '#/components/composite/route-error';
@@ -13,21 +14,23 @@ import { LinksTable } from '#/components/screens/links/index/links-table';
 import { Loading } from '#/components/screens/links/index/loading';
 import { SearchBox } from '#/components/screens/links/index/search-box';
 
-const FILTERS: TFilter[] = ['all', 'active', 'disabled', 'expired'];
 const DEFAULT_FILTER: TFilter = 'all';
 const DEFAULT_SEARCH = '';
 
+const searchSchema = z.object({
+    filter: z.enum(['all', 'active', 'disabled', 'expired']).optional(),
+    search: z.string().min(1).optional(),
+    page: z.coerce.number().int().min(2).optional(),
+});
+
 export const Route = createFileRoute('/dashboard/_auth/links/')({
     head: () => ({ meta: [{ title: 'Links — urlz' }] }),
-    validateSearch: (search): { filter?: TFilter; search?: string; page?: number } => ({
-        filter:
-            FILTERS.includes(search.filter as TFilter) && search.filter !== DEFAULT_FILTER
-                ? (search.filter as TFilter)
-                : undefined,
-        search: (search.search as string) || undefined,
-        page: Number(search.page) > 1 ? Number(search.page) : undefined,
+    validateSearch: (search) => searchSchema.parse(search),
+    loaderDeps: ({ search }) => ({
+        filter: search.filter,
+        search: search.search,
+        page: search.page,
     }),
-    loaderDeps: ({ search }) => ({ filter: search.filter, search: search.search, page: search.page }),
     loader: ({ deps }) => getLinksData(deps.filter, deps.search, deps.page),
     pendingComponent: () => (
         <Layout refreshDisable>
@@ -77,10 +80,19 @@ function RouteComponent() {
         navigate({ search: (prev) => ({ ...prev, search: s || undefined, page: undefined }) });
 
     const setFilter = (f: TFilter) =>
-        navigate({ search: (prev) => ({ ...prev, filter: f === DEFAULT_FILTER ? undefined : f, page: undefined }) });
+        navigate({
+            search: (prev) => ({
+                ...prev,
+                filter: f === DEFAULT_FILTER ? undefined : f,
+                page: undefined,
+            }),
+        });
 
     const setPage = (p: number) =>
-        navigate({ search: (prev) => ({ ...prev, page: p > 1 ? p : undefined }) });
+        navigate({
+            search: (prev) => ({ ...prev, page: p > 1 ? p : undefined }),
+            resetScroll: false,
+        });
 
     const links = data.links ?? [];
 
@@ -90,7 +102,13 @@ function RouteComponent() {
                 <SearchBox search={search} onSearch={setSearch} />
                 <FiltersTabs counts={data.counts} filter={filter} onFilter={setFilter} />
             </div>
-            <LinksTable links={links} page={page} totalItems={data.total_items} totalPages={data.total_pages} onPage={setPage} />
+            <LinksTable
+                links={links}
+                page={page}
+                totalItems={data.total_items}
+                totalPages={data.total_pages}
+                onPage={setPage}
+            />
         </Layout>
     );
 }

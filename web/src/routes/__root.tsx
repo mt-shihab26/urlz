@@ -12,6 +12,7 @@ import { HeadContent, Link, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 
 export const Route = createRootRoute({
+    head: () => ({ meta: [{ titleTemplate: '%s — urlz' }] }),
     component: () => (
         <>
         <HeadContent />

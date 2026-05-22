@@ -2,9 +2,9 @@ import type { ReactNode } from 'react';
 
 import { getAuth } from '#/collections/users';
 import { canUseFeature, getActivePlan } from '#/lib/plan';
-import { validateRange } from '#/lib/ranges';
 import { getAnalyticsData } from '#/services/analytics';
 import { createFileRoute } from '@tanstack/react-router';
+import { z } from 'zod';
 
 import { RangeTabs } from '#/components/composite/range-tabs';
 import { RefreshButton } from '#/components/composite/refresh-button';
@@ -24,9 +24,15 @@ import { StatsCards } from '#/components/screens/analytics/stats-cards';
 import { TopPerforming } from '#/components/screens/analytics/top-performing';
 import { Link } from '@tanstack/react-router';
 
+import { RANGES } from '#/lib/ranges';
+
+const searchSchema = z.object({
+    range: z.enum(RANGES).default('30d'),
+});
+
 export const Route = createFileRoute('/dashboard/_auth/analytics')({
     head: () => ({ meta: [{ title: 'Analytics — urlz' }] }),
-    validateSearch: (search) => ({ range: validateRange(search.range) }),
+    validateSearch: (search) => searchSchema.parse(search),
     loaderDeps: ({ search }) => ({ range: search.range }),
     loader: async ({ deps }) => {
         const hasFullAnalytics = canUseFeature(getActivePlan(getAuth()), 'analytics');
