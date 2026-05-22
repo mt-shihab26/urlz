@@ -27,6 +27,7 @@ import { useUser } from '#/components/providers/auth-provider';
 import { useSidebar } from '#/components/ui/sidebar';
 
 import { Link } from '@tanstack/react-router';
+import { NavGithub } from './nav-github';
 import { NavMain } from './nav-main';
 import { NavUser } from './nav-user';
 
@@ -86,6 +87,7 @@ export const AppSidebar = (props: ComponentProps<typeof Sidebar>) => {
                 <NavMain items={navMain} />
             </SidebarContent>
             <SidebarFooter className="gap-2">
+                <NavGithub />
                 <NavUser user={user} />
                 <SidebarMenu>
                     <SidebarMenuItem>

@@ -47,7 +47,7 @@ lint:
 
 build:
 	@cd web && bun run build
-	go build -o urlz ./cmd/server/main.go
+	go build -o urlz ./cmd/server
 
 # Live reload
 dev:

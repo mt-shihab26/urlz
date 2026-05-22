@@ -1,51 +1,20 @@
-import { createRootRoute } from '@tanstack/react-router';
+import '#/styles.css';
 
-import { TanStackDevtools } from '@tanstack/react-devtools';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { HeadContent, Link, Outlet, Scripts } from '@tanstack/react-router';
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
+import { createRootRoute } from '@tanstack/react-router';
 
 import { AuthProvider } from '#/components/providers/auth-provider';
 import { ThemeProvider } from '#/components/providers/theme-provider';
 import { Button } from '#/components/ui/button';
 import { Toaster } from '#/components/ui/sonner';
 import { TooltipProvider } from '#/components/ui/tooltip';
-
-import styles from '../styles.css?url';
+import { TanStackDevtools } from '@tanstack/react-devtools';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Link, Outlet } from '@tanstack/react-router';
+import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 
 const queryClient = new QueryClient();
 
 export const Route = createRootRoute({
-    head: () => ({
-        links: [
-            { rel: 'stylesheet', href: styles },
-            { rel: 'manifest', href: '/manifest.json' },
-            { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-            { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png' },
-            { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' },
-            { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
-        ],
-        meta: [
-            { charSet: 'utf-8' },
-            { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-            { title: 'urlz' },
-        ],
-    }),
-    shellComponent: ({ children }) => (
-        <html lang="en">
-            <head>
-                <HeadContent />
-            </head>
-            <body>
-                {children}
-                <TanStackDevtools
-                    config={{ position: 'bottom-right' }}
-                    plugins={[{ name: 'Tanstack Router', render: <TanStackRouterDevtoolsPanel /> }]}
-                />
-                <Scripts />
-            </body>
-        </html>
-    ),
     component: () => (
         <QueryClientProvider client={queryClient}>
             <ThemeProvider>
@@ -53,6 +22,17 @@ export const Route = createRootRoute({
                     <TooltipProvider>
                         <Outlet />
                         <Toaster />
+                        <TanStackDevtools
+                            config={{
+                                position: 'bottom-right',
+                            }}
+                            plugins={[
+                                {
+                                    name: 'TanStack Router',
+                                    render: <TanStackRouterDevtoolsPanel />,
+                                },
+                            ]}
+                        />
                     </TooltipProvider>
                 </AuthProvider>
             </ThemeProvider>
