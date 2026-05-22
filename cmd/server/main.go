@@ -44,7 +44,7 @@ func main() {
 		se.Router.GET("/api/links/{id}", show.Handler)
 		se.Router.GET("/api/clicks", clicks.Handler)
 
-		sub, err := fs.Sub(web.DistFS, "dist/client")
+		sub, err := fs.Sub(web.DistFS, "dist")
 		if err != nil {
 			return err
 		}
