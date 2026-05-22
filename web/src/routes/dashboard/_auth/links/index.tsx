@@ -19,15 +19,16 @@ const DEFAULT_SEARCH = '';
 
 export const Route = createFileRoute('/dashboard/_auth/links/')({
     head: () => ({ meta: [{ title: 'Links — urlz' }] }),
-    validateSearch: (search): { filter?: TFilter; search?: string } => ({
+    validateSearch: (search): { filter?: TFilter; search?: string; page?: number } => ({
         filter:
             FILTERS.includes(search.filter as TFilter) && search.filter !== DEFAULT_FILTER
                 ? (search.filter as TFilter)
                 : undefined,
         search: (search.search as string) || undefined,
+        page: Number(search.page) > 1 ? Number(search.page) : undefined,
     }),
-    loaderDeps: ({ search }) => ({ filter: search.filter, search: search.search }),
-    loader: ({ deps }) => getLinksData(deps.filter, deps.search),
+    loaderDeps: ({ search }) => ({ filter: search.filter, search: search.search, page: search.page }),
+    loader: ({ deps }) => getLinksData(deps.filter, deps.search, deps.page),
     pendingComponent: () => (
         <Layout refreshDisable>
             <Loading />
@@ -69,14 +70,17 @@ function Layout({
 
 function RouteComponent() {
     const data = Route.useLoaderData();
-    const { filter = DEFAULT_FILTER, search = DEFAULT_SEARCH } = Route.useSearch();
+    const { filter = DEFAULT_FILTER, search = DEFAULT_SEARCH, page = 1 } = Route.useSearch();
     const navigate = Route.useNavigate();
 
     const setSearch = (s: string) =>
-        navigate({ search: (prev) => ({ ...prev, search: s || undefined }) });
+        navigate({ search: (prev) => ({ ...prev, search: s || undefined, page: undefined }) });
 
     const setFilter = (f: TFilter) =>
-        navigate({ search: (prev) => ({ ...prev, filter: f === DEFAULT_FILTER ? undefined : f }) });
+        navigate({ search: (prev) => ({ ...prev, filter: f === DEFAULT_FILTER ? undefined : f, page: undefined }) });
+
+    const setPage = (p: number) =>
+        navigate({ search: (prev) => ({ ...prev, page: p > 1 ? p : undefined }) });
 
     const links = data.links ?? [];
 
@@ -86,7 +90,7 @@ function RouteComponent() {
                 <SearchBox search={search} onSearch={setSearch} />
                 <FiltersTabs counts={data.counts} filter={filter} onFilter={setFilter} />
             </div>
-            <LinksTable links={links} />
+            <LinksTable links={links} page={page} totalItems={data.total_items} totalPages={data.total_pages} onPage={setPage} />
         </Layout>
     );
 }

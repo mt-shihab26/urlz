@@ -23,11 +23,17 @@ export type TLinkCounts = {
 export type TResponse = {
     links: TLinkItem[];
     counts: TLinkCounts;
+    total_items: number;
+    total_pages: number;
 };
 
-export const getLinksData = async (filter?: TFilter, search?: string): Promise<TResponse> => {
+export const getLinksData = async (
+    filter?: TFilter,
+    search?: string,
+    page = 1,
+): Promise<TResponse> => {
     try {
-        const query: Record<string, string> = {};
+        const query: Record<string, string> = { page: String(page) };
         if (filter) query.filter = filter;
         if (search) query.search = search;
         return await pb.send<TResponse>('/api/links', { method: 'GET', query });

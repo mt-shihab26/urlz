@@ -53,7 +53,9 @@ func fetchLinkCounts(db dbx.Builder, uid string) linkCounts {
 	return counts
 }
 
-func fetchLinkRows(db dbx.Builder, uid, filter, search string) []linkRow {
+const perPage = 20
+
+func buildWhere(uid, filter, search string) (string, dbx.Params) {
 	where := "user = {:u}"
 	params := dbx.Params{"u": uid}
 
@@ -74,12 +76,30 @@ func fetchLinkRows(db dbx.Builder, uid, filter, search string) []linkRow {
 		params["search"] = fmt.Sprintf("%%%s%%", search)
 	}
 
+	return where, params
+}
+
+func fetchFilteredCount(db dbx.Builder, uid, filter, search string) int {
+	where, params := buildWhere(uid, filter, search)
+	var count struct {
+		N int `db:"n"`
+	}
+	_ = db.NewQuery(fmt.Sprintf(`SELECT COUNT(*) AS n FROM links WHERE %s`, where)).
+		Bind(params).One(&count)
+	return count.N
+}
+
+func fetchLinkRows(db dbx.Builder, uid, filter, search string, page int) []linkRow {
+	where, params := buildWhere(uid, filter, search)
+	offset := (page - 1) * perPage
+
 	var rows []linkRow
 	_ = db.NewQuery(fmt.Sprintf(`
 		SELECT id, code, url, title, status, user, created, updated, expires
 		FROM links
 		WHERE %s
 		ORDER BY created DESC
-	`, where)).Bind(params).All(&rows)
+		LIMIT %d OFFSET %d
+	`, where, perPage, offset)).Bind(params).All(&rows)
 	return rows
 }
