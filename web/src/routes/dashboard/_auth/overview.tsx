@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 import { getOverviewData } from '#/services/overview';
 import { createFileRoute } from '@tanstack/react-router';
 
@@ -13,36 +15,42 @@ export const Route = createFileRoute('/dashboard/_auth/overview')({
     head: () => ({ meta: [{ title: 'Overview — urlz' }] }),
     loader: () => getOverviewData(),
     pendingComponent: () => (
-        <>
-            <Header title="Overview" description="All your links at a glance" />
-            <div className="flex flex-col gap-6 p-4 lg:p-6">
-                <Loading />
-            </div>
-        </>
+        <Layout refreshDisable>
+            <Loading />
+        </Layout>
     ),
     errorComponent: ({ error }) => (
-        <>
-            <Header
-                title="Overview"
-                description="All your links at a glance"
-                action={<RefreshButton />}
-            />
+        <Layout>
             <RouteError error={error} />
-        </>
+        </Layout>
     ),
     component: Overview,
 });
 
-function Overview() {
-    const data = Route.useLoaderData();
-
+function Layout({
+    children,
+    refreshDisable = false,
+}: {
+    children?: ReactNode;
+    refreshDisable?: boolean;
+}) {
     return (
         <>
             <Header
                 title="Overview"
                 description="All your links at a glance"
-                action={<RefreshButton />}
+                action={!refreshDisable && <RefreshButton />}
             />
+            {children}
+        </>
+    );
+}
+
+function Overview() {
+    const data = Route.useLoaderData();
+
+    return (
+        <Layout>
             <div className="flex flex-col gap-6 p-4 lg:p-6">
                 <StatsCards
                     totalClicks={data.total_clicks}
@@ -55,6 +63,6 @@ function Overview() {
                 <ClickBreakdown breakdown={data.breakdown} />
                 <TopLinks topLinks={data.top_links} />
             </div>
-        </>
+        </Layout>
     );
 }
