@@ -1,9 +1,8 @@
 import type { TFilter } from '#/types/utils';
 
 import { filterLinks } from '#/lib/links';
-import { toastError } from '#/lib/toast';
 import { getLinksData } from '#/services/links';
-import { createFileRoute, useRouter, useRouterState } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 
 import { RefreshButton } from '#/components/composite/refresh-button';
@@ -16,14 +15,7 @@ import { SearchBox } from '#/components/screens/links/index/search-box';
 
 export const Route = createFileRoute('/dashboard/_auth/links/')({
     head: () => ({ meta: [{ title: 'Links — urlz' }] }),
-    loader: async () => {
-        try {
-            return await getLinksData();
-        } catch (e) {
-            toastError(e);
-            return null;
-        }
-    },
+    loader: () => getLinksData(),
     pendingComponent: () => (
         <>
             <Header title="Links" description="Manage and monitor all your shortened links" />
@@ -35,10 +27,9 @@ export const Route = createFileRoute('/dashboard/_auth/links/')({
     component: Links,
 });
 
-const Links = () => {
+function Links() {
     const data = Route.useLoaderData();
-    const router = useRouter();
-    const isRefreshing = useRouterState({ select: (s) => s.isLoading });
+
     const [filter, setFilter] = useState<TFilter>('all');
     const [search, setSearch] = useState('');
 
@@ -51,10 +42,7 @@ const Links = () => {
                 description="Manage and monitor all your shortened links"
                 action={
                     <div className="flex items-center gap-2">
-                        <RefreshButton
-                            onClick={() => router.invalidate()}
-                            isLoading={isRefreshing}
-                        />
+                        <RefreshButton />
                         <CreateLinkButton />
                     </div>
                 }
@@ -68,4 +56,4 @@ const Links = () => {
             </div>
         </>
     );
-};
+}
