@@ -14,11 +14,12 @@ import { useState } from 'react';
 import { EmailField } from '#/components/composite/email-field';
 import { Form } from '#/components/composite/form';
 import { SubmitButton } from '#/components/composite/submit-button';
+import { head } from '#/lib/utils';
 import { Link } from '@tanstack/react-router';
 import { ArrowLeftIcon, MailIcon } from 'lucide-react';
 
 export const Route = createFileRoute('/dashboard/_guest/forgot-password')({
-    head: () => ({ meta: [{ title: 'Forgot Password — urlz' }] }),
+    head: () => head('Forgot Password'),
     component: ForgotPassword,
 });
 

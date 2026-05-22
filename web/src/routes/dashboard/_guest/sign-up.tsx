@@ -21,9 +21,10 @@ import { PasswordField } from '#/components/composite/password-field';
 import { PasswordStrength } from '#/components/composite/password-strength';
 import { SubmitButton } from '#/components/composite/submit-button';
 import { TextField } from '#/components/composite/text-field';
+import { head } from '#/lib/utils';
 
 export const Route = createFileRoute('/dashboard/_guest/sign-up')({
-    head: () => ({ meta: [{ title: 'Sign Up — urlz' }] }),
+    head: () => head('Sign Up'),
     component: SignUp,
 });
 

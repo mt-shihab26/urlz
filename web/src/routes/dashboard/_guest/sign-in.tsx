@@ -19,10 +19,11 @@ import { LinkPrompt } from '#/components/composite/link-prompt';
 import { OrDivider } from '#/components/composite/or-divider';
 import { PasswordField } from '#/components/composite/password-field';
 import { SubmitButton } from '#/components/composite/submit-button';
+import { head } from '#/lib/utils';
 import { Link } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/dashboard/_guest/sign-in')({
-    head: () => ({ meta: [{ title: 'Sign In — urlz' }] }),
+    head: () => head('Sign In'),
     component: SignIn,
 });
 

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 
+import { head } from '#/lib/utils';
 import { getOverviewData } from '#/services/overview';
 import { createFileRoute } from '@tanstack/react-router';
 
@@ -12,7 +13,7 @@ import { StatsCards } from '#/components/screens/overview/stats-cards';
 import { TopLinks } from '#/components/screens/overview/top-links';
 
 export const Route = createFileRoute('/dashboard/_auth/overview')({
-    head: () => ({ meta: [{ title: 'Overview — urlz' }] }),
+    head: () => head('Overview'),
     loader: () => getOverviewData(),
     pendingComponent: () => (
         <Layout refreshDisable>

@@ -1,6 +1,7 @@
 import type { TFilter } from '#/types/utils';
 import type { ReactNode } from 'react';
 
+import { head } from '#/lib/utils';
 import { getLinksData } from '#/services/links';
 import { createFileRoute } from '@tanstack/react-router';
 import { z } from 'zod';
@@ -24,7 +25,7 @@ const searchSchema = z.object({
 });
 
 export const Route = createFileRoute('/dashboard/_auth/links/')({
-    head: () => ({ meta: [{ title: 'Links — urlz' }] }),
+    head: () => head('Links'),
     validateSearch: (search) => searchSchema.parse(search),
     loaderDeps: ({ search }) => ({
         filter: search.filter,

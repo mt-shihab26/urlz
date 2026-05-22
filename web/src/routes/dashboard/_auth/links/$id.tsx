@@ -18,9 +18,10 @@ import { DetailHeader } from '#/components/screens/links/show/detail-header';
 import { DetailStats } from '#/components/screens/links/show/detail-stats';
 import { Loading } from '#/components/screens/links/show/loading';
 import { Button } from '#/components/ui/button';
+import { head } from '#/lib/utils';
 
 export const Route = createFileRoute('/dashboard/_auth/links/$id')({
-    head: () => ({ meta: [{ title: 'Link — urlz' }] }),
+    head: () => head('Link'),
     validateSearch: (search) => ({ range: validateRange(search.range) }),
     loaderDeps: ({ search }) => ({ range: search.range }),
     loader: async ({ params, deps }) => {

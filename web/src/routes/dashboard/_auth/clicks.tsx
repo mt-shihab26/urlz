@@ -11,9 +11,10 @@ import { RangeTabs } from '#/components/composite/range-tabs';
 import { Header } from '#/components/composite/site-header';
 import { ClicksTable } from '#/components/screens/clicks/clicks-table';
 import { DetailDrawer } from '#/components/screens/clicks/detail-drawer';
+import { head } from '#/lib/utils';
 
 export const Route = createFileRoute('/dashboard/_auth/clicks')({
-    head: () => ({ meta: [{ title: 'Clicks — urlz' }] }),
+    head: () => head('Clicks'),
     validateSearch: (search) => ({
         range: validateRange(search.range),
         page: Number(search.page ?? 1),

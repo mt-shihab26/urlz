@@ -15,11 +15,12 @@ import { Form } from '#/components/composite/form';
 import { PasswordField } from '#/components/composite/password-field';
 import { SubmitButton } from '#/components/composite/submit-button';
 import { Button } from '#/components/ui/button';
+import { head } from '#/lib/utils';
 import { Link } from '@tanstack/react-router';
 import { ArrowLeftIcon, CheckIcon } from 'lucide-react';
 
 export const Route = createFileRoute('/dashboard/_guest/reset-password')({
-    head: () => ({ meta: [{ title: 'Reset Password — urlz' }] }),
+    head: () => head('Reset Password'),
     component: ResetPassword,
 });
 

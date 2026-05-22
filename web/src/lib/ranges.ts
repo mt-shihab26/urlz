@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 export const RANGES = ['7d', '30d', '90d', 'All'] as const;
 
 export type TRange = (typeof RANGES)[number];
@@ -9,8 +11,9 @@ const RANGE_DAYS: Record<TRange, number | null> = {
     All: null,
 };
 
-export const validateRange = (value: unknown): TRange =>
-    RANGES.includes(value as TRange) ? (value as TRange) : '30d';
+export const rangeSchema = z.object({
+    range: z.enum(RANGES).default('30d'),
+});
 
 export const getRangeStartDate = (range: TRange) => {
     const days = RANGE_DAYS[range];

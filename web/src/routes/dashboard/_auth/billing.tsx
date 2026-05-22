@@ -8,9 +8,10 @@ import { Header } from '#/components/composite/site-header';
 import { Invoices } from '#/components/screens/billing/invoices';
 import { Plans } from '#/components/screens/billing/plans';
 import { Subscription } from '#/components/screens/billing/subscription';
+import { head } from '#/lib/utils';
 
 export const Route = createFileRoute('/dashboard/_auth/billing')({
-    head: () => ({ meta: [{ title: 'Billing — urlz' }] }),
+    head: () => head('Billing'),
     loader: async () => {
         const [subscriptionResult, invoicesResult] = await Promise.allSettled([
             getSubscription(),

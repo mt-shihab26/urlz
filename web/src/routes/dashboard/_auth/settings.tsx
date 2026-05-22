@@ -4,9 +4,10 @@ import { Header } from '#/components/composite/site-header';
 import { DangerZoneCard } from '#/components/screens/settings/danger-zone-card';
 import { ProfileCard } from '#/components/screens/settings/profile-card';
 import { ThemeCard } from '#/components/screens/settings/theme-card';
+import { head } from '#/lib/utils';
 
 export const Route = createFileRoute('/dashboard/_auth/settings')({
-    head: () => ({ meta: [{ title: 'Settings — urlz' }] }),
+    head: () => head('Settings'),
     component: Settings,
 });
 
