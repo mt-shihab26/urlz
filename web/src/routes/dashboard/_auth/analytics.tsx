@@ -2,7 +2,6 @@ import type { TRange } from '#/lib/ranges';
 import type { ReactNode } from 'react';
 
 import { getAuth } from '#/collections/users';
-import { useUser } from '#/components/providers/auth-provider';
 import { canUseFeature, getActivePlan } from '#/lib/plan';
 import { getAnalyticsData } from '#/services/analytics';
 import { createFileRoute } from '@tanstack/react-router';
@@ -29,12 +28,18 @@ import { RANGES } from '#/lib/ranges';
 
 export const Route = createFileRoute('/dashboard/_auth/analytics')({
     head: () => ({ meta: [{ title: 'Analytics — urlz' }] }),
-    validateSearch: (search) => ({
-        range: (RANGES.includes(search.range as TRange) ? search.range : '30d') as TRange,
+    validateSearch: (s) => ({
+        range: (RANGES.includes(s.range as TRange) ? s.range : '30d') as TRange,
     }),
     loaderDeps: ({ search }) => ({ range: search.range }),
-    loader: ({ deps }) =>
-        getAnalyticsData(deps.range, canUseFeature(getActivePlan(getAuth()), 'analytics')),
+    loader: async ({ deps }) => {
+        const hasFullAnalytics = canUseFeature(getActivePlan(getAuth()), 'analytics');
+        const data = await getAnalyticsData(deps.range, hasFullAnalytics);
+        return {
+            hasFullAnalytics,
+            data,
+        };
+    },
     pendingComponent: () => (
         <Layout>
             <Loading />
@@ -48,7 +53,13 @@ export const Route = createFileRoute('/dashboard/_auth/analytics')({
     component: RouteComponent,
 });
 
-function Layout({ children }: { children: ReactNode }) {
+function Layout({
+    children,
+    refreshDisable = false,
+}: {
+    children: ReactNode;
+    refreshDisable?: boolean;
+}) {
     const { range } = Route.useSearch();
 
     const navigate = Route.useNavigate();
@@ -59,13 +70,15 @@ function Layout({ children }: { children: ReactNode }) {
                 title="Analytics"
                 description="Aggregated traffic across all links"
                 action={
-                    <div className="flex items-center gap-2">
-                        <RangeTabs
-                            range={range}
-                            onRange={(r) => navigate({ search: { range: r } })}
-                        />
-                        <RefreshButton />
-                    </div>
+                    !refreshDisable && (
+                        <div className="flex items-center gap-2">
+                            <RangeTabs
+                                range={range}
+                                onRange={(r) => navigate({ search: { range: r } })}
+                            />
+                            <RefreshButton />
+                        </div>
+                    )
                 }
             />
             <div className="flex flex-col gap-6 p-4 lg:p-6">{children}</div>
@@ -74,10 +87,7 @@ function Layout({ children }: { children: ReactNode }) {
 }
 
 function RouteComponent() {
-    const { user } = useUser();
-
-    const hasFullAnalytics = canUseFeature(getActivePlan(user), 'analytics');
-    const data = Route.useLoaderData();
+    const { data, hasFullAnalytics } = Route.useLoaderData();
 
     return (
         <Layout>
