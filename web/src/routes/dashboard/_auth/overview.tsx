@@ -24,7 +24,7 @@ export const Route = createFileRoute('/dashboard/_auth/overview')({
             <RouteError error={error} />
         </Layout>
     ),
-    component: Overview,
+    component: RouteComponent,
 });
 
 function Layout({
@@ -46,7 +46,7 @@ function Layout({
     );
 }
 
-function Overview() {
+function RouteComponent() {
     const data = Route.useLoaderData();
 
     return (

@@ -3,16 +3,8 @@ import type { TRange } from '#/lib/ranges';
 import { getAuth } from '#/collections/users';
 import { useUser } from '#/components/providers/auth-provider';
 import { canUseFeature, getActivePlan } from '#/lib/plan';
-import { RANGES } from '#/lib/ranges';
-import { toastError } from '#/lib/toast';
 import { getAnalyticsData } from '#/services/analytics';
-import {
-    createFileRoute,
-    Link,
-    useNavigate,
-    useRouter,
-    useRouterState,
-} from '@tanstack/react-router';
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 
 import { RangeTabs } from '#/components/composite/range-tabs';
 import { RefreshButton } from '#/components/composite/refresh-button';
@@ -30,22 +22,16 @@ import { Referrers } from '#/components/screens/analytics/referrers';
 import { StatsCards } from '#/components/screens/analytics/stats-cards';
 import { TopPerforming } from '#/components/screens/analytics/top-performing';
 
+import { RANGES } from '#/lib/ranges';
+
 export const Route = createFileRoute('/dashboard/_auth/analytics')({
     head: () => ({ meta: [{ title: 'Analytics — urlz' }] }),
     validateSearch: (search) => ({
         range: (RANGES.includes(search.range as TRange) ? search.range : '30d') as TRange,
     }),
     loaderDeps: ({ search }) => ({ range: search.range }),
-    loader: async ({ deps }) => {
-        const user = getAuth();
-        const hasFullAnalytics = canUseFeature(getActivePlan(user), 'analytics');
-        try {
-            return await getAnalyticsData(deps.range, hasFullAnalytics);
-        } catch (e) {
-            toastError(e);
-            return null;
-        }
-    },
+    loader: ({ deps }) =>
+        getAnalyticsData(deps.range, canUseFeature(getActivePlan(getAuth()), 'analytics')),
     pendingComponent: () => (
         <>
             <Header title="Analytics" description="Aggregated traffic across all links" />
@@ -54,17 +40,15 @@ export const Route = createFileRoute('/dashboard/_auth/analytics')({
             </div>
         </>
     ),
-    component: Analytics,
+    component: RouteComponent,
 });
 
-const Analytics = () => {
+function RouteComponent() {
     const { user } = useUser();
     const hasFullAnalytics = canUseFeature(getActivePlan(user), 'analytics');
     const { range } = Route.useSearch();
     const data = Route.useLoaderData();
     const navigate = useNavigate();
-    const router = useRouter();
-    const isRefreshing = useRouterState({ select: (s) => s.isLoading });
 
     const setRange = (r: TRange) => navigate({ search: { range: r } });
 
@@ -76,10 +60,7 @@ const Analytics = () => {
                 action={
                     <div className="flex items-center gap-2">
                         <RangeTabs range={range} onRange={setRange} />
-                        <RefreshButton
-                            onClick={() => router.invalidate()}
-                            isLoading={isRefreshing}
-                        />
+                        <RefreshButton />
                     </div>
                 }
             />
@@ -128,4 +109,4 @@ const Analytics = () => {
             </div>
         </>
     );
-};
+}
