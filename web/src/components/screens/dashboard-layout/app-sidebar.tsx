@@ -1,7 +1,6 @@
 import {
     ChartBarIcon,
     CreditCardIcon,
-    GithubIcon,
     LayoutDashboardIcon,
     LinkIcon,
     MousePointerClickIcon,
@@ -28,6 +27,7 @@ import { useUser } from '#/components/providers/auth-provider';
 import { useSidebar } from '#/components/ui/sidebar';
 
 import { Link } from '@tanstack/react-router';
+import { NavGithub } from './nav-github';
 import { NavMain } from './nav-main';
 import { NavUser } from './nav-user';
 
@@ -87,38 +87,9 @@ export const AppSidebar = (props: ComponentProps<typeof Sidebar>) => {
                 <NavMain items={navMain} />
             </SidebarContent>
             <SidebarFooter className="gap-2">
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton
-                            render={
-                                <a
-                                    href="https://github.com/mt-shihab26/urlz"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                />
-                            }
-                        >
-                            <GithubIcon className="size-5" />
-                            <span className="group-data-[collapsible=icon]:hidden">GitHub</span>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                </SidebarMenu>
                 <NavUser user={user} />
+                <NavGithub />
                 <SidebarMenu>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton
-                            render={
-                                <a
-                                    href="https://github.com/mt-shihab26/urlz"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                />
-                            }
-                        >
-                            <GithubIcon className="size-5" />
-                            <span className="group-data-[collapsible=icon]:hidden">GitHub</span>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
                     <SidebarMenuItem>
                         <SidebarMenuButton
                             size="lg"
