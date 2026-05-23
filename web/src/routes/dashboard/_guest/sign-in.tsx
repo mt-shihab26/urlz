@@ -9,6 +9,7 @@ import {
 
 import { signIn } from '#/collections/users';
 import { useForm } from '#/hooks/use-form';
+import { head } from '#/lib/utils';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 
 import { CheckboxField } from '#/components/composite/checkbox-field';
@@ -19,7 +20,6 @@ import { LinkPrompt } from '#/components/composite/link-prompt';
 import { OrDivider } from '#/components/composite/or-divider';
 import { PasswordField } from '#/components/composite/password-field';
 import { SubmitButton } from '#/components/composite/submit-button';
-import { head } from '#/lib/utils';
 import { Link } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/dashboard/_guest/sign-in')({

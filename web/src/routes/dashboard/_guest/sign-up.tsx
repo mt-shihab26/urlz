@@ -9,6 +9,7 @@ import {
 
 import { signUp } from '#/collections/users';
 import { useForm } from '#/hooks/use-form';
+import { head } from '#/lib/utils';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 
 import { CheckboxField } from '#/components/composite/checkbox-field';
@@ -21,7 +22,6 @@ import { PasswordField } from '#/components/composite/password-field';
 import { PasswordStrength } from '#/components/composite/password-strength';
 import { SubmitButton } from '#/components/composite/submit-button';
 import { TextField } from '#/components/composite/text-field';
-import { head } from '#/lib/utils';
 
 export const Route = createFileRoute('/dashboard/_guest/sign-up')({
     head: () => head('Sign Up'),

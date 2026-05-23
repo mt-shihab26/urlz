@@ -8,13 +8,13 @@ import {
 } from '#/components/ui/card';
 
 import { useForm } from '#/hooks/use-form';
+import { head } from '#/lib/utils';
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 
 import { EmailField } from '#/components/composite/email-field';
 import { Form } from '#/components/composite/form';
 import { SubmitButton } from '#/components/composite/submit-button';
-import { head } from '#/lib/utils';
 import { Link } from '@tanstack/react-router';
 import { ArrowLeftIcon, MailIcon } from 'lucide-react';
 

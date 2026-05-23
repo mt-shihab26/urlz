@@ -8,6 +8,7 @@ import {
 } from '#/components/ui/card';
 
 import { useForm } from '#/hooks/use-form';
+import { head } from '#/lib/utils';
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 
@@ -15,7 +16,6 @@ import { Form } from '#/components/composite/form';
 import { PasswordField } from '#/components/composite/password-field';
 import { SubmitButton } from '#/components/composite/submit-button';
 import { Button } from '#/components/ui/button';
-import { head } from '#/lib/utils';
 import { Link } from '@tanstack/react-router';
 import { ArrowLeftIcon, CheckIcon } from 'lucide-react';
 
