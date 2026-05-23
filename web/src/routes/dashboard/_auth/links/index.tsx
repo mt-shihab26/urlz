@@ -1,15 +1,13 @@
-import type { TResponse } from '#/services/links';
 import type { TFilter } from '#/types/utils';
+import type { ReactNode } from 'react';
 
-import { filterLinks } from '#/lib/links';
-import { queryKeys } from '#/lib/query-keys';
-import { toastError } from '#/lib/toast';
+import { head } from '#/lib/utils';
 import { getLinksData } from '#/services/links';
-import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { useState } from 'react';
+import { z } from 'zod';
 
 import { RefreshButton } from '#/components/composite/refresh-button';
+import { RouteError } from '#/components/composite/route-error';
 import { Header } from '#/components/composite/site-header';
 import { CreateLinkButton } from '#/components/screens/links/create-link-button';
 import { FiltersTabs } from '#/components/screens/links/index/filters-tabs';
@@ -17,52 +15,101 @@ import { LinksTable } from '#/components/screens/links/index/links-table';
 import { Loading } from '#/components/screens/links/index/loading';
 import { SearchBox } from '#/components/screens/links/index/search-box';
 
-export const Route = createFileRoute('/dashboard/_auth/links/')({
-    head: () => ({ meta: [{ title: 'Links — urlz' }] }),
-    component: Links,
+const DEFAULT_FILTER: TFilter = 'all';
+const DEFAULT_SEARCH = '';
+
+const searchSchema = z.object({
+    filter: z.enum(['all', 'active', 'disabled', 'expired']).optional(),
+    search: z.string().min(1).optional(),
+    page: z.coerce.number().int().min(2).optional(),
 });
 
-function Links() {
-    const [filter, setFilter] = useState<TFilter>('all');
-    const [search, setSearch] = useState('');
+export const Route = createFileRoute('/dashboard/_auth/links/')({
+    head: () => head('Links'),
+    validateSearch: (search) => searchSchema.parse(search),
+    loaderDeps: ({ search }) => ({
+        filter: search.filter,
+        search: search.search,
+        page: search.page,
+    }),
+    loader: ({ deps }) => getLinksData(deps.filter, deps.search, deps.page),
+    pendingComponent: () => (
+        <Layout refreshDisable>
+            <Loading />
+        </Layout>
+    ),
+    errorComponent: ({ error }) => (
+        <Layout>
+            <RouteError error={error} />
+        </Layout>
+    ),
+    component: RouteComponent,
+});
 
-    const { data, isLoading, isFetching, refetch } = useQuery<TResponse>({
-        queryKey: queryKeys.links.index,
-        queryFn: getLinksData,
-        throwOnError: (e) => toastError(e),
-    });
-
-    const links = data?.links ?? [];
-
+function Layout({
+    children,
+    refreshDisable = false,
+}: {
+    children: ReactNode;
+    refreshDisable?: boolean;
+}) {
     return (
         <>
             <Header
                 title="Links"
                 description="Manage and monitor all your shortened links"
                 action={
-                    <div className="flex items-center gap-2">
-                        <RefreshButton
-                            onClick={refetch}
-                            isFetching={isFetching}
-                            isLoading={isLoading}
-                        />
-                        <CreateLinkButton />
-                    </div>
+                    !refreshDisable && (
+                        <div className="flex items-center gap-2">
+                            <RefreshButton />
+                            <CreateLinkButton />
+                        </div>
+                    )
                 }
             />
-            <div className="flex flex-col gap-4 p-4 lg:p-6">
-                {isLoading ? (
-                    <Loading />
-                ) : (
-                    <>
-                        <div className="flex flex-wrap items-center gap-3">
-                            <SearchBox search={search} onSearch={setSearch} />
-                            <FiltersTabs links={links} filter={filter} onFilter={setFilter} />
-                        </div>
-                        <LinksTable links={filterLinks({ links, search, filter })} />
-                    </>
-                )}
-            </div>
+            <div className="flex flex-col gap-4 p-4 lg:p-6">{children}</div>
         </>
+    );
+}
+
+function RouteComponent() {
+    const data = Route.useLoaderData();
+    const { filter = DEFAULT_FILTER, search = DEFAULT_SEARCH, page = 1 } = Route.useSearch();
+    const navigate = Route.useNavigate();
+
+    const setSearch = (s: string) =>
+        navigate({ search: (prev) => ({ ...prev, search: s || undefined, page: undefined }) });
+
+    const setFilter = (f: TFilter) =>
+        navigate({
+            search: (prev) => ({
+                ...prev,
+                filter: f === DEFAULT_FILTER ? undefined : f,
+                page: undefined,
+            }),
+        });
+
+    const setPage = (p: number) =>
+        navigate({
+            search: (prev) => ({ ...prev, page: p > 1 ? p : undefined }),
+            resetScroll: false,
+        });
+
+    const links = data.links ?? [];
+
+    return (
+        <Layout>
+            <div className="flex flex-wrap items-center gap-3">
+                <SearchBox search={search} onSearch={setSearch} />
+                <FiltersTabs counts={data.counts} filter={filter} onFilter={setFilter} />
+            </div>
+            <LinksTable
+                links={links}
+                page={page}
+                totalItems={data.total_items}
+                totalPages={data.total_pages}
+                onPage={setPage}
+            />
+        </Layout>
     );
 }

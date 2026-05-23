@@ -1,3 +1,4 @@
+import { head } from '#/lib/utils';
 import { createFileRoute } from '@tanstack/react-router';
 
 import { Header } from '#/components/composite/site-header';
@@ -6,7 +7,7 @@ import { ProfileCard } from '#/components/screens/settings/profile-card';
 import { ThemeCard } from '#/components/screens/settings/theme-card';
 
 export const Route = createFileRoute('/dashboard/_auth/settings')({
-    head: () => ({ meta: [{ title: 'Settings — urlz' }] }),
+    head: () => head('Settings'),
     component: Settings,
 });
 

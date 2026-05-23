@@ -2,13 +2,12 @@ import type { TPlan } from '#/types/models';
 
 import { createCheckoutUrl, successfullCheckout } from '#/collections/billing';
 import { refresh } from '#/collections/users';
-import { queryKeys } from '#/lib/query-keys';
 import { toastError, toastSuccess } from '#/lib/toast';
-import { useQueryClient } from '@tanstack/react-query';
+import { useRouter } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 
 export const useHandleUpgrade = () => {
-    const queryClient = useQueryClient();
+    const router = useRouter();
     const [loading, setLoading] = useState<TPlan | null>(null);
 
     useEffect(() => {
@@ -18,8 +17,7 @@ export const useHandleUpgrade = () => {
         window.history.replaceState({}, '', window.location.pathname);
         successfullCheckout(sessionId)
             .then(() => refresh())
-            .then(() => queryClient.invalidateQueries({ queryKey: queryKeys.subscription }))
-            .then(() => queryClient.invalidateQueries({ queryKey: queryKeys.invoices }))
+            .then(() => router.invalidate())
             .then(() => toastSuccess('Subscription activated!'))
             .catch(() => toastError('Failed to activate plan. Contact support.'));
     }, []);

@@ -9,6 +9,7 @@ import {
 
 import { signIn } from '#/collections/users';
 import { useForm } from '#/hooks/use-form';
+import { head } from '#/lib/utils';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 
 import { CheckboxField } from '#/components/composite/checkbox-field';
@@ -22,7 +23,7 @@ import { SubmitButton } from '#/components/composite/submit-button';
 import { Link } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/dashboard/_guest/sign-in')({
-    head: () => ({ meta: [{ title: 'Sign In — urlz' }] }),
+    head: () => head('Sign In'),
     component: SignIn,
 });
 

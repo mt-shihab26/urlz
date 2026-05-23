@@ -21,6 +21,10 @@ export const getInitial = (name: string) => {
         .join('');
 };
 
+export const head = (title: string) => {
+    return { meta: [{ title: `${title} — urlz` }] };
+};
+
 export const cutoffDate = (days: number) => {
     const d = new Date();
     d.setDate(d.getDate() - days);

@@ -1,6 +1,10 @@
 package index
 
-import "github.com/pocketbase/dbx"
+import (
+	"fmt"
+
+	"github.com/pocketbase/dbx"
+)
 
 type linkItem struct {
 	ID          string     `json:"id"`
@@ -28,13 +32,74 @@ type linkRow struct {
 	Expires string `db:"expires"`
 }
 
-func fetchLinkRows(db dbx.Builder, uid string) []linkRow {
-	var rows []linkRow
+type linkCounts struct {
+	All      int `json:"all" db:"all"`
+	Active   int `json:"active" db:"active"`
+	Disabled int `json:"disabled" db:"disabled"`
+	Expired  int `json:"expired" db:"expired"`
+}
+
+func fetchLinkCounts(db dbx.Builder, uid string) linkCounts {
+	var counts linkCounts
 	_ = db.NewQuery(`
-		SELECT id, code, url, title, status, user, created, updated, expires
+		SELECT
+			COUNT(*) AS "all",
+			COUNT(CASE WHEN status = 'active'   AND (expires IS NULL OR expires = '' OR datetime(expires) > datetime('now')) THEN 1 END) AS active,
+			COUNT(CASE WHEN status = 'disabled' AND (expires IS NULL OR expires = '' OR datetime(expires) > datetime('now')) THEN 1 END) AS disabled,
+			COUNT(CASE WHEN expires IS NOT NULL AND expires != '' AND datetime(expires) < datetime('now') THEN 1 END) AS expired
 		FROM links
 		WHERE user = {:u}
+	`).Bind(dbx.Params{"u": uid}).One(&counts)
+	return counts
+}
+
+const perPage = 20
+
+func buildWhere(uid, filter, search string) (string, dbx.Params) {
+	where := "user = {:u}"
+	params := dbx.Params{"u": uid}
+
+	notExpired := "(expires IS NULL OR expires = '' OR datetime(expires) > datetime('now'))"
+	isExpired := "(expires IS NOT NULL AND expires != '' AND datetime(expires) < datetime('now'))"
+
+	switch filter {
+	case "active":
+		where += " AND status = 'active' AND " + notExpired
+	case "disabled":
+		where += " AND status = 'disabled' AND " + notExpired
+	case "expired":
+		where += " AND " + isExpired
+	}
+
+	if search != "" {
+		where += " AND (url LIKE {:search} OR title LIKE {:search} OR code LIKE {:search})"
+		params["search"] = fmt.Sprintf("%%%s%%", search)
+	}
+
+	return where, params
+}
+
+func fetchFilteredCount(db dbx.Builder, uid, filter, search string) int {
+	where, params := buildWhere(uid, filter, search)
+	var count struct {
+		N int `db:"n"`
+	}
+	_ = db.NewQuery(fmt.Sprintf(`SELECT COUNT(*) AS n FROM links WHERE %s`, where)).
+		Bind(params).One(&count)
+	return count.N
+}
+
+func fetchLinkRows(db dbx.Builder, uid, filter, search string, page int) []linkRow {
+	where, params := buildWhere(uid, filter, search)
+	offset := (page - 1) * perPage
+
+	var rows []linkRow
+	_ = db.NewQuery(fmt.Sprintf(`
+		SELECT id, code, url, title, status, user, created, updated, expires
+		FROM links
+		WHERE %s
 		ORDER BY created DESC
-	`).Bind(dbx.Params{"u": uid}).All(&rows)
+		LIMIT %d OFFSET %d
+	`, where, perPage, offset)).Bind(params).All(&rows)
 	return rows
 }

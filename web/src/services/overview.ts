@@ -2,7 +2,10 @@ import type { TBreakdownItem } from '#/types/utils';
 
 import { pb } from '#/lib/pb';
 
-export type TClickDay = { date: string; clicks: number };
+export type TClickDay = {
+    date: string;
+    clicks: number;
+};
 
 export type TTopLink = {
     id: string;

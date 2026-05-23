@@ -8,6 +8,7 @@ import {
 } from '#/components/ui/card';
 
 import { useForm } from '#/hooks/use-form';
+import { head } from '#/lib/utils';
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 
@@ -19,7 +20,7 @@ import { Link } from '@tanstack/react-router';
 import { ArrowLeftIcon, CheckIcon } from 'lucide-react';
 
 export const Route = createFileRoute('/dashboard/_guest/reset-password')({
-    head: () => ({ meta: [{ title: 'Reset Password — urlz' }] }),
+    head: () => head('Reset Password'),
     component: ResetPassword,
 });
 

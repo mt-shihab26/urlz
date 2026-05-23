@@ -25,13 +25,20 @@ export type TResponse = {
     volume: TVolumeDay[];
     breakdown: TBreakdownData;
     clicks: TClickRecord[];
+    clicks_total_items: number;
+    clicks_total_pages: number;
 };
 
-export const getLinkShowData = async (id: string, range: string): Promise<TResponse> => {
+export const getLinkShowData = async (
+    id: string,
+    range: string,
+    page: number,
+): Promise<TResponse | null> => {
     try {
-        const params = new URLSearchParams({ range });
+        const params = new URLSearchParams({ range, page: String(page) });
         return await pb.send<TResponse>(`/api/links/${id}?${params}`, { method: 'GET' });
     } catch (e: any) {
+        if (e?.status === 404) return null;
         throw new Error(e?.message || 'Failed to load link data');
     }
 };

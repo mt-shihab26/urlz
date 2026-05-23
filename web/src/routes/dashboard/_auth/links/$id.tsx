@@ -1,14 +1,13 @@
 import type { TRange } from '#/lib/ranges';
-import type { TResponse } from '#/services/links/show';
+import type { ReactNode } from 'react';
 
-import { queryKeys } from '#/lib/query-keys';
-import { toastError } from '#/lib/toast';
+import { rangeSchema } from '#/lib/ranges';
+import { head } from '#/lib/utils';
 import { getLinkShowData } from '#/services/links/show';
-import { useQuery } from '@tanstack/react-query';
-import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router';
-import { useState } from 'react';
+import { createFileRoute, notFound } from '@tanstack/react-router';
+import { z } from 'zod';
 
-import { RefreshButton } from '#/components/composite/refresh-button';
+import { RouteError } from '#/components/composite/route-error';
 import { Browsers } from '#/components/screens/analytics/browsers';
 import { Countries } from '#/components/screens/analytics/countries';
 import { Devices } from '#/components/screens/analytics/devices';
@@ -20,66 +19,92 @@ import { ClicksTable } from '#/components/screens/links/show/clicks-table';
 import { DetailHeader } from '#/components/screens/links/show/detail-header';
 import { DetailStats } from '#/components/screens/links/show/detail-stats';
 import { Loading } from '#/components/screens/links/show/loading';
-import { Button } from '#/components/ui/button';
+import { NotFound } from '#/components/screens/links/show/not-found';
+
+import { DEFAULT_RANGE } from '#/lib/ranges';
+
+const searchSchema = z.object({
+    range: rangeSchema,
+    page: z.coerce.number().int().min(1).optional(),
+});
 
 export const Route = createFileRoute('/dashboard/_auth/links/$id')({
-    head: () => ({ meta: [{ title: 'Link — urlz' }] }),
+    head: () => head('Link'),
+    validateSearch: (search) => searchSchema.parse(search),
+    loaderDeps: ({ search }) => ({
+        range: search.range ?? DEFAULT_RANGE,
+        page: search.page ?? 1,
+    }),
+    loader: async ({ params, deps }) => {
+        const data = await getLinkShowData(params.id, deps.range, deps.page);
+        if (!data) throw notFound();
+        return data;
+    },
+    pendingComponent: () => (
+        <Layout>
+            <Loading />
+        </Layout>
+    ),
+    errorComponent: ({ error }) => (
+        <Layout>
+            <RouteError error={error} />
+        </Layout>
+    ),
+    notFoundComponent: () => (
+        <Layout>
+            <NotFound />
+        </Layout>
+    ),
     component: LinkDetail,
 });
 
-function LinkDetail() {
-    const navigate = useNavigate();
-    const { id } = useParams({ strict: false });
-    const [range, setRange] = useState<TRange>('30d');
+function Layout({ children }: { children: ReactNode }) {
+    return <div className="flex flex-col">{children}</div>;
+}
 
-    const { data, isLoading, isFetching, refetch } = useQuery<TResponse>({
-        queryKey: queryKeys.links.show(id!, range),
-        queryFn: () => getLinkShowData(id!, range),
-        enabled: !!id,
-        throwOnError: (e) => toastError(e),
-    });
+function LinkDetail() {
+    const { id } = Route.useParams();
+    const { range = DEFAULT_RANGE, page = 1 } = Route.useSearch();
+
+    const navigate = Route.useNavigate();
+    const data = Route.useLoaderData();
+
+    const setRange = (r: TRange) =>
+        navigate({ to: '/dashboard/links/$id', params: { id }, search: { range: r } });
+
+    const setPage = (p: number) =>
+        navigate({
+            search: (prev) => ({ ...prev, page: p > 1 ? p : undefined }),
+            resetScroll: false,
+        });
 
     return (
-        <>
-            {isLoading ? (
-                <Loading />
-            ) : !data ? (
-                <div className="flex flex-col items-center justify-center gap-4 p-12 text-center">
-                    <p className="text-muted-foreground">Link not found.</p>
-                    <Button variant="outline" onClick={() => navigate({ to: '/dashboard/links' })}>
-                        Back to Links
-                    </Button>
+        <Layout>
+            <DetailHeader
+                link={data.link}
+                range={range}
+                onRangeChange={setRange}
+                onBack={() => navigate({ to: '/dashboard/links' })}
+            />
+            <div className="flex flex-col gap-6 p-4 lg:p-6">
+                <DetailStats stats={data.stats} created={data.link.created} />
+                <ClicksChart volume={data.volume} />
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <Countries items={data.breakdown.countries} />
+                    <Devices items={data.breakdown.devices} />
+                    <Referrers items={data.breakdown.referrers} />
+                    <Browsers items={data.breakdown.browsers} />
+                    <OperatingSystems items={data.breakdown.os} />
+                    <Languages items={data.breakdown.languages} />
                 </div>
-            ) : (
-                <>
-                    <DetailHeader
-                        link={data.link}
-                        range={range}
-                        onRangeChange={setRange}
-                        onBack={() => navigate({ to: '/dashboard/links' })}
-                    />
-                    <div className="flex items-center justify-end px-4 pt-3 lg:px-6">
-                        <RefreshButton
-                            onClick={refetch}
-                            isFetching={isFetching}
-                            isLoading={isLoading}
-                        />
-                    </div>
-                    <div className="flex flex-col gap-6 p-4 lg:p-6">
-                        <DetailStats stats={data.stats} created={data.link.created} />
-                        <ClicksChart volume={data.volume} />
-                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <Countries items={data.breakdown.countries} />
-                            <Devices items={data.breakdown.devices} />
-                            <Referrers items={data.breakdown.referrers} />
-                            <Browsers items={data.breakdown.browsers} />
-                            <OperatingSystems items={data.breakdown.os} />
-                            <Languages items={data.breakdown.languages} />
-                        </div>
-                        <ClicksTable clicks={data.clicks} />
-                    </div>
-                </>
-            )}
-        </>
+                <ClicksTable
+                    clicks={data.clicks}
+                    page={page}
+                    totalItems={data.clicks_total_items}
+                    totalPages={data.clicks_total_pages}
+                    onPage={setPage}
+                />
+            </div>
+        </Layout>
     );
 }

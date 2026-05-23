@@ -9,6 +9,7 @@ import {
 
 import { signUp } from '#/collections/users';
 import { useForm } from '#/hooks/use-form';
+import { head } from '#/lib/utils';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 
 import { CheckboxField } from '#/components/composite/checkbox-field';
@@ -23,7 +24,7 @@ import { SubmitButton } from '#/components/composite/submit-button';
 import { TextField } from '#/components/composite/text-field';
 
 export const Route = createFileRoute('/dashboard/_guest/sign-up')({
-    head: () => ({ meta: [{ title: 'Sign Up — urlz' }] }),
+    head: () => head('Sign Up'),
     component: SignUp,
 });
 

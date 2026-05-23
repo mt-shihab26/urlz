@@ -1,30 +1,18 @@
-import { getSubscription } from '#/collections/billing';
+import type { TSubscription } from '#/collections/billing';
+
 import { useUser } from '#/components/providers/auth-provider';
 import { getCanCancel, getIsFree, getScheduledToCancel } from '#/lib/billing';
-import { queryKeys } from '#/lib/query-keys';
-import { toastError } from '#/lib/toast';
-import { useQuery } from '@tanstack/react-query';
 
 import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card';
 import { CancelButton } from './cancel-button';
 import { CancelingInfo } from './canceling-info';
-import { Loading } from './loading';
 import { PlanLavel } from './plan-label';
 import { StatusLabel } from './status-label';
 import { SubscriptionInfo } from './subscription-info';
 import { UncancelButton } from './uncancel-button';
 
-export const Subscription = () => {
+export const Subscription = ({ subscription }: { subscription: TSubscription | null }) => {
     const { user } = useUser();
-
-    const { data: subscription, isLoading } = useQuery({
-        queryKey: queryKeys.subscription,
-        queryFn: getSubscription,
-        throwOnError: (e: unknown) => {
-            toastError(e);
-            return false;
-        },
-    });
 
     const scheduledCancel = getScheduledToCancel(subscription ?? null, user);
     const canCancel = getCanCancel(user, subscription ?? null);
@@ -35,9 +23,7 @@ export const Subscription = () => {
                 <CardTitle>Subscription</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
-                {isLoading ? (
-                    <Loading />
-                ) : !subscription ? (
+                {!subscription ? (
                     <p className="text-sm text-muted-foreground">No subscription found.</p>
                 ) : (
                     <>

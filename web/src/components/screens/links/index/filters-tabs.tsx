@@ -1,7 +1,5 @@
-import type { TLinkItem } from '#/services/links';
+import type { TLinkCounts } from '#/services/links';
 import type { TFilter } from '#/types/utils';
-
-import { isLinkActive, isLinkDisabled, isLinkExpired } from '#/lib/links';
 
 import { ToggleGroup, ToggleGroupItem } from '#/components/ui/toggle-group';
 
@@ -13,21 +11,14 @@ const filterEntries: { key: TFilter; label: string }[] = [
 ];
 
 export const FiltersTabs = ({
-    links,
+    counts,
     filter,
     onFilter,
 }: {
-    links: TLinkItem[];
+    counts: TLinkCounts;
     filter: TFilter;
     onFilter: (filter: TFilter) => void;
 }) => {
-    const counts = {
-        all: links.length,
-        active: links.filter(isLinkActive).length,
-        disabled: links.filter(isLinkDisabled).length,
-        expired: links.filter(isLinkExpired).length,
-    };
-
     return (
         <ToggleGroup
             multiple={false}

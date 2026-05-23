@@ -10,7 +10,6 @@ import {
 } from '#/components/ui/table';
 
 import { formatChartDate } from '#/lib/formats';
-import { useEffect, useMemo, useState } from 'react';
 
 import { Paginator } from '#/components/composite/paginator';
 import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card';
@@ -19,20 +18,20 @@ const PAGE_SIZE = 10;
 
 const label = (value: string) => value.trim() || 'Direct';
 
-export const ClicksTable = ({ clicks }: { clicks: TClickRecord[] }) => {
-    const [page, setPage] = useState(1);
-
-    const pageCount = Math.max(1, Math.ceil(clicks.length / PAGE_SIZE));
-    const currentPage = Math.min(page, pageCount);
-
-    const paginated = useMemo(() => {
-        const start = (currentPage - 1) * PAGE_SIZE;
-        return clicks.slice(start, start + PAGE_SIZE);
-    }, [currentPage, clicks]);
-
-    useEffect(() => {
-        setPage(1);
-    }, [clicks.length]);
+export const ClicksTable = ({
+    clicks,
+    page,
+    totalItems,
+    totalPages,
+    onPage,
+}: {
+    clicks: TClickRecord[];
+    page: number;
+    totalItems: number;
+    totalPages: number;
+    onPage: (page: number) => void;
+}) => {
+    const offset = (page - 1) * PAGE_SIZE;
 
     return (
         <Card>
@@ -52,7 +51,7 @@ export const ClicksTable = ({ clicks }: { clicks: TClickRecord[] }) => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {paginated.length === 0 ? (
+                        {clicks.length === 0 ? (
                             <TableRow>
                                 <TableCell
                                     colSpan={6}
@@ -62,10 +61,10 @@ export const ClicksTable = ({ clicks }: { clicks: TClickRecord[] }) => {
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            paginated.map((click, index) => (
+                            clicks.map((click, index) => (
                                 <TableRow key={click.id}>
                                     <TableCell className="text-center font-mono text-xs text-muted-foreground">
-                                        {(currentPage - 1) * PAGE_SIZE + index + 1}
+                                        {offset + index + 1}
                                     </TableCell>
                                     <TableCell className="font-mono text-xs text-muted-foreground">
                                         {formatChartDate(click.date)}
@@ -81,17 +80,13 @@ export const ClicksTable = ({ clicks }: { clicks: TClickRecord[] }) => {
                         )}
                     </TableBody>
                 </Table>
-                {clicks.length > PAGE_SIZE && (
+                {totalPages > 1 && (
                     <div className="mt-2 flex flex-col gap-3 px-3 sm:flex-row sm:items-center sm:justify-between">
                         <p className="shrink-0 text-sm text-muted-foreground">
-                            Showing {(currentPage - 1) * PAGE_SIZE + 1}–
-                            {Math.min(currentPage * PAGE_SIZE, clicks.length)} of {clicks.length}
+                            Showing {offset + 1}–{Math.min(page * PAGE_SIZE, totalItems)} of{' '}
+                            {totalItems}
                         </p>
-                        <Paginator
-                            currentPage={currentPage}
-                            totalPages={pageCount}
-                            onPage={setPage}
-                        />
+                        <Paginator currentPage={page} totalPages={totalPages} onPage={onPage} />
                     </div>
                 )}
             </CardContent>
