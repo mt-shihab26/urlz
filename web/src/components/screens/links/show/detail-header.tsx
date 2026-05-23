@@ -6,6 +6,7 @@ import { formatCode, formatDate } from '#/lib/formats';
 import { CopyButton } from '#/components/composite/copy-button';
 import { LinkStatusBadge } from '#/components/composite/link-status-badge';
 import { RangeTabs } from '#/components/composite/range-tabs';
+import { RefreshButton } from '#/components/composite/refresh-button';
 import { LinkDeleteButton } from '#/components/screens/links/link-delete-button';
 import { LinkEditButton } from '#/components/screens/links/link-edit-button';
 import { LinkOpenButton } from '#/components/screens/links/link-open-button';
@@ -62,7 +63,10 @@ export const DetailHeader = ({
                         <LinkDeleteButton link={link} />
                     </div>
                 </div>
-                <RangeTabs range={range} onRange={onRangeChange} />
+                <div className="flex gap-2 items-center justify-end px-4 pt-3 lg:px-6">
+                    <RangeTabs range={range} onRange={onRangeChange} />
+                    <RefreshButton />
+                </div>
             </div>
         </div>
     );
