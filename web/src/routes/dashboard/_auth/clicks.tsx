@@ -1,6 +1,5 @@
 import type { TClickItem } from '#/services/clicks';
 
-import { DEFAULT_RANGE, RANGES } from '#/lib/ranges';
 import { toastError } from '#/lib/toast';
 import { head } from '#/lib/utils';
 import { getClicksData } from '#/services/clicks';
@@ -12,6 +11,8 @@ import { RangeTabs } from '#/components/composite/range-tabs';
 import { Header } from '#/components/composite/site-header';
 import { ClicksTable } from '#/components/screens/clicks/clicks-table';
 import { DetailDrawer } from '#/components/screens/clicks/detail-drawer';
+
+import { DEFAULT_RANGE, RANGES } from '#/lib/ranges';
 
 const searchSchema = z.object({
     range: z.enum(RANGES).optional(),
@@ -42,7 +43,7 @@ function Clicks() {
     const navigate = Route.useNavigate();
     const [selectedClick, setSelectedClick] = useState<TClickItem | null>(null);
 
-    const handleRangeChange = (r: typeof RANGES[number]) => {
+    const handleRangeChange = (r: (typeof RANGES)[number]) => {
         navigate({ search: { range: r, page: 1 } });
     };
 
