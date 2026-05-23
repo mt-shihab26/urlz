@@ -1,9 +1,9 @@
-import type { TRange } from '#/lib/ranges';
-
-import { validateRange } from '#/lib/ranges';
+import { DEFAULT_RANGE, RANGES } from '#/lib/ranges';
 import { toastError } from '#/lib/toast';
+import { head } from '#/lib/utils';
 import { getLinkShowData } from '#/services/links/show';
-import { createFileRoute, useNavigate, useRouter, useRouterState } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { z } from 'zod';
 
 import { RefreshButton } from '#/components/composite/refresh-button';
 import { Browsers } from '#/components/screens/analytics/browsers';
@@ -18,12 +18,15 @@ import { DetailHeader } from '#/components/screens/links/show/detail-header';
 import { DetailStats } from '#/components/screens/links/show/detail-stats';
 import { Loading } from '#/components/screens/links/show/loading';
 import { Button } from '#/components/ui/button';
-import { head } from '#/lib/utils';
+
+const searchSchema = z.object({
+    range: z.enum(RANGES).optional(),
+});
 
 export const Route = createFileRoute('/dashboard/_auth/links/$id')({
     head: () => head('Link'),
-    validateSearch: (search) => ({ range: validateRange(search.range) }),
-    loaderDeps: ({ search }) => ({ range: search.range }),
+    validateSearch: (search) => searchSchema.parse(search),
+    loaderDeps: ({ search }) => ({ range: search.range ?? DEFAULT_RANGE }),
     loader: async ({ params, deps }) => {
         try {
             return await getLinkShowData(params.id, deps.range);
@@ -36,15 +39,13 @@ export const Route = createFileRoute('/dashboard/_auth/links/$id')({
     component: LinkDetail,
 });
 
-const LinkDetail = () => {
+function LinkDetail() {
     const navigate = useNavigate();
     const { id } = Route.useParams();
-    const { range } = Route.useSearch();
+    const { range = DEFAULT_RANGE } = Route.useSearch();
     const data = Route.useLoaderData();
-    const router = useRouter();
-    const isRefreshing = useRouterState({ select: (s) => s.isLoading });
 
-    const setRange = (r: TRange) =>
+    const setRange = (r: typeof RANGES[number]) =>
         navigate({ to: '/dashboard/links/$id', params: { id }, search: { range: r } });
 
     return (
@@ -65,10 +66,7 @@ const LinkDetail = () => {
                         onBack={() => navigate({ to: '/dashboard/links' })}
                     />
                     <div className="flex items-center justify-end px-4 pt-3 lg:px-6">
-                        <RefreshButton
-                            onClick={() => router.invalidate()}
-                            isLoading={isRefreshing}
-                        />
+                        <RefreshButton />
                     </div>
                     <div className="flex flex-col gap-6 p-4 lg:p-6">
                         <DetailStats stats={data.stats} created={data.link.created} />
@@ -87,4 +85,4 @@ const LinkDetail = () => {
             )}
         </>
     );
-};
+}

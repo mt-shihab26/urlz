@@ -1,24 +1,26 @@
-import type { TRange } from '#/lib/ranges';
 import type { TClickItem } from '#/services/clicks';
 
-import { validateRange } from '#/lib/ranges';
+import { DEFAULT_RANGE, RANGES } from '#/lib/ranges';
 import { toastError } from '#/lib/toast';
+import { head } from '#/lib/utils';
 import { getClicksData } from '#/services/clicks';
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
+import { z } from 'zod';
 
 import { RangeTabs } from '#/components/composite/range-tabs';
 import { Header } from '#/components/composite/site-header';
 import { ClicksTable } from '#/components/screens/clicks/clicks-table';
 import { DetailDrawer } from '#/components/screens/clicks/detail-drawer';
-import { head } from '#/lib/utils';
+
+const searchSchema = z.object({
+    range: z.enum(RANGES).default(DEFAULT_RANGE),
+    page: z.coerce.number().int().min(1).default(1),
+});
 
 export const Route = createFileRoute('/dashboard/_auth/clicks')({
     head: () => head('Clicks'),
-    validateSearch: (search) => ({
-        range: validateRange(search.range),
-        page: Number(search.page ?? 1),
-    }),
+    validateSearch: (search) => searchSchema.parse(search),
     loaderDeps: ({ search }) => ({ range: search.range, page: search.page }),
     loader: async ({ deps }) => {
         try {
@@ -31,13 +33,13 @@ export const Route = createFileRoute('/dashboard/_auth/clicks')({
     component: Clicks,
 });
 
-const Clicks = () => {
+function Clicks() {
     const { range, page } = Route.useSearch();
     const data = Route.useLoaderData();
-    const navigate = useNavigate();
+    const navigate = Route.useNavigate();
     const [selectedClick, setSelectedClick] = useState<TClickItem | null>(null);
 
-    const handleRangeChange = (r: TRange) => {
+    const handleRangeChange = (r: typeof RANGES[number]) => {
         navigate({ search: { range: r, page: 1 } });
     };
 
@@ -69,4 +71,4 @@ const Clicks = () => {
             />
         </>
     );
-};
+}

@@ -30,7 +30,7 @@ export const Route = createFileRoute('/dashboard/_auth/billing')({
     component: Billing,
 });
 
-const Billing = () => {
+function Billing() {
     const { subscription, invoices } = Route.useLoaderData();
 
     return (
@@ -43,4 +43,4 @@ const Billing = () => {
             </div>
         </>
     );
-};
+}
