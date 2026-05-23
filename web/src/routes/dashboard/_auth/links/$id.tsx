@@ -1,5 +1,4 @@
 import { DEFAULT_RANGE, RANGES } from '#/lib/ranges';
-import { toastError } from '#/lib/toast';
 import { head } from '#/lib/utils';
 import { getLinkShowData } from '#/services/links/show';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
@@ -27,14 +26,7 @@ export const Route = createFileRoute('/dashboard/_auth/links/$id')({
     head: () => head('Link'),
     validateSearch: (search) => searchSchema.parse(search),
     loaderDeps: ({ search }) => ({ range: search.range ?? DEFAULT_RANGE }),
-    loader: async ({ params, deps }) => {
-        try {
-            return await getLinkShowData(params.id, deps.range);
-        } catch (e) {
-            toastError(e);
-            return null;
-        }
-    },
+    loader: async ({ params, deps }) => getLinkShowData(params.id, deps.range),
     pendingComponent: Loading,
     component: LinkDetail,
 });
@@ -45,7 +37,7 @@ function LinkDetail() {
     const { range = DEFAULT_RANGE } = Route.useSearch();
     const data = Route.useLoaderData();
 
-    const setRange = (r: typeof RANGES[number]) =>
+    const setRange = (r: (typeof RANGES)[number]) =>
         navigate({ to: '/dashboard/links/$id', params: { id }, search: { range: r } });
 
     return (
