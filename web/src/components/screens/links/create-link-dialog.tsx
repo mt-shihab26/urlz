@@ -128,8 +128,8 @@ export const CreateLinkDialog = ({
                                 placeholder="my-link"
                                 className="rounded-none border-0 shadow-none focus-visible:ring-0"
                             />
-                            {errors.code && <FieldError>{errors.code}</FieldError>}
                         </div>
+                        {errors.code && <FieldError>{errors.code}</FieldError>}
                     </div>
                     <TextField
                         id="label"
