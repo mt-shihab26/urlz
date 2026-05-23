@@ -33,19 +33,3 @@ func fetchClicks(db dbx.Builder, linkID, since string, limit, offset int) []clic
 	return rows
 }
 
-func fetchClicksTotal(db dbx.Builder, linkID, since string) int {
-	type row struct {
-		Count int `db:"count"`
-	}
-	q := "SELECT COUNT(*) as count FROM clicks WHERE link = {:id}"
-	params := dbx.Params{"id": linkID}
-	if since != "" {
-		q += " AND date >= {:since}"
-		params["since"] = since
-	}
-	var r row
-	if err := db.NewQuery(q).Bind(params).One(&r); err != nil {
-		return 0
-	}
-	return r.Count
-}

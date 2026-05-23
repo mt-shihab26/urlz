@@ -39,8 +39,14 @@ func Handler(e *core.RequestEvent) error {
 	)
 	wg.Go(func() { links = buildLinks(db, uid, filter, search, page) })
 	wg.Go(func() { counts = fetchLinkCounts(db, uid) })
-	wg.Go(func() { totalItems = fetchFilteredCount(db, uid, filter, search) })
+	needsCount := filter != "" || search != ""
+	if needsCount {
+		wg.Go(func() { totalItems = fetchFilteredCount(db, uid, filter, search) })
+	}
 	wg.Wait()
+	if !needsCount {
+		totalItems = counts.All
+	}
 
 	totalPages := (totalItems + perPage - 1) / perPage
 	if totalPages == 0 {

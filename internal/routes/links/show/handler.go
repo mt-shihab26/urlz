@@ -42,20 +42,20 @@ func Handler(e *core.RequestEvent) error {
 	}
 
 	var (
-		stats       statsData
-		volume      []volumeDay
-		breakdown   breakdownData
-		clicks      []clickRecord
-		clicksTotal int
-		wg          sync.WaitGroup
+		stats     statsData
+		volume    []volumeDay
+		breakdown breakdownData
+		clicks    []clickRecord
+		wg        sync.WaitGroup
 	)
 	wg.Go(func() { stats = fetchStats(db, linkID, since) })
 	wg.Go(func() { volume = fetchVolume(db, linkID, since) })
 	wg.Go(func() { breakdown = fetchBreakdown(db, linkID, since) })
 	wg.Go(func() { clicks = fetchClicks(db, linkID, since, perPage, offset) })
-	wg.Go(func() { clicksTotal = fetchClicksTotal(db, linkID, since) })
 	wg.Wait()
 
+	// period_clicks already counts the same rows fetchClicksTotal would count
+	clicksTotal := stats.PeriodClicks
 	totalPages := clicksTotal / perPage
 	if clicksTotal%perPage != 0 {
 		totalPages++
