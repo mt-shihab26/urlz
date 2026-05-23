@@ -14,6 +14,7 @@ import { SubmitButton } from '#/components/composite/submit-button';
 import { TextField } from '#/components/composite/text-field';
 import { Button } from '#/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '#/components/ui/dialog';
+import { FieldError } from '#/components/ui/field';
 import { Label } from '#/components/ui/label';
 import { Link } from '@tanstack/react-router';
 
@@ -126,8 +127,8 @@ export const CreateLinkDialog = ({
                                 }
                                 placeholder="my-link"
                                 className="rounded-none border-0 shadow-none focus-visible:ring-0"
-                                error={errors.code}
                             />
+                            {errors.code && <FieldError>{errors.code}</FieldError>}
                         </div>
                     </div>
                     <TextField
