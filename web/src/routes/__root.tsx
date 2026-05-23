@@ -14,26 +14,26 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 export const Route = createRootRoute({
     component: () => (
         <>
-        <HeadContent />
-        <ThemeProvider>
-            <AuthProvider>
-                <TooltipProvider>
-                    <Outlet />
-                    <Toaster />
-                    <TanStackDevtools
-                        config={{
-                            position: 'bottom-right',
-                        }}
-                        plugins={[
-                            {
-                                name: 'TanStack Router',
-                                render: <TanStackRouterDevtoolsPanel />,
-                            },
-                        ]}
-                    />
-                </TooltipProvider>
-            </AuthProvider>
-        </ThemeProvider>
+            <HeadContent />
+            <ThemeProvider>
+                <AuthProvider>
+                    <TooltipProvider>
+                        <Outlet />
+                        <Toaster />
+                        <TanStackDevtools
+                            config={{
+                                position: 'bottom-right',
+                            }}
+                            plugins={[
+                                {
+                                    name: 'TanStack Router',
+                                    render: <TanStackRouterDevtoolsPanel />,
+                                },
+                            ]}
+                        />
+                    </TooltipProvider>
+                </AuthProvider>
+            </ThemeProvider>
         </>
     ),
     notFoundComponent: () => (

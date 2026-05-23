@@ -32,4 +32,3 @@ func fetchClicks(db dbx.Builder, linkID, since string, limit, offset int) []clic
 	}
 	return rows
 }
-

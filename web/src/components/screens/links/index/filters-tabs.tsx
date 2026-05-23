@@ -19,7 +19,6 @@ export const FiltersTabs = ({
     filter: TFilter;
     onFilter: (filter: TFilter) => void;
 }) => {
-
     return (
         <ToggleGroup
             multiple={false}

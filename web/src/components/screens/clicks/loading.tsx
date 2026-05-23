@@ -1,6 +1,13 @@
-import { Skeleton } from '#/components/ui/skeleton';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '#/components/ui/table';
 import { Card, CardContent, CardHeader } from '#/components/ui/card';
+import { Skeleton } from '#/components/ui/skeleton';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '#/components/ui/table';
 
 export const Loading = () => (
     <div className="p-4 lg:p-6">

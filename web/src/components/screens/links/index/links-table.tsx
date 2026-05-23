@@ -1,8 +1,15 @@
 import type { TLinkItem } from '#/services/links';
 
 import { Paginator } from '#/components/composite/paginator';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '#/components/ui/table';
 import { LinkRow } from '#/components/screens/links/index/link-row';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '#/components/ui/table';
 
 export const PER_PAGE = 20;
 
@@ -61,7 +68,8 @@ export const LinksTable = ({
             {totalItems > PER_PAGE && (
                 <div className="flex flex-col gap-3 px-2 sm:flex-row sm:items-center sm:justify-between">
                     <p className="shrink-0 text-sm text-muted-foreground">
-                        Showing {(page - 1) * PER_PAGE + 1}–{Math.min(page * PER_PAGE, totalItems)} of {totalItems}
+                        Showing {(page - 1) * PER_PAGE + 1}–{Math.min(page * PER_PAGE, totalItems)}{' '}
+                        of {totalItems}
                     </p>
                     <Paginator currentPage={page} totalPages={totalPages} onPage={onPage} />
                 </div>
