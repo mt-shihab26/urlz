@@ -1,6 +1,7 @@
 import type { TClickItem } from '#/services/clicks';
+import type { ReactNode } from 'react';
 
-import { toastError } from '#/lib/toast';
+import { rangeSchema } from '#/lib/ranges';
 import { head } from '#/lib/utils';
 import { getClicksData } from '#/services/clicks';
 import { createFileRoute } from '@tanstack/react-router';
@@ -8,14 +9,17 @@ import { useState } from 'react';
 import { z } from 'zod';
 
 import { RangeTabs } from '#/components/composite/range-tabs';
+import { RefreshButton } from '#/components/composite/refresh-button';
+import { RouteError } from '#/components/composite/route-error';
 import { Header } from '#/components/composite/site-header';
 import { ClicksTable } from '#/components/screens/clicks/clicks-table';
 import { DetailDrawer } from '#/components/screens/clicks/detail-drawer';
+import { Loading } from '#/components/screens/clicks/loading';
 
-import { DEFAULT_RANGE, RANGES } from '#/lib/ranges';
+import { DEFAULT_RANGE } from '#/lib/ranges';
 
 const searchSchema = z.object({
-    range: z.enum(RANGES).optional(),
+    range: rangeSchema,
     page: z.coerce.number().int().min(1).optional(),
 });
 
@@ -26,45 +30,80 @@ export const Route = createFileRoute('/dashboard/_auth/clicks')({
         range: search.range ?? DEFAULT_RANGE,
         page: search.page ?? 1,
     }),
-    loader: async ({ deps }) => {
-        try {
-            return await getClicksData(deps.page, deps.range);
-        } catch (e) {
-            toastError(e);
-            return null;
-        }
-    },
+    loader: ({ deps }) => getClicksData(deps.page, deps.range),
+    pendingComponent: () => (
+        <Layout refreshDisable>
+            <Loading />
+        </Layout>
+    ),
+    errorComponent: ({ error }) => (
+        <Layout>
+            <RouteError error={error} />
+        </Layout>
+    ),
     component: Clicks,
 });
 
-function Clicks() {
-    const { range = DEFAULT_RANGE, page = 1 } = Route.useSearch();
-    const data = Route.useLoaderData();
+function Layout({
+    children,
+    refreshDisable = false,
+}: {
+    children: ReactNode;
+    refreshDisable?: boolean;
+}) {
+    const { range = DEFAULT_RANGE } = Route.useSearch();
+
     const navigate = Route.useNavigate();
-    const [selectedClick, setSelectedClick] = useState<TClickItem | null>(null);
-
-    const handleRangeChange = (r: (typeof RANGES)[number]) => {
-        navigate({ search: { range: r, page: 1 } });
-    };
-
-    const handlePage = (p: number) => {
-        navigate({ search: (prev) => ({ ...prev, page: p > 1 ? p : undefined }) });
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
 
     return (
         <>
             <Header
                 title="Clicks"
                 description="Full paginated click history"
-                action={<RangeTabs range={range} onRange={handleRangeChange} />}
+                action={
+                    !refreshDisable && (
+                        <div className="flex items-center gap-2">
+                            <RangeTabs
+                                range={range}
+                                onRange={(r) =>
+                                    navigate({
+                                        search: (prev) => ({ ...prev, range: r, page: undefined }),
+                                    })
+                                }
+                            />
+                            <RefreshButton />
+                        </div>
+                    )
+                }
             />
+            {children}
+        </>
+    );
+}
+
+function Clicks() {
+    const { page = 1 } = Route.useSearch();
+
+    const data = Route.useLoaderData();
+    const navigate = Route.useNavigate();
+
+    const [selectedClick, setSelectedClick] = useState<TClickItem | null>(null);
+
+    const setPage = (p: number) => {
+        navigate({
+            search: (prev) => ({ ...prev, page: p > 1 ? p : undefined }),
+            resetScroll: false,
+        });
+    };
+
+    return (
+        <Layout>
             <div className="p-4 lg:p-6">
                 <ClicksTable
                     result={data ?? null}
                     loading={false}
                     page={page}
-                    onPage={handlePage}
+                    onPage={setPage}
                     onClickRow={setSelectedClick}
                 />
             </div>
@@ -73,6 +112,6 @@ function Clicks() {
                 open={selectedClick !== null}
                 onClose={() => setSelectedClick(null)}
             />
-        </>
+        </Layout>
     );
 }
