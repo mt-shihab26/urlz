@@ -12,8 +12,10 @@ const RANGE_DAYS: Record<TRange, number | null> = {
     All: null,
 };
 
+export const rangeSchema = z.enum(RANGES).optional();
+
 export const searchRangeSchema = z.object({
-    range: z.enum(RANGES).optional(),
+    range: rangeSchema,
 });
 
 export const getRangeStartDate = (range: TRange) => {
