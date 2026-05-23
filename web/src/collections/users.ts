@@ -11,6 +11,10 @@ export const signIn = async (email: string, password: string) => {
     await pb.collection('users').authWithPassword(email, password);
 };
 
+export const signInWithGoogle = () => {
+    return pb.collection('users').authWithOAuth2({ provider: 'google' });
+};
+
 export const refresh = async () => {
     await pb.collection('users').authRefresh();
 };
