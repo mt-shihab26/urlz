@@ -1,6 +1,7 @@
 package show
 
 import (
+	"strconv"
 	"sync"
 	"time"
 
@@ -9,11 +10,13 @@ import (
 )
 
 type showResponse struct {
-	Link      linkData      `json:"link"`
-	Stats     statsData     `json:"stats"`
-	Volume    []volumeDay   `json:"volume"`
-	Breakdown breakdownData `json:"breakdown"`
-	Clicks    []clickRecord `json:"clicks"`
+	Link             linkData      `json:"link"`
+	Stats            statsData     `json:"stats"`
+	Volume           []volumeDay   `json:"volume"`
+	Breakdown        breakdownData `json:"breakdown"`
+	Clicks           []clickRecord `json:"clicks"`
+	ClicksTotalItems int           `json:"clicks_total_items"`
+	ClicksTotalPages int           `json:"clicks_total_pages"`
 }
 
 func Handler(e *core.RequestEvent) error {
@@ -24,7 +27,14 @@ func Handler(e *core.RequestEvent) error {
 	uid := user.Id
 	linkID := e.Request.PathValue("id")
 	db := e.App.DB()
-	since := startDate(e.Request.URL.Query().Get("range"))
+	q := e.Request.URL.Query()
+
+	since := startDate(q.Get("range"))
+	page, _ := strconv.Atoi(q.Get("page"))
+	if page < 1 {
+		page = 1
+	}
+	offset := (page - 1) * perPage
 
 	link, err := fetchLink(db, linkID, uid)
 	if err != nil {
@@ -32,24 +42,36 @@ func Handler(e *core.RequestEvent) error {
 	}
 
 	var (
-		stats     statsData
-		volume    []volumeDay
-		breakdown breakdownData
-		clicks    []clickRecord
-		wg        sync.WaitGroup
+		stats       statsData
+		volume      []volumeDay
+		breakdown   breakdownData
+		clicks      []clickRecord
+		clicksTotal int
+		wg          sync.WaitGroup
 	)
 	wg.Go(func() { stats = fetchStats(db, linkID, since) })
 	wg.Go(func() { volume = fetchVolume(db, linkID, since) })
 	wg.Go(func() { breakdown = fetchBreakdown(db, linkID, since) })
-	wg.Go(func() { clicks = fetchClicks(db, linkID, since) })
+	wg.Go(func() { clicks = fetchClicks(db, linkID, since, perPage, offset) })
+	wg.Go(func() { clicksTotal = fetchClicksTotal(db, linkID, since) })
 	wg.Wait()
 
+	totalPages := clicksTotal / perPage
+	if clicksTotal%perPage != 0 {
+		totalPages++
+	}
+	if totalPages < 1 {
+		totalPages = 1
+	}
+
 	return e.JSON(200, showResponse{
-		Link:      link,
-		Stats:     stats,
-		Volume:    volume,
-		Breakdown: breakdown,
-		Clicks:    clicks,
+		Link:             link,
+		Stats:            stats,
+		Volume:           volume,
+		Breakdown:        breakdown,
+		Clicks:           clicks,
+		ClicksTotalItems: clicksTotal,
+		ClicksTotalPages: totalPages,
 	})
 }
 

@@ -1,10 +1,11 @@
 import type { TRange } from '#/lib/ranges';
 import type { ReactNode } from 'react';
 
-import { searchRangeSchema } from '#/lib/ranges';
+import { rangeSchema } from '#/lib/ranges';
 import { head } from '#/lib/utils';
 import { getLinkShowData } from '#/services/links/show';
-import { createFileRoute, notFound, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, notFound } from '@tanstack/react-router';
+import { z } from 'zod';
 
 import { RouteError } from '#/components/composite/route-error';
 import { Browsers } from '#/components/screens/analytics/browsers';
@@ -22,12 +23,20 @@ import { NotFound } from '#/components/screens/links/show/not-found';
 
 import { DEFAULT_RANGE } from '#/lib/ranges';
 
+const searchSchema = z.object({
+    range: rangeSchema,
+    page: z.coerce.number().int().min(1).optional(),
+});
+
 export const Route = createFileRoute('/dashboard/_auth/links/$id')({
     head: () => head('Link'),
-    validateSearch: (search) => searchRangeSchema.parse(search),
-    loaderDeps: ({ search }) => ({ range: search.range ?? DEFAULT_RANGE }),
+    validateSearch: (search) => searchSchema.parse(search),
+    loaderDeps: ({ search }) => ({
+        range: search.range ?? DEFAULT_RANGE,
+        page: search.page ?? 1,
+    }),
     loader: async ({ params, deps }) => {
-        const data = await getLinkShowData(params.id, deps.range);
+        const data = await getLinkShowData(params.id, deps.range, deps.page);
         if (!data) throw notFound();
         return data;
     },
@@ -55,13 +64,19 @@ function Layout({ children }: { children: ReactNode }) {
 
 function LinkDetail() {
     const { id } = Route.useParams();
-    const { range = DEFAULT_RANGE } = Route.useSearch();
+    const { range = DEFAULT_RANGE, page = 1 } = Route.useSearch();
 
-    const navigate = useNavigate();
+    const navigate = Route.useNavigate();
     const data = Route.useLoaderData();
 
     const setRange = (r: TRange) =>
         navigate({ to: '/dashboard/links/$id', params: { id }, search: { range: r } });
+
+    const setPage = (p: number) =>
+        navigate({
+            search: (prev) => ({ ...prev, page: p > 1 ? p : undefined }),
+            resetScroll: false,
+        });
 
     return (
         <Layout>
@@ -82,7 +97,13 @@ function LinkDetail() {
                     <OperatingSystems items={data.breakdown.os} />
                     <Languages items={data.breakdown.languages} />
                 </div>
-                <ClicksTable clicks={data.clicks} />
+                <ClicksTable
+                    clicks={data.clicks}
+                    page={page}
+                    totalItems={data.clicks_total_items}
+                    totalPages={data.clicks_total_pages}
+                    onPage={setPage}
+                />
             </div>
         </Layout>
     );
