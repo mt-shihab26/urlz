@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import { getAuth } from '#/collections/users';
 import { canUseFeature, getActivePlan } from '#/lib/plan';
-import { rangeSchema } from '#/lib/ranges';
+import { searchRangeSchema } from '#/lib/ranges';
 import { head } from '#/lib/utils';
 import { getAnalyticsData } from '#/services/analytics';
 import { createFileRoute } from '@tanstack/react-router';
@@ -25,10 +25,12 @@ import { StatsCards } from '#/components/screens/analytics/stats-cards';
 import { TopPerforming } from '#/components/screens/analytics/top-performing';
 import { Link } from '@tanstack/react-router';
 
+import { DEFAULT_RANGE } from '#/lib/ranges';
+
 export const Route = createFileRoute('/dashboard/_auth/analytics')({
     head: () => head('Analytics'),
-    validateSearch: (search) => rangeSchema.parse(search),
-    loaderDeps: ({ search }) => ({ range: search.range }),
+    validateSearch: (search) => searchRangeSchema.parse(search),
+    loaderDeps: ({ search }) => ({ range: search.range ?? DEFAULT_RANGE }),
     loader: async ({ deps }) => {
         const hasFullAnalytics = canUseFeature(getActivePlan(getAuth()), 'analytics');
         return {
@@ -56,7 +58,7 @@ function Layout({
     children: ReactNode;
     refreshDisable?: boolean;
 }) {
-    const { range } = Route.useSearch();
+    const { range = DEFAULT_RANGE } = Route.useSearch();
 
     const navigate = Route.useNavigate();
 

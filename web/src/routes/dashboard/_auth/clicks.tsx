@@ -14,14 +14,17 @@ import { ClicksTable } from '#/components/screens/clicks/clicks-table';
 import { DetailDrawer } from '#/components/screens/clicks/detail-drawer';
 
 const searchSchema = z.object({
-    range: z.enum(RANGES).default(DEFAULT_RANGE),
-    page: z.coerce.number().int().min(1).default(1),
+    range: z.enum(RANGES).optional(),
+    page: z.coerce.number().int().min(1).optional(),
 });
 
 export const Route = createFileRoute('/dashboard/_auth/clicks')({
     head: () => head('Clicks'),
     validateSearch: (search) => searchSchema.parse(search),
-    loaderDeps: ({ search }) => ({ range: search.range, page: search.page }),
+    loaderDeps: ({ search }) => ({
+        range: search.range ?? DEFAULT_RANGE,
+        page: search.page ?? 1,
+    }),
     loader: async ({ deps }) => {
         try {
             return await getClicksData(deps.page, deps.range);
@@ -34,7 +37,7 @@ export const Route = createFileRoute('/dashboard/_auth/clicks')({
 });
 
 function Clicks() {
-    const { range, page } = Route.useSearch();
+    const { range = DEFAULT_RANGE, page = 1 } = Route.useSearch();
     const data = Route.useLoaderData();
     const navigate = Route.useNavigate();
     const [selectedClick, setSelectedClick] = useState<TClickItem | null>(null);
@@ -44,7 +47,7 @@ function Clicks() {
     };
 
     const handlePage = (p: number) => {
-        navigate({ search: (prev) => ({ ...prev, page: p }) });
+        navigate({ search: (prev) => ({ ...prev, page: p > 1 ? p : undefined }) });
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
